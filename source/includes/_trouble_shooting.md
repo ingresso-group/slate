@@ -32,3 +32,13 @@ to take care of when passing crypto blocks to the api:
   expects a crypto block from the [Start Session](#start-session) method call,
   providing a crypto block from the [Date Time Options](#date-time-options) 
   method call instead, would result in an error.
+
+##Uniqueness of Event Ids/Tokens
+
+An event can be uniquely identified by the tuple of codes
+( source, area, venue, event ). All four parts are required
+to guarantee that an event is being uniquely specified, as the various
+codes are only defined to be unique within the namespace corresponding
+to the code above them in the data model. i.e. an event code is only
+guaranteed to be unique within a particular venue code, though a backend
+system may actually allocate unique codes for all events system-wide.
