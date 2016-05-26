@@ -1,5 +1,4 @@
-#Trouble Shooting
-
+#Troubleshooting
 
 ##Handling Crypto Blocks
 > **Invalid**
@@ -26,17 +25,20 @@ to take care of when passing crypto blocks to the api:
   handling pretty printed XML (see example)
 
 * Crypto blocks are created in series and extended as a user moves through the
-  flow. As such every crypto block can't be unilaterally passed by every method.
+  flow. You can't use any crypto block with any API method.
   All methods will state from what previous method call it expects the crypto
   block to be from. For example the [Event Search](#event-search) method call
-  expects a crypto block from the [Start Session](#start-session) method call,
-  providing a crypto block from the [Date Time Options](#date-time-options) 
-  method call instead, would result in an error.
+  expects a crypto block from the [Start Session](#start-session) method call.
+  Providing a crypto block from the [Date Time Options](#date-time-options) 
+  method call instead would result in an error.
 
-##Uniqueness of Event Ids/Tokens
 
-An event can be uniquely identified by the tuple of codes
-( source, area, venue, event ). All four parts are required
+##Uniqueness of Event IDs / Tokens
+
+The easiest way to uniquely identify an event is using the event_id (even_token is a synonym).
+
+Alternatively an event can be uniquely identified by the tuple of codes
+(source, area, venue, event). All four parts are required
 to guarantee that an event is being uniquely specified, as the various
 codes are only defined to be unique within the namespace corresponding
 to the code above them in the data model. i.e. an event code is only

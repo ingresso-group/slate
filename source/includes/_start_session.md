@@ -28,8 +28,8 @@ Accept: text/xml
 
 Parameter | Description
 --------- | -----------
-`user_id` | Client API's username provided by TicketSwitch. It's unique per Client and has its own setup and `products` that are allow to see and buy.
-`user_passwd` | Client API's password provided by TicketSwitch.
+`user_id` | Client API username provided by TicketSwitch. Your API username controls the `events` you can see, your pricing, and how you purchase tickets.
+`user_passwd` | Client API password provided by TicketSwitch.
 
 > **Response**
 
@@ -37,14 +37,26 @@ Parameter | Description
 HTTP/1.1 200 OK
 Content-Type: text/xml
 
-
 <start_session_result>
-  <subdomain_user_is_bad>no</subdomain_user_is_bad>
-  <crypto_block>M_--qRfq64CDfM9Vj4JBQdRMdOJPW0xEpX1WsPqJY6Sy_XkrL_G8x-0i4sQu1cKhPNF-2PkEozP_rOW8KEiQSB10ZOO5hkKzT1OUz6IdkZ5DnW4DXoVa_AwIc0--Y</crypto_block>
-  <running_user>
-    <user_id>demo</user_id>
-  </running_user>
+    <subdomain_user_is_bad>yes</subdomain_user_is_bad>
+    <crypto_block>U_--6-bsjWOjlRgre-sDbJR9OBcf8hK6xqSNfGtNSPBPb61l0yAibpFTgRQ3KdZIzDisgzqts9dVHUBrNLid8ZVZ9BGd-rjzGOX57cknKbgeoljvFSpIovXIvBbSf60nZ2HwY</crypto_block>
+    <running_user>
+        <backend_group>demo_internal_debit_group</backend_group>
+        <content_group/>
+        <default_country_code>uk</default_country_code>
+        <is_b2b>no</is_b2b>
+        <real_name>Demonstration User</real_name>
+        <statement_descriptor/>
+        <style>fixed-tabs</style>
+        <sub_style>styled-aff-default</sub_style>
+        <sub_sub_style>ingresso-generic</sub_sub_style>
+        <sub_user/>
+        <user_id>demo</user_id>
+    </running_user>
+    <country_code>uk</country_code>
+    <country_desc>United Kingdom</country_desc>
 </start_session_result>
+
 ```
 
 ###Response
