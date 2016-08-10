@@ -1,17 +1,22 @@
 ---
-title: Ticketswitch API docs
+title: Ingresso API docs
 
 language_tabs:
-  - http
+  - curl
   - python
   - go
 
 toc_footers:
-  - <a href='#how-to-get-access-to-the-api'>Sign Up for a Developer Key</a>
-  - <a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a>
+  - <a href='#how-to-get-access-to-the-api'>Sign up for a developer key</a>
+  - <a href='https://github.com/tripit/slate'>Documentation powered by Slate</a>
 
 includes:
   - intro
+  - events
+  - performances
+  - months
+  - availability
+  - send_methods
   - api_calls
   - start_session
   - event_search
