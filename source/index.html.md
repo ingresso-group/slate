@@ -2,9 +2,9 @@
 title: Ingresso API docs
 
 language_tabs:
-  - curl
-  - python
-  - go
+  - shell: cURL
+  - python: Python
+  - go: Go
 
 toc_footers:
   - <a href='#how-to-get-access-to-the-api'>Sign up for a developer key</a>

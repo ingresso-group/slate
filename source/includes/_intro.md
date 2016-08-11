@@ -1,11 +1,10 @@
 # TODOs / questions
 
-* Can we tidy up the URLs: get rid of "json_", ".exe" and "cgi-bin"?
-* What about versioning? Should we build this in now for when we need to make breaking changes?
+* Can / should we tidy up the URLs: get rid of "json_", ".exe" and "cgi-bin"?
+* What about versioning? Should we build this in now for when we need to make breaking changes in future?
 * Get rid of json_event_info if redundant?
 * Should we use HTTP authentication?
 * Should we have the concept of a venue with an ID? (when the venue is enforced)
-* Is it a problem to include passwords within the URL?
 * Use a test API server or some form of rate limiting for particular users? Would allow us to give open access without worrying about someone hammering our main API server.
 * A reporting API would be useful - our internal reporting apps should also use this
 
@@ -47,15 +46,14 @@ of this change is that a call near the end of the booking process, such as
 
 ## Basic booking flow
 
-The Ingresso API supports multiple use cases, but below is a typical workflow:
+The Ingresso API supports multiple use cases and variations, but below is a typical workflow:
 
-* [json_events](#json-events) returns a list of events based on search criteria.
-* []() returns a list of performances for an event.
-* []() returns availability for a performance, including seat numbers if the event is seated.
+* get a list of [events](#events) based on search criteria.
+* get a list of [performances](#performances) for an event.
+* get [availability](#availability) for a performance, including seat numbers if the event is seated.
 * *Optional:* [](), []() and []() can be used to manage shopping baskets.
-* [reserve]() specific seats or best available tickets for a set period of time. 
-If using basketing `reserve` will attempt to reserve all items in the basket.
-* [purchase]() the reserved tickets.
+* [reserve](#reserve) specific seats or best available tickets for a set period of time. If using basketing `reserve` will attempt to reserve all items in the basket.
+* [purchase](#purchase) the reserved tickets.
 
 
 ## How to get access to the API
@@ -199,11 +197,11 @@ To test selecting specific seats use any of these
 events: 3CVA, 3CVB, 3CVC, 3CVD, 3CVE, 3CVF, 3CVG.
 Note that we have a seat selection seating plan available for 3CVE - this will be helpful
 if you decide to implement seat selection on your front end (please email 
-api@ingresso.co.uk and we can talk you through this). (TODO: does api@ingresso.co.uk actually work?)
+api@ingresso.co.uk and we can talk you through this).
 
 It may be useful to use our [B2B website](https://b2b.ingresso.co.uk/b2b/) 
 as a working example during your development. 
-You can sign in using your own credentials or with agent ID: `demo` and password: `demopass`
+You can sign in using your own credentials or with affiliate ID: `demo` and password: `demopass`
 
 Some of the test events have specific conditions that you can check:
 
