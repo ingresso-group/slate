@@ -2,11 +2,17 @@
 
 * Can / should we tidy up the URLs: get rid of "json_", ".exe" and "cgi-bin"?
 * What about versioning? Should we build this in now for when we need to make breaking changes in future?
-* Get rid of json_event_info if redundant?
-* Should we use HTTP authentication?
-* Should we have the concept of a venue with an ID? (when the venue is enforced)
+* Replace seatprice and surcharge with face_value and booking_fee?
+* The Python wrapper is simplifying a number of concepts from the API. We need to be consistent across JSON API and the wrappers - if a concept is too complex we should simplify everywhere. Eg the python is using positive flags everywhere rather than negative sometimes eg has_no_perfs.
+* Merge images and video into media. Can we also reduce the number of fields returned for each media instance?
+* Matt to rerun examples now that bit masks are replaced
+* Any reason not to use a single req_media rather than requesting individual items? Should we simplify the attributes returned eg just return the URL and is_secure rather than splitting up the URL into components and listing http and https variants.
 * Use a test API server or some form of rate limiting for particular users? Would allow us to give open access without worrying about someone hammering our main API server.
 * A reporting API would be useful - our internal reporting apps should also use this
+* Should we be more restful eg /events/25DR to get detail by event ID ?
+* event_type is one of `simple_ticket`, `hotel_room` or `misc_item`. Do we have any hotel_rooms or misc_items currently? If not should we hide this from the API consumer?
+* Should we use HTTP authentication?
+* Should we have the concept of a venue with an ID? (when the venue is enforced)
 
 
 # Introduction
@@ -14,14 +20,14 @@
 The Ingresso API is designed for partners who sell from Ingresso's inventory 
 of tickets. It is a fully transactional API. 
 
-The API is very loosely based on [REST](http://en.wikipedia.org/wiki/Representational_State_Transfer). GET 
-requests and basic query paremeters are used to drive the API. You format requests 
+The API is very loosely based on REST. 
+GET requests and basic query paremeters are used to drive the API. You format requests 
 in [JSON](http://www.json.org/) and you will receive either a JSON-formatted 
 response or an HTTP error. 
 
 We describe objects in a consistent way across different calls 
 (for example the output of [events](#events) and [performances](#performances)
-(TODO fix names) includes a cost_range object and this is described in the 
+includes a cost_range object and this is described in the 
 same format. The idea of this is that standard code
 can be used on the client side to read all parts of the output.
 Rather than relegate these common objects to an appendix at
@@ -51,7 +57,7 @@ The Ingresso API supports multiple use cases and variations, but below is a typi
 * get a list of [events](#events) based on search criteria.
 * get a list of [performances](#performances) for an event.
 * get [availability](#availability) for a performance, including seat numbers if the event is seated.
-* *Optional:* [](), []() and []() can be used to manage shopping baskets.
+* *Optional:* [](), []() and []() can be used to manage shopping baskets. (TODO)
 * [reserve](#reserve) specific seats or best available tickets for a set period of time. If using basketing `reserve` will attempt to reserve all items in the basket.
 * [purchase](#purchase) the reserved tickets.
 
@@ -63,7 +69,6 @@ This user has access to test product only - you can make purchases with this use
 live tickets.
 
 To request your own test or live API credentials email us: api@ingresso.co.uk.
-(TODO test the demo user - should be an on-credit user)
 
 
 ## Authentication
@@ -106,19 +111,19 @@ error text so that the caller has some idea of what they have done wrong.
 The output from a given API call may be augmented beyond the
 basic result in one of two ways. Firstly there are extra functions
 which may be availble for a given API call, which are specific to
-that call. These are triggered using variables with the prefix 'add_'
-or 'include_' such as 'add_discount_codes' on the availability call which
+that call. These are triggered using variables with the prefix `add_`
+or `include_` such as `add_discount_codes` on the availability call which
 is used to control whether or not discount codes are also retrieved and
 returned.
 
-The second type of augmentation is specific to the retruned objects
-themselves and is thus applicable to the output of any call whcih returns
-one of these obejcts. The most obvious example is an event object, which
+The second type of augmentation is specific to the returned objects
+themselves and is thus applicable to the output of any call which returns
+one of these objects. The most obvious example is an event object, which
 can be described with many extra pieces of information about it. These
 varaibles are all prefixed with `req_` as they are requests to the objects
 to output something extra or different about themselves, for example `req_cost_range`.
 
-Note that the 'req_' and 'add_' / 'include_' variables all result in extra
+Note that the `req_` and `add_` / `include_` variables all result in extra
 processing to retrieve the requested data, which will slow down the call,
 sometimes substantially. They should therefore only be used where absolutely necessary.
 
@@ -190,11 +195,12 @@ The first step in most situations will be to instantiate a client. (TODO these c
 
 ## Testing
 
-For best available testing, use "Matthew Bourne's 
-Nutcracker TEST" (event ID = 6IF) and "Matthew Bourne's Swan Lake test" (6IE). 
+We have a number of test events that you can use to view test availability and make test purchases.
 
-To test selecting specific seats use any of these 
-events: 3CVA, 3CVB, 3CVC, 3CVD, 3CVE, 3CVF, 3CVG.
+For testing best available events, use "Matthew Bourne's Nutcracker TEST" (event ID = 6IF) and "Matthew Bourne's Swan Lake test" (6IE). 
+
+For testing events that allow you to select specific seats, use any of these 
+events: 3CVA, 3CVB, 3CVC, 3CVD, 3CVE, 3CVF or 3CVG.
 Note that we have a seat selection seating plan available for 3CVE - this will be helpful
 if you decide to implement seat selection on your front end (please email 
 api@ingresso.co.uk and we can talk you through this).
@@ -202,6 +208,8 @@ api@ingresso.co.uk and we can talk you through this).
 It may be useful to use our [B2B website](https://b2b.ingresso.co.uk/b2b/) 
 as a working example during your development. 
 You can sign in using your own credentials or with affiliate ID: `demo` and password: `demopass`
+
+We have a number of other events for different types of events such as attractions and hotels - you will see these if you [list all events](#events). 
 
 Some of the test events have specific conditions that you can check:
 
@@ -212,17 +220,11 @@ Some of the test events have specific conditions that you can check:
 - The Nutcracker (6IF) has no availability on saturday nights
 - The Nutcracker (6IF) has no discounts in the stalls on the 1st of the month
 - The Nutcracker (6IF) has no OPA or STUDENT discounts in price band B
-- La Femme has blanket discounts (TODO add event IDs for all of these events)
-- La Femme has a special offer
-- V&A memberships only allow a single seat to be selected and have a type of use_last_perf
-- Eurodisney enforces one adult or student for a booking
-- California Disney is post only (can be used to generate 'no sends') (TODO how?)
-- Tokyo Disney - add junior codes for bundle failure
-  - 2 - auth failure
-  - 3 - auth timeout
-  - 4 - booking refused
-- Rambert never has any available performances
-- Flamingoland family passes are not valid on mondays
+- La Femme (6L9) has blanket discounts
+- La Femme (6L9) has a special offer
+- V&A memberships (6KF) only allow a single seat to be selected and have a type of use_last_perf
+- California Disney (9XY) is post only (can be used to generate 'no sends' if you select a performance date within the next few days)
+- Flamingoland family passes (6KU) are not valid on Mondays
 
 
 ## API Variations

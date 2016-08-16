@@ -17,12 +17,6 @@ includes:
   - months
   - availability
   - send_methods
-  - api_calls
-  - start_session
-  - event_search
-  - generic_output
-  - trouble_shooting
-  - glossary
 
   
 search: true
