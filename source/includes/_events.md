@@ -1,66 +1,67 @@
 # Events
 
+This section describes:
+
+- the [event object](#event-object)
+- the API call to [retrieve information about an individual event](#retrieve-an-event)
+- the API call to [list all events or search for events](#list-all-events-or-search-for-events)
+
 ## Event object
 
 > **Example Response**
 
 ```json
 {
-  "results": {
-    "event": [
-      {
-        "city_desc": "London",
-        "class": [
-          {
-            "class_desc": "Arts & Culture"
-          }
-        ],
-        "country_code": "uk",
-        "country_desc": "United Kingdom",
-        "critic_review_percent": 100,
-        "custom_filter": [],
-        "date_range_end": {
-          "date_desc": "Fri, 9th December 2016",
-          "iso8601_date_and_time": "2016-12-09T19:30:00+01:00"
-        },
-        "date_range_start": {
-          "date_desc": "Fri, 12th August 2016",
-          "iso8601_date_and_time": "2016-08-12T19:30:00+01:00"
-        },
-        "event_desc": "Matthew Bourne's Nutcracker TEST",
-        "event_id": "6IF",
-        "event_path": "/6IF-matthew-bourne-s-nutcracker-test/",
-        "event_status": "live",
-        "event_type": "simple_ticket",
-        "event_upsell_list": {
-          "event_id": [
-            "6IE",
-            "MH0"
-          ]
-        },
-        "geo_data": {
-          "latitude": 51.52961137,
-          "longitude": -0.10601562
-        },
-        "has_no_perfs": false,
-        "is_seated": true,
-        "max_running_time": 120,
-        "min_running_time": 120,
-        "need_departure_date": false,
-        "need_duration": false,
-        "need_performance": true,
-        "postcode": "EC1R 4TN",
-        "show_perf_time": true,
-        "source_desc": "External Test Backend 0",
-        "user_review_percent": 100,
-        "venue_desc": "Sadler's Wells"
-      }
+  "city_desc": "London",
+  "class": [
+    {
+      "class_desc": "Arts & Culture"
+    }
+  ],
+  "country_code": "uk",
+  "country_desc": "United Kingdom",
+  "critic_review_percent": 100,
+  "custom_filter": [],
+  "date_range_end": {
+    "date_desc": "Fri, 9th December 2016",
+    "iso8601_date_and_time": "2016-12-09T19:30:00+01:00"
+  },
+  "date_range_start": {
+    "date_desc": "Fri, 12th August 2016",
+    "iso8601_date_and_time": "2016-08-12T19:30:00+01:00"
+  },
+  "event_desc": "Matthew Bourne's Nutcracker TEST",
+  "event_id": "6IF",
+  "event_path": "/6IF-matthew-bourne-s-nutcracker-test/",
+  "event_status": "live",
+  "event_type": "simple_ticket",
+  "event_upsell_list": {
+    "event_id": [
+      "6IE",
+      "MH0"
     ]
-  }
+  },
+  "geo_data": {
+    "latitude": 51.52961137,
+    "longitude": -0.10601562
+  },
+  "has_no_perfs": false,
+  "is_seated": true,
+  "max_running_time": 120,
+  "min_running_time": 120,
+  "need_departure_date": false,
+  "need_duration": false,
+  "need_performance": true,
+  "postcode": "EC1R 4TN",
+  "show_perf_time": true,
+  "source_desc": "External Test Backend 0",
+  "user_review_percent": 100,
+  "venue_desc": "Sadler's Wells"
 }
 ```
 
 An event object describes an event, and its associated venue, within the system. It is possible to request a number of additional attributes for an event - the default attributes are listed first:
+
 
 Attribute | Description
 --------- | -----------
@@ -73,7 +74,7 @@ Attribute | Description
 `date_range_start` | A [date/time object](#date-time-object) for the start of the run
 `date_range_end` | A [date/time object](#date-time-object) for the end of the run
 `event_desc` | Name of the show or event e.g. `The Lion King`
-`event_id` | The Ingresso ID used to identify this event
+`event_id` | Unique identifier for the event
 `event_path` | If you also use a white label website this can be used to navigate to the event page, e.g. `/2J5V-la-pedrera-skip-the-line/`
 `event_status` | Will be `live` for a normal event search. Other values are `dead` and `pending` but these will only be displayed when using the `include_dead` or `include_non_live` parameters.
 `event_type` | Currently all events are of type `simple_ticket`. In future we may add `hotel_room` and `misc_item`.
@@ -83,8 +84,8 @@ Attribute | Description
 `geo_data.longitude` | Longitude of the event
 `has_no_perfs` | `true` if the event has no performances. For example some attraction tickets are valid for any date, so we do not present a list of performances to select.
 `is_seated` | `true` for seated events
-`min_running_time` | Minimum running time in minutes (not always present)
-`max_running_time` | Maximum running time in minutes (not always present)
+`min_running_time` | Minimum length / duration in minutes (not always present)
+`max_running_time` | Maximum length / duration in minutes (not always present)
 `need_departure_date` | Flag indicating whether the event needs a departure date specified. This is `false` for most events. (TODO more detail needed)
 `need_duration` | Flag indicating whether the event needs duration (specific to `hotel_room` events only)
 `need_performance` | Flag indicating if a performance must be selected in order to retrieve availability
@@ -100,8 +101,8 @@ These are the optional attributes - these are only returned if you add one of th
 
 Attribute | Description
 --------- | -----------
-`avail_details` | Return a list of [avail details](#avail-detail-object)
-`cost_range` | Return a list of [cost ranges](#cost-range-object)
+`avail_details` | A list of [avail details](#avail-detail-object)
+`cost_range` | A list of [cost ranges](#cost-range-object)
 `cost_range_details` | Return a list of [cost range details](#cost-range-detail-object)
 `event_info` | A plain text block combining all of the `structured_info` sections.
 `event_info_html` | A single block of HTML combining all of the `structured_info` sections. The section names are also included as H4 headers.
@@ -184,34 +185,36 @@ Parameter | Description
 `page_no` | Page number, default 0, ignored if page_len is not present
 `s_top` | orders events by the most sales over the last 48 hour period, otherwise orders alphabetically (TODO taken from XML API - is this valid for JSON?)
 
+(TODO: need example of how the paging works)
 
 
 > **Example response**
 
 ```json
 {
-  "results": {
-    "event": [
-      {EVENT_OBJECT},
-      {EVENT_OBJECT},
-      {EVENT_OBJECT},
-    ...
-    ]
+  "events_by_id": {
+    "6IF": {
+      "event": {EVENT_OBJECT},
+      "quantity_options": {
+        "valid_quantity_flags": [
+          false,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      "venue_is_enforced": true
+    }
   }
 }
 ```
 
 ### Response
 
-<p class="lang-specific shell">
-The output JSON contains a 'results' object which has an array called
-'event' within it containing event objects. Thus the results
-are accessed as 'result.event[0]', 'result.event[1]'' and so on. This is a
-common structure for returning array data through the API.
-</p>
-
-
-
+(TODO describe the output - why is quantity_options and venue_is_enforced returned here? Shouldn't they be returned per event?)
 
 
 ## List all events or search for events
@@ -268,7 +271,7 @@ Parameter | Description
       {EVENT_OBJECT},
       {EVENT_OBJECT},
       {EVENT_OBJECT},
-	  ...
+    ...
     ]
   }
 }
@@ -284,287 +287,8 @@ common structure for returning array data through the API.
 </p>
 
 
-## Avail Detail object
 
-> **Example Response**
-
-```json
-"avail_details": {
-  "ticket_type": [
-    {
-      "price_band": [
-        {
-          "avail_detail": [
-            {
-              "avail_currency": {
-                "currency_code": "gbp",
-                "currency_factor": 100,
-                "currency_number": 826,
-                "currency_places": 2,
-                "currency_post_symbol": "",
-                "currency_pre_symbol": "£"
-              },
-              "available_dates": {
-                "first_yyyymmdd": "20160817",
-                "last_yyyymmdd": "20161214",
-                "year_2016": {
-                  "aug": 2079784960,
-                  "dec": 15867,
-                  "nov": 1039923183,
-                  "oct": 1876934526,
-                  "sep": 1065287163
-                }
-              },
-              "day_mask": 63,
-              "quantity_options": {
-                "valid_quantity_mask": "126"
-              },
-              "seatprice": 35,
-              "surcharge": 4
-            }
-          ],
-          "price_band_code": "A",
-          "price_band_desc": ""
-        },
-        {
-          "avail_detail": [
-            AVAIL_DETAIL_OBJECT
-          ],
-          "price_band_code": "C",
-          "price_band_desc": ""
-        }
-      ],
-      "ticket_type_code": "CIRCLE",
-      "ticket_type_desc": "Upper circle"
-    },
-    {
-      "price_band": [
-        {
-          "avail_detail": [
-            AVAIL_DETAIL_OBJECT
-          ],
-          "price_band_code": "A",
-          "price_band_desc": ""
-        },
-        {
-          "avail_detail": [
-            AVAIL_DETAIL_OBJECT
-          ],
-          "price_band_code": "B",
-          "price_band_desc": ""
-        }
-      ],
-      "ticket_type_code": "STALLS",
-      "ticket_type_desc": "Stalls"
-    }
-  ]
-}
-```
-
-
-
-Avail details are a cached list of the price bands available for this event across all performances. They are cached from previous availability requests made via your username. This data can be useful for example if you wish to display a separate page with pricing detail for all price bands on sale.
-
-Avail details are generated from availability requests made either by end-users or by scheduled processes that 
-Ingresso use to update this data. You should not attempt to make multiple availability
-requests in order to keep this data up to date - please contact us instead to discuss options api@ingresso.co.uk.
-
-Avail details are only ever returned as part of a parent object (such as [event](#event-object)).
-
-
-Attribute | Description
---------- | -----------
-`avail_currency` | The price [currency](#currency-object) 
-`available_dates` | `first_yyyymmdd` and `last_yyyymmdd` for the range. If the req_avail_details_with_perfs parameter was included then a nested list of available dates is also added (year -> month -> day)
-`day_mask` | which days of the week where have we seen this price band availability
-`quantity_options` | the available quantities we have seen for this price band
-`seatprice` | the per-ticket face value
-`surcharge` | the per-ticket booking fee
-
-
-
-## Cost Range object
-
-> **Example Response**
-
-```json
-{
-  "best_value_offer": {
-    "absolute_saving": 44.2,
-    "full_seatprice": 72.5,
-    "full_surcharge": 14.2,
-    "offer_seatprice": 42.5,
-    "offer_surcharge": 0,
-    "percentage_saving": 51
-  },
-  "max_saving_offer": {
-    "absolute_saving": 49.8,
-    "full_seatprice": 85,
-    "full_surcharge": 16.8,
-    "offer_seatprice": 52,
-    "offer_surcharge": 0,
-    "percentage_saving": 49
-  },
-  "max_seatprice": 85.5,
-  "max_surcharge": 16.8,
-  "min_cost_offer": {
-    "absolute_saving": 19.8,
-    "full_seatprice": 37.5,
-    "full_surcharge": 7.3,
-    "offer_seatprice": 25,
-    "offer_surcharge": 0,
-    "percentage_saving": 44
-  },
-  "min_seatprice": 25,
-  "min_surcharge": 0,
-  "no_singles_cost_range": {COST_RANGE_OBJECT},
-  "quantity_options": {
-    "valid_quantity_mask": "2046"
-  },
-  "range_currency": {
-    "currency_code": "gbp",
-    "currency_factor": 100,
-    "currency_number": 826,
-    "currency_places": 2,
-    "currency_post_symbol": "",
-    "currency_pre_symbol": "£"
-  },
-  "top_price_offer": {
-    "absolute_saving": 47.3,
-    "full_seatprice": 85.5,
-    "full_surcharge": 16.8,
-    "offer_seatprice": 55,
-    "offer_surcharge": 0,
-    "percentage_saving": 46
-  }
-}
-```
-
-Cost ranges are a cached summary of the pricing that has been seen for your username. They are primarily used to retrieve the minimum (or "from") price for the event, along with detail of any offers or discounts.
-
-Cost ranges are generated from availability requests made either by end-users or by scheduled processes that 
-Ingresso use to update cost range data. You should not attempt to make multiple availability
-requests in order to keep this data up to date - please contact us instead to discuss options api@ingresso.co.uk.
-Cost ranges are only ever returned as part of a parent object (such as event). 
-
-<aside class="warning">
-Cost ranges (and avail details) are not guaranteed to be present so you should design your application with 
-this in mind, e.g. by still displaying a performance even if it has no from price.
-</aside>
-
-
-Attribute | Description
---------- | -----------
-`max_seatprice` | the face value for the highest price (seatprice + surcharge)
-`max_surcharge` | the booking fee for the highest price (seatprice + surcharge)
-`max_seatprice` | the face value for the lowest price (seatprice + surcharge)
-`max_surcharge` | the booking fee for the lowest price (seatprice + surcharge)
-`no_singles_cost_range` | this returns another cost range object that excludes availability with only 1 consecutive seat available. The prices in this cost range will therefore be the same or higher than the outer cost range.
-`quantity_options` | the quantities with availability
-`range_currency` | the [currency](#currency-object) for the cost range
-
-
-## Cost Range Detail object
-
-> **Example Response**
-
-```json
-"cost_range_details": {
-  "ticket_type": [
-    {
-      "price_band": [
-        {
-          "cost_range": {
-            COST_RANGE_OBJECT
-          },
-          "price_band_code": "A",
-          "price_band_desc": ""
-        }
-      ],
-      "ticket_type_code": "BALCONY",
-      "ticket_type_desc": "Balcony"
-    },
-    {
-      "price_band": [
-        {
-          "cost_range": {
-            COST_RANGE_OBJECT
-          },
-          "price_band_code": "A",
-          "price_band_desc": ""
-        },
-        {
-          "cost_range": {
-            COST_RANGE_OBJECT
-          },
-          "price_band_code": "B",
-          "price_band_desc": ""
-        }
-      ],
-      "ticket_type_code": "CIRCLE",
-      "ticket_type_desc": "Upper circle"
-    }
-  ]
-}
-```
-
-Cost range details presents a cost range for every available price band. A list of ticket types are returned; nested within each ticket type are the available price bands; nested within each price band is a [cost range](#cost-range-object). Cost range details are only ever returned as part of the parent event object.
-
-
-
-## Currency object
-
-> **Example Response**
-
-```json
-{
-  "currency_code": "gbp",
-  "currency_factor": 100,
-  "currency_number": 826,
-  "currency_places": 2,
-  "currency_post_symbol": "",
-  "currency_pre_symbol": "£"
-}
-```
-
-Attribute | Description
---------- | -----------
-`currency_code` | [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) three letter code
-`currency_factor` | Multiply by this number to get values in the base unit (e.g. multiplying $47.11 by the currency_factor will give 4711 cents)
-`currency_number` | [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) three letter numeric identifier
-`currency_places` | The number of decimal places to display (eg 45.5 usd should be displayed as 45.50)
-`currency_post_symbol` | A symbol to display at the end of the price
-`currency_pre_symbol` | A symbol to display in front of the price
-
-
-## Date/Time object
-
-> **Example Response**
-
-```json
-{
-  "date_desc": "Fri, 12th August 2016",
-  "iso8601_date_and_time": "2016-08-12T19:30:00+01:00",
-  "time_desc": "10.00 AM"
-}
-```
-
-The ISO 8601 value is always output, as iso8601_date_and_time. 
-Since sometimes we represent both a date and
-a time, and sometimes only a time, the descriptive text for the
-date is split into 'date_desc' and 'time_desc'. If there is no
-'time_desc' then only the date is relevent, despite the fact that the
-ISO 8601 variable will always have an associated time. The timezones
-should be treated as correct when parsing these objects. 
-
-Attribute | Description
---------- | -----------
-`date_desc` | Date description
-`iso8601_date_and_time` | ISO 8601 date and time
-`time_desc` | Time description
-
-
-## Media
+## Media object
 
 > **Example Response**
 
@@ -699,7 +423,7 @@ Attribute | Description
 (TODO: complete after we have discussed the list of fields)
 
 
-## Review
+## Review object
 
 > **Example Response**
 

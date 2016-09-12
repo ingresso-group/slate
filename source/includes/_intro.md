@@ -2,10 +2,14 @@
 
 * Can / should we tidy up the URLs: get rid of "json_", ".exe" and "cgi-bin"?
 * What about versioning? Should we build this in now for when we need to make breaking changes in future?
+* Is it useful to return the detail for previous objects? Eg in json_performances should we be returning the event object?
 * Replace seatprice and surcharge with face_value and booking_fee?
 * The Python wrapper is simplifying a number of concepts from the API. We need to be consistent across JSON API and the wrappers - if a concept is too complex we should simplify everywhere. Eg the python is using positive flags everywhere rather than negative sometimes eg has_no_perfs.
 * Merge images and video into media. Can we also reduce the number of fields returned for each media instance?
+* Matt to include a section describing how our caching works
+* Matt to ensure seat selection vs best available is explained
 * Matt to rerun examples now that bit masks are replaced
+* Matt to make all tables have a wide enough first column (just using HTML tables broke on the events doc page)
 * Any reason not to use a single req_media rather than requesting individual items? Should we simplify the attributes returned eg just return the URL and is_secure rather than splitting up the URL into components and listing http and https variants.
 * Use a test API server or some form of rate limiting for particular users? Would allow us to give open access without worrying about someone hammering our main API server.
 * A reporting API would be useful - our internal reporting apps should also use this
@@ -17,10 +21,11 @@
 
 # Introduction
 
-The Ingresso API is designed for partners who sell from Ingresso's inventory 
-of tickets. It is a fully transactional API. 
+The Ingresso API is designed to allow you to sell from Ingresso's inventory of event tickets. 
+Ingresso has connected to a large number of ticketing system APIs, allowing us to transact directly on the venue's system. 
+By integrating with the Ingresso API you are able to view and purchase live inventory from a number of different venues.
 
-The API is very loosely based on REST. 
+The Ingresso API is a fully transactional API, very loosely based on REST. 
 GET requests and basic query paremeters are used to drive the API. You format requests 
 in [JSON](http://www.json.org/) and you will receive either a JSON-formatted 
 response or an HTTP error. 
@@ -210,6 +215,11 @@ as a working example during your development.
 You can sign in using your own credentials or with affiliate ID: `demo` and password: `demopass`
 
 We have a number of other events for different types of events such as attractions and hotels - you will see these if you [list all events](#events). 
+
+It can be useful to test different despatch methods:
+
+- The Nutcracker (6IF) has "collect from the venue" and "post"
+- Test Event - Type 1 (3CVA) has "self-print voucher" (also known as eticket)
 
 Some of the test events have specific conditions that you can check:
 
