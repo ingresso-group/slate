@@ -2,18 +2,18 @@
 
 * Can / should we tidy up the URLs: get rid of "json_", ".exe" and "cgi-bin"?
 * What about versioning? Should we build this in now for when we need to make breaking changes in future?
-* Is it useful to return the detail for previous objects? Eg in json_performances should we be returning the event object?
-* Replace seatprice and surcharge with face_value and booking_fee?
+* Is it useful to return the detail for previous objects? Eg in json_performances is there a need to return the event object? (excluding meta events)
+* Replace seatprice and surcharge with face_value and booking_fee? This has caused confusion before.
 * The Python wrapper is simplifying a number of concepts from the API. We need to be consistent across JSON API and the wrappers - if a concept is too complex we should simplify everywhere. Eg the python is using positive flags everywhere rather than negative sometimes eg has_no_perfs.
 * Merge images and video into media. Can we also reduce the number of fields returned for each media instance?
+* Pete to default self_print_mode to html by default - this  
 * Matt to include a section describing how our caching works
 * Matt to ensure seat selection vs best available is explained
-* Matt to rerun examples now that bit masks are replaced
-* Matt to make all tables have a wide enough first column (just using HTML tables broke on the events doc page)
+* Matt to rerun examples now that bit masks are replaced / flagged (and explain how to use bit masks)
 * Any reason not to use a single req_media rather than requesting individual items? Should we simplify the attributes returned eg just return the URL and is_secure rather than splitting up the URL into components and listing http and https variants.
 * Use a test API server or some form of rate limiting for particular users? Would allow us to give open access without worrying about someone hammering our main API server.
 * A reporting API would be useful - our internal reporting apps should also use this
-* Should we be more restful eg /events/25DR to get detail by event ID ?
+* Should we be more restful eg /events/25DR to get detail by event ID? What do we lose by not being true rest?
 * event_type is one of `simple_ticket`, `hotel_room` or `misc_item`. Do we have any hotel_rooms or misc_items currently? If not should we hide this from the API consumer?
 * Should we use HTTP authentication?
 * Should we have the concept of a venue with an ID? (when the venue is enforced)
@@ -209,6 +209,7 @@ events: 3CVA, 3CVB, 3CVC, 3CVD, 3CVE, 3CVF or 3CVG.
 Note that we have a seat selection seating plan available for 3CVE - this will be helpful
 if you decide to implement seat selection on your front end (please email 
 api@ingresso.co.uk and we can talk you through this).
+The availability on these seat selection events is limited, so please keep test purchasing to a minimum.
 
 It may be useful to use our [B2B website](https://b2b.ingresso.co.uk/b2b/) 
 as a working example during your development. 

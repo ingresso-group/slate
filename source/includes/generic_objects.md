@@ -280,3 +280,28 @@ Attribute | Description
 `date_desc` | Date description
 `iso8601_date_and_time` | ISO 8601 date and time
 `time_desc` | Time description
+
+
+## Quantity Options object
+
+> **Example Response**
+
+```json
+"quantity_options": {
+  "valid_quantity_flags": [
+    false,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ]
+}
+```
+
+This represents the valid quantities that can be purchased for this event with a zero-based array. The example response indicates that you cannot purchase 0 tickets, but you can purchase 1, 2, 3, 4, 5 or 6 tickets.
+
+TODO: consecutive??
+
+TODO: someone needs to check this as I'm guessing

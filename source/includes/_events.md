@@ -120,7 +120,7 @@ Attribute | Description
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/cgi-bin/json_events_by_id.exe/{username}?user_passwd={password}&event_id_list={id}
+GET https://api.ticketswitch.com/cgi-bin/json_events_by_id.exe/{username}
 ```
 
 This call is used to return detail for one or more events by their ID. It returns a list of [event objects](#event-object).
@@ -128,17 +128,37 @@ This call is used to return detail for one or more events by their ID. It return
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/cgi-bin/json_events_by_id.exe/demo?user_passwd=demopass&event_id_list=6IF
+curl https://api.ticketswitch.com/cgi-bin/json_events_by_id.exe/demo \
+    -d "user_passwd=demopass" \
+    -d "event_id_list=6IF" \
+    -G
 ```
 
 > **Example request including all addtional data**
 
 ```shell
-curl https://api.ticketswitch.com/cgi-bin/json_events_by_id.exe/demo?user_passwd=demopass&event_id_list=6IF
-&req_cost_range&req_cost_range_details&req_extra_info&req_reviews&req_media_triplet_one&req_media_triplet_two
-&req_media_triplet_three&req_media_triplet_four&req_media_triplet_five&req_media_seating_plan&req_media_square
-&req_media_landscape&req_media_marquee&req_media_supplier&req_video_iframe&req_avail_details
-&req_avail_details_with_perfs&req_meta_components
+curl https://api.ticketswitch.com/cgi-bin/json_events_by_id.exe/demo \
+    -d "user_passwd=demopass" \
+    -d "event_id_list=6IF" \
+    -d "req_cost_range" \
+    -d "req_cost_range_details" \
+    -d "req_extra_info" \
+    -d "req_reviews" \
+    -d "req_media_triplet_one" \
+    -d "req_media_triplet_two" \
+    -d "req_media_triplet_three" \
+    -d "req_media_triplet_four" \
+    -d "req_media_triplet_five" \
+    -d "req_media_seating_plan" \
+    -d "req_media_square" \
+    -d "req_media_landscape" \
+    -d "req_media_marquee" \
+    -d "req_media_supplier" \
+    -d "req_video_iframe" \
+    -d "req_avail_details" \
+    -d "req_avail_details_with_perfs" \
+    -d "req_meta_components" \
+    -G
 ```
 
 ### Request
@@ -214,7 +234,7 @@ Parameter | Description
 
 ### Response
 
-(TODO describe the output - why is quantity_options and venue_is_enforced returned here? Shouldn't they be returned per event?)
+(TODO describe the output - why is quantity_options and venue_is_enforced returned here? Shouldn't they be returned per event? If necessary link to [quantity options](#quantity-options-object) )
 
 
 ## List all events or search for events
@@ -222,7 +242,7 @@ Parameter | Description
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/cgi-bin/json_events.exe/{username}?user_passwd={password}
+GET https://api.ticketswitch.com/cgi-bin/json_events.exe/{username}
 ```
 
 This call is used to search for events. It takes filter parameters
@@ -239,8 +259,11 @@ Typical use cases:
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/cgi-bin/json_events.exe/demo?
-user_passwd=demopass&s_keys=nutcracker&s_coco=uk
+curl https://api.ticketswitch.com/cgi-bin/json_events.exe/demo \
+    -d "user_passwd=demopass" \
+    -d "s_keys=nutcracker" \
+    -d "s_coco=uk" \
+    -G
 ```
 
 ### Request

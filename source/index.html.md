@@ -18,6 +18,7 @@ includes:
   - availability
   - send_methods
   - generic_objects
+  - caching
 
   
 search: true
