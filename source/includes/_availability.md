@@ -1,30 +1,18 @@
-
-The API properly
-supports simple tickets, misc items and hotles, as well as promo codes
-and the 'both' allocation mode for B2B customers who are allowed to select
-where they wish their reservation to come from.
-
-
-
-
-
-
-
-
 # Availability
 
 TODO:
 
-- Are send methods returned by availability? If so how?
+- Are send methods returned by availability? If so how?  "A list of possible methods of despatching the tickets to the customer is also provided. Depending on the particular product, a ticket may be held for collection, or posted to the customer (subject to a number of restrictions on timing and postal areas). Each method in the list has an associated cost which will be added to the overall ticket charge."
 - What other parameters am I missing?
-- promo codes?
+- How are example seats handled? Do you need to request them?
+- Promo codes?
 - "both" allocation mode (we have a few "both" entries in event_allocation_modes - should probably change these to pool_alloc)
+
 
 This section describes:
 
-- the [availability object](#availability-object)
-- the API call to [retrieve availability for a performance](#retrieve-availability)
-
+- The [availability object](#availability-object)
+- The API call to [retrieve availability for a performance](#retrieve-availability)
 
 ## Availability Object
 
@@ -117,42 +105,62 @@ This section describes:
 }
 ```
 
-`Availability` lists the tickets that are currently available for a performance. Availability is divided into a set of ticket types, and each ticket type is subdivided into price bands. 
+`Availability` lists the tickets that are currently available for a performance. In most cases the availability provided is in real time (although we do sometimes [cache](#caching) availability) and represents the tickets available at the time the request was made. There is therefore no guarantee that the tickets will still be available to purchase at some future time. Tickets are only guaranteed to be held after you have [reserved tickets](#reservation).
 
-TODO add detail on:
+Availability is divided into a set of ticket types, and each ticket type is subdivided into price bands. If you request individual seats for a seated event each price band includes seat blocks for the contiguous seats. The structure of the availability data returned is therefore:
 
-- Pricing components
-- Seat selection vs best available
-- Best available: example seats
-- Caching
-- Restricted view
-- Despatch
-- Net pricing / commission
+--> availability
 
-The maximum number of tickets that are allowed to be booked for that particular price band is also indicated. Potentially the method may also return a set of example seats, indicating the kind of seats which may be available for that price band. Note that these are examples only and are not intended as an indication of the actual seats which will be sold. It is possible for the method to return actual seats, however, but this must be requested explicitly, and the backend system must support it.
+-----> ticket types
 
-Some events are restricted to certain combinations of tickets, the most common being tickets which may only be purchased in pairs. A list is returned containing the set of valid possibilities for the number of tickets that may be purchased. Only values from the list will be accepted for bookings. 
+--------> price bands
 
-A list of possible methods of despatching the tickets to the customer is also provided. Depending on the particular product, a ticket may be held for collection, or posted to the customer (subject to a number of restrictions on timing and postal areas). Each method in the list has an associated cost which will be added to the overall ticket charge.
+-----------> seat blocks
 
-It should be noted that the availability provided by the system is in real time and represents what was available at the time the request was made. There is thus no guarantee that the tickets will still be available to purchase at some future time. Tickets are only guaranteed to be held for a customer after you have [reserved tickets](#reservation).
+--------------> seats
 
+If you wish to retrieve individual seats and offer seat selection to your customer then you should include `add_seat_blocks` in your request. If the event is seated and the backend system supports seat selection then we will return seat blocks containing seats. You can check for the presence of the seat blocks to determine whether you can offer seat selection to your customer. Note that implementing seat selection can be quite involved because you need to integrate a third-party seat renderer or implement your own - we are happy to discuss this further with you and offer our advice. 
 
-Attribute | Description
---------- | -----------
-`` | xx
+This example response is for best available - following this there is an example response that includes seats.
+
+Availability-level attributes:
 
 Attribute | Description
 --------- | -----------
-`backend_is_broken` | 
-`backend_is_down` | 
-`backend_throttle_failed` | 
-`can_leave_singles` | In most cases this is `true`. When `false` the backend ticketing system does not allow us to leave single seats (which are difficult to sell). TODO add more detail to this - what does an api user do when this is false?
-`contiguous_seat_selection_only` | If you have requested individual seats a value of `true` indicates that you can only select consecutive seats. `false` indicates that you can select seats without restriction *within a single price band*. If you would like to allow your customers to select seats across price bands and ticket types you need to add multiple orders to a basket, one order for each price band. However there are currently some restrictions enforced so if you want to do this you will need to contact us first api@ingresso.co.uk.
+`backend_is_broken` | If we see an unexpected error from the backend system (for example a 500 error) we mark the system as "broken" for a period of time afterwards (the time can vary from nothing to 2 minutes). During this period of time this attribute will be `true` and we will return empty availability. This is an exceptional circumstance; to check if there is currently a backend system issue you can check our [status page](https://status.ingresso.co.uk/).
+`backend_is_down` | When `true` the backend system cannot be contacted for some reason, for example they are having technical problems or scheduled maintenance. The response will include empty availability in this case. This is an exceptional circumstance; to check if there is currently a backend system issue you can check our [status page](https://status.ingresso.co.uk/).
+`backend_throttle_failed` | We allow a certain number of simultaneous requests to hit a backend system and queue requests when the limit is reached. When this attribute is `true` your request has been sitting in our queue for a long time and we have timed out the request. This is an exceptional circumstance.
+`can_leave_singles` | In most cases this is `true`. When `false` the backend ticketing system does not allow us to leave single seats (which are difficult to sell). TODO add more detail to this - what should an api user do when this is false?
+`contiguous_seat_selection_only` | If you have requested individual seats a value of `true` indicates that you can only select consecutive seats. `false` indicates that you can select seats without restriction *within a single price band*. If you would like to allow your customers to select seats without restriction across price bands and ticket types, you need to need to add multiple orders to a basket, one order for each price band. However there are currently some restrictions enforced so if you want to do this you will need to contact us first api@ingresso.co.uk.
 `currency` | The [currency](#currency-object) of the availability
-`quantity_options` | The valid [quantity options](#quantity-options-object)
+`quantity_options` | The valid [quantity options](#quantity-options-object), a rare example is that some tickets can only be purchased in pairs.
 
 
+Ticket type attributes:
+
+Attribute | Description
+--------- | -----------
+`ticket_type_code` | The unique identifier for the ticket type. For seated events this refers to a part of house / seating area such as Grand Circle.
+`ticket_type_desc` | The description for the ticket type. This should be displayed to the customer (if you are offering seat selection to your customer then you would typically hard code the description when drawing a seating plan).
+
+
+Price band attributes:
+
+Attribute | Description
+--------- | -----------
+`absolute_saving` | Defined as (`non_offer_sale_seatprice` + `non_offer_sale_surcharge`) - (`sale_seatprice` + `sale_surcharge`)
+`discount_code` | The unique identifier of the default [discount](#discount-object). Each price band has a default discount, but additional discounts can be requested for a price band with [list discounts](#list-discounts).
+`discount_desc` | The description of the default discount. We recommend to present this text to customers when `is_offer` is `true` to describe the offer.
+`is_alloc` | `true` means the availability is from an allocation; `false` means the availability is from the general pool. This is normally `false` and can be ignored for most use cases.
+`is_offer` | `true` if the ticket price is discounted below the full price, i.e. if `absolute_saving` is greater than zero.
+`non_offer_sale_seatprice` | The per-ticket price for full-priced tickets. This will be the face value price when the market has such a concept (for example the London theatre market has this concept, but some New York theatre shows do not). This is the same as the `sale_seatprice` when the price band is not discounted. (TODO can we remove "sale" from the name?)
+`non_offer_sale_surcharge` | The per-ticket booking fee for full-priced tickets. To determine the total ticket price you must add together the `non_offer_sale_seatprice` and the `non_offer_sale_surcharge`.
+`number_available` | This is the maximum number of contiguous seats that can be purchased. This applies to best available only - if you are using seat selection and `contiguous_seat_selection_only` is `false` it is possible to select above this number.
+`percentage_saving` | Defined as `absolute_saving` / (`non_offer_sale_seatprice` + `non_offer_sale_surcharge`) * 100
+`price_band_code` | The code for a price band. To uniquely identify a price band you should take the combination of `ticket_type_code`, `price_band_code` and `is_alloc` (`is_alloc` will default in most cases if you do not specify it).
+`price_band_description??` | (TODO what is the actual name of this attribute?)
+`sale_seatprice` | The per-ticket price. This will be the face value price when the market has such a concept (for example the London theatre market has this concept, but some New York theatre shows do not). This is the same as the `non_offer_sale_seatprice` when the price band is not discounted.
+`sale_surcharge` | The per-ticket booking fee. To determine the total ticket price you must add together the `sale_seatprice` and the `sale_surcharge`.
 
 
 > **Example response - including seat listing**
@@ -165,79 +173,64 @@ Attribute | Description
         "price_band": [
           {
             "absolute_saving": 0,
-            "discount_code": "RED/RED/1",
-            "discount_desc": "FULL PRICE",
+            "discount_code": "TSW/ABF/1",
+            "discount_desc": "Regular Price",
             "free_seat_blocks": {
               "seat_block": [
                 {
-                  "block_length": 3,
+                  "block_length": 2,
                   "id_details": [
                     {
-                      "col_id": "11",
-                      "full_id": "G11",
+                      "col_id": "1",
+                      "full_id": "A1",
                       "is_restricted_view": false,
-                      "row_id": "G",
-                      "seat_subdata": "7/11",
+                      "row_id": "A",
+                      "seat_subdata": "84/1",
                       "seat_text_code": "",
                       "separator": ""
                     },
                     {
-                      "col_id": "12",
-                      "full_id": "G12",
+                      "col_id": "2",
+                      "full_id": "A2",
                       "is_restricted_view": false,
-                      "row_id": "G",
-                      "seat_subdata": "7/12",
-                      "seat_text_code": "",
-                      "separator": ""
-                    },
-                    {
-                      "col_id": "13",
-                      "full_id": "G13",
-                      "is_restricted_view": false,
-                      "row_id": "G",
-                      "seat_subdata": "7/13",
+                      "row_id": "A",
+                      "seat_subdata": "84/2",
                       "seat_text_code": "",
                       "separator": ""
                     }
                   ]
                 },
                 {
-                  "block_length": 4,
+                  "block_length": 3,
                   "id_details": [
                     {
-                      "col_id": "2",
-                      "full_id": "H2",
-                      "is_restricted_view": false,
+                      "col_id": "7",
+                      "full_id": "H7",
+                      "is_restricted_view": true,
                       "row_id": "H",
-                      "seat_subdata": "8/2",
-                      "seat_text_code": "",
+                      "seat_subdata": "91/1",
+                      "seat_text": "Restricted view, may miss moments on raised section of set",
+                      "seat_text_code": "RVI",
                       "separator": ""
                     },
                     {
-                      "col_id": "3",
-                      "full_id": "H3",
-                      "is_restricted_view": false,
+                      "col_id": "8",
+                      "full_id": "H8",
+                      "is_restricted_view": true,
                       "row_id": "H",
-                      "seat_subdata": "8/3",
-                      "seat_text_code": "",
+                      "seat_subdata": "91/2",
+                      "seat_text": "Restricted view, may miss moments on raised section of set",
+                      "seat_text_code": "RVI",
                       "separator": ""
                     },
                     {
-                      "col_id": "4",
-                      "full_id": "H4",
-                      "is_restricted_view": false,
+                      "col_id": "9",
+                      "full_id": "H9",
+                      "is_restricted_view": true,
                       "row_id": "H",
-                      "seat_subdata": "8/4",
-                      "seat_text_code": "",
-                      "separator": ""
-                    },
-                    {
-                      "col_id": "5",
-                      "full_id": "H5",
-                      "is_restricted_view": false,
-                      "row_id": "H",
-                      "seat_subdata": "8/5",
-                      "seat_text_code": "",
+                      "seat_subdata": "91/3",
+                      "seat_text": "Restricted view, may miss moments on raised section of set",
+                      "seat_text_code": "RVI",
                       "separator": ""
                     }
                   ]
@@ -291,16 +284,21 @@ Attribute | Description
 }
 ```
 
-Seat selection STUFF
 
-Seat selection parameters
+Seat block attributes:
 
 Attribute | Description
 --------- | -----------
-`zz` | zz
-
-
-
+`block_length` | The number of seats in the block. Seats are included in the same seat block when they are contiguous. 
+`id_details` | The description of an individual seat.
+`col_id` | The column identifier, normally a number.
+`full_id` | The unique identifier for the seat.
+`is_restricted_view` | `true` if the seat is marked as having a restricted view.
+`row_id` | The row identifier, normally a letter.
+`seat_subdata` | (TODO: what is this useful for?)
+`seat_text` | *(Optional)* A description of the seat that should be displayed to the customer. If the seat has a restricted view this text will normally be present to describe the restriction in more detail, but it should be displayed in all cases. 
+`seat_text_code` | (TODO shouldn't this only appear when seat_text appears?)
+`separator` | (TODO when is this used, what is an example?)
 
 
 
@@ -308,9 +306,6 @@ Attribute | Description
 
 ## Retrieve availability
 
-This call is used to return detail for one or more performances by their ID. It returns a list of [performance objects](#performance-object).
-
-This call will not be useful for common use cases. If you have a need to request availability for a subset of performances in a guaranteed fast response time then one way to achieve it is to use this call with the req_avail_details parameter - this will return the list of available price bands from Ingresso's cached data. Not that the cached data can be out of date or not present, and doesn't return seating data, so we do not recommend this in most cases.
 
 > **Definition**
 
@@ -318,7 +313,7 @@ This call will not be useful for common use cases. If you have a need to request
 GET https://api.ticketswitch.com/cgi-bin/json_availability.exe/{username}
 ```
 
-This call is used to return detail for one or more performances by their ID. It returns a list of [performance objects](#performance-object).
+This call is used to return availability for a performance. It returns a list of [availability objects](#availability-object).
 
 > **Example request**
 
@@ -326,128 +321,25 @@ This call is used to return detail for one or more performances by their ID. It 
 curl https://api.ticketswitch.com/cgi-bin/json_availability.exe/demo
         -d "user_passwd=demopass" \
         -d "perf_id=3CVA-6A" \
-        -d "&add_seat_blocks" \
+        -d "add_seat_blocks" \
         -G
 ```
 
-### Request
-
-Parameter | Description
---------- | -----------
-`perf_id_list` | A comma separated list of performance IDs e.g. `6IF-A5R` for a single performance; `6IF-A5R,6IF-A5S` for multiple performances
-
-
-These parameters can be included to request additional data for each performance:
-
-
-Parameter | Description
---------- | -----------
-`req_avail_details` | Returns a list of ticket types and price bands that are available for this performance [see detail](#avail-detail-object). This data is retrieved from a cache of previously-seen availability data. If you wish to display availability for a particular performance our recommendation is to make a separate [availability request](#availability) rather than using this data which can be quite out of date. However if you have a use case requiring you to quickly return availability for all performances this is the best way to achieve it.
-`req_cost_range` | Returns [cost ranges](#cost-range-object) for each performance (min and max prices, details of offers). This will normally be useful to request.
-
-
-These parameters are used to control the output if more than one performance is returned:
-
-
-
-
-
-Parameter | Description
---------- | -----------
-`page_len` | Length of a page, default 50
-`page_no` | Page number, default 0, ignored if page_len is not present
-
-
-(TODO: need example of how the paging works or link to description in events when that is added)
-
-
-> **Example response**
-
-```json
-{
-  "performances_by_id": {
-    "6IF-A48": {
-      PERFORMANCE_OBJECT
-    }
-  }
-}
-```
-
-### Response
-
-A list of performance objects are returned for each perf_id requested.
-
-
-
-
-## List performances for an event
-
-> **Definition**
-
-```
-GET https://api.ticketswitch.com/cgi-bin/json_performances.exe/{username}?user_passwd={password}&event_id={event_id}
-```
-
-This call returns a list of [performance objects](#performance-object) for a particular event. The list is paged to avoid large volumes
-of data being accidentally returned.
-
-Typical use cases:
-
-* Request a list of performances to dynamically populate the calendar on your website
-* Request performances on a regular basis (e.g. hourly) to add them to your system. Note that this is not necessary or recommended - performances is one of our faster calls and if you cache the list of performances in your own system pricing and offers can be out of date. This is a particular problem when an offer or price change goes live at a particular time - you then need to worry about refreshing your cache. Our own websites dynamically request performances when a user needs to select on a calendar.
-
-
-> **Example request**
-
-```shell
-curl https://api.ticketswitch.com/cgi-bin/json_performances.exe/demo?
-user_passwd=demopass&event_id=6IF
-```
+(TODO should be req_seat_blocks for consistency?)
 
 ### Request
 
+Parameter | Description
+--------- | -----------
+`perf_id` | The performance identifier that you want to display availability for.
 
 These parameters can be included to request additional data for each performance:
 
-
 Parameter | Description
 --------- | -----------
-`req_avail_details` | Returns a list of ticket types and price bands that are available for this performance [see detail](#avail-detail-object). This data is retrieved from a cache of previously-seen availability data. If you wish to display availability for a particular performance our recommendation is to make a separate [availability request](#availability) rather than using this data which can be quite out of date. However if you have a use case requiring you to quickly return availability for all performances this is the best way to achieve it.
-`req_cost_range` | Returns [cost ranges](#cost-range-object) for each performance (min and max prices, details of offers). This will normally be useful to request.
+`add_seat_blocks` | Include to retrieve individual seats (if, for example, you wish to offer seat selection to your customer). The inclusion of this parameter does not guarantee that individual seat data will be returned - this also depends on (a) whether the event is seated and (b) whether the backend supports seat selection.
 
-
-These parameters are used to control the output if more than one performance is returned:
-
-Parameter | Description
---------- | -----------
-`page_len` | Length of a page, default 50
-`page_no` | Page number, default 0, ignored if page_len is not present
-
-
-
-> **Example response**
-
-```json
-{
-  "results": {
-    "events_by_id": { ... },
-    "has_perf_names": true,
-    "performance": [
-      {
-        PERFORMANCE_OBJECT
-      },
-      {
-        PERFORMANCE_OBJECT
-      }
-    ]
-  }
-}
-```
 
 ### Response
 
-Attribute | Description
---------- | -----------
-`events_by_id` | A list of events related to the performances returned. This is necessary in the case of meta events (events that are made up of multiple component events, for example a touring show) - in that case it is useful to know the details of the component events. (TODO couldn't this just be returned at the event stage?)
-`has_perf_names` | Whether the performances returned have performance names (human readable descriptions of the performance). Performance names are not always present but must be displayed when they are. Performance names are typically used where performances of an event differ significantly in more than just date and time (sometimes the backend system will not return the time to us in a structured format but it will instead be included as part of the performance name). An example performance with a performance name is 6IF-A5R.
-`performance` | A list of [performance objects](#performance-object)
+Returns an [availability object](#availability-object).

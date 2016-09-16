@@ -17,6 +17,8 @@ includes:
   - months
   - availability
   - send_methods
+  - discount
+  - reservation
   - generic_objects
   - caching
 

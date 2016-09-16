@@ -110,6 +110,7 @@ correct REST response. Even when an HTTP error *is* returned, however, there
 will be a JSON block acocmpanying it which contains human readable
 error text so that the caller has some idea of what they have done wrong.
 
+To check whether there is a problem with the Ingresso API or the backend systems we connect to you can check the [Ingresso status page](https://status.ingresso.co.uk/).
 
 ## Variables controlling output
 
@@ -242,3 +243,11 @@ Some of the test events have specific conditions that you can check:
 
 TODO is it worth describing some high-level variations here? Freesale, allocation, seated, seat selection, no performances, no perf times eg goldentours (we should also fix this).
 
+
+## API Support
+
+We only provide support to customers that we have provided a test account to. If you have a test or live account and you encounter problems with the API:
+
+1. Check the [Ingresso status page](https://status.ingresso.co.uk/)
+2. If there is an issue reported on the status page this indicates we are already aware. 
+3. If your issue does not fit the description of the current issue, or we have not reported an issue you should contact us using the contact details and under the SLAs we have previously agreed.
