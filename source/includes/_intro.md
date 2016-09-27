@@ -1,7 +1,9 @@
-# TODOs / questions
+<!---
+# TODOs / Questions
 
 * Can / should we tidy up the URLs: get rid of "json_", ".exe" and "cgi-bin"?
 * What about versioning? Should we build this in now for when we need to make breaking changes in future?
+* Allowing search on cost ranges would be useful
 * Is it useful to return the detail for previous objects? Eg in json_performances is there a need to return the event object? (excluding meta events)
 * Replace seatprice and surcharge with face_value and booking_fee? This has caused confusion before.
 * The Python wrapper is simplifying a number of concepts from the API. We need to be consistent across JSON API and the wrappers - if a concept is too complex we should simplify everywhere. Eg the python is using positive flags everywhere rather than negative sometimes eg has_no_perfs.
@@ -17,6 +19,7 @@
 * event_type is one of `simple_ticket`, `hotel_room` or `misc_item`. Do we have any hotel_rooms or misc_items currently? If not should we hide this from the API consumer?
 * Should we use HTTP authentication?
 * Should we have the concept of a venue with an ID? (when the venue is enforced)
+-->
 
 
 # Introduction

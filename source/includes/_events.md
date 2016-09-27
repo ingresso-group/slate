@@ -268,7 +268,7 @@ curl https://api.ticketswitch.com/cgi-bin/json_events.exe/demo \
 
 ### Request
 
-All parameters from [json_events_by_id](#retrieve-an-event) can be used, apart from `event_id_list`. The following filter parameters are also available; we've listed what we believe are the most important filters first.
+These are the available search / filter parameters; we've listed what we believe are the most important filters first.
 
 Parameter | Description
 --------- | -----------
@@ -283,6 +283,45 @@ Parameter | Description
 `include_dead` | Include dead events in the results - useful if you want to continue to display an event page after an event dies, for example to help with search engine optimisation
 `include_non_live` | Include dead, pending and new events. *Unlikely to be useful for partners*
 
+
+All other parameters are the same as [json_events_by_id](#retrieve-an-event). 
+
+These parameters can be included to request additional data for each event:
+
+Parameter | Description
+--------- | -----------
+`req_avail_details` | Returns a list of unique ticket types and price bands that are available for this event across all performances [see detail](#avail-detail-object). This is not commonly used but was originally developed to display the pricing detail for each price band on sale.
+`req_avail_details_with_perfs` | This will add the list of available performance dates to each avail detail object. Only valid if used alongside req_avail_details. This is not commonly used but one possible use case is to display a matrix of availability and performance date to show users availability in one view.
+`req_cost_range` | Returns [cost ranges](#cost-range-object) for each event (min and max prices, details of offers). This will normally be useful to request.
+`req_cost_range_details` | [cost range details](#cost-range-detail-object) for each event (this returns the min and max prices and details of offers for every price band). This is not commonly used.
+`req_extra_info` | Returns the descriptive info for the event, returned as individual sections (`structured_info`) or as a single summary (`event_info` / `event_info_html`)
+`req_media_triplet_one` | 
+`req_media_triplet_two` | 
+`req_media_triplet_three` | 
+`req_media_triplet_four` | 
+`req_media_triplet_five` | 
+`req_media_seating_plan` | 
+`req_media_square` | 
+`req_media_landscape` | 
+`req_media_marquee` | 
+`req_media_supplier` | (TODO is this needed?)
+`req_meta_components` | (TODO)
+`req_reviews` | Returns event reviews if available
+`req_video_iframe` | Returns video iframe information if available
+`req_custom_fields` | *Internal use only*
+`req_internal_codes` | *Internal use only*
+`req_sale_mode` |  *Internal use only*
+`req_src_info` |  *Internal use only*
+`req_collect_text` | *Internal use only* (TODO should we just get rid of this?)
+
+
+These parameters are used to control the output if more than one event is returned:
+
+Parameter | Description
+--------- | -----------
+`page_len` | Length of a page, default 50
+`page_no` | Page number, default 0, ignored if page_len is not present
+`s_top` | orders events by the most sales over the last 48 hour period, otherwise orders alphabetically (TODO taken from XML API - is this valid for JSON?)
 
 
 > **Example response**
