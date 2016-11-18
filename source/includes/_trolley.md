@@ -254,15 +254,15 @@ This section describes:
 
 The trolley returns several nested objects:
 
---> trolley
+--> `trolley`
 
------> trolley_contents
+-----> `trolley_contents`
 
---------> bundle
+--------> `bundle`
 
------------> order
+-----------> `order`
 
---------------> ticket_order
+--------------> `ticket_order`
 
 A `bundle` represents all orders from a particular supplier. Orders are grouped like this so that all items are ordered from the supplier at once - if the supplier posts tickets on our behalf then separate items will be posted together, and if the supplier processes payment all items in the bundle will be paid for with a single payment. Reserving and purchasing items will also succeed or fail together. 
 

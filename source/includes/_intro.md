@@ -9,7 +9,7 @@
 * Merge images and video into media. Can we also reduce the number of fields returned for each media instance?
 * Pete to default self_print_mode to html by default - this normally confuses distributors
 * Pete to add ability to return availability for non-live events - we can then use F13 to allow ops to run availability checks before the event is live and make use of the results
-* Amazon suggested we return a 429 - TOO MANY REQUESTS when we return <backend_call_failed/> or <backend_call_throttling_failed/>. Should we use http status codes in this type of case?
+* Amazon suggested we return a 429 - TOO MANY REQUESTS when we return backend_call_failed or backend_call_throttling_failed. Should we use http status codes in this type of case?
 * Should we add a flag to distinguish between no booking fee and discounted face value offers? If not then need to explain how to distinguish between these offer types in events / perfs / availability
 * We have been asked to produce lists of categories and regions / cities - for now I have a google doc but we should add an API for this
 * Matt to include a section describing how our caching works
@@ -27,7 +27,7 @@
 
 # IMPORTANT NOTE
 
-This API is a work in progress so please note that it is subject to change.
+This API is currently a work in progress - until this message is removed it is subject to change.
 
 
 # Introduction

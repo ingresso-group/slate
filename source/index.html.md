@@ -18,6 +18,7 @@ includes:
   - availability
   - send_methods
   - discount
+  - trolley
   - reservation
   - generic_objects
   - caching
