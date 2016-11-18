@@ -120,7 +120,7 @@ Attribute | Description
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/cgi-bin/json_events_by_id.exe/{username}
+GET https://api.ticketswitch.com/cgi-bin/json_events_by_id.exe/{username}?user_passwd={password}&event_id_list={eventidlist}
 ```
 
 This call is used to return detail for one or more events by their ID. It returns a list of [event objects](#event-object).
@@ -141,6 +141,11 @@ curl https://api.ticketswitch.com/cgi-bin/json_events_by_id.exe/demo \
     -d "user_passwd=demopass" \
     -d "event_id_list=6IF" \
     -d "req_cost_range" \
+    -d "req_cost_range_best_value_offer" \
+    -d "req_cost_range_max_saving_offer" \
+    -d "req_cost_range_min_cost_offer" \
+    -d "req_cost_range_top_price_offer" \
+    -d "req_cost_range_no_singles_data" \
     -d "req_cost_range_details" \
     -d "req_extra_info" \
     -d "req_reviews" \
@@ -247,7 +252,7 @@ Parameter | Description
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/cgi-bin/json_events.exe/{username}
+GET https://api.ticketswitch.com/cgi-bin/json_events.exe/{username}?user_passwd={password}
 ```
 
 This call is used to search for events. It takes filter parameters
@@ -268,6 +273,9 @@ curl https://api.ticketswitch.com/cgi-bin/json_events.exe/demo \
     -d "user_passwd=demopass" \
     -d "s_keys=nutcracker" \
     -d "s_coco=uk" \
+    -d "req_cost_range" \
+    -d "req_cost_range_best_value_offer" \
+    -d "req_cost_range_no_singles_data" \
     -G
 ```
 

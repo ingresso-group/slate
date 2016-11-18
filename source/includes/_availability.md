@@ -7,6 +7,9 @@ TODO:
 - How are example seats handled? Do you need to request them?
 - Promo codes?
 - "both" allocation mode (we have a few "both" entries in event_allocation_modes - should probably change these to pool_alloc)
+- MATT to add docs for add_user_commission
+- MATT to add docs for add_example_seats
+- MATT to add docs for add_discounts
 
 
 This section describes:
@@ -141,7 +144,7 @@ Ticket type attributes:
 Attribute | Description
 --------- | -----------
 `ticket_type_code` | The unique identifier for the ticket type. For seated events this refers to a part of house / seating area such as Grand Circle.
-`ticket_type_desc` | The description for the ticket type. This should be displayed to the customer (if you are offering seat selection to your customer then you would typically hard code the description when drawing a seating plan).
+`ticket_type_desc` | The description for the ticket type. This should be displayed to the customer (if you are offering seat selection to your customer then you would typically hard-code the description when drawing a seating plan).
 
 
 Price band attributes:
@@ -310,7 +313,7 @@ Attribute | Description
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/cgi-bin/json_availability.exe/{username}
+GET https://api.ticketswitch.com/cgi-bin/json_availability.exe/{username}?user_passwd={password}&perf_id={perfid}
 ```
 
 This call is used to return availability for a performance. It returns a list of [availability objects](#availability-object).
@@ -318,7 +321,7 @@ This call is used to return availability for a performance. It returns a list of
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/cgi-bin/json_availability.exe/demo
+curl https://api.ticketswitch.com/cgi-bin/json_availability.exe/demo \
         -d "user_passwd=demopass" \
         -d "perf_id=3CVA-6A" \
         -d "add_seat_blocks" \
@@ -337,7 +340,36 @@ These parameters can be included to request additional data for each performance
 
 Parameter | Description
 --------- | -----------
+`add_discounts` | 
+`add_example_seats` | Include to retrieve example seats. These can be displayed alongside the ticket options when presenting availability to customers. The inclusion of this parameter does not guarantee that example seats data will be returned - this also depends on (a) whether the event is seated and (b) whether the backend supports seat selection.
 `add_seat_blocks` | Include to retrieve individual seats (if, for example, you wish to offer seat selection to your customer). The inclusion of this parameter does not guarantee that individual seat data will be returned - this also depends on (a) whether the event is seated and (b) whether the backend supports seat selection.
+`add_user_commission` | Include to retrieve commission data. For most partners this will include user_commission only (the amount you earn per ticket). Some partners will also see gross_commission, which is the total commission available to be shared between Ingresso and our partner. By default you will see user_commission only - if you think you need to see gross_commission as well then please get in touch.
+
+TODO:
+            "gross_commission": {
+              "amount_excluding_vat": 6.5,
+              "amount_including_vat": 7.8,
+              "commission_currency": {
+                "currency_code": "gbp",
+                "currency_factor": 100,
+                "currency_number": 826,
+                "currency_places": 2,
+                "currency_post_symbol": "",
+                "currency_pre_symbol": "£"
+              }
+            },
+            "user_commission": {
+              "amount_excluding_vat": 2.93,
+              "amount_including_vat": 3.51,
+              "commission_currency": {
+                "currency_code": "gbp",
+                "currency_factor": 100,
+                "currency_number": 826,
+                "currency_places": 2,
+                "currency_post_symbol": "",
+                "currency_pre_symbol": "£"
+              }
+            }
 
 
 ### Response

@@ -1,25 +1,33 @@
 <!---
 # TODOs / Questions
 
-* Can / should we tidy up the URLs: get rid of "json_", ".exe" and "cgi-bin"?
-* What about versioning? Should we build this in now for when we need to make breaking changes in future?
-* Allowing search on cost ranges would be useful
+* Can we tidy up the URLs: get rid of "json_", ".exe" and "cgi-bin"?
+* API versioning is a common practice. Should we build this in now for when we need to make breaking changes in future?
 * Is it useful to return the detail for previous objects? Eg in json_performances is there a need to return the event object? (excluding meta events)
 * Replace seatprice and surcharge with face_value and booking_fee? This has caused confusion before.
 * The Python wrapper is simplifying a number of concepts from the API. We need to be consistent across JSON API and the wrappers - if a concept is too complex we should simplify everywhere. Eg the python is using positive flags everywhere rather than negative sometimes eg has_no_perfs.
 * Merge images and video into media. Can we also reduce the number of fields returned for each media instance?
-* Pete to default self_print_mode to html by default - this  
+* Pete to default self_print_mode to html by default - this normally confuses distributors
+* Pete to add ability to return availability for non-live events - we can then use F13 to allow ops to run availability checks before the event is live and make use of the results
+* Amazon suggested we return a 429 - TOO MANY REQUESTS when we return <backend_call_failed/> or <backend_call_throttling_failed/>. Should we use http status codes in this type of case?
+* Should we add a flag to distinguish between no booking fee and discounted face value offers? If not then need to explain how to distinguish between these offer types in events / perfs / availability
+* We have been asked to produce lists of categories and regions / cities - for now I have a google doc but we should add an API for this
 * Matt to include a section describing how our caching works
-* Matt to ensure seat selection vs best available is explained
 * Matt to rerun examples now that bit masks are replaced / flagged (and explain how to use bit masks)
-* Any reason not to use a single req_media rather than requesting individual items? Should we simplify the attributes returned eg just return the URL and is_secure rather than splitting up the URL into components and listing http and https variants.
+* Can we add price-based search to availability?
+* Any reason not to use a single req_media rather than requesting individual items? Should we simplify the attributes returned eg just return the URL and is_secure rather than splitting up the URL into components and listing http and https variants?
 * Use a test API server or some form of rate limiting for particular users? Would allow us to give open access without worrying about someone hammering our main API server.
+* Allowing search on cost ranges would be useful
 * A reporting API would be useful - our internal reporting apps should also use this
 * Should we be more restful eg /events/25DR to get detail by event ID? What do we lose by not being true rest?
 * event_type is one of `simple_ticket`, `hotel_room` or `misc_item`. Do we have any hotel_rooms or misc_items currently? If not should we hide this from the API consumer?
 * Should we use HTTP authentication?
 * Should we have the concept of a venue with an ID? (when the venue is enforced)
 -->
+
+# IMPORTANT NOTE
+
+This API is a work in progress so please note that it is subject to change.
 
 
 # Introduction

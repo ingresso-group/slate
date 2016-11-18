@@ -75,7 +75,7 @@ This call will not be useful for common use cases. If you have a need to request
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/cgi-bin/json_performances_by_id.exe/{username}
+GET https://api.ticketswitch.com/cgi-bin/json_performances_by_id.exe/{username}?user_passwd={password}&perf_id_list={perfidlist}
 ```
 
 This call is used to return detail for one or more performances by their ID. It returns a list of [performance objects](#performance-object).
@@ -103,7 +103,12 @@ These parameters can be included to request additional data for each performance
 Parameter | Description
 --------- | -----------
 `req_avail_details` | Returns a list of ticket types and price bands that are available for this performance [see detail](#avail-detail-object). This data is retrieved from a cache of previously-seen availability data. If you wish to display availability for a particular performance our recommendation is to make a separate [availability request](#availability) rather than using this data which can be quite out of date. However if you have a use case requiring you to quickly return availability for all performances this is the best way to achieve it.
-`req_cost_range` | Returns [cost ranges](#cost-range-object) for each performance (min and max prices, details of offers). This will normally be useful to request.
+`req_cost_range` | Returns [cost ranges](#cost-range-object) for each event. On its own, this parameter will add min and max prices only, however by adding one of the following 5 parameters below you can receive additional data (multiple parameters are provided because there can be multiple definitions of the "best" offer). Most API users request cost ranges.
+`req_cost_range_best_value_offer` | Returns the offer with the highest percentage saving. This is the most commonly used offer cost range.
+`req_cost_range_max_saving_offer` | Returns the offer with the highest absolute saving.
+`req_cost_range_min_cost_offer` | Returns the offer with the lowest cost.
+`req_cost_range_top_price_offer` | Returns the offer with the highest cost. This is the least used offer cost range.
+`req_cost_range_no_singles_data` | This returns another cost range object that excludes availability with only 1 consecutive seat available. The prices in this cost range will therefore be the same or higher than the outer cost range. It has the same structure as the main cost range (so if you want to see the "best value offer" in the no singles data, you need to add `req_cost_range_best_value_offer` and you will see this data in both cost ranges).
 
 
 These parameters are used to control the output if more than one performance is returned:
@@ -144,7 +149,7 @@ A list of performance objects are returned for each perf_id requested.
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/cgi-bin/json_performances.exe/{username}
+GET https://api.ticketswitch.com/cgi-bin/json_performances.exe/{username}?user_passwd={password}&event_id={eventid}
 ```
 
 This call returns a list of [performance objects](#performance-object) for a particular event. The list is paged to avoid large volumes
@@ -161,7 +166,7 @@ Typical use cases:
 ```shell
 curl https://api.ticketswitch.com/cgi-bin/json_performances.exe/demo \
     -d "user_passwd=demopass" \
-    -d "&event_id=6IF" \
+    -d "event_id=6IF" \
     -G
 ```
 
@@ -174,7 +179,12 @@ These parameters can be included to request additional data for each performance
 Parameter | Description
 --------- | -----------
 `req_avail_details` | Returns a list of ticket types and price bands that are available for this performance [see detail](#avail-detail-object). This data is retrieved from a cache of previously-seen availability data. If you wish to display availability for a particular performance our recommendation is to make a separate [availability request](#availability) rather than using this data which can be quite out of date. However if you have a use case requiring you to quickly return availability for all performances this is the best way to achieve it.
-`req_cost_range` | Returns [cost ranges](#cost-range-object) for each performance (min and max prices, details of offers). This will normally be useful to request.
+`req_cost_range` | Returns [cost ranges](#cost-range-object) for each event. On its own, this parameter will add min and max prices only, however by adding one of the following 5 parameters below you can receive additional data (multiple parameters are provided because there can be multiple definitions of the "best" offer). Most API users request cost ranges.
+`req_cost_range_best_value_offer` | Returns the offer with the highest percentage saving. This is the most commonly used offer cost range.
+`req_cost_range_max_saving_offer` | Returns the offer with the highest absolute saving.
+`req_cost_range_min_cost_offer` | Returns the offer with the lowest cost.
+`req_cost_range_top_price_offer` | Returns the offer with the highest cost. This is the least used offer cost range.
+`req_cost_range_no_singles_data` | This returns another cost range object that excludes availability with only 1 consecutive seat available. The prices in this cost range will therefore be the same or higher than the outer cost range. It has the same structure as the main cost range (so if you want to see the "best value offer" in the no singles data, you need to add `req_cost_range_best_value_offer` and you will see this data in both cost ranges).
 
 
 These parameters are used to control the output if more than one performance is returned:

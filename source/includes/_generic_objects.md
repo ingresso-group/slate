@@ -181,6 +181,7 @@ Attribute | Description
 `quantity_options` | the quantities with availability
 `range_currency` | the [currency](#currency-object) for the cost range
 
+TODO: ensure I have explaining the difference between best_value_offer etc somewhere.
 
 ## Cost Range Detail object
 
@@ -251,8 +252,8 @@ Attribute | Description
 `currency_factor` | Multiply by this number to get values in the base unit (e.g. multiplying $47.11 by the currency_factor will give 4711 cents)
 `currency_number` | [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) three letter numeric identifier
 `currency_places` | The number of decimal places to display (eg 45.5 usd should be displayed as 45.50)
-`currency_post_symbol` | A symbol to display at the end of the price
-`currency_pre_symbol` | A symbol to display in front of the price
+`currency_post_symbol` | A symbol to display at the end of the price. Not always present.
+`currency_pre_symbol` | A symbol to display in front of the price. Not always present.
 
 
 ## Date/Time object
