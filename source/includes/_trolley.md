@@ -271,7 +271,7 @@ An `order` represents a number of tickets to a particular `price band` and `tick
 An `order` will contain multiple `ticket_order`s when more than one `discount code` is used (for example ticket 1 and 2 have the ADULT discount code, and tickets 3 and 4 have the CHILD discount code). In this example there will be two `ticket_order`s: one for ADULT and one for CHILD.
 
 
-* trolley *
+**`trolley` attributes:**
 
 Attribute | Description
 --------- | -----------
@@ -279,7 +279,7 @@ Attribute | Description
 `trolley_token` | The identifier for the trolley (this is an internal hash representing the items in the trolley, so the identifier will be the same for identical trolleys).
 
 
-* trolley_contents *
+**`trolley_contents` attributes:**
 
 Attribute | Description
 --------- | -----------
@@ -288,7 +288,7 @@ Attribute | Description
 `trolley_order_count` | The number of orders in the trolley. There will be at least one order for every bundle.
 
 
-* bundle * 
+**`bundle` attributes** 
 
 Attribute | Description
 --------- | -----------
@@ -302,7 +302,7 @@ Attribute | Description
 `source_desc` | The name of the supplier system that this bundle will be purchased from.
 
 
-* order *
+**`order` attributes:**
 
 Attribute | Description
 --------- | -----------
@@ -319,7 +319,7 @@ Attribute | Description
 `total_sale_surcharge` | The total booking fee for this order.
 
 
-* ticket_order *
+**`ticket_order` attributes:**
 
 Attribute | Description
 --------- | -----------

@@ -36,26 +36,23 @@ The Ingresso API is designed to allow you to sell from Ingresso's inventory of e
 Ingresso has connected to a large number of ticketing system APIs, allowing us to transact directly on the venue's system. 
 By integrating with the Ingresso API you are able to view and purchase live inventory from a number of different venues.
 
-The Ingresso API is a fully transactional API, very loosely based on REST. 
+The Ingresso API is a fully transactional API, loosely based on REST. 
 GET requests and basic query paremeters are used to drive the API. You format requests 
 in [JSON](http://www.json.org/) and you will receive either a JSON-formatted 
 response or an HTTP error. 
 
 We describe objects in a consistent way across different calls 
 (for example the output of [events](#events) and [performances](#performances)
-includes a cost_range object and this is described in the 
+includes a [cost_range object](#cost-range-object) and this is described in the 
 same format. The idea of this is that standard code
 can be used on the client side to read all parts of the output.
-Rather than relegate these common objects to an appendix at
-the end of this document we have instead chosen to describe each one where
-it first occurs, which hopefully reduces the need to flip backwards and forwards.
 
 This API replaces the [the Ingresso XML API](http://www.ingresso.co.uk/apidocs/). 
 The XML API relies on temporary tokens from the preceeding call being passed in 
 to the next call - these has been removed in favour of permanent IDs. One benefit 
 of this change is that a call near the end of the booking process, such as 
-[reserve](TODO), can be called without needing to remake the preceeding calls 
-(such as requesting availability). 
+[reserve](#make-a-reservation), can be called without needing to remake the preceeding calls 
+(such as [requesting availability](#retrieve-availability)). 
 
 
 ## Philosophy
@@ -73,8 +70,8 @@ The Ingresso API supports multiple use cases and variations, but below is a typi
 * get a list of [events](#events) based on search criteria.
 * get a list of [performances](#performances) for an event.
 * get [availability](#availability) for a performance, including seat numbers if the event is seated.
-* *Optional:* [](), []() and []() can be used to manage shopping baskets. (TODO)
-* [reserve](#reserve) specific seats or best available tickets for a set period of time. If using basketing `reserve` will attempt to reserve all items in the basket.
+* *Optional:* use a [shopping trolley](#manage-the-shopping-trolley) to add multiple items to your basket.
+* [reserve](#make-a-reservation) specific seats or best available tickets for a set period of time. If using basketing `reserve` will attempt to reserve all items in the shopping trolley.
 * [purchase](#purchase) the reserved tickets.
 
 
@@ -84,7 +81,7 @@ All examples shown in this documentation are for the `demo` user.
 This user has access to test product only - you can make purchases with this user without any impact on 
 live tickets.
 
-To request your own test or live API credentials email us: api@ingresso.co.uk.
+To request your own test or live API credentials email us: api@ingresso.co.uk
 
 
 ## Authentication
@@ -92,9 +89,9 @@ To request your own test or live API credentials email us: api@ingresso.co.uk.
 The username and password should be passed in with every call. 
 (TODO does it only need to be set once for the client libraries?)
 
-The password should be passed in the query string with `user_passwd`.
+The password must be passed in the query string with `user_passwd`.
 
-The username is to be passed in explicitly as part of the path, being
+The username must be passed in explicitly as part of the path, being
 the component after the '.exe'. Some of our partners require sub users for 
 certain use cases such as running their own affiliate programme; if a sub 
 user is to be passed in 
@@ -104,10 +101,10 @@ set of three path components is treated as a placehold for the information
 not being passed - i.e. it is ignored. So you can, for example,
 call json_events as 'demo' with a language of 'de' like this.:
 
-	/cgi-bin/json_events.exe/demo/-/de?user_passwd=demopass
+`/cgi-bin/json_events.exe/demo/-/de?user_passwd=demopass`
 
 The sub user there is not set to '-', instead it is treated as unset 
-and can be pased in as query string argument if desired.
+and can be passed in as a query string argument if desired.
 
 
 ## Errors
@@ -121,7 +118,9 @@ correct REST response. Even when an HTTP error *is* returned, however, there
 will be a JSON block acocmpanying it which contains human readable
 error text so that the caller has some idea of what they have done wrong.
 
-To check whether there is a problem with the Ingresso API or the backend systems we connect to you can check the [Ingresso status page](https://status.ingresso.co.uk/).
+To check whether there is a problem with the Ingresso API or the backend systems we 
+connect to, you can check the [Ingresso status page](https://status.ingresso.co.uk/).
+
 
 ## Variables controlling output
 
