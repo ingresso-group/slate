@@ -67,8 +67,8 @@ Attribute | Description
 --------- | -----------
 `city_desc` | Name of the city where the event is taking place
 `class` | Array of class or category objects.
-`country_code` | ISO3166 county code for the above country
 `country_desc` | Name of the country where the event is taking place
+`country_code` | ISO3166 county code for the above country
 `critic_review_percent` | The aggregate critic review score, e.g. `80` for 80%.
 `custom_filter` | Array of custom filter codes. (TODO can we remove this?)
 `date_range_start` | A [date/time object](#date-time-object) for the start of the run
