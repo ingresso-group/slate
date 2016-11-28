@@ -20,7 +20,7 @@ This section describes:
 
 > **Example response**
 
-```json
+```shell
 {
   "trolley_contents": {
     "bundle": [

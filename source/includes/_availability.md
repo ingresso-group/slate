@@ -21,7 +21,7 @@ This section describes:
 
 > **Example response - best available only**
 
-```json
+```shell
 {
   "availability": {
     "ticket_type": [
@@ -168,7 +168,7 @@ Attribute | Description
 
 > **Example response - including seat listing**
 
-```json
+```shell
 {
   "availability": {
     "ticket_type": [

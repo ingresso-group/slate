@@ -10,7 +10,7 @@ This section describes:
 
 > **Example Response**
 
-```json
+```shell
 {
   "city_desc": "London",
   "class": [
@@ -220,7 +220,7 @@ Parameter | Description
 
 > **Example response**
 
-```json
+```shell
 {
   "events_by_id": {
     "6IF": {
@@ -344,7 +344,7 @@ Parameter | Description
 
 > **Example response**
 
-```json
+```shell
 {
   "results": {
     "event": [
@@ -372,7 +372,7 @@ common structure for returning array data through the API.
 
 > **Example Response**
 
-```json
+```shell
 "video_iframe": {
   "video_iframe_caption": "",
   "video_iframe_caption_html": "",
@@ -507,7 +507,7 @@ Attribute | Description
 
 > **Example Response**
 
-```json
+```shell
 "reviews": {
   "review": [
     {
