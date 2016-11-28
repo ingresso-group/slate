@@ -270,20 +270,8 @@ Attribute | Description
     "currency_pre_symbol": "£"
   },
   "quantity_options": {
-    "valid_quantity_flags": [
-      false,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true
-    ]
-  }
+    "valid_quantity_bitmask": 126,
+   }
 }
 ```
 
