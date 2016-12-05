@@ -2,9 +2,6 @@
 
 TODO: 
 
-- what are the "extra data items"?
-- "Note that, as with the json_discounts, you may need the use_alloc flag for B2B clients whi have their allocation mode set to 'both'."
-- what systems currently use blanket discounts? "Also if a backend only supprts 'blanket' discount (i.e. all tickets have to have the same discount) then you only need specifcy disc0"
 - send method may be complex to use?
 
 In order to reserve and purchase tickets for multiple events in a single transaction, you first need to add them to a shopping trolley.
@@ -310,7 +307,7 @@ Attribute | Description
 `item_number` | This remains constant as items are added or removed. 
 `performance` | The [performance](#performance-object) for this order.
 `price_band_code` | The code for a price band. To uniquely identify a price band you should take the combination of `ticket_type_code`
-`seat_request_status` | The status of this order - this indicates whether the seats have been reserved or not. Possible values are `not_requested` (TODO: finish)
+`seat_request_status` | The status of your tickets after they have been reserved. Possible values are `not_requested` (specific seats not requested), `got_none` (you requested A13 and A14 but we gave you A15 and A16), `got_partial` (you requested A13 and A14 but we gave you A14 and A15), `got_all` (you requested A13 and A14 and you got A13 and A14 - by far the most common response when requesting specific seats). 
 `ticket_orders` | A number of ticket_order objects, details below.
 `ticket_type_code` | The unique identifier for the ticket type. For seated events this refers to a part of house / seating area such as Grand Circle.
 `ticket_type_desc` | The description for the ticket type. This should be displayed to the customer
@@ -347,8 +344,12 @@ This call is used for the following use cases:
 - Add specific seats to a new or existing shopping trolley
 - Remove items from the trolley
 
-Note that adding an order will kick out anything in the trolley which would prevent it being added.
-TODO MORE DETAIL ON THIS!
+Note that adding an order will remove anything in the trolley which would prevent it being added. The common reasons why two orders cannot sit alongside each other are:
+
+- We currently don't allow a basket to contain multiple orders for the same performance. This is something we plan to change, if this is a problem for you please let us know.
+- Incompatible despatch methods for the same supplier. For example if you have specified "International Post" for one item, and "Collect From Box Office" for the next item, and they are both from the same supplier then these are incompatible and the first item will be removed from your trolley. This should be an uncommon occurence.
+- Differing currencies - for example the first item added to the trolley uses the USD currency while the second item added uses the GBP currency. These are incompatible so the first item will be removed from your trolley.
+
 
 > **Example request - adding best available tickets to a new trolley, specifying specific discount codes**
 
@@ -410,7 +411,7 @@ Parameter | Description
 `price_band_code` | The price band identifier for the tickets that you want to add to your trolley.
 `remove_items_list` | A comma separated list of order `item_number`s that you want to remove.
 `seatX` | Specify a specific seat for ticket number X, with zero-based numbering (so to specify seat A12 as the first ticket use `seat0=A12`). If seat numbers are not specified then when the trolley is later reserved you will receive best available seats.
-`X_send_code` | Specify a send / despatch method for backend system X. If this is not present it will default to the first send method. For example, to specify the POST send method for the nimax backend system, use `nimax_send_code=POST`.
+`X_send_code` | Specify a send / despatch method for supplier system X. If this is not present it will default to the first send method. For example, to specify the POST send method for the nimax supplier system, use `nimax_send_code=POST`.
 `ticket_type_code` | The ticket type identifier for the tickets that you want to add to your trolley.
 `trolley_token` | The identifier for the trolley. This is used to add additional items to a trolley, or to reserve the items in a trolley.
 
@@ -419,7 +420,7 @@ Additional parameters, primarily for internal use:
 
 Parameter | Description
 --------- | -----------
-`add_crypto_block` | `cypto_block`s are used in the old [Ingresso XML API](http://www.ingresso.co.uk/apidocs/). To make migration away from the XML API easier, when `add_crypto_block=yes` a `crypto_block` will be added to the response. This can then be used to reserve and purchase tickets using the XML API (so that the JSON API is used up to the basket stage and the XML API is used to complete the purchase).
+`add_crypto_block` | `cypto_block`s are used in the old [Ingresso XML API](http://www.ingresso.co.uk/apidocs/). To make migration away from the XML API easier, if you include `add_crypto_block` a `crypto_block` will be added to the response. You can then take the crypto_block and trolley_token and pass these in to the XML API call make_reservation to reserve and later purchase tickets (so that the JSON API is used up to the basket stage and the XML API is used to complete the purchase).
 `departure_date` | Specify a departure date for example `departure_date=20170214`.
 `duration` | Specify a duration for hotel product, for example `duration=3`.
 `promo_code` | Specifying a promo codes can unlock a special offer discount code. If you have a promo code it can be specified like this: `promo_code=FOO`. Note that this feature is not commonly used with partners.

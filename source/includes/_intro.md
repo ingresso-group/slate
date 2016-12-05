@@ -1,26 +1,62 @@
 <!---
 # TODOs / Questions
 
-* Can we tidy up the URLs: get rid of "json_", ".exe" and "cgi-bin"?
-* API versioning is a common practice. Should we build this in now for when we need to make breaking changes in future?
-* Is it useful to return the detail for previous objects? Eg in json_performances is there a need to return the event object? (excluding meta events)
-* Replace seatprice and surcharge with face_value and booking_fee? This has caused confusion before.
-* The Python wrapper is simplifying a number of concepts from the API. We need to be consistent across JSON API and the wrappers - if a concept is too complex we should simplify everywhere. Eg the python is using positive flags everywhere rather than negative sometimes eg has_no_perfs.
-* Merge images and video into media. Can we also reduce the number of fields returned for each media instance?
-* Pete to default self_print_mode to html by default - this normally confuses distributors
-* Pete to add ability to return availability for non-live events - we can then use F13 to allow ops to run availability checks before the event is live and make use of the results
-* Amazon suggested we return a 429 - TOO MANY REQUESTS when we return backend_call_failed or backend_call_throttling_failed. Should we use http status codes in this type of case?
-* Should we add a flag to distinguish between no booking fee and discounted face value offers? If not then need to explain how to distinguish between these offer types in events / perfs / availability
-* We have been asked to produce lists of categories and regions / cities - for now I have a google doc but we should add an API for this
 * Matt to include a section describing how our caching works
 * Matt to rerun examples now that bit masks are replaced / flagged (and explain how to use bit masks)
-* Can we add price-based search to availability?
-* Any reason not to use a single req_media rather than requesting individual items? Should we simplify the attributes returned eg just return the URL and is_secure rather than splitting up the URL into components and listing http and https variants?
-* Use a test API server or some form of rate limiting for particular users? Would allow us to give open access without worrying about someone hammering our main API server.
+* Matt to add json_cities and json_categories
+
+* Simplifying allocation modes for seat selection - perhaps the best approach is to only require ticket type and seat ID, then failing a reserve that doesn't include any of the requested seats (so a reserve with seat_request_status = got_partial or got_all succeeds, but got_none results in a failure if you haven't passed in the price band)
+* Tidy up the URLs: get rid of "json_", ".exe" and "cgi-bin"
+* API versioning is a common practice. Can we build this in now for when we need to make breaking changes in future?
+* Is it useful to return the detail for previous objects? Eg in json_performances is there a need to return the event object? (excluding meta events)
+* Can we replace seatprice and surcharge with face_value and booking_fee? This has caused confusion before.
+* Pete to default self_print_mode to html - this normally confuses distributors
+* Amazon suggested we return a 429 - TOO MANY REQUESTS when we return backend_call_failed or backend_call_throttling_failed. Should we use http status codes in this type of case? These cases are an exception where they don't really look like errors (initially by design...)
+* There are a number of places where the JSON object nesting isn't as simple as it could be. Eg instead of "event_upsell_list": ["6IE","MH0"] we have:
+  "event_upsell_list": {
+    "event_id": [
+      "6IE",
+      "MH0"
+    ]
+  }
+
+  Similarly can this:
+  "class": [
+    {
+      "class_desc": "Arts & Culture"
+    }
+  ]
+
+  be simplified to this:
+  "class": ["Arts & Culture"]
+
+* For bitmasks, rather than this:
+  "quantity_options": {
+    "valid_quantity_bitmask": 126
+  }
+  We should be returning:
+  "valid_quantities": [2, 3, 4, 5, 6, 7]
+
+  Similarly for discount_disallowed_seat_no_bitmask, use "discount_disallowed_seat_no": [3, 4]
+
+  However the bitmasks make sense for avail_details data since it is way too verbose to not use them, and it means you only need to worry about bitmasks if you use that call (which won't be commonly used). I suggest we go with that and remove the flags to use bitmasks or not.
+
+* Currency - just return GBP and add a currency endpoint to get extra stuff if you need it since most people won't need the extra?
+* Can we optimise the performance of json_performances enough that there isn't a need for a json_months call?
+* We should remove user_review_percent until we actually have some reviews in the core
+* Now that we use seat selection widely, should we remove the concept of example seats? Does seat_request_status go along with this?
+* Use a single req_media rather than requesting individual items. Merge images and video into media. Simplify the attributes returned eg just return the URL and is_secure rather than splitting up the URL into components and listing http and https variants.
+* When automatically kicking items out of the trolley:
+  - give a list of the items kicked out, and the reason. 
+* event_type is one of `simple_ticket`, `hotel_room` or `misc_item`. Do we have any hotel_rooms or misc_items currently? If not suggest we hide this from the API consumer until we later add this product.
+
+Possible V2 functionality:
+* We have been asked by a couple of affiliates to produce lists of categories and regions / cities - would be good to add an API for this
+* Should we add a flag to distinguish between no booking fee and discounted face value offers? If not then need to explain how to distinguish between these offer types in events / perfs / availability
+* A test API server or some form of rate limiting for particular users would help. Would allow us to give open access without worrying about someone hammering our main API server.
 * Allowing search on cost ranges would be useful
+* Can we be more restful eg /events/25DR to get detail by event ID?
 * A reporting API would be useful - our internal reporting apps should also use this
-* Should we be more restful eg /events/25DR to get detail by event ID? What do we lose by not being true rest?
-* event_type is one of `simple_ticket`, `hotel_room` or `misc_item`. Do we have any hotel_rooms or misc_items currently? If not should we hide this from the API consumer?
 * Should we use HTTP authentication?
 * Should we have the concept of a venue with an ID? (when the venue is enforced)
 -->
@@ -118,7 +154,7 @@ correct REST response. Even when an HTTP error *is* returned, however, there
 will be a JSON block acocmpanying it which contains human readable
 error text so that the caller has some idea of what they have done wrong.
 
-To check whether there is a problem with the Ingresso API or the backend systems we 
+To check whether there is a problem with the Ingresso API or the supplier systems we 
 connect to, you can check the [Ingresso status page](https://status.ingresso.co.uk/).
 
 
