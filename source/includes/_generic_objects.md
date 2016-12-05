@@ -6,7 +6,7 @@ There are some objects that are returned as part of several calls, for example c
 
 > **Example Response**
 
-```json
+```shell
 "avail_details": {
   "ticket_type": [
     {
@@ -105,7 +105,7 @@ Attribute | Description
 
 > **Example Response**
 
-```json
+```shell
 {
   "best_value_offer": {
     "absolute_saving": 44.2,
@@ -187,7 +187,7 @@ TODO: ensure I have explaining the difference between best_value_offer etc somew
 
 > **Example Response**
 
-```json
+```shell
 "cost_range_details": {
   "ticket_type": [
     {
@@ -235,7 +235,7 @@ Cost range details presents a cost range for every available price band. A list 
 
 > **Example Response**
 
-```json
+```shell
 {
   "currency_code": "gbp",
   "currency_factor": 100,
@@ -260,7 +260,7 @@ Attribute | Description
 
 > **Example Response**
 
-```json
+```shell
 {
   "date_desc": "Fri, 12th August 2016",
   "iso8601_date_and_time": "2016-08-12T19:30:00+01:00",
@@ -287,7 +287,7 @@ Attribute | Description
 
 > **Example Response**
 
-```json
+```shell
 "quantity_options": {
   "valid_quantity_flags": [
     false,

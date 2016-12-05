@@ -16,7 +16,7 @@ This section describes:
 
 > **Example Response**
 
-```json
+```shell
 {
   "cached_max_seats": 6,
   "date_desc": "Tue, 13th September 2016",
@@ -128,7 +128,7 @@ Parameter | Description
 
 > **Example response**
 
-```json
+```shell
 {
   "performances_by_id": {
     "6IF-A48": {
@@ -198,7 +198,7 @@ Parameter | Description
 
 > **Example response**
 
-```json
+```shell
 {
   "results": {
     "events_by_id": { ... },

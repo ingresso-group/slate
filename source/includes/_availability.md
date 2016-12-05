@@ -21,7 +21,7 @@ This section describes:
 
 > **Example response - best available only**
 
-```json
+```shell
 {
   "availability": {
     "ticket_type": [
@@ -168,7 +168,7 @@ Attribute | Description
 
 > **Example response - including seat listing**
 
-```json
+```shell
 {
   "availability": {
     "ticket_type": [
@@ -270,20 +270,8 @@ Attribute | Description
     "currency_pre_symbol": "£"
   },
   "quantity_options": {
-    "valid_quantity_flags": [
-      false,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true
-    ]
-  }
+    "valid_quantity_bitmask": 126,
+   }
 }
 ```
 

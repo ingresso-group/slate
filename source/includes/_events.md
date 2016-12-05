@@ -10,7 +10,7 @@ This section describes:
 
 > **Example Response**
 
-```json
+```shell
 {
   "city_desc": "London",
   "class": [
@@ -60,7 +60,43 @@ This section describes:
 }
 ```
 
-An event object describes an event, and its associated venue. We distinguish between events and performances - events are for example "The Lion King (at the Lyceum Theatre, London)" or "Madame Tussauds (New York)", and a performance is for example the 7:30pm showing of The Lion King on Saturday 28 Jan 2017. 
+```python
+pyticketswitch.Event(
+    event_id='6IF',
+    status='live',
+    description='Matthew Bourne\'s Nutcracker TEST',
+    source='External Test Backend 0',
+    event_type='simple_ticket',
+    venue='Sadler\'s Wells',
+
+    classes=['Arts & Culture'],
+    filters=[],
+
+    start_date=datetime.datetime(2016, 12, 08, 19, 30, 0, 0, tzinfo=datetime.timezone(datetime.timedelta(0, 3600))),
+    end_date=datetime.datetime(2016, 12, 09, 19, 30, 0, 0, tzinfo=datetime.timezone(datetime.timedelta(0, 3600))),
+
+    postcode='EC1R 4TN',
+    city='London',
+    country='United Kingdom',
+    country_code='uk',
+    latitude=51.52961137,
+    longditude=-0.10601562,
+
+    max_running_time=120,
+    min_running_time=120,
+
+    show_performance_time=True,
+    has_performances=True,
+    is_seated=True,
+    needs_departure_date=False,
+    needs_duration=False,
+    needs_performance=True,
+
+    upsell_list=['6IE', 'MH0'],
+)
+```
+
+An event object describes an event, and its associated venue. We distinguish between events and performances - events are for example "The Lion King (at the Lyceum Theatre, London)" or "Madame Tussauds (New York)", and a performance is for example the 7:30pm showing of The Lion King on Saturday 28 Jan 2017.
 
 **Default attributes**
 
@@ -68,8 +104,8 @@ Attribute | Description
 --------- | -----------
 `city_desc` | Name of the city where the event is taking place
 `class` | Array of class or category objects.
-`country_code` | ISO3166 county code for the above country
 `country_desc` | Name of the country where the event is taking place
+`country_code` | ISO3166 county code for the above country
 `critic_review_percent` | The aggregate critic review score, e.g. `80` for 80%.
 `custom_filter` | Array of custom filter codes. (TODO can we remove this?)
 `date_range_start` | A [date/time object](#date-time-object) for the start of the run
@@ -135,6 +171,14 @@ curl https://api.ticketswitch.com/cgi-bin/json_events_by_id.exe/demo \
     -G
 ```
 
+```python
+from pyticketswitch import Client
+
+
+client = Client(user='demo', password='demopass')
+events = client.get_events(event_ids=['6IF'])
+```
+
 > **Example request including all addtional data**
 
 ```shell
@@ -165,6 +209,29 @@ curl https://api.ticketswitch.com/cgi-bin/json_events_by_id.exe/demo \
     -d "req_avail_details_with_perfs" \
     -d "req_meta_components" \
     -G
+```
+
+```python
+from pyticketswitch import Client
+
+
+client = Client(user='demo', password='demopass')
+events = client.get_events(
+    event_ids=['6IF'],
+    availability=True,
+    availability_with_performances=True,
+    extra_info=True,
+    reviews=True,
+    media=True,
+    cost_range=True,
+    best_value_offer=True,
+    max_saving_offer=True,
+    min_cost_offer=True,
+    top_price_offer=True,
+    no_singles_data=True,
+    cost_range_details=True,
+    meta_components=True,
+)
 ```
 
 ### Request
@@ -221,26 +288,856 @@ Parameter | Description
 
 > **Example response**
 
-```json
+```shell
 {
   "events_by_id": {
     "6IF": {
-      "event": {EVENT_OBJECT},
+      "event": {
+        "avail_details": {
+          "ticket_type": [
+            {
+              "price_band": [
+                {
+                  "avail_detail": [
+                    {
+                      "avail_currency": {
+                        "currency_code": "gbp",
+                        "currency_factor": 100,
+                        "currency_number": 826,
+                        "currency_places": 2,
+                        "currency_post_symbol": "",
+                        "currency_pre_symbol": "£"
+                      },
+                      "available_dates": {
+                        "first_yyyymmdd": "20161129",
+                        "last_yyyymmdd": "20170327",
+                        "year_2016": {
+                          "dec_bitmask": 1065287163,
+                          "nov_bitmask": 805306368
+                        },
+                        "year_2017": {
+                          "feb_bitmask": 251526135,
+                          "jan_bitmask": 2012209087,
+                          "mar_bitmask": 117308407
+                        }
+                      },
+                      "available_weekdays_bitmask": 63,
+                      "quantity_options": {
+                        "valid_quantity_bitmask": 126
+                      },
+                      "seatprice": 47,
+                      "surcharge": 0
+                    }
+                  ],
+                  "price_band_code": "A",
+                  "price_band_desc": ""
+                }
+              ],
+              "ticket_type_code": "BALCONY",
+              "ticket_type_desc": "Balcony"
+            },
+            {
+              "price_band": [
+                {
+                  "avail_detail": [
+                    {
+                      "avail_currency": {
+                        "currency_code": "gbp",
+                        "currency_factor": 100,
+                        "currency_number": 826,
+                        "currency_places": 2,
+                        "currency_post_symbol": "",
+                        "currency_pre_symbol": "£"
+                      },
+                      "available_dates": {
+                        "first_yyyymmdd": "20161129",
+                        "last_yyyymmdd": "20170327",
+                        "year_2016": {
+                          "dec_bitmask": 1065287163,
+                          "nov_bitmask": 805306368
+                        },
+                        "year_2017": {
+                          "feb_bitmask": 251526135,
+                          "jan_bitmask": 2012209087,
+                          "mar_bitmask": 117308407
+                        }
+                      },
+                      "available_weekdays_bitmask": 63,
+                      "quantity_options": {
+                        "valid_quantity_bitmask": 126
+                      },
+                      "seatprice": 35,
+                      "surcharge": 0
+                    }
+                  ],
+                  "price_band_code": "A",
+                  "price_band_desc": ""
+                },
+                {
+                  "avail_detail": [
+                    {
+                      "avail_currency": {
+                        "currency_code": "gbp",
+                        "currency_factor": 100,
+                        "currency_number": 826,
+                        "currency_places": 2,
+                        "currency_post_symbol": "",
+                        "currency_pre_symbol": "£"
+                      },
+                      "available_dates": {
+                        "first_yyyymmdd": "20161129",
+                        "last_yyyymmdd": "20170327",
+                        "year_2016": {
+                          "dec_bitmask": 1065287163,
+                          "nov_bitmask": 805306368
+                        },
+                        "year_2017": {
+                          "feb_bitmask": 251526135,
+                          "jan_bitmask": 2012209087,
+                          "mar_bitmask": 117308407
+                        }
+                      },
+                      "available_weekdays_bitmask": 63,
+                      "quantity_options": {
+                        "valid_quantity_bitmask": 126
+                      },
+                      "seatprice": 30,
+                      "surcharge": 0
+                    }
+                  ],
+                  "price_band_code": "B",
+                  "price_band_desc": ""
+                },
+                {
+                  "avail_detail": [
+                    {
+                      "avail_currency": {
+                        "currency_code": "gbp",
+                        "currency_factor": 100,
+                        "currency_number": 826,
+                        "currency_places": 2,
+                        "currency_post_symbol": "",
+                        "currency_pre_symbol": "£"
+                      },
+                      "available_dates": {
+                        "first_yyyymmdd": "20161129",
+                        "last_yyyymmdd": "20170327",
+                        "year_2016": {
+                          "dec_bitmask": 1065287163,
+                          "nov_bitmask": 805306368
+                        },
+                        "year_2017": {
+                          "feb_bitmask": 251526135,
+                          "jan_bitmask": 2012209087,
+                          "mar_bitmask": 117308407
+                        }
+                      },
+                      "available_weekdays_bitmask": 63,
+                      "quantity_options": {
+                        "valid_quantity_bitmask": 126
+                      },
+                      "seatprice": 25,
+                      "surcharge": 0
+                    }
+                  ],
+                  "price_band_code": "C",
+                  "price_band_desc": ""
+                }
+              ],
+              "ticket_type_code": "CIRCLE",
+              "ticket_type_desc": "Upper circle"
+            },
+            {
+              "price_band": [
+                {
+                  "avail_detail": [
+                    {
+                      "avail_currency": {
+                        "currency_code": "gbp",
+                        "currency_factor": 100,
+                        "currency_number": 826,
+                        "currency_places": 2,
+                        "currency_post_symbol": "",
+                        "currency_pre_symbol": "£"
+                      },
+                      "available_dates": {
+                        "first_yyyymmdd": "20161129",
+                        "last_yyyymmdd": "20170327",
+                        "year_2016": {
+                          "dec_bitmask": 1065287163,
+                          "nov_bitmask": 805306368
+                        },
+                        "year_2017": {
+                          "feb_bitmask": 251526135,
+                          "jan_bitmask": 2012209087,
+                          "mar_bitmask": 117308407
+                        }
+                      },
+                      "available_weekdays_bitmask": 63,
+                      "quantity_options": {
+                        "valid_quantity_bitmask": 126
+                      },
+                      "seatprice": 21,
+                      "surcharge": 0
+                    }
+                  ],
+                  "price_band_code": "A",
+                  "price_band_desc": ""
+                },
+                {
+                  "avail_detail": [
+                    {
+                      "avail_currency": {
+                        "currency_code": "gbp",
+                        "currency_factor": 100,
+                        "currency_number": 826,
+                        "currency_places": 2,
+                        "currency_post_symbol": "",
+                        "currency_pre_symbol": "£"
+                      },
+                      "available_dates": {
+                        "first_yyyymmdd": "20161129",
+                        "last_yyyymmdd": "20170327",
+                        "year_2016": {
+                          "dec_bitmask": 1065287163,
+                          "nov_bitmask": 805306368
+                        },
+                        "year_2017": {
+                          "feb_bitmask": 251526135,
+                          "jan_bitmask": 2012209087,
+                          "mar_bitmask": 117308407
+                        }
+                      },
+                      "available_weekdays_bitmask": 63,
+                      "quantity_options": {
+                        "valid_quantity_bitmask": 14
+                      },
+                      "seatprice": 18,
+                      "surcharge": 0
+                    }
+                  ],
+                  "price_band_code": "B",
+                  "price_band_desc": ""
+                }
+              ],
+              "ticket_type_code": "STALLS",
+              "ticket_type_desc": "Stalls"
+            }
+          ]
+        },
+        "city_desc": "London",
+        "class": [
+          {
+            "class_desc": "Ballet & Dance"
+          }
+        ],
+        "cost_range": {
+          "max_seatprice": 47,
+          "max_surcharge": 0,
+          "min_seatprice": 18,
+          "min_surcharge": 0,
+          "no_singles_cost_range": {
+            "max_seatprice": 47,
+            "max_surcharge": 0,
+            "min_seatprice": 18,
+            "min_surcharge": 0,
+            "quantity_options": {
+              "valid_quantity_bitmask": 126
+            },
+            "range_currency": {
+              "currency_code": "gbp",
+              "currency_factor": 100,
+              "currency_number": 826,
+              "currency_places": 2,
+              "currency_post_symbol": "",
+              "currency_pre_symbol": "£"
+            }
+          },
+          "quantity_options": {
+            "valid_quantity_bitmask": 126
+          },
+          "range_currency": {
+            "currency_code": "gbp",
+            "currency_factor": 100,
+            "currency_number": 826,
+            "currency_places": 2,
+            "currency_post_symbol": "",
+            "currency_pre_symbol": "£"
+          }
+        },
+        "cost_range_details": {
+          "ticket_type": [
+            {
+              "price_band": [
+                {
+                  "cost_range": {
+                    "max_seatprice": 47,
+                    "max_surcharge": 0,
+                    "min_seatprice": 47,
+                    "min_surcharge": 0,
+                    "no_singles_cost_range": {
+                      "max_seatprice": 47,
+                      "max_surcharge": 0,
+                      "min_seatprice": 47,
+                      "min_surcharge": 0,
+                      "quantity_options": {
+                        "valid_quantity_bitmask": 126
+                      },
+                      "range_currency": {
+                        "currency_code": "gbp",
+                        "currency_factor": 100,
+                        "currency_number": 826,
+                        "currency_places": 2,
+                        "currency_post_symbol": "",
+                        "currency_pre_symbol": "£"
+                      }
+                    },
+                    "quantity_options": {
+                      "valid_quantity_bitmask": 126
+                    },
+                    "range_currency": {
+                      "currency_code": "gbp",
+                      "currency_factor": 100,
+                      "currency_number": 826,
+                      "currency_places": 2,
+                      "currency_post_symbol": "",
+                      "currency_pre_symbol": "£"
+                    }
+                  },
+                  "price_band_code": "A",
+                  "price_band_desc": ""
+                }
+              ],
+              "ticket_type_code": "BALCONY",
+              "ticket_type_desc": "Balcony"
+            },
+            {
+              "price_band": [
+                {
+                  "cost_range": {
+                    "max_seatprice": 35,
+                    "max_surcharge": 0,
+                    "min_seatprice": 35,
+                    "min_surcharge": 0,
+                    "no_singles_cost_range": {
+                      "max_seatprice": 35,
+                      "max_surcharge": 0,
+                      "min_seatprice": 35,
+                      "min_surcharge": 0,
+                      "quantity_options": {
+                        "valid_quantity_bitmask": 126
+                      },
+                      "range_currency": {
+                        "currency_code": "gbp",
+                        "currency_factor": 100,
+                        "currency_number": 826,
+                        "currency_places": 2,
+                        "currency_post_symbol": "",
+                        "currency_pre_symbol": "£"
+                      }
+                    },
+                    "quantity_options": {
+                      "valid_quantity_bitmask": 126
+                    },
+                    "range_currency": {
+                      "currency_code": "gbp",
+                      "currency_factor": 100,
+                      "currency_number": 826,
+                      "currency_places": 2,
+                      "currency_post_symbol": "",
+                      "currency_pre_symbol": "£"
+                    }
+                  },
+                  "price_band_code": "A",
+                  "price_band_desc": ""
+                },
+                {
+                  "cost_range": {
+                    "max_seatprice": 30,
+                    "max_surcharge": 0,
+                    "min_seatprice": 30,
+                    "min_surcharge": 0,
+                    "no_singles_cost_range": {
+                      "max_seatprice": 30,
+                      "max_surcharge": 0,
+                      "min_seatprice": 30,
+                      "min_surcharge": 0,
+                      "quantity_options": {
+                        "valid_quantity_bitmask": 126
+                      },
+                      "range_currency": {
+                        "currency_code": "gbp",
+                        "currency_factor": 100,
+                        "currency_number": 826,
+                        "currency_places": 2,
+                        "currency_post_symbol": "",
+                        "currency_pre_symbol": "£"
+                      }
+                    },
+                    "quantity_options": {
+                      "valid_quantity_bitmask": 126
+                    },
+                    "range_currency": {
+                      "currency_code": "gbp",
+                      "currency_factor": 100,
+                      "currency_number": 826,
+                      "currency_places": 2,
+                      "currency_post_symbol": "",
+                      "currency_pre_symbol": "£"
+                    }
+                  },
+                  "price_band_code": "B",
+                  "price_band_desc": ""
+                },
+                {
+                  "cost_range": {
+                    "max_seatprice": 25,
+                    "max_surcharge": 0,
+                    "min_seatprice": 25,
+                    "min_surcharge": 0,
+                    "no_singles_cost_range": {
+                      "max_seatprice": 25,
+                      "max_surcharge": 0,
+                      "min_seatprice": 25,
+                      "min_surcharge": 0,
+                      "quantity_options": {
+                        "valid_quantity_bitmask": 126
+                      },
+                      "range_currency": {
+                        "currency_code": "gbp",
+                        "currency_factor": 100,
+                        "currency_number": 826,
+                        "currency_places": 2,
+                        "currency_post_symbol": "",
+                        "currency_pre_symbol": "£"
+                      }
+                    },
+                    "quantity_options": {
+                      "valid_quantity_bitmask": 126
+                    },
+                    "range_currency": {
+                      "currency_code": "gbp",
+                      "currency_factor": 100,
+                      "currency_number": 826,
+                      "currency_places": 2,
+                      "currency_post_symbol": "",
+                      "currency_pre_symbol": "£"
+                    }
+                  },
+                  "price_band_code": "C",
+                  "price_band_desc": ""
+                }
+              ],
+              "ticket_type_code": "CIRCLE",
+              "ticket_type_desc": "Upper circle"
+            },
+            {
+              "price_band": [
+                {
+                  "cost_range": {
+                    "max_seatprice": 21,
+                    "max_surcharge": 0,
+                    "min_seatprice": 21,
+                    "min_surcharge": 0,
+                    "no_singles_cost_range": {
+                      "max_seatprice": 21,
+                      "max_surcharge": 0,
+                      "min_seatprice": 21,
+                      "min_surcharge": 0,
+                      "quantity_options": {
+                        "valid_quantity_bitmask": 126
+                      },
+                      "range_currency": {
+                        "currency_code": "gbp",
+                        "currency_factor": 100,
+                        "currency_number": 826,
+                        "currency_places": 2,
+                        "currency_post_symbol": "",
+                        "currency_pre_symbol": "£"
+                      }
+                    },
+                    "quantity_options": {
+                      "valid_quantity_bitmask": 126
+                    },
+                    "range_currency": {
+                      "currency_code": "gbp",
+                      "currency_factor": 100,
+                      "currency_number": 826,
+                      "currency_places": 2,
+                      "currency_post_symbol": "",
+                      "currency_pre_symbol": "£"
+                    }
+                  },
+                  "price_band_code": "A",
+                  "price_band_desc": ""
+                },
+                {
+                  "cost_range": {
+                    "max_seatprice": 18,
+                    "max_surcharge": 0,
+                    "min_seatprice": 18,
+                    "min_surcharge": 0,
+                    "no_singles_cost_range": {
+                      "max_seatprice": 18,
+                      "max_surcharge": 0,
+                      "min_seatprice": 18,
+                      "min_surcharge": 0,
+                      "quantity_options": {
+                        "valid_quantity_bitmask": 14
+                      },
+                      "range_currency": {
+                        "currency_code": "gbp",
+                        "currency_factor": 100,
+                        "currency_number": 826,
+                        "currency_places": 2,
+                        "currency_post_symbol": "",
+                        "currency_pre_symbol": "£"
+                      }
+                    },
+                    "quantity_options": {
+                      "valid_quantity_bitmask": 14
+                    },
+                    "range_currency": {
+                      "currency_code": "gbp",
+                      "currency_factor": 100,
+                      "currency_number": 826,
+                      "currency_places": 2,
+                      "currency_post_symbol": "",
+                      "currency_pre_symbol": "£"
+                    }
+                  },
+                  "price_band_code": "B",
+                  "price_band_desc": ""
+                }
+              ],
+              "ticket_type_code": "STALLS",
+              "ticket_type_desc": "Stalls"
+            }
+          ]
+        },
+        "country_code": "uk",
+        "country_desc": "United Kingdom",
+        "critic_review_percent": 100,
+        "custom_filter": [],
+        "date_range_end": {
+          "date_desc": "Tue, 28th March 2017",
+          "iso8601_date_and_time": "2017-03-28T19:30:00+01:00"
+        },
+        "date_range_start": {
+          "date_desc": "Tue, 29th November 2016",
+          "iso8601_date_and_time": "2016-11-29T19:30:00Z"
+        },
+        "event_desc": "Matthew Bourne's Nutcracker TEST",
+        "event_id": "6IF",
+        "event_info": "Matthew Bourne's stunning production of Nutcracker! returns in 2008 to Sadler's Wells having broken all box office records during last year's sell-out season.\n\nThis festive treat is full of his trademark style of wit, pathos and theatrical magic. Nutcracker! follows Clara's journey from a bleak Christmas Eve at Dr.Dross' Orphanage, through a shimmering ice-skating wonderland and to the spectacular candy folk of Sweetieland.\n\nOliver award-winning designer Anthony Ward and Tchaikovsky's much-loved score combined with sizzling choreography guarantee that Matthew Bourne's Nutcracker! is a fresh, lip-smacking, serving of traditional Christmas fare.\n\nMatthew Bourne has achieved both artistic and commercial success with his imaginative new versions of classical ballets. Last year his Play Without Words made for the Royal National Theatre, received two Olivier Awards and is shortly to be revived.\n\nDuration\n\nA Goldilocks duration - not too long, not too short, just the right amount of time.\n\n\nPerformance Times\n\nAnytime you like! As long as there's a show on...\n\n\nWhere Do I Go\n\nTo Sadler's Wells of course!\n\n\nWhat's Included\n\nEverything you need.\n\n\nGood To Know\n\nWarning! Men in very tight tights.\n\n\nSuitable For Children\n\nSure, just be aware of the aforementioned tights.\n\n",
+        "event_info_html": "<div><p>Matthew Bourne's stunning production of Nutcracker! returns in 2008 to Sadler's Wells having broken all box office records during last year's sell-out season.</p>\r\n<p>This festive treat is full of his trademark style of wit, pathos and theatrical magic. Nutcracker! follows Clara's journey from a bleak Christmas Eve at Dr.Dross' Orphanage, through a shimmering ice-skating wonderland and to the spectacular candy folk of Sweetieland.</p>\r\n<p>Oliver award-winning designer Anthony Ward and Tchaikovsky's much-loved score combined with sizzling choreography guarantee that Matthew Bourne's Nutcracker! is a fresh, lip-smacking, serving of traditional Christmas fare.</p>\r\n<p>Matthew Bourne has achieved both artistic and commercial success with his imaginative new versions of classical ballets. Last year his Play Without Words made for the Royal National Theatre, received two Olivier Awards and is shortly to be revived.</p></div>\n\n<h4>Duration</h4>\n<div><p>A Goldilocks duration - not <em>too</em> long, not <em>too</em> short, just the right amount of time.</p></div>\n\n<h4>Performance Times</h4>\n<div><p>Anytime you like! As long as there's a show on...</p></div>\n\n<h4>Where Do I Go</h4>\n<div><p>To Sadler's Wells of course!</p></div>\n\n<h4>What&#39;s Included</h4>\n<div><p>Everything you need.</p></div>\n\n<h4>Good To Know</h4>\n<div><p>Warning! Men in very tight tights.</p></div>\n\n<h4>Suitable For Children</h4>\n<div><p>Sure, just be aware of the aforementioned tights.</p></div>\n",
+        "event_path": "/6IF-matthew-bourne-s-nutcracker-test/",
+        "event_status": "live",
+        "event_type": "simple_ticket",
+        "event_upsell_list": {
+          "event_id": [
+            "6IE",
+            "MH0"
+          ]
+        },
+        "geo_data": {
+          "latitude": 51.52961137,
+          "longitude": -0.10601562
+        },
+        "has_no_perfs": false,
+        "is_seated": true,
+        "max_running_time": 120,
+        "media": {
+          "media_asset": [
+            {
+              "caption": "",
+              "caption_html": "",
+              "host": "d1wx4w35ubmdix.cloudfront.net",
+              "insecure_complete_url": "https://d1wx4w35ubmdix.cloudfront.net/shared/event_media/cropper/93/93c04bf0d24ef3d05e8fef4ba7709df0434ea13c.jpg",
+              "name": "landscape",
+              "path": "/shared/event_media/cropper/93/93c04bf0d24ef3d05e8fef4ba7709df0434ea13c.jpg",
+              "secure_complete_url": "https://d1wx4w35ubmdix.cloudfront.net/shared/event_media/cropper/93/93c04bf0d24ef3d05e8fef4ba7709df0434ea13c.jpg",
+              "supports_http": false,
+              "supports_https": true
+            },
+            {
+              "caption": "",
+              "caption_html": "",
+              "host": "d1wx4w35ubmdix.cloudfront.net",
+              "insecure_complete_url": "https://d1wx4w35ubmdix.cloudfront.net/shared/event_media/cropper/7e/7e048c655f79d1ae01419c92420861df156b83fc.jpg",
+              "name": "marquee",
+              "path": "/shared/event_media/cropper/7e/7e048c655f79d1ae01419c92420861df156b83fc.jpg",
+              "secure_complete_url": "https://d1wx4w35ubmdix.cloudfront.net/shared/event_media/cropper/7e/7e048c655f79d1ae01419c92420861df156b83fc.jpg",
+              "supports_http": false,
+              "supports_https": true
+            },
+            {
+              "caption": "",
+              "caption_html": "",
+              "host": "d1wx4w35ubmdix.cloudfront.net",
+              "insecure_complete_url": "http://d1wx4w35ubmdix.cloudfront.net/shared/event_media/cropper_cloud/29/2974e58797af0d91752b73da390ae6f8fa6e4862.jpg",
+              "name": "seating_plan",
+              "path": "/shared/event_media/cropper_cloud/29/2974e58797af0d91752b73da390ae6f8fa6e4862.jpg",
+              "secure_complete_url": "https://d1wx4w35ubmdix.cloudfront.net/shared/event_media/cropper_cloud/29/2974e58797af0d91752b73da390ae6f8fa6e4862.jpg",
+              "supports_http": true,
+              "supports_https": true
+            },
+            {
+              "caption": "",
+              "caption_html": "",
+              "host": "d1wx4w35ubmdix.cloudfront.net",
+              "insecure_complete_url": "https://d1wx4w35ubmdix.cloudfront.net/shared/event_media/cropper/5e/5e004f25b5aab6f432cd7e6839b70942d8a5f17b.jpg",
+              "name": "square",
+              "path": "/shared/event_media/cropper/5e/5e004f25b5aab6f432cd7e6839b70942d8a5f17b.jpg",
+              "secure_complete_url": "https://d1wx4w35ubmdix.cloudfront.net/shared/event_media/cropper/5e/5e004f25b5aab6f432cd7e6839b70942d8a5f17b.jpg",
+              "supports_http": false,
+              "supports_https": true
+            },
+            {
+              "caption": "",
+              "caption_html": "",
+              "host": "d1wx4w35ubmdix.cloudfront.net",
+              "insecure_complete_url": "http://d1wx4w35ubmdix.cloudfront.net/shared/event_media/ext_test0/+system_ext_test0/supplier.jpg",
+              "name": "supplier",
+              "path": "/shared/event_media/ext_test0/+system_ext_test0/supplier.jpg",
+              "secure_complete_url": "https://d1wx4w35ubmdix.cloudfront.net/shared/event_media/ext_test0/+system_ext_test0/supplier.jpg",
+              "supports_http": true,
+              "supports_https": true
+            },
+            {
+              "caption": "",
+              "caption_html": "",
+              "host": "d1wx4w35ubmdix.cloudfront.net",
+              "insecure_complete_url": "https://d1wx4w35ubmdix.cloudfront.net/shared/event_media/cropper/f9/f9aaf4bc04477c303d78bc5107cc0754df846ac8.jpg",
+              "name": "triplet_five",
+              "path": "/shared/event_media/cropper/f9/f9aaf4bc04477c303d78bc5107cc0754df846ac8.jpg",
+              "secure_complete_url": "https://d1wx4w35ubmdix.cloudfront.net/shared/event_media/cropper/f9/f9aaf4bc04477c303d78bc5107cc0754df846ac8.jpg",
+              "supports_http": false,
+              "supports_https": true
+            },
+            {
+              "caption": "",
+              "caption_html": "",
+              "host": "d1wx4w35ubmdix.cloudfront.net",
+              "insecure_complete_url": "https://d1wx4w35ubmdix.cloudfront.net/shared/event_media/cropper/f9/f9aaf4bc04477c303d78bc5107cc0754df846ac8.jpg",
+              "name": "triplet_four",
+              "path": "/shared/event_media/cropper/f9/f9aaf4bc04477c303d78bc5107cc0754df846ac8.jpg",
+              "secure_complete_url": "https://d1wx4w35ubmdix.cloudfront.net/shared/event_media/cropper/f9/f9aaf4bc04477c303d78bc5107cc0754df846ac8.jpg",
+              "supports_http": false,
+              "supports_https": true
+            },
+            {
+              "caption": "",
+              "caption_html": "",
+              "host": "d1wx4w35ubmdix.cloudfront.net",
+              "insecure_complete_url": "http://d1wx4w35ubmdix.cloudfront.net/shared/event_media/cropper_cloud/0e/0e255d4f96bd02baa7bfd22fd2cab90c8f6ced34.jpg",
+              "name": "triplet_one",
+              "path": "/shared/event_media/cropper_cloud/0e/0e255d4f96bd02baa7bfd22fd2cab90c8f6ced34.jpg",
+              "secure_complete_url": "https://d1wx4w35ubmdix.cloudfront.net/shared/event_media/cropper_cloud/0e/0e255d4f96bd02baa7bfd22fd2cab90c8f6ced34.jpg",
+              "supports_http": true,
+              "supports_https": true
+            },
+            {
+              "caption": "",
+              "caption_html": "",
+              "host": "d1wx4w35ubmdix.cloudfront.net",
+              "insecure_complete_url": "http://d1wx4w35ubmdix.cloudfront.net/shared/event_media/cropper_cloud/ca/ca2d4589a89480514f0db6fcec8a982652280093.jpg",
+              "name": "triplet_two",
+              "path": "/shared/event_media/cropper_cloud/ca/ca2d4589a89480514f0db6fcec8a982652280093.jpg",
+              "secure_complete_url": "https://d1wx4w35ubmdix.cloudfront.net/shared/event_media/cropper_cloud/ca/ca2d4589a89480514f0db6fcec8a982652280093.jpg",
+              "supports_http": true,
+              "supports_https": true
+            }
+          ]
+        },
+        "min_running_time": 120,
+        "need_departure_date": false,
+        "need_duration": false,
+        "need_performance": true,
+        "postcode": "EC1R 4TN",
+        "reviews": {
+          "review": [
+            {
+              "is_user_review": false,
+              "review_author": "The Times",
+              "review_body": "Cannot recommend this show enough!",
+              "review_date_desc": "Tue, 17th November 2015",
+              "review_iso8601_date_and_time": "2015-11-17T10:00:00Z",
+              "review_lang": "en",
+              "review_original_url": "",
+              "review_time_desc": "10.00 AM",
+              "review_title": "Unmissable!",
+              "star_rating": 5
+            },
+            {
+              "is_user_review": true,
+              "review_author": "Matt Allpress",
+              "review_body": "What a show! The mise-en-scène is magical, the choreography is wonderful, the story is magnificent and those tights... incredible. I'll be buying tickets for this show again and again",
+              "review_date_desc": "Thu, 28th August 2014",
+              "review_iso8601_date_and_time": "2014-08-28T10:00:00Z",
+              "review_lang": "en",
+              "review_original_url": "",
+              "review_time_desc": "10.00 AM",
+              "review_title": "Can't get enough!",
+              "star_rating": 5
+            }
+          ]
+        },
+        "show_perf_time": true,
+        "source_desc": "External Test Backend 0",
+        "structured_info": {
+          "address": {
+            "name": "Address",
+            "value": "Roseberry Avenue\r\nIslington\r\nLondon\r\nUK",
+            "value_html": "<p>Roseberry Avenue\r\nIslington\r\nLondon\r\nUK</p>"
+          },
+          "duration": {
+            "name": "Duration",
+            "value": "A Goldilocks duration - not too long, not too short, just the right amount of time.\n",
+            "value_html": "<p>A Goldilocks duration - not <em>too</em> long, not <em>too</em> short, just the right amount of time.</p>"
+          },
+          "good_to_know": {
+            "name": "Good To Know",
+            "value": "Warning! Men in very tight tights.\n",
+            "value_html": "<p>Warning! Men in very tight tights.</p>"
+          },
+          "overview": {
+            "name": "Overview",
+            "value": "Matthew Bourne's stunning production of Nutcracker! returns in 2008 to Sadler's Wells having broken all box office records during last year's sell-out season.\n\nThis festive treat is full of his trademark style of wit, pathos and theatrical magic. Nutcracker! follows Clara's journey from a bleak Christmas Eve at Dr.Dross' Orphanage, through a shimmering ice-skating wonderland and to the spectacular candy folk of Sweetieland.\n\nOliver award-winning designer Anthony Ward and Tchaikovsky's much-loved score combined with sizzling choreography guarantee that Matthew Bourne's Nutcracker! is a fresh, lip-smacking, serving of traditional Christmas fare.\n\nMatthew Bourne has achieved both artistic and commercial success with his imaginative new versions of classical ballets. Last year his Play Without Words made for the Royal National Theatre, received two Olivier Awards and is shortly to be revived.\n",
+            "value_html": "<p>Matthew Bourne's stunning production of Nutcracker! returns in 2008 to Sadler's Wells having broken all box office records during last year's sell-out season.</p>\r\n<p>This festive treat is full of his trademark style of wit, pathos and theatrical magic. Nutcracker! follows Clara's journey from a bleak Christmas Eve at Dr.Dross' Orphanage, through a shimmering ice-skating wonderland and to the spectacular candy folk of Sweetieland.</p>\r\n<p>Oliver award-winning designer Anthony Ward and Tchaikovsky's much-loved score combined with sizzling choreography guarantee that Matthew Bourne's Nutcracker! is a fresh, lip-smacking, serving of traditional Christmas fare.</p>\r\n<p>Matthew Bourne has achieved both artistic and commercial success with his imaginative new versions of classical ballets. Last year his Play Without Words made for the Royal National Theatre, received two Olivier Awards and is shortly to be revived.</p>"
+          },
+          "pricing_details_info": {
+            "name": "Pricing details information",
+            "value": "Book by 30th April for performances from 10 July - 10 August and pay no booking fee on this show\n",
+            "value_html": "<p>Book by 30th April for performances from 10 July - 10 August and pay no booking fee on this show</p>"
+          },
+          "suitable_for_children": {
+            "name": "Suitable For Children",
+            "value": "Sure, just be aware of the aforementioned tights.\n",
+            "value_html": "<p>Sure, just be aware of the aforementioned tights.</p>"
+          },
+          "whats_included": {
+            "name": "What's Included",
+            "value": "Everything you need.\n",
+            "value_html": "<p>Everything you need.</p>"
+          },
+          "when_can_i_go": {
+            "name": "Performance Times",
+            "value": "Anytime you like! As long as there's a show on...\n",
+            "value_html": "<p>Anytime you like! As long as there's a show on...</p>"
+          },
+          "where_do_i_go": {
+            "name": "Where Do I Go",
+            "value": "To Sadler's Wells of course!\n",
+            "value_html": "<p>To Sadler's Wells of course!</p>"
+          }
+        },
+        "user_review_percent": 100,
+        "venue_addr": "Roseberry Avenue\r\nIslington\r\nLondon\r\nUK",
+        "venue_addr_html": "<div><p>Roseberry Avenue\r\nIslington\r\nLondon\r\nUK</p></div>\n",
+        "venue_desc": "Sadler's Wells",
+        "video_iframe": {
+          "video_iframe_caption": "",
+          "video_iframe_caption_html": "",
+          "video_iframe_height": 315,
+          "video_iframe_host": "www.youtube.com",
+          "video_iframe_path": "/embed/G1JpEHGizk4",
+          "video_iframe_supports_http": false,
+          "video_iframe_supports_https": true,
+          "video_iframe_url_when_insecure": "https://www.youtube.com/embed/G1JpEHGizk4",
+          "video_iframe_url_when_secure": "https://www.youtube.com/embed/G1JpEHGizk4",
+          "video_iframe_width": 420
+        }
+      },
       "quantity_options": {
-        "valid_quantity_flags": [
-          false,
-          true,
-          true,
-          true,
-          true,
-          true,
-          true
-        ]
+        "valid_quantity_bitmask": 126
       },
       "venue_is_enforced": true
     }
   }
 }
+
+```
+
+```python
+pyticketswitch.Event(
+    event_id='6IF',
+    status='live',
+    description='Matthew Bourne\'s Nutcracker TEST',
+    source='External Test Backend 0',
+    event_type='simple_ticket',
+    venue='Sadler\'s Wells',
+
+    classes=['Arts & Culture'],
+    filters=[],
+
+    start_date=datetime.datetime(2016, 12, 08, 19, 30, 0, 0, tzinfo=datetime.timezone(datetime.timedelta(0, 3600))),
+    end_date=datetime.datetime(2016, 12, 09, 19, 30, 0, 0, tzinfo=datetime.timezone(datetime.timedelta(0, 3600))),
+
+    postcode='EC1R 4TN',
+    city='London',
+    country='United Kingdom',
+    country_code='uk',
+    latitude=51.52961137,
+    longditude=-0.10601562,
+
+    max_running_time=120,
+    min_running_time=120,
+
+    show_performance_time=True,
+    has_performances=True,
+    is_seated=True,
+    needs_departure_date=False,
+    needs_duration=False,
+    needs_performance=True,
+
+    upsell_list=['6IE', 'MH0'],
+    cost_range=pyticketswitch.CostRange(
+        valid_quantities=[2, 3, 4, 5, 6, 7],
+        max_seatprice=47.0,
+        max_surcharge=0.0,
+        min_seatprice=18.0,
+        min_surcharge=0.0,
+        currency=pyticketswitch.Currency(
+            code='gbp',
+            number=826,
+            factor=100,
+            places=2,
+            pre_symbol="",
+            post_symbol="£",
+        )
+    )
+    no_singles_cost_range = pyticketswitch.CostRange(
+        valid_quantities=[2, 3, 4, 5, 6, 7],
+        max_seatprice=47.0,
+        max_surcharge=0.0,
+        min_seatprice=18.0,
+        min_surcharge=0.0,
+        currency=pyticketswitch.Currency(
+            code='gbp',
+            number=826,
+            factor=100,
+            places=2,
+            pre_symbol="",
+            post_symbol="£",
+        )
+    )
+    cost_range_details = cost_range_details
+
+    content = content
+    event_info = event_info
+    event_info_html = event_info_html
+    venue_addr = venue_addr
+    venue_addr_html = venue_addr_html
+    venue_info = venue_info
+    venue_info_html = venue_info_html
+
+    media = media
+    reviews = reviews
+
+    availability_details = availability_details 
+    meta_events = meta_events
+)
 ```
 
 ### Response
@@ -345,7 +1242,7 @@ Parameter | Description
 
 > **Example response**
 
-```json
+```shell
 {
   "results": {
     "event": [
@@ -373,7 +1270,7 @@ common structure for returning array data through the API.
 
 > **Example Response**
 
-```json
+```shell
 "video_iframe": {
   "video_iframe_caption": "",
   "video_iframe_caption_html": "",
@@ -508,7 +1405,7 @@ Attribute | Description
 
 > **Example Response**
 
-```json
+```shell
 "reviews": {
   "review": [
     {

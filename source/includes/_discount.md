@@ -7,7 +7,7 @@
 
 > **Example response - best available only**
 
-```json
+```shell
 {
     "absolute_saving": 0,
     "discount_code": "ADULT",

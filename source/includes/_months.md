@@ -25,7 +25,7 @@ We have provided examples of both formats.
 
 > **Example Response - days explicitly listed**
 
-```json
+```shell
 {
     "month": "oct",
     "month_dates": {
@@ -95,7 +95,7 @@ Attribute | Description
 
 > **Example Response - using bitmasks**
 
-```json
+```shell
 {
     "month": "aug",
     "month_date_mask": 2012209072,
@@ -174,7 +174,7 @@ Parameter | Description
 
 > **Example response**
 
-```json
+```shell
 {
   "results": {
     "events_by_id": { ... },
