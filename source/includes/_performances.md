@@ -83,7 +83,7 @@ This call is used to return detail for one or more performances by their ID. It 
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/cgi-bin/json_performances_by_id.exe/demo \
+curl https://api.ticketswitch.com/f13/performances_by_id.v1/demo \
     -d "user_passwd=demopass" \
     -d "perf_id_list=6IF-A5R" \
     -d "req_cost_range" \
