@@ -96,8 +96,9 @@ pyticketswitch.Event(
 )
 ```
 
-An event object describes an event, and its associated venue, within the system. It is possible to request a number of additional attributes for an event - the default attributes are listed first:
+An event object describes an event, and its associated venue. We distinguish between events and performances - events are for example "The Lion King (at the Lyceum Theatre, London)" or "Madame Tussauds (New York)", and a performance is for example the 7:30pm showing of The Lion King on Saturday 28 Jan 2017.
 
+**Default attributes**
 
 Attribute | Description
 --------- | -----------
@@ -133,7 +134,7 @@ Attribute | Description
 
 
 
-These are the optional attributes - these are only returned if you add one of the `req_` parameters to your request.
+**Optional attributes** - these are only returned if you add one of the `req_` parameters to your request.
 
 Attribute | Description
 --------- | -----------
