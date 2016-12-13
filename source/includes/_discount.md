@@ -57,7 +57,7 @@ Attribute | Description
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/cgi-bin/json_discounts.exe/{username}?user_passwd={password}&perf_id={perfid}&price_band_code={pricebandcode}&ticket_type_code={tickettypecode}
+GET https://api.ticketswitch.com/f13/discounts.v1/{username}?user_passwd={password}&perf_id={perfid}&price_band_code={pricebandcode}&ticket_type_code={tickettypecode}
 ```
 
 This call is used to return availability for a performance. It returns a list of [availability objects](#availability-object).
@@ -65,7 +65,7 @@ This call is used to return availability for a performance. It returns a list of
 > **Example request - price band**
 
 ```shell
-curl https://api.ticketswitch.com/cgi-bin/json_discounts.exe/demo \
+curl https://api.ticketswitch.com/f13/discounts.v1/demo \
         -d "user_passwd=demopass" \
         -d "perf_id=6IF-A5W" \
         -d "price_band_code=A" \

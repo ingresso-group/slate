@@ -335,7 +335,7 @@ Attribute | Description
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/cgi-bin/json_trolley.exe/{username}?user_passwd={password}&perf_id={perfid}&ticket_type_code={tickettype}&price_band_code={priceband}&no_of_seats={numtickets}
+GET https://api.ticketswitch.com/f13/trolley.v1/{username}?user_passwd={password}&perf_id={perfid}&ticket_type_code={tickettype}&price_band_code={priceband}&no_of_seats={numtickets}
 ```
 
 This call is used for the following use cases:
@@ -354,7 +354,7 @@ Note that adding an order will remove anything in the trolley which would preven
 > **Example request - adding best available tickets to a new trolley, specifying specific discount codes**
 
 ```shell
-curl https://api.ticketswitch.com/cgi-bin/json_trolley.exe/demo \
+curl https://api.ticketswitch.com/f13/trolley.v1/demo \
         -d "user_passwd=demopass" \
         -d "perf_id=6IF-A7N" \
         -d "ticket_type_code=CIRCLE" \
@@ -369,7 +369,7 @@ curl https://api.ticketswitch.com/cgi-bin/json_trolley.exe/demo \
 > **Example request - adding specific seats to an existing trolley**
 
 ```shell
-curl https://api.ticketswitch.com/cgi-bin/json_trolley.exe/demo \
+curl https://api.ticketswitch.com/f13/trolley.v1/demo \
         -d "user_passwd=demopass" \
         -d "trolley_token=k---bTur8DtD3TFVZR3ByQT-6tp2nUNjEM-Ecu16DM2wRLeKDpVncGguCbLv8Rqliw7CY" \
         -d "perf_id=3CVA-89" \
@@ -385,7 +385,7 @@ curl https://api.ticketswitch.com/cgi-bin/json_trolley.exe/demo \
 > **Example request - removing three orders from the trolley**
 
 ```shell
-curl https://api.ticketswitch.com/cgi-bin/json_trolley.exe/demo \
+curl https://api.ticketswitch.com/f13/trolley.v1/demo \
         -d "user_passwd=demopass" \
         -d "trolley_token=k---bTur8DtD3TFVZR3ByQT-6tp2nUNjEM-Ecu16DM2wRLeKDpVncGguCbLv8Rqliw7CY" \
         -d "remove_items_list=2" \
@@ -395,7 +395,7 @@ curl https://api.ticketswitch.com/cgi-bin/json_trolley.exe/demo \
 > **Example request - view the current state of the trolley**
 
 ```shell
-curl https://api.ticketswitch.com/cgi-bin/json_trolley.exe/demo \
+curl https://api.ticketswitch.com/f13/trolley.v1/demo \
         -d "user_passwd=demopass" \
         -d "trolley_token=k---bTur8DtD3TFVZR3ByQT-6tp2nUNjEM-Ecu16DM2wRLeKDpVncGguCbLv8Rqliw7CY" \
         -G

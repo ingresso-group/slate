@@ -157,7 +157,7 @@ Attribute | Description
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/cgi-bin/json_events_by_id.exe/{username}?user_passwd={password}&event_id_list={eventidlist}
+GET https://api.ticketswitch.com/f13/events_by_id.v1/{username}/?user_passwd={password}&event_id_list={eventidlist}
 ```
 
 This call is used to return detail for one or more events by their ID. It returns a list of [event objects](#event-object).
@@ -165,7 +165,7 @@ This call is used to return detail for one or more events by their ID. It return
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/cgi-bin/json_events_by_id.exe/demo \
+curl https://api.ticketswitch.com/f13/events_by_id.v1/demo \
     -d "user_passwd=demopass" \
     -d "event_id_list=6IF" \
     -G
@@ -182,7 +182,7 @@ events = client.get_events(event_ids=['6IF'])
 > **Example request including all addtional data**
 
 ```shell
-curl https://api.ticketswitch.com/cgi-bin/json_events_by_id.exe/demo \
+curl https://api.ticketswitch.com/f13/events_by_id.v1/demo \
     -d "user_passwd=demopass" \
     -d "event_id_list=6IF" \
     -d "req_cost_range" \
@@ -1295,7 +1295,7 @@ pyticketswitch.Event(
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/cgi-bin/json_events.exe/{username}?user_passwd={password}
+GET https://api.ticketswitch.com/f13/events.v1/{username}?user_passwd={password}
 ```
 
 This call is used to search for events. It takes filter parameters
@@ -1312,7 +1312,7 @@ Typical use cases:
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/cgi-bin/json_events.exe/demo \
+curl https://api.ticketswitch.com/f13/events.v1/demo \
     -d "user_passwd=demopass" \
     -d "s_keys=nutcracker" \
     -d "s_coco=uk" \

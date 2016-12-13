@@ -75,7 +75,7 @@ This call will not be useful for common use cases. If you have a need to request
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/cgi-bin/json_performances_by_id.exe/{username}?user_passwd={password}&perf_id_list={perfidlist}
+GET https://api.ticketswitch.com/f13/performances_by_id.v1/{username}?user_passwd={password}&perf_id_list={perfidlist}
 ```
 
 This call is used to return detail for one or more performances by their ID. It returns a list of [performance objects](#performance-object).
@@ -149,7 +149,7 @@ A list of performance objects are returned for each perf_id requested.
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/cgi-bin/json_performances.exe/{username}?user_passwd={password}&event_id={eventid}
+GET https://api.ticketswitch.com/f13/performances.v1/{username}?user_passwd={password}&event_id={eventid}
 ```
 
 This call returns a list of [performance objects](#performance-object) for a particular event. The list is paged to avoid large volumes
@@ -164,7 +164,7 @@ Typical use cases:
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/cgi-bin/json_performances.exe/demo \
+curl https://api.ticketswitch.com/f13/performances.v1/demo \
     -d "user_passwd=demopass" \
     -d "event_id=6IF" \
     -G

@@ -129,7 +129,7 @@ The attributes are the same as described above, however `month_date_mask` replac
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/cgi-bin/json_months.exe/{username}?user_passwd={password}&event_id={eventid}
+GET https://api.ticketswitch.com/f13/json_months.v1/{username}?user_passwd={password}&event_id={eventid}
 ```
 
 This call returns a list of [month objects](#month-object) for a particular event. The list is paged to avoid large volumes of data being accidentally returned.
@@ -141,7 +141,7 @@ Typical use cases:
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/cgi-bin/json_months.exe/demo \
+curl https://api.ticketswitch.com/f13/json_months.v1/demo \
     -d "user_passwd=demopass" \
     -d "event_id=6IF" \
     -d "req_cost_range" \

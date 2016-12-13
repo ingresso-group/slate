@@ -301,7 +301,7 @@ Attribute | Description
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/cgi-bin/json_availability.exe/{username}?user_passwd={password}&perf_id={perfid}
+GET https://api.ticketswitch.com/f13/availability.v1/{username}?user_passwd={password}&perf_id={perfid}
 ```
 
 This call is used to return availability for a performance. It returns a list of [availability objects](#availability-object).
@@ -309,7 +309,7 @@ This call is used to return availability for a performance. It returns a list of
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/cgi-bin/json_availability.exe/demo \
+curl https://api.ticketswitch.com/f13/availability.v1/demo \
         -d "user_passwd=demopass" \
         -d "perf_id=3CVA-6A" \
         -d "add_seat_blocks" \
