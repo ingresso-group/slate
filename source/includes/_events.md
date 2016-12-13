@@ -1067,7 +1067,7 @@ pyticketswitch.Event(
     event_type='simple_ticket',
     venue='Sadler\'s Wells',
 
-    classes=['Arts & Culture'],
+    classes=['Ballet & Dance'],
     filters=[],
 
     start_date=datetime.datetime(2016, 12, 08, 19, 30, 0, 0, tzinfo=datetime.timezone(datetime.timedelta(0, 3600))),
@@ -1134,7 +1134,152 @@ pyticketswitch.Event(
     media = media
     reviews = reviews
 
-    availability_details = availability_details 
+    availability_details = [
+        pyticketswitch.AvailabilityDetails(
+            ticket_type='BALCONY',
+            price_band='A',
+            ticket_type_description='Balcony',
+            price_band_description='',
+            seatprice=47.0,
+            surcharge=0.0,
+            currency=pyticketswitch.Currency(
+                code='gbp',
+                number=826,
+                factor=100,
+                places=2,
+                pre_symbol="",
+                post_symbol="£",
+            ),
+            first_date=datetime.date(2016, 11, 29),
+            last_date=datetime.data(2017, 3, 27),
+            calendar_masks={
+                2016: {11: 805306368, 12: 1065289163},
+                2017: {1: 2012209087, 2: 251526135, 3: 117308407},
+            },
+            weekday_mask=63,
+            valid_quanities=[2, 3, 4, 5, 6, 7]
+        ),
+        pyticketswitch.AvailabilityDetails(
+            ticket_type='CIRCLE',
+            price_band='A',
+            ticket_type_description='Upper circle',
+            price_band_description='',
+            seatprice=35.0,
+            surcharge=0.0,
+            currency=pyticketswitch.Currency(
+                code='gbp',
+                number=826,
+                factor=100,
+                places=2,
+                pre_symbol="",
+                post_symbol="£",
+            ),
+            first_date=datetime.date(2016, 11, 29),
+            last_date=datetime.data(2017, 3, 27),
+            calendar_masks={
+                2016: {11: 805306368, 12: 1065289163},
+                2017: {1: 2012209087, 2: 251526135, 3: 117308407},
+            },
+            weekday_mask=63,
+            valid_quanities=[2, 3, 4, 5, 6, 7]
+        ),
+        pyticketswitch.AvailabilityDetails(
+            ticket_type='CIRCLE',
+            price_band='B',
+            ticket_type_description='Upper circle',
+            price_band_description='',
+            seatprice=30.0,
+            surcharge=0.0,
+            currency=pyticketswitch.Currency(
+                code='gbp',
+                number=826,
+                factor=100,
+                places=2,
+                pre_symbol="",
+                post_symbol="£",
+            ),
+            first_date=datetime.date(2016, 11, 29),
+            last_date=datetime.data(2017, 3, 27),
+            calendar_masks={
+                2016: {11: 805306368, 12: 1065289163},
+                2017: {1: 2012209087, 2: 251526135, 3: 117308407},
+            },
+            weekday_mask=63,
+            valid_quanities=[2, 3, 4, 5, 6, 7]
+        ),
+        pyticketswitch.AvailabilityDetails(
+            ticket_type='CIRCLE',
+            price_band='C',
+            ticket_type_description='Upper circle',
+            price_band_description='',
+            seatprice=25.0,
+            surcharge=0.0,
+            currency=pyticketswitch.Currency(
+                code='gbp',
+                number=826,
+                factor=100,
+                places=2,
+                pre_symbol="",
+                post_symbol="£",
+            ),
+            first_date=datetime.date(2016, 11, 29),
+            last_date=datetime.data(2017, 3, 27),
+            calendar_masks={
+                2016: {11: 805306368, 12: 1065289163},
+                2017: {1: 2012209087, 2: 251526135, 3: 117308407},
+            },
+            weekday_mask=63,
+            valid_quanities=[2, 3, 4, 5, 6, 7]
+        ),
+        pyticketswitch.AvailabilityDetails(
+            ticket_type='STALLS',
+            price_band='A',
+            ticket_type_description='Stalls',
+            price_band_description='',
+            seatprice=21.0,
+            surcharge=0.0,
+            currency=pyticketswitch.Currency(
+                code='gbp',
+                number=826,
+                factor=100,
+                places=2,
+                pre_symbol="",
+                post_symbol="£",
+            ),
+            first_date=datetime.date(2016, 11, 29),
+            last_date=datetime.data(2017, 3, 27),
+            calendar_masks={
+                2016: {11: 805306368, 12: 1065289163},
+                2017: {1: 2012209087, 2: 251526135, 3: 117308407},
+            },
+            weekday_mask=63,
+            valid_quanities=[2, 3, 4, 5, 6, 7]
+        ),
+        pyticketswitch.AvailabilityDetails(
+            ticket_type='STALLS',
+            price_band='B',
+            ticket_type_description='Stalls',
+            price_band_description='',
+            seatprice=18.0,
+            surcharge=0.0,
+            currency=pyticketswitch.Currency(
+                code='gbp',
+                number=826,
+                factor=100,
+                places=2,
+                pre_symbol="",
+                post_symbol="£",
+            ),
+            first_date=datetime.date(2016, 11, 29),
+            last_date=datetime.data(2017, 3, 27),
+            calendar_masks={
+                2016: {11: 805306368, 12: 1065289163},
+                2017: {1: 2012209087, 2: 251526135, 3: 117308407},
+            },
+            weekday_mask=63,
+            valid_quanities=[2, 3, 4, 5, 6, 7]
+        ),
+    ],
     meta_events = meta_events
 )
 ```
