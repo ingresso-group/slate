@@ -1,5 +1,9 @@
 # Send Methods
 
+```
+GET https://api.ticketswitch.com/f13/send_methods.v1/{username}?user_password={password}&perf_id={performance id}
+```
+
 This section describes the available methods of delivery for a given
 performance.
 
@@ -9,12 +13,6 @@ ticket to a customer before the performance starts, so those performances would
 not have that optional available. As such it's important that send methods are
 called before any reservation to ensure that user isn't seeing options that are
 out of date.
-
-## List send methods
-
-```
-GET https://api.ticketswitch.com/f13/send_methods.v1/{username}?user_password={password}&perf_id={performance id}
-```
 
 
 > **Example request**
