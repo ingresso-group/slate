@@ -21,6 +21,7 @@ includes:
   - trolley
   - reservation
   - generic_objects
+  - bitmask_fields
   - caching
 
   
