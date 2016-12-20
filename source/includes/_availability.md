@@ -165,6 +165,24 @@ Attribute | Description
 `sale_seatprice` | The per-ticket price. This will be the face value price when the market has such a concept (for example the London theatre market has this concept, but some New York theatre shows do not). This is the same as the `non_offer_sale_seatprice` when the price band is not discounted.
 `sale_surcharge` | The per-ticket booking fee. To determine the total ticket price you must add together the `sale_seatprice` and the `sale_surcharge`.
 
+> **Example request**
+
+```shell
+curl https://api.ticketswitch.com/f13/availability.v1/demo \
+    -d "user_passwd=demopass" \
+    -d "perf_id=6IF-A8B" \
+    -G
+```
+
+### Request
+
+Attribute | Description
+--------- | -----------
+`perf_id` | the identifier of the performance for which availability will be requested
+`no_of_seats` | the number of seats the user is looking for. This attribute is required when asking for seat blocks 
+`no_of_seats` | the number of seats the user is looking for. This attribute is required when asking for seat blocks 
+
+
 
 > **Example response - including seat listing**
 
