@@ -831,7 +831,85 @@ Parameter | Description
 ```
 
 ```python
-# TODO!
+{
+    '6IF-A8K': pyticketswitch.Performance(
+        performance_id='6IF-A8K',
+        availabilty_details=[
+            pyticketswitch.AvailabilityDetails(
+                ticket_type='BALCONY',
+                ticket_type_description='Balcony',
+                price_band='A',
+                price_band_description='',
+                seatprice=47.0,
+                surcharge=0.0,
+                currency=pyticketswitch.Currency(
+                    code='gbp',
+                ),
+                valid_quantities=[2, 3, 4, 5, 6, 7],
+            ),
+            pyticketswitch.AvailabilityDetails(
+                ticket_type='CIRCLE',
+                ticket_type_description='Upper circle',
+                price_band='A',
+                price_band_description='',
+                seatprice=35.0,
+                surcharge=0.0,
+                currency=pyticketswitch.Currency(
+                    code='gbp',
+                ),
+                valid_quantities=[2, 3, 4, 5, 6, 7],
+            ),
+            pyticketswitch.AvailabilityDetails(
+                ticket_type='CIRCLE',
+                ticket_type_description='Upper circle',
+                price_band='B',
+                price_band_description='',
+                seatprice=30.0,
+                surcharge=0.0,
+                currency=pyticketswitch.Currency(
+                    code='gbp',
+                ),
+                valid_quantities=[2, 3, 4, 5, 6, 7],
+            ),
+            pyticketswitch.AvailabilityDetails(
+                ticket_type='CIRCLE',
+                ticket_type_description='Upper circle',
+                price_band='C',
+                price_band_description='',
+                seatprice=25.0,
+                surcharge=0.0,
+                currency=pyticketswitch.Currency(
+                    code='gbp',
+                ),
+                valid_quantities=[2, 3, 4, 5, 6, 7],
+            ),
+            pyticketswitch.AvailabilityDetails(
+                ticket_type='STALLS',
+                ticket_type_description='Stalls',
+                price_band='A',
+                price_band_description='',
+                seatprice=21.0,
+                surcharge=0.0,
+                currency=pyticketswitch.Currency(
+                    code='gbp',
+                ),
+                valid_quantities=[2, 3, 4, 5, 6, 7],
+            ),
+            pyticketswitch.AvailabilityDetails(
+                ticket_type='STALLS',
+                ticket_type_description='Stalls',
+                price_band='B',
+                price_band_description='',
+                seatprice=18.0,
+                surcharge=0.0,
+                currency=pyticketswitch.Currency(
+                    code='gbp',
+                ),
+                valid_quantities=[2, 3, 4, 5, 6, 7],
+            ),
+        ],
+    )
+}
 ```
 
 #### Ticket Type
@@ -863,8 +941,6 @@ The avail details indicate what prices we have seen for this performance.
 Attribute | Description
 --------- | -----------
 `avail_currency` | The price [currency](#currency-object) 
-`available_dates` | `first_yyyymmdd` and `last_yyyymmdd` for the range. 
-`available_weekdays_bitmask` | the days of the week where we have seen availability
 `quantity_options.valid_quantity_bitmask` | the available quantities we have seen for this price band
 `seatprice` | the per-ticket face value
 `surcharge` | the per-ticket booking fee
