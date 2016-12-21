@@ -849,6 +849,218 @@ Attribute | Description
 `video_iframe_supports_https`| indicates that the asset is accessible via https
 
 
+## Extra info
+
+Most events will have additional information and content available. This data is
+not returned by default because it can significantly slow down response time,
+especially when many events are being returned.
+
+### Request
+
+> **Example request**
+
+```shell
+
+curl https://api.ticketswitch.com/f13/events_by_id.v1/demo \
+    -d "user_passwd=demopass" \
+    -d "event_id_list=6IF" \
+    -d "req_extra_info" \
+    -G
+```
+
+```python
+from pyticketswitch import Client
+
+
+client = Client('demo', 'demopass')
+events = client.get_events(['6IF'], extra_info=True)
+```
+
+Parameter | Description
+--------- | -----------
+`req_extra_info` | Returns the descriptive info for the event, returned as individual sections (`structured_info`) or as a single summary (`event_info` / `event_info_html`)
+
+
+### Response
+
+> **Example response**
+
+```shell
+{
+  "events_by_id": {
+    "6IF": {
+      "event": {
+        "city_desc": "London",
+        "class": [
+          {
+            "class_desc": "Ballet & Dance"
+          }
+        ],
+        "country_code": "uk",
+        "country_desc": "United Kingdom",
+        "critic_review_percent": 100,
+        "custom_filter": [],
+        "event_desc": "Matthew Bourne's Nutcracker TEST",
+        "event_id": "6IF",
+        "event_info": "Matthew Bourne's stunning production of Nutcracker! returns in 2008 to Sadler's Wells having broken all box office records during last year's sell-out season.\n\nThis festive treat is full of his trademark style of wit, pathos and theatrical magic. Nutcracker! follows Clara's journey from a bleak Christmas Eve at Dr.Dross' Orphanage, through a shimmering ice-skating wonderland and to the spectacular candy folk of Sweetieland.\n\nOliver award-winning designer Anthony Ward and Tchaikovsky's much-loved score combined with sizzling choreography guarantee that Matthew Bourne's Nutcracker! is a fresh, lip-smacking, serving of traditional Christmas fare.\n\nMatthew Bourne has achieved both artistic and commercial success with his imaginative new versions of classical ballets. Last year his Play Without Words made for the Royal National Theatre, received two Olivier Awards and is shortly to be revived.\n\nDuration\n\nA Goldilocks duration - not too long, not too short, just the right amount of time.\n\n\nPerformance Times\n\nAnytime you like! As long as there's a show on...\n\n\nWhere Do I Go\n\nTo Sadler's Wells of course!\n\n\nWhat's Included\n\nEverything you need.\n\n\nGood To Know\n\nWarning! Men in very tight tights.\n\n\nSuitable For Children\n\nSure, just be aware of the aforementioned tights.\n\n",
+        "event_info_html": "<div><p>Matthew Bourne's stunning production of Nutcracker! returns in 2008 to Sadler's Wells having broken all box office records during last year's sell-out season.</p>\r\n<p>This festive treat is full of his trademark style of wit, pathos and theatrical magic. Nutcracker! follows Clara's journey from a bleak Christmas Eve at Dr.Dross' Orphanage, through a shimmering ice-skating wonderland and to the spectacular candy folk of Sweetieland.</p>\r\n<p>Oliver award-winning designer Anthony Ward and Tchaikovsky's much-loved score combined with sizzling choreography guarantee that Matthew Bourne's Nutcracker! is a fresh, lip-smacking, serving of traditional Christmas fare.</p>\r\n<p>Matthew Bourne has achieved both artistic and commercial success with his imaginative new versions of classical ballets. Last year his Play Without Words made for the Royal National Theatre, received two Olivier Awards and is shortly to be revived.</p></div>\n\n<h4>Duration</h4>\n<div><p>A Goldilocks duration - not <em>too</em> long, not <em>too</em> short, just the right amount of time.</p></div>\n\n<h4>Performance Times</h4>\n<div><p>Anytime you like! As long as there's a show on...</p></div>\n\n<h4>Where Do I Go</h4>\n<div><p>To Sadler's Wells of course!</p></div>\n\n<h4>What&#39;s Included</h4>\n<div><p>Everything you need.</p></div>\n\n<h4>Good To Know</h4>\n<div><p>Warning! Men in very tight tights.</p></div>\n\n<h4>Suitable For Children</h4>\n<div><p>Sure, just be aware of the aforementioned tights.</p></div>\n",
+        "event_path": "/6IF-matthew-bourne-s-nutcracker-test/",
+        "event_status": "live",
+        "event_type": "simple_ticket",
+        "event_upsell_list": {
+          "event_id": [
+            "6IE",
+            "MH0"
+          ]
+        },
+        "geo_data": {
+          "latitude": 51.52961137,
+          "longitude": -0.10601562
+        },
+        "has_no_perfs": false,
+        "is_seated": true,
+        "max_running_time": 120,
+        "min_running_time": 120,
+        "need_departure_date": false,
+        "need_duration": false,
+        "need_performance": true,
+        "postcode": "EC1R 4TN",
+        "show_perf_time": true,
+        "source_code": "ext_test0",
+        "source_desc": "External Test Backend 0",
+        "structured_info": {
+          "address": {
+            "name": "Address",
+            "value": "Roseberry Avenue\r\nIslington\r\nLondon\r\nUK",
+            "value_html": "<p>Roseberry Avenue\r\nIslington\r\nLondon\r\nUK</p>"
+          },
+          "duration": {
+            "name": "Duration",
+            "value": "A Goldilocks duration - not too long, not too short, just the right amount of time.\n",
+            "value_html": "<p>A Goldilocks duration - not <em>too</em> long, not <em>too</em> short, just the right amount of time.</p>"
+          },
+          "good_to_know": {
+            "name": "Good To Know",
+            "value": "Warning! Men in very tight tights.\n",
+            "value_html": "<p>Warning! Men in very tight tights.</p>"
+          },
+          "overview": {
+            "name": "Overview",
+            "value": "Matthew Bourne's stunning production of Nutcracker! returns in 2008 to Sadler's Wells having broken all box office records during last year's sell-out season.\n\nThis festive treat is full of his trademark style of wit, pathos and theatrical magic. Nutcracker! follows Clara's journey from a bleak Christmas Eve at Dr.Dross' Orphanage, through a shimmering ice-skating wonderland and to the spectacular candy folk of Sweetieland.\n\nOliver award-winning designer Anthony Ward and Tchaikovsky's much-loved score combined with sizzling choreography guarantee that Matthew Bourne's Nutcracker! is a fresh, lip-smacking, serving of traditional Christmas fare.\n\nMatthew Bourne has achieved both artistic and commercial success with his imaginative new versions of classical ballets. Last year his Play Without Words made for the Royal National Theatre, received two Olivier Awards and is shortly to be revived.\n",
+            "value_html": "<p>Matthew Bourne's stunning production of Nutcracker! returns in 2008 to Sadler's Wells having broken all box office records during last year's sell-out season.</p>\r\n<p>This festive treat is full of his trademark style of wit, pathos and theatrical magic. Nutcracker! follows Clara's journey from a bleak Christmas Eve at Dr.Dross' Orphanage, through a shimmering ice-skating wonderland and to the spectacular candy folk of Sweetieland.</p>\r\n<p>Oliver award-winning designer Anthony Ward and Tchaikovsky's much-loved score combined with sizzling choreography guarantee that Matthew Bourne's Nutcracker! is a fresh, lip-smacking, serving of traditional Christmas fare.</p>\r\n<p>Matthew Bourne has achieved both artistic and commercial success with his imaginative new versions of classical ballets. Last year his Play Without Words made for the Royal National Theatre, received two Olivier Awards and is shortly to be revived.</p>"
+          },
+          "pricing_details_info": {
+            "name": "Pricing details information",
+            "value": "Book by 30th April for performances from 10 July - 10 August and pay no booking fee on this show\n",
+            "value_html": "<p>Book by 30th April for performances from 10 July - 10 August and pay no booking fee on this show</p>"
+          },
+          "suitable_for_children": {
+            "name": "Suitable For Children",
+            "value": "Sure, just be aware of the aforementioned tights.\n",
+            "value_html": "<p>Sure, just be aware of the aforementioned tights.</p>"
+          },
+          "whats_included": {
+            "name": "What's Included",
+            "value": "Everything you need.\n",
+            "value_html": "<p>Everything you need.</p>"
+          },
+          "when_can_i_go": {
+            "name": "Performance Times",
+            "value": "Anytime you like! As long as there's a show on...\n",
+            "value_html": "<p>Anytime you like! As long as there's a show on...</p>"
+          },
+          "where_do_i_go": {
+            "name": "Where Do I Go",
+            "value": "To Sadler's Wells of course!\n",
+            "value_html": "<p>To Sadler's Wells of course!</p>"
+          }
+        },
+        "user_review_percent": 100,
+        "venue_addr": "Roseberry Avenue\r\nIslington\r\nLondon\r\nUK",
+        "venue_addr_html": "<div><p>Roseberry Avenue\r\nIslington\r\nLondon\r\nUK</p></div>\n",
+        "venue_desc": "Sadler's Wells"
+      },
+      "quantity_options": {
+        "valid_quantity_bitmask": 126
+      },
+      "venue_is_enforced": true
+    }
+  }
+}
+```
+
+```python
+{
+    '6IF': pyticketswitch.Event(
+        event_id='6IF',
+        content = {
+            'address': pyticketswitch.Content(
+                name='Address',
+                value='Roseberry Avenue\r\nIslington\r\nLondon\r\nUK',
+                value_html='<p>Roseberry Avenue\r\nIslington\r\nLondon\r\nUK</p>'
+            ),
+            'duration': pyticketswitch.Content(
+                name='Duration',
+                value='A Goldilocks duration - not too long, not too short, just the right amount of time.\n',
+                value_html='<p>A Goldilocks duration - not <em>too</em> long, not <em>too</em> short, just the right amount of time.</p>'
+            ),
+            'good_to_know': pyticketswitch.Content(
+                name='Good To Know',
+                value='Warning! Men in very tight tights.\n',
+                value_html='<p>Warning! Men in very tight tights.</p>'
+            ),
+            'overview': pyticketswitch.Content(
+                name='Overview',
+                value='Matthew Bourne\'s stunning production of Nutcracker! returns in 2008 to Sadler\'s Wells having broken all box office records during last year\'s sell-out season.\n\nThis festive treat is full of his trademark style of wit, pathos and theatrical magic. Nutcracker! follows Clara\'s journey from a bleak Christmas Eve at Dr.Dross\' Orphanage, through a shimmering ice-skating wonderland and to the spectacular candy folk of Sweetieland.\n\nOliver award-winning designer Anthony Ward and Tchaikovsky\'s much-loved score combined with sizzling choreography guarantee that Matthew Bourne\'s Nutcracker! is a fresh, lip-smacking, serving of traditional Christmas fare.\n\nMatthew Bourne has achieved both artistic and commercial success with his imaginative new versions of classical ballets. Last year his Play Without Words made for the Royal National Theatre, received two Olivier Awards and is shortly to be revived.\n',
+                value_html='<p>Matthew Bourne\'s stunning production of Nutcracker! returns in 2008 to Sadler\'s Wells having broken all box office records during last year\'s sell-out season.</p>\r\n<p>This festive treat is full of his trademark style of wit, pathos and theatrical magic. Nutcracker! follows Clara\'s journey from a bleak Christmas Eve at Dr.Dross\' Orphanage, through a shimmering ice-skating wonderland and to the spectacular candy folk of Sweetieland.</p>\r\n<p>Oliver award-winning designer Anthony Ward and Tchaikovsky\'s much-loved score combined with sizzling choreography guarantee that Matthew Bourne\'s Nutcracker! is a fresh, lip-smacking, serving of traditional Christmas fare.</p>\r\n<p>Matthew Bourne has achieved both artistic and commercial success with his imaginative new versions of classical ballets. Last year his Play Without Words made for the Royal National Theatre, received two Olivier Awards and is shortly to be revived.</p>'
+            ),
+            'pricing_details_info': pyticketswitch.Content(
+                name='Pricing details information',
+                value='Book by 30th April for performances from 10 July - 10 August and pay no booking fee on this show\n',
+                value_html='<p>Book by 30th April for performances from 10 July - 10 August and pay no booking fee on this show</p>'
+            ),
+            'suitable_for_children': pyticketswitch.Content(
+                name='Suitable For Children',
+                value='Sure, just be aware of the aforementioned tights.\n',
+                value_html='<p>Sure, just be aware of the aforementioned tights.</p>'
+            ),
+            'whats_included': pyticketswitch.Content(
+                name='What\'s Included',
+                value='Everything you need.\n',
+                value_html='<p>Everything you need.</p>'
+            ),
+            'when_can_i_go': pyticketswitch.Content(
+                name='Performance Times',
+                value='Anytime you like! As long as there\'s a show on...\n',
+                value_html='<p>Anytime you like! As long as there\'s a show on...</p>'
+            ),
+            'where_do_i_go': pyticketswitch.Content(
+                name='Where Do I Go',
+                value='To Sadler\'s Wells of course!\n',
+                value_html='<p>To Sadler\'s Wells of course!</p>'
+            ),
+        },
+        event_info = 'Matthew Bourne\'s stunning production of Nutcracker! returns in 2008 to Sadler\'s Wells having broken all box office records during last year\'s sell-out season.\n\nThis festive treat is full of his trademark style of wit, pathos and theatrical magic. Nutcracker! follows Clara\'s journey from a bleak Christmas Eve at Dr.Dross\' Orphanage, through a shimmering ice-skating wonderland and to the spectacular candy folk of Sweetieland.\n\nOliver award-winning designer Anthony Ward and Tchaikovsky\'s much-loved score combined with sizzling choreography guarantee that Matthew Bourne\'s Nutcracker! is a fresh, lip-smacking, serving of traditional Christmas fare.\n\nMatthew Bourne has achieved both artistic and commercial success with his imaginative new versions of classical ballets. Last year his Play Without Words made for the Royal National Theatre, received two Olivier Awards and is shortly to be revived.\n\nDuration\n\nA Goldilocks duration - not too long, not too short, just the right amount of time.\n\n\nPerformance Times\n\nAnytime you like! As long as there\'s a show on...\n\n\nWhere Do I Go\n\nTo Sadler\'s Wells of course!\n\n\nWhat\'s Included\n\nEverything you need.\n\n\nGood To Know\n\nWarning! Men in very tight tights.\n\n\nSuitable For Children\n\nSure, just be aware of the aforementioned tights.\n\n',
+        event_info_html = '<div><p>Matthew Bourne\'s stunning production of Nutcracker! returns in 2008 to Sadler\'s Wells having broken all box office records during last year\'s sell-out season.</p>\r\n<p>This festive treat is full of his trademark style of wit, pathos and theatrical magic. Nutcracker! follows Clara\'s journey from a bleak Christmas Eve at Dr.Dross\' Orphanage, through a shimmering ice-skating wonderland and to the spectacular candy folk of Sweetieland.</p>\r\n<p>Oliver award-winning designer Anthony Ward and Tchaikovsky\'s much-loved score combined with sizzling choreography guarantee that Matthew Bourne\'s Nutcracker! is a fresh, lip-smacking, serving of traditional Christmas fare.</p>\r\n<p>Matthew Bourne has achieved both artistic and commercial success with his imaginative new versions of classical ballets. Last year his Play Without Words made for the Royal National Theatre, received two Olivier Awards and is shortly to be revived.</p></div>\n\n<h4>Duration</h4>\n<div><p>A Goldilocks duration - not <em>too</em> long, not <em>too</em> short, just the right amount of time.</p></div>\n\n<h4>Performance Times</h4>\n<div><p>Anytime you like! As long as there\'s a show on...</p></div>\n\n<h4>Where Do I Go</h4>\n<div><p>To Sadler\'s Wells of course!</p></div>\n\n<h4>What&#39;s Included</h4>\n<div><p>Everything you need.</p></div>\n\n<h4>Good To Know</h4>\n<div><p>Warning! Men in very tight tights.</p></div>\n\n<h4>Suitable For Children</h4>\n<div><p>Sure, just be aware of the aforementioned tights.</p></div>\n',
+        venue_addr = 'Roseberry Avenue\r\nIslington\r\nLondon\r\nUK',
+        venue_addr_html = '<div><p>Roseberry Avenue\r\nIslington\r\nLondon\r\nUK</p></div>\n',
+        venue_info = None,
+        venue_info_html = None,
+    )
+}
+```
+
+
+Attribute | Description
+--------- | -----------
+`content` | this is miscellaneous textual content that can be used to populate an event page.
+`event_info` | summary description of the event as plain text
+`event_info_html` | summary description of the event as html
+`venue_info` | summary description of the venue as plain text
+`venue_info_html` | summary description of the venue as html
+`venue_addr` | the address of the venue as plain text
+`venue_addr_html` | the address of the venue as html
+
 
 ## Reviews
 
@@ -1416,10 +1628,283 @@ Parameter | Description
 ```
 
 ```python
+{
+    '6IF': pyticketswitch.Event(
+        event_id='6IF',
+        cost_range_details = [
+            pyticketswitch.CostRangeDetails(
+                ticket_type='BALCONY',
+                ticket_type_description='Balcony',
+                price_band='A',
+                price_band_description='',
+                cost_range=pyticketswitch.CostRange(
+                    valid_quantities=[2, 3, 4, 5, 6, 7],
+                    max_seatprice=47.0,
+                    max_surcharge=0.0,
+                    min_seatprice=47.0,
+                    min_surcharge=0.0,
+                    currency=pyticketswitch.Currency(
+                        code='gbp',
+                        number=826,
+                        factor=100,
+                        places=2,
+                        pre_symbol="",
+                        post_symbol="£",
+                    )
+                ),
+                cost_range_no_singles=pyticketswitch.CostRange(
+                    valid_quantities=[2, 3, 4, 5, 6, 7],
+                    max_seatprice=47.0,
+                    max_surcharge=0.0,
+                    min_seatprice=47.0,
+                    min_surcharge=0.0,
+                    currency=pyticketswitch.Currency(
+                        code='gbp',
+                        number=826,
+                        factor=100,
+                        places=2,
+                        pre_symbol="",
+                        post_symbol="£",
+                    )
+                )
 
+            ),
+            pyticketswitch.CostRangeDetails(
+                ticket_type='CIRCLE',
+                ticket_type_description='Upper Circle',
+                price_band='A',
+                price_band_description='',
+                cost_range=pyticketswitch.CostRange(
+                    valid_quantities=[2, 3, 4, 5, 6, 7],
+                    max_seatprice=35.0,
+                    max_surcharge=0.0,
+                    min_seatprice=35.0,
+                    min_surcharge=0.0,
+                    currency=pyticketswitch.Currency(
+                        code='gbp',
+                        number=826,
+                        factor=100,
+                        places=2,
+                        pre_symbol="",
+                        post_symbol="£",
+                    )
+                ),
+                cost_range_no_singles=pyticketswitch.CostRange(
+                    valid_quantities=[2, 3, 4, 5, 6, 7],
+                    max_seatprice=35.0,
+                    max_surcharge=0.0,
+                    min_seatprice=35.0,
+                    min_surcharge=0.0,
+                    currency=pyticketswitch.Currency(
+                        code='gbp',
+                        number=826,
+                        factor=100,
+                        places=2,
+                        pre_symbol="",
+                        post_symbol="£",
+                    )
+                )
+            ),
+            pyticketswitch.CostRangeDetails(
+                ticket_type='CIRCLE',
+                ticket_type_description='Upper Circle',
+                price_band='B',
+                price_band_description='',
+                cost_range=pyticketswitch.CostRange(
+                    valid_quantities=[2, 3, 4, 5, 6, 7],
+                    max_seatprice=30.0,
+                    max_surcharge=0.0,
+                    min_seatprice=30.0,
+                    min_surcharge=0.0,
+                    currency=pyticketswitch.Currency(
+                        code='gbp',
+                        number=826,
+                        factor=100,
+                        places=2,
+                        pre_symbol="",
+                        post_symbol="£",
+                    )
+                ),
+                cost_range_no_singles=pyticketswitch.CostRange(
+                    valid_quantities=[2, 3, 4, 5, 6, 7],
+                    max_seatprice=30.0,
+                    max_surcharge=0.0,
+                    min_seatprice=30.0,
+                    min_surcharge=0.0,
+                    currency=pyticketswitch.Currency(
+                        code='gbp',
+                        number=826,
+                        factor=100,
+                        places=2,
+                        pre_symbol="",
+                        post_symbol="£",
+                    )
+                )
+            ),
+            pyticketswitch.CostRangeDetails(
+                ticket_type='CIRCLE',
+                ticket_type_description='Upper Circle',
+                price_band='C',
+                price_band_description='',
+                cost_range=pyticketswitch.CostRange(
+                    valid_quantities=[2, 3, 4, 5, 6, 7],
+                    max_seatprice=25.0,
+                    max_surcharge=0.0,
+                    min_seatprice=25.0,
+                    min_surcharge=0.0,
+                    currency=pyticketswitch.Currency(
+                        code='gbp',
+                        number=826,
+                        factor=100,
+                        places=2,
+                        pre_symbol="",
+                        post_symbol="£",
+                    )
+                ),
+                cost_range_no_singles=pyticketswitch.CostRange(
+                    valid_quantities=[2, 3, 4, 5, 6, 7],
+                    max_seatprice=25.0,
+                    max_surcharge=0.0,
+                    min_seatprice=25.0,
+                    min_surcharge=0.0,
+                    currency=pyticketswitch.Currency(
+                        code='gbp',
+                        number=826,
+                        factor=100,
+                        places=2,
+                        pre_symbol="",
+                        post_symbol="£",
+                    )
+                )
+            ),
+            pyticketswitch.CostRangeDetails(
+                ticket_type='STALLS',
+                ticket_type_description='Stalls',
+                price_band='A',
+                price_band_description='',
+                cost_range=pyticketswitch.CostRange(
+                    valid_quantities=[2, 3, 4, 5, 6, 7],
+                    max_seatprice=21.0,
+                    max_surcharge=0.0,
+                    min_seatprice=21.0,
+                    min_surcharge=0.0,
+                    currency=pyticketswitch.Currency(
+                        code='gbp',
+                        number=826,
+                        factor=100,
+                        places=2,
+                        pre_symbol="",
+                        post_symbol="£",
+                    )
+                ),
+                cost_range_no_singles=pyticketswitch.CostRange(
+                    valid_quantities=[2, 3, 4, 5, 6, 7],
+                    max_seatprice=21.0,
+                    max_surcharge=0.0,
+                    min_seatprice=21.0,
+                    min_surcharge=0.0,
+                    currency=pyticketswitch.Currency(
+                        code='gbp',
+                        number=826,
+                        factor=100,
+                        places=2,
+                        pre_symbol="",
+                        post_symbol="£",
+                    )
+                )
+            ),
+            pyticketswitch.CostRangeDetails(
+                ticket_type='STALLS',
+                ticket_type_description='Stalls',
+                price_band='B',
+                price_band_description='',
+                cost_range=pyticketswitch.CostRange(
+                    valid_quantities=[2, 3, 4, 5, 6, 7],
+                    max_seatprice=18.0,
+                    max_surcharge=0.0,
+                    min_seatprice=18.0,
+                    min_surcharge=0.0,
+                    currency=pyticketswitch.Currency(
+                        code='gbp',
+                        number=826,
+                        factor=100,
+                        places=2,
+                        pre_symbol="",
+                        post_symbol="£",
+                    )
+                ),
+                cost_range_no_singles=pyticketswitch.CostRange(
+                    valid_quantities=[2, 3, 4, 5, 6, 7],
+                    max_seatprice=18.0,
+                    max_surcharge=0.0,
+                    min_seatprice=18.0,
+                    min_surcharge=0.0,
+                    currency=pyticketswitch.Currency(
+                        code='gbp',
+                        number=826,
+                        factor=100,
+                        places=2,
+                        pre_symbol="",
+                        post_symbol="£",
+                    )
+                )
+            ),
+        ],
+    )
+}
 ```
 
+#### Ticket Type
 
+Ticket types describe a part of house or location within the venue.
+
+Attribute | Description
+--------- | -----------
+`ticket_type_code` | the identifier of the ticket type, this can be used later in the [trolley](#trolley) or [reserve](#reserve) calls
+`ticket_type_desc` | A human readable description of the price band if applicable
+`price_band` | a list of price bands
+
+
+#### Price Band
+
+Price bands describe the different levels of pricing that are available within a
+ticket type. It's important to note that a price band may not have a long term
+set price, and as such ticket prices and surcharges might change on a performance to
+performance basis. 
+
+Attribute | Description
+--------- | -----------
+`price_band_code` | the identifier of the price band, this can be used later in the [trolley](#trolley) or [reserve](#reserve) calls
+`price_band_desc` | A human readable description of the price band if applicable
+`cost_range_details` | a list of the cost ranges in this price band.
+
+#### Cost range
+
+Cost ranges are a cached summary of the pricing that has been seen for your
+username. They are primarily used to retrieve the minimum (or "from") price for
+the event, along with detail of any offers or discounts.
+
+Cost ranges are generated from availability requests made either by end-users or
+by scheduled processes that Ingresso use to update cost range data. You should
+not attempt to make multiple availability requests in order to keep this data up
+to date - please contact us instead to discuss options api@ingresso.co.uk.  Cost
+ranges are only ever returned as part of a parent object (such as event). 
+
+<aside class="warning"> Cost ranges (and avail details) are not guaranteed to be
+present (nor accurate) so you should design your application with this in mind,
+for example by still displaying a performance even if it is missing a from
+price.  </aside>
+
+
+Attribute | Description
+--------- | -----------
+`max_seatprice` | the face value for the highest price (seatprice + surcharge)
+`max_surcharge` | the booking fee for the highest price (seatprice + surcharge)
+`max_seatprice` | the face value for the lowest price (seatprice + surcharge)
+`max_surcharge` | the booking fee for the lowest price (seatprice + surcharge)
+`no_singles_cost_range` | this returns another cost range object that excludes availability with only 1 consecutive seat available. The prices in this cost range will therefore be the same or higher than the outer cost range.
+`quantity_options` | the quantities with availability
+`range_currency` | the [currency](#currency-object) for the cost range
 
 ## Availability details
 
