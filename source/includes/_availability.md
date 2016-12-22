@@ -1,5 +1,49 @@
 # Availability
 
+> **Definition**
+
+```
+GET https://api.ticketswitch.com/f13/availability.v1/{username}?user_passwd={password}&perf_id={perfid}
+```
+
+`Availability` lists the tickets that are currently available for a performance.
+In most cases the availability provided is in real time (although we do
+sometimes [cache](#caching) availability) and represents the tickets available
+at the time the request was made. There is therefore no guarantee that the
+tickets will still be available to purchase at some future time. Tickets are
+only guaranteed to be held after you have [reserved tickets](#reservation).
+
+Availability is divided into a set of ticket types, and each ticket type is
+subdivided into price bands. If you request individual seats for a seated event
+each price band includes seat blocks for the contiguous seats.
+
+## Retrieve availability
+
+> **Example request**
+
+```shell
+curl https://api.ticketswitch.com/f13/availability.v1/demo \
+    -d "user_passwd=demopass" \
+    -d "perf_id=6IF-A8B" \
+    -G
+```
+
+```python
+from pyticketswitch import Client
+
+
+client = Client('demo', 'demopass')
+availability, meta = client.get_availability('6IF-A8B')
+```
+
+### Request
+
+Attribute | Description
+--------- | -----------
+`perf_id` | the identifier of the performance for which availability will be requested
+`no_of_seats` | the number of seats the user is looking for. This attribute is required when asking for seat blocks 
+
+
 TODO:
 
 - Are send methods returned by availability? If so how?  "A list of possible methods of despatching the tickets to the customer is also provided. Depending on the particular product, a ticket may be held for collection, or posted to the customer (subject to a number of restrictions on timing and postal areas). Each method in the list has an associated cost which will be added to the overall ticket charge."
@@ -108,9 +152,17 @@ This section describes:
 }
 ```
 
-`Availability` lists the tickets that are currently available for a performance. In most cases the availability provided is in real time (although we do sometimes [cache](#caching) availability) and represents the tickets available at the time the request was made. There is therefore no guarantee that the tickets will still be available to purchase at some future time. Tickets are only guaranteed to be held after you have [reserved tickets](#reservation).
+`Availability` lists the tickets that are currently available for a performance.
+In most cases the availability provided is in real time (although we do
+sometimes [cache](#caching) availability) and represents the tickets available
+at the time the request was made. There is therefore no guarantee that the
+tickets will still be available to purchase at some future time. Tickets are
+only guaranteed to be held after you have [reserved tickets](#reservation).
 
-Availability is divided into a set of ticket types, and each ticket type is subdivided into price bands. If you request individual seats for a seated event each price band includes seat blocks for the contiguous seats. The structure of the availability data returned is therefore:
+Availability is divided into a set of ticket types, and each ticket type is
+subdivided into price bands. If you request individual seats for a seated event
+each price band includes seat blocks for the contiguous seats. The structure of
+the availability data returned is therefore:
 
 --> availability
 
@@ -316,11 +368,6 @@ Attribute | Description
 ## Retrieve availability
 
 
-> **Definition**
-
-```
-GET https://api.ticketswitch.com/f13/availability.v1/{username}?user_passwd={password}&perf_id={perfid}
-```
 
 This call is used to return availability for a performance. It returns a list of [availability objects](#availability-object).
 
