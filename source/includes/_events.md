@@ -503,7 +503,7 @@ information related to the event.
 Most of these additional parameters are either relatively slow or produce lots
 of data, so be aware that may effect your response times.
 
-## Media object
+## Media
 
 Most events will have some kind of media attached to them. Usually this will
 just be a largish marquee image, some promotional shots. However there may

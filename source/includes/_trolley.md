@@ -24,7 +24,7 @@ identifier for the current state of your trolley, and can not be used to
 identify your trolley as you add or remove items.
 
 
-## trolley - Request
+### Request
 
 > **Example request - adding best available tickets to a new trolley, specifying specific discount codes**
 
@@ -40,6 +40,19 @@ curl https://api.ticketswitch.com/f13/trolley.v1/demo \
         -d "disc2=CHILD" \
         -G
 ```
+```python
+from pyticketswitch import Client
+
+client = Client('demo', 'demopass')
+trolley = client.get_trolley(
+    performance_id='6IF-A8N',
+    number_of_seats=2,
+    price_band_code='A/pool',
+    ticket_type_code='STALLS'
+)
+```
+
+
 
 > **Example request - adding specific seats to an existing trolley**
 
@@ -66,6 +79,18 @@ curl https://api.ticketswitch.com/f13/trolley.v1/demo \
         -G
 ```
 
+```python
+from pyticketswitch import Client
+
+client = Client('demo', 'demopass')
+trolley = client.get_trolley(
+    token='E2--nPSMAQKI8kggWwF4N5qp4zPaO2VU_3armTREADiU6s4xgp3VjDmF7TXSnD0DN100souzOPZD8COW-jLhPSAsdOY-DhoK15T4meB5-xUrXpZ2cMrLIbVbongnwLqzJdI_-FFa6XqQTrF2ncjGLssB9nC7R79FHSN12AADiZ795WDj3vQ8GJ6DGvXjTf3-bULrCpjitgZLqMf_bAlqay7hSQxfCFaD1PiUtuU7gIhi7vnsr0CJT7vtJJmLd_HXfrwgQYTNey5dia6Tx9o4Ed3QAvwctSGBGVZ6g9qabWwRnTbBg8_TFuvY0vSvqPq31b30Dey_rLBKq4X1Ay2uNx3VJCs221wGGEvmlY5JoxhmKm5-Z',
+    item_numbers_to_remove=[1, 2, 3],   
+)
+```
+
+
+
 > **Example request - view the current state of the trolley**
 
 ```shell
@@ -73,6 +98,19 @@ curl https://api.ticketswitch.com/f13/trolley.v1/demo \
         -d "user_passwd=demopass" \
         -d "trolley_token=k---bTur8DtD3TFVZR3ByQT-6tp2nUNjEM-Ecu16DM2wRLeKDpVncGguCbLv8Rqliw7CY" \
         -G
+```
+
+```python
+from pyticketswitch import Client
+
+client = Client('demo', 'demopass')
+trolley = client.get_trolley(
+    token='E2--nPSMAQKI8kggWwF4N5qp4zPaO2VU_3armTREADiU6s4xgp3VjDmF7TXSnD0DN100souzOPZD8COW-jLhPSAsdOY-DhoK15T4meB5-xUrXpZ2cMrLIbVbongnwLqzJdI_-FFa6XqQTrF2ncjGLssB9nC7R79FHSN12AADiZ795WDj3vQ8GJ6DGvXjTf3-bULrCpjitgZLqMf_bAlqay7hSQxfCFaD1PiUtuU7gIhi7vnsr0CJT7vtJJmLd_HXfrwgQYTNey5dia6Tx9o4Ed3QAvwctSGBGVZ6g9qabWwRnTbBg8_TFuvY0vSvqPq31b30Dey_rLBKq4X1Ay2uNx3VJCs221wGGEvmlY5JoxhmKm5-Z',
+    performance_id='6IF-A8D',
+    number_of_seats=4,
+    price_band_code='C/pool',
+    ticket_type_code='CIRCLE',
+)
 ```
 
 The single trolley call is used for multiple use cases such as:
@@ -113,7 +151,7 @@ Parameter | Description
 `seatX` | Specify a specific seat for ticket number X, with zero-based numbering (so to specify seat A12 as the first ticket use `seat0=A12`). If seat numbers are not specified then when the trolley is later reserved you will receive best available seats.
 `X_send_code` | Specify a send / despatch method for supplier system X. If this is not present it will default to the first send method. For example, to specify the POST send method for the nimax supplier system, use `nimax_send_code=POST`.
 `ticket_type_code` | The ticket type identifier for the tickets that you want to add to your trolley.
-`trolley_token` | The identifier for the trolley. This is used to add additional items to a trolley, or to reserve the items in a trolley.
+`trolley_token` | The identifier for the trolley. This is used to add additional items to a trolley, or to remove items in a trolley.
 
 
 Additional parameters, primarily for internal use:
@@ -126,7 +164,7 @@ Parameter | Description
 `promo_code` | Specifying a promo codes can unlock a special offer discount code. If you have a promo code it can be specified like this: `promo_code=FOO`. Note that this feature is not commonly used with partners.
 
 
-## trolley - Response
+### Response
 
 > **Example response - adding specific seats to an existing trolley**
 
