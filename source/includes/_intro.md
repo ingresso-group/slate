@@ -90,6 +90,8 @@ of this change is that a call near the end of the booking process, such as
 [reserve](#make-a-reservation), can be called without needing to remake the preceeding calls 
 (such as [requesting availability](#retrieve-availability)). 
 
+If you use Postman we have a [public library available](https://www.getpostman.com/collections/27ec338b8f3e932038ba).
+
 
 ## Philosophy
 

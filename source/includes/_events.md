@@ -149,7 +149,7 @@ Attribute | Description
 `venue_addr` | The venue address in plain text format. This is returned by the req_extra_info parameter.
 `venue_addr_html` | The venue address in HTML format. This is returned by the req_extra_info parameter.
 `venue_info` | Additional venue information in plain text format. This is sometimes not provided. This is returned by the req_extra_info parameter.
-`venue_info_html` | Additional venue information in HTML format. This is sometimes not provided.. This is returned by the req_extra_info parameter.
+`venue_info_html` | Additional venue information in HTML format. This is sometimes not provided. This is returned by the req_extra_info parameter.
 
 
 ## Retrieve an event
