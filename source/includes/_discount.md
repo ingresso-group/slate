@@ -1,9 +1,10 @@
 # Discounts
 
-- The [discount object](#discount-object)
-- The API call to [retrieve a list of discounts for given availability](#list-discounts) (either a price band and ticket type, or an individual seat) (TODO is that correct)
-
-## Discount object
+```
+GET https://api.ticketswitch.com/f13/discounts.v1/{username}?user_passwd={password}&perf_id={perfid}&price_band_code={pricebandcode}&ticket_type_code={tickettypecode}
+```
+A `discount` represents a price type or concession that is available for a set
+of available tickets.
 
 > **Example response - best available only**
 
@@ -24,17 +25,24 @@
 }
 ```
 
-A `discount` represents a price type or concession that is available for a set of available tickets. For example seat A12 in the Royal Circle may have the following `discounts` available, each with their own price: 
 
 * Adult
 * Child
 * Student
 
-When multiple `discounts` are returned, you should present the choice to your user (it is possible for you to just purchase the default `discount` even when there are multiple `discounts` but this is not recommended). When there are multiple offers available on a single ticket these are also presented as `discounts` so you can present the choice to your users (multiple offers are rare though).
+When multiple `discounts` are returned, you should present the choice to your
+user (it is possible for you to just purchase the default `discount` even when
+there are multiple `discounts` but this is not recommended). When there are
+multiple offers available on a single ticket these are also presented as
+`discounts` so you can present the choice to your users (multiple offers are
+rare though).
 
-When [retrieving availability for a performance](#retrieve-availability) we return the default `discount`, you then call [list discounts](#list discounts) for the full list of `discounts`.
+When [retrieving availability for a performance](#retrieve-availability) we
+return the default `discount`, you then call [list discounts](#list discounts)
+for the full list of `discounts`.
 
-The following attributes are returned - these are the same as for the [availability object](#availability-object).
+The following attributes are returned - these are the same as for the
+[availability object](#availability-object).
 
 Attribute | Description
 --------- | -----------
@@ -56,18 +64,15 @@ Attribute | Description
 
 > **Definition**
 
-```
-GET https://api.ticketswitch.com/cgi-bin/json_discounts.exe/{username}?user_passwd={password}&perf_id={perfid}&price_band_code={pricebandcode}&ticket_type_code={tickettypecode}
-```
 
 This call is used to return availability for a performance. It returns a list of [availability objects](#availability-object).
 
 > **Example request - price band**
 
 ```shell
-curl https://api.ticketswitch.com/cgi-bin/json_discounts.exe/demo \
+curl https://api.ticketswitch.com/f13/discounts.v1/demo \
         -d "user_passwd=demopass" \
-        -d "perf_id=6IF-A5W" \
+        -d "perf_id=6IF-A8G" \
         -d "price_band_code=A" \
         -d "ticket_type_code=CIRCLE" \
         -G
