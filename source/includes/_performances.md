@@ -101,7 +101,7 @@ Parameter | Description
 ```python
 {
     '6IF-A8J': pyticketswitch.Performance(
-        performance_id='6IF-A8J',
+        id='6IF-A8J',
         event_id='6IF',
         date_time=datetime.datetime(2017, 2, 16, 19, 30, 0, 0),
         has_pool_seats=True,
@@ -109,7 +109,7 @@ Parameter | Description
         cached_max_seats=123,
     ),
     '6IF-A8J': pyticketswitch.Performance(
-        performance_id='6IF-A8K',
+        id='6IF-A8K',
         event_id='6IF',
         date_time=datetime.datetime(2017, 2, 17, 19, 30, 0, 0),
         has_pool_seats=True,
@@ -379,7 +379,7 @@ Parameter | Description
 ```python
 [
     pyticketswitch.Performance(
-        performance_id='6IF-A6Z',
+        id='6IF-A6Z',
         event_id='6IF',
         date_time=datetime.datetime(2016, 12, 22, 19, 30, 0, 0),
         has_pool_seats=True,
@@ -387,7 +387,7 @@ Parameter | Description
         cached_max_seats=6,
     ),
     pyticketswitch.Performance(
-        performance_id='6IF-A70',
+        id='6IF-A70',
         event_id='6IF',
         date_time=datetime.datetime(2016, 12, 23, 19, 30, 0, 0),
         has_pool_seats=True,
@@ -395,7 +395,7 @@ Parameter | Description
         cached_max_seats=6,
     ),
     pyticketswitch.Performance(
-        performance_id='6IF-A72',
+        id='6IF-A72',
         event_id='6IF',
         date_time=datetime.datetime(2016, 12, 25, 19, 30, 0, 0),
         has_pool_seats=True,
@@ -403,7 +403,7 @@ Parameter | Description
         cached_max_seats=6,
     ),
     pyticketswitch.Performance(
-        performance_id='6IF-A73',
+        id='6IF-A73',
         event_id='6IF',
         date_time=datetime.datetime(2016, 12, 26, 19, 30, 0, 0),
         has_pool_seats=True,
@@ -411,7 +411,7 @@ Parameter | Description
         cached_max_seats=6,
     ),
     pyticketswitch.Performance(
-        performance_id='6IF-A74',
+        id='6IF-A74',
         event_id='6IF',
         date_time=datetime.datetime(2016, 12, 27, 19, 30, 0, 0),
         has_pool_seats=True,
@@ -419,7 +419,7 @@ Parameter | Description
         cached_max_seats=6,
     ),
     pyticketswitch.Performance(
-        performance_id='6IF-A75',
+        id='6IF-A75',
         event_id='6IF',
         date_time=datetime.datetime(2016, 12, 28, 19, 30, 0, 0),
         has_pool_seats=True,
@@ -427,7 +427,7 @@ Parameter | Description
         cached_max_seats=6,
     ),
     pyticketswitch.Performance(
-        performance_id='6IF-A76',
+        id='6IF-A76',
         event_id='6IF',
         date_time=datetime.datetime(2016, 12, 29, 19, 30, 0, 0),
         has_pool_seats=True,
@@ -435,7 +435,7 @@ Parameter | Description
         cached_max_seats=6,
     ),
     pyticketswitch.Performance(
-        performance_id='6IF-A77',
+        id='6IF-A77',
         event_id='6IF',
         date_time=datetime.datetime(2016, 12, 30, 19, 30, 0, 0),
         has_pool_seats=True,
@@ -443,7 +443,7 @@ Parameter | Description
         cached_max_seats=6,
     ),
     pyticketswitch.Performance(
-        performance_id='6IF-A79',
+        id='6IF-A79',
         event_id='6IF',
         date_time=datetime.datetime(2017, 1, 1, 19, 30, 0, 0),
         has_pool_seats=True,
@@ -451,7 +451,7 @@ Parameter | Description
         cached_max_seats=6,
     ),
     pyticketswitch.Performance(
-        performance_id='6IF-A7A',
+        id='6IF-A7A',
         event_id='6IF',
         date_time=datetime.datetime(2017, 1, 2, 19, 30, 0, 0),
         has_pool_seats=True,
@@ -611,7 +611,7 @@ Parameter | Description
 
 ```python
 pyticketswitch.Performance(
-    event_id='6IF-A8K',
+    id='6IF-A8K',
     cost_range=pyticketswitch.CostRange(
         valid_quantities=[2, 3, 4, 5, 6, 7],
         max_seatprice=47.0,
@@ -833,7 +833,7 @@ Parameter | Description
 ```python
 {
     '6IF-A8K': pyticketswitch.Performance(
-        performance_id='6IF-A8K',
+        id='6IF-A8K',
         availabilty_details=[
             pyticketswitch.AvailabilityDetails(
                 ticket_type='BALCONY',

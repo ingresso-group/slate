@@ -149,7 +149,7 @@ Parameter | Description
 ```python
 {
     '6IE': pyticketswitch.Event(
-        event_id='6IE',
+        id='6IE',
         status='live',
         description='Matthew Bourne\'s Swan Lake TEST',
         source='External Test Backend 0',
@@ -179,7 +179,7 @@ Parameter | Description
         upsell_list=['6IF', '6KU' 'MH0'],
     ),
     '6IF': pyticketswitch.Event(
-        event_id='6IF',
+        id='6IF',
         status='live',
         description='Matthew Bourne\'s Nutcracker TEST',
         source='External Test Backend 0',
@@ -398,7 +398,7 @@ Parameter | Description
 ```python
 [
     pyticketswitch.Event(
-        event_id='6IF',
+        id='6IF',
         status='live',
         description='Matthew Bourne\'s Nutcracker TEST',
         source='External Test Backend 0',
@@ -428,7 +428,7 @@ Parameter | Description
         upsell_list=['6IE', 'MH0'],
     ),
     pyticketswitch.Event(
-        event_id='6IE',
+        id='6IE',
         status='live',
         description='Matthew Bourne\'s Swan Lake TEST',
         source='External Test Backend 0',
@@ -734,7 +734,7 @@ Parameter | Description
 
 ```python
 pyticketswitch.Event(
-    event_id='6IF',
+    id='6IF',
     media = [
         pyticketswitch.Media(
             name='landscape',
@@ -993,7 +993,7 @@ Parameter | Description
 ```python
 {
     '6IF': pyticketswitch.Event(
-        event_id='6IF',
+        id='6IF',
         content = {
             'address': pyticketswitch.Content(
                 name='Address',
@@ -1182,7 +1182,7 @@ Parameter | Description
 ```python
 {
     '6IF': pyticketswitch.Event(
-        event_id='6IF',
+        id='6IF',
         reviews = [
             pyticketswitch.Review(
                 body='Cannot recommend this show enough!',
@@ -1374,7 +1374,7 @@ Parameter | Description
 
 ```python
 pyticketswitch.Event(
-    event_id='6IF',
+    id='6IF',
     cost_range=pyticketswitch.CostRange(
         valid_quantities=[2, 3, 4, 5, 6, 7],
         max_seatprice=47.0,
@@ -1631,7 +1631,7 @@ Parameter | Description
 ```python
 {
     '6IF': pyticketswitch.Event(
-        event_id='6IF',
+        id='6IF',
         cost_range_details = [
             pyticketswitch.CostRangeDetails(
                 ticket_type='BALCONY',
@@ -2206,7 +2206,7 @@ Parameter | Description
 
 ```python
 pyticketswitch.Event(
-    event_id='6IF',
+    id='6IF',
 
     availability_details = [
         pyticketswitch.AvailabilityDetails(
