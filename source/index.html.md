@@ -18,7 +18,7 @@ includes:
   - send_methods
   - discount
   - trolley
-  - reservation
+  - reserve
   - generic_objects
   - bitmask_fields
   - caching
