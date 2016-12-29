@@ -6,6 +6,7 @@
 * Matt to rerun examples now that bit masks are replaced / flagged (and explain how to use bit masks)
 * Matt to add json_cities and json_categories
 * Matt to add recommendation on payment to the intro, and we should ensure #1 and #2 is as easy as possible.
+* Matt to add a small section on versioning.
 ******
 Ingresso's partners split into the following categories: (1) those who purchase on-credit, and are invoiced by Ingresso; (2) those who exclusively use Stripe to take payment, either into their own bank account (and are invoiced by Ingresso) or directly into Ingresso's bank account; (3) those who send payment direct to the venue or to the payment provider specified by Ingresso. For partners in category 2 and 3 accepted_payment_cards
 ******
