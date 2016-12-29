@@ -1,6 +1,10 @@
 # Generic objects
 
-There are some objects that are returned as part of several calls, for example cost ranges can be retrieved when you [list events](#list-all-events-or-search-for-events) or when you [list performances](#list-performances). These objects are consistent so that you can use a single function to parse them regardless of which API call has returned them.
+There are some objects that are returned as part of several resources, for
+example cost ranges can be retrieved when you [list events](#events-list) or
+when you [list performances](#performances-list). These objects are consistent
+so that you can use a single function to parse them regardless of which resource
+has returned them.
 
 ## Avail Detail object
 

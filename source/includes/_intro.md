@@ -1,16 +1,15 @@
 <!---
 # TODOs / Questions
 
+* Matt to include detail on how user authentication works now, and what our recommended approach is
 * Matt to include a section describing how our caching works
 * Matt to explain how to distinguish between these no booking fee and discounted face value offers in events / perfs / availability
 * Matt to rerun examples now that bit masks are replaced / flagged (and explain how to use bit masks)
 * Matt to add json_cities and json_categories
-* Matt to add recommendation on payment to the intro, and we should ensure #1 and #2 is as easy as possible.
 * Matt to add a small section on versioning.
-******
-Ingresso's partners split into the following categories: (1) those who purchase on-credit, and are invoiced by Ingresso; (2) those who exclusively use Stripe to take payment, either into their own bank account (and are invoiced by Ingresso) or directly into Ingresso's bank account; (3) those who send payment direct to the venue or to the payment provider specified by Ingresso. For partners in category 2 and 3 accepted_payment_cards
-******
+* Matt to add a test meta event, and refer to this in the test intro section and wherever meta events are mentioned.
 
+* Error codes need to be added everywhere by Pete.
 
 
 * Simplifying allocation modes for seat selection - perhaps the best approach is to only require ticket type and seat ID, then failing a reserve that doesn't include any of the requested seats (so a reserve with seat_request_status = got_partial or got_all succeeds, but got_none results in a failure if you haven't passed in the price band)
@@ -73,26 +72,34 @@ APIs, allowing us to transact directly on the venue's system.  By integrating
 with the Ingresso API you are able to view and purchase live inventory from a
 number of different venues.
 
-The Ingresso API is a fully transactional API, loosely based on REST.  GET
-requests and basic query paremeters are used to drive the API. You format
-requests  in [JSON](http://www.json.org/) and you will receive either a JSON-
-formatted  response or an HTTP error.
+The Ingresso API is a fully transactional API, loosely based on REST. You format
+GET or POST requests in [JSON](http://www.json.org/) and you will receive either 
+a JSON-formatted response or an HTTP error.
 
-We describe objects in a consistent way across different calls  (for example the
+We describe objects in a consistent way across different resources (for example the
 output of [events](#events) and [performances](#performances) includes a
-[cost_range object](#cost-range-object) and this is described in the  same
+[cost_range object](#cost-range-object) and this is described in the same
 format. The idea of this is that standard code can be used on the client side to
 read all parts of the output.
 
-This API replaces the [the Ingresso XML
-API](http://www.ingresso.co.uk/apidocs/).  The XML API relies on temporary
-tokens from the preceeding call being passed in  to the next call - these has
-been removed in favour of permanent IDs. One benefit  of this change is that a
-call near the end of the booking process, such as  [reserve](#reserve), can be
-called without needing to remake the preceeding calls  (such as [requesting
-availability](#availability)).
+This API replaces the [the Ingresso XML API](http://www.ingresso.co.uk/apidocs/).  
+The XML API relies on temporary tokens from the one call being passed in
+to the next call; these has been removed in favour of permanent IDs. One
+benefit of this change is that a call near the end of the booking process, such
+as [reserve](#reserve), can be called without needing to remake the preceeding
+calls (such as [requesting availability](#availability)).
 
 If you use Postman we have a [public library available](https://www.getpostman.com/collections/27ec338b8f3e932038ba).
+
+
+## How to get access to the API
+
+All examples shown in this documentation are for the `demo` user. This user has
+access to test product only - you can make purchases with this  user without any
+impact on live tickets, or any need to contact us first.
+
+If you would like your own API credentials in order to start selling please 
+email us: api@ingresso.co.uk
 
 
 ## Philosophy
@@ -122,9 +129,8 @@ the event is seated.
 * *Optional:* use a [trolley](#trolley) if you want to purchase multiple events 
 together.
 
-* [reserve](#reserve) specific seats or best available tickets for a set period
-[of time. If using basketing `reserve` will attempt to reserve all items in
-[the shopping trolley.
+* [reserve](#reserve) specific seats or best available tickets (or items 
+previously added to a trolley) for a set period of time.
 
 * [purchase](#purchase) the reserved tickets.
 
@@ -145,7 +151,7 @@ website as a **partial integration**. Some examples of partial integrations:
 
 * Maintain a listing of events on your own site, and use Ingresso's white label
 website for booking the tickets. In this case the Ingresso API can be used to 
-[retrieve a listing of events](#list-all-events-or-search-for-events).
+[list events](#events-list).
 
 * Ingresso have invested in a high-converting booking app (where the user
 selects their performance and seats). This page is often where most development
@@ -181,18 +187,9 @@ by Ingresso. This is not typically offered to partners - if you think this is
 required please contact us: api@ingresso.co.uk.
 
 
-## How to get access to the API
-
-All examples shown in this documentation are for the `demo` user.  
-This user has access to test product only - you can make purchases with this 
-user without any impact on  live tickets.
-
-To request your own test or live API credentials email us: api@ingresso.co.uk
-
-
 ## Authentication
 
-The username and password should be passed in with every call. 
+The username and password should be passed in to every resource. 
 (TODO does it only need to be set once for the client libraries?)
 
 The password must be passed in the query string with `user_passwd`.
@@ -231,25 +228,24 @@ page](https://status.ingresso.co.uk/).
 
 ## Variables controlling output
 
-The output from a given API call may be augmented beyond the
+The output from a given resource may be augmented beyond the
 basic result in one of two ways. Firstly there are extra functions
-which may be availble for a given API call, which are specific to
-that call. These are triggered using variables with the prefix `add_`
-or `include_` such as `add_discount_codes` on the availability call which
+which may be availble for a given resource, which are specific to
+that resource. These are triggered using variables with the prefix `add_`
+or `include_` such as `add_discount_codes` on the availability resource which
 is used to control whether or not discount codes are also retrieved and
 returned.
 
 The second type of augmentation is specific to the returned objects themselves
-and is thus applicable to the output of any call which returns one of these
+and is thus applicable to the output of any resource which returns one of these
 objects. The most obvious example is an event object, which can be described
 with many extra pieces of information about it. These varaibles are all prefixed
 with `req_` as they are requests to the objects to output something extra or
 different about themselves, for example `req_cost_range`.
 
 Note that the `req_` and `add_` / `include_` variables all result in extra
-processing to retrieve the requested data, which will slow down the call,
-sometimes substantially. They should therefore only be used where absolutely
-necessary.
+processing to retrieve the requested data, which will slow down the resource,
+sometimes substantially. They should therefore only be used where necessary.
 
 
 ## API libraries / SDKs

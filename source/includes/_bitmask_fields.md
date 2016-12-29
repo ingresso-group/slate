@@ -3,7 +3,7 @@
 This section describes the bitmasks fields returned in response to some api
 calls and explains how to decode their data. 
 
-The bitmask is an positive integer who's binary representation can be considered
+The bitmask is an positive integer whose binary representation can be considered
 as a sequence of boolean values. Bitmasks are little-endian; As such the start
 of the sequence is the last (or right-most) bit of the byte.
 
@@ -17,7 +17,7 @@ of the sequence is the last (or right-most) bit of the byte.
   X  |  X  |     |  X  |  X  |     |  X
 ```
 
-Consider the situation where we have a show with a performance on everyday of
+Consider the situation where we have a show with a performance on every day of
 the week with the exception of Tuesday and Friday. 
 
 
@@ -28,7 +28,7 @@ the week with the exception of Tuesday and Friday.
 ```
 
 If we put a `1` in the column for every day of the week when the performance is
-available, and `0` for everyday when it's not available then we get something
+available, and `0` for every day when it's not available then we get something
 that looks a lot like binary! Indeed as we have 7 bits (one for each day of the
 week) we could represent this as the 8bit number 218.
 
@@ -50,8 +50,8 @@ converts binary data into integers.
 ## Decoding
 
 
-Assuming that you have received `91` as the week day mask in a response from the
-API and you wanted to see if the event has a performance on a Wednesday. You can
+Assume that you have received `91` as the week day mask in a response from the
+API and you want to see if the event has a performance on a Wednesday. You can
 quickly check this a number of ways. 
 
 ```
@@ -81,5 +81,4 @@ could use `4` or `00000100` against the mask, this would return `01011111` or
 `95`, the output is different from your mask, therefore we don't have anything
 on a tuesday. You can do compound `OR` as well `00001000 | 00000100 == 00001100`
 or `12` so 
-
-
+(TODO: Nic please finish)

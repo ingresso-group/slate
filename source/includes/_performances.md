@@ -15,126 +15,20 @@ the same, there are some exceptions:
 
 An event is considered live when it has one or more future performances. The API
 will not return performances that are more than 2 years in the future by
-calendar date (TODO: check with pete).
+calendar date.
 
-## Retrieve specific performance
+There are two performance-related resources:
 
-> **Definition**
+1. [Performances list](#performances-list): list performances for an event.
 
-```
-GET https://api.ticketswitch.com/f13/performances_by_id.v1/{username}?user_passwd={password}&perf_id_list={perfidlist}
-```
+2. [Performances by ID](#performances-by-id): return detail for one or more 
+performances by their ID.
 
-This call is used to return detail for one or more performances by their ID. It
-returns a list of [performance objects](#performance-object).
-
-If you have a need to request availability for a subset of performances in a
-guaranteed fast response time then one way to achieve it is to use this call
-with the `req_avail_details` parameter - this will return the list of available
-price bands from Ingresso's cached data. Note that the cached data can be out of
-date or not present, and doesn't return seating data, so we do not recommend
-this in most cases.
-
-This call is used to return detail for one or more performances by their ID. It
-returns a dictionary of performances.
-
-### Request
-
-> **Example request**
-
-```shell
-curl https://api.ticketswitch.com/f13/performances_by_id.v1/demo \
-    -d "user_passwd=demopass" \
-    -d "perf_id_list=6IF-A8J,6IF-A8K" \
-    -G
-```
-
-```python
-from pyticketswitch import Client
+These two resources are described below, followed by detail of the 
+[extra parameters](#extra-parameters) that can be passed in to each resource.
 
 
-client = Client('demo', 'demopass')
-performances = client.get_performances(['6IF-A5R'])
-```
-
-Parameter | Description
---------- | -----------
-`perf_id_list` | A comma separated list of performance IDs e.g. `6IF-A5R` for a single performance; `6IF-A5R,6IF-A5S` for multiple performances
-
-
-### Response
-
-
-> **Example response**
-
-```shell
-{
-  "performances_by_id": {
-    "6IF-A8J": {
-      "date_desc": "Thu, 16th February 2017",
-      "event_id": "6IF",
-      "has_pool_seats": true,
-      "is_ghost": false,
-      "is_limited": false,
-      "iso8601_date_and_time": "2017-02-16T19:30:00Z",
-      "perf_id": "6IF-A8J",
-      "running_time": 120,
-      "time_desc": "7.30 PM",
-      "cached_max_seats": 123
-    },
-    "6IF-A8K": {
-      "date_desc": "Fri, 17th February 2017",
-      "event_id": "6IF",
-      "has_pool_seats": true,
-      "is_ghost": false,
-      "is_limited": true,
-      "iso8601_date_and_time": "2017-02-17T19:30:00Z",
-      "perf_id": "6IF-A8K",
-      "running_time": 120,
-      "time_desc": "7.30 PM",
-      "cached_max_seats": 456
-    }
-  }
-}
-```
-
-```python
-{
-    '6IF-A8J': pyticketswitch.Performance(
-        id='6IF-A8J',
-        event_id='6IF',
-        date_time=datetime.datetime(2017, 2, 16, 19, 30, 0, 0),
-        has_pool_seats=True,
-        is_limited=False,
-        cached_max_seats=123,
-    ),
-    '6IF-A8J': pyticketswitch.Performance(
-        id='6IF-A8K',
-        event_id='6IF',
-        date_time=datetime.datetime(2017, 2, 17, 19, 30, 0, 0),
-        has_pool_seats=True,
-        is_limited=True,
-        cached_max_seats=456,
-    ),
-}
-```
-
-Attribute | Description
---------- | -----------
-`perf_id` | Unique identifier for the performance
-`perf_name` | A human readable description of the performance. Performance names are not always present but must be displayed when they are. Performance names are typically used where performances of an event differ significantly in more than just date and time (sometimes the supplier system will not return the time to us in a structured format but it will instead be included as part of the performance name). An example performance with a performance name is 6IF-A5R.
-`event_id` | Unique identifier for the event that this performance is an instance of
-`iso8601_date_and_time` | ISO 8601 date and time
-`date_desc` | human readable date description
-`time_desc` | human readable time description
-`is_limited` | Indicates whether the supply of tickets is known to be extremely limited. This is usually taken to be fewer than four remaining, though not all ticket sources provide this information. Where the information is not available the flag will always be set to `false`
-`has_pool_seats` | (TODO: Pete what does this mean exactly?)
-`is_ghost` | (TODO: Pete in what scenario would you return perfs with is_ghost = true?)
-`cached_max_seats` | This is the maximum number of contiguous seats that can be booked for this performance, based on Ingresso's cached data. Note that if the event supports seat selection you are not limited by the number of contiguous seats, so this value should be used in the context of best available only. (TODO is this optional?)
-`running_time` | The length / duration of the performance in minutes
-
-
-## List performances for an event
+## Performances list
 
 > **Definition**
 
@@ -142,9 +36,8 @@ Attribute | Description
 GET https://api.ticketswitch.com/f13/performances.v1/{username}?user_passwd={password}&event_id={eventid}
 ```
 
-This call returns a list of [performance objects](#performance-object) for a
-particular event. The list is paged to avoid large volumes of data being
-accidentally returned.
+This call returns a list of performances for a particular event. The list is
+paged to avoid large volumes of data being accidentally returned.
 
 Typical use cases:
 
@@ -173,23 +66,31 @@ curl https://api.ticketswitch.com/f13/performances.v1/demo \
 ```python
 from pyticketswitch import Client
 
-
 client = Client('demo', 'demopass')
 performances = client.list_performances('6IF')
 ```
 
 Parameter | Description
 --------- | -----------
-`event_id` | identifier of the event we want to see performances for.
+`event_id` | Identifier of the event you want to see performances for.
+`page_len` | Length of a page, default 50.
+`page_no` | Page number, default 0, ignored if page_len is not present.
+`s_dates` | Date range in the form `yyyymmdd:yyyymmdd` (both are optional)
 
-These parameters are used to control the output if more than one performance is
-returned:
+These parameters can be passed in to request additional data for each 
+performance, and are described in more detail in the 
+[extra parameters](#extra-parameters) section below:
 
 Parameter | Description
 --------- | -----------
-`page_len` | Length of a page, default 50
-`page_no` | Page number, default 0, ignored if page_len is not present
-
+`req_avail_details` | Returns [availability details](#availability-detail) - a cached list of unique ticket types and price bands available for this performance.
+`req_cost_range` | Returns [cost ranges](#cost-ranges) - a from price and offer detail for each event. *Most partners include this parameter.*
+`req_cost_range_best_value_offer` | Returns the offer with the highest percentage saving. *This is the most commonly used offer cost range.*
+`req_cost_range_details` | Returns a list of unique ticket types and price bands and their cost ranges across all performances.
+`req_cost_range_max_saving_offer` | Returns the offer with the highest absolute saving.
+`req_cost_range_min_cost_offer` | Returns the offer with the lowest cost.
+`req_cost_range_top_price_offer` | Returns the offer with the highest cost. This is the least used offer cost range.
+`req_cost_range_no_singles_data` | This returns another cost range object that excludes availability with only 1 consecutive seat available. The prices in this cost range will therefore be the same or higher than the outer cost range. It has the same structure as the main cost range (so if you want to see the "best value offer" in the no singles data, you need to add `req_cost_range_best_value_offer` and you will see this data in both cost ranges).
 
 ### Response
 
@@ -199,54 +100,6 @@ Parameter | Description
 
 {
   "results": {
-    "events_by_id": {
-      "6IF": {
-        "event": {
-          "city_desc": "London",
-          "class": [
-            {
-              "class_desc": "Ballet & Dance"
-            }
-          ],
-          "country_code": "uk",
-          "country_desc": "United Kingdom",
-          "critic_review_percent": 100,
-          "custom_filter": [],
-          "event_desc": "Matthew Bourne's Nutcracker TEST",
-          "event_id": "6IF",
-          "event_path": "/6IF-matthew-bourne-s-nutcracker-test/",
-          "event_status": "live",
-          "event_type": "simple_ticket",
-          "event_upsell_list": {
-            "event_id": [
-              "6IE",
-              "MH0"
-            ]
-          },
-          "geo_data": {
-            "latitude": 51.52961137,
-            "longitude": -0.10601562
-          },
-          "has_no_perfs": false,
-          "is_seated": true,
-          "max_running_time": 120,
-          "min_running_time": 120,
-          "need_departure_date": false,
-          "need_duration": false,
-          "need_performance": true,
-          "postcode": "EC1R 4TN",
-          "show_perf_time": true,
-          "source_code": "ext_test0",
-          "source_desc": "External Test Backend 0",
-          "user_review_percent": 100,
-          "venue_desc": "Sadler's Wells"
-        },
-        "quantity_options": {
-          "valid_quantity_bitmask": 126
-        },
-        "venue_is_enforced": true
-      }
-    },
     "has_perf_names": true,
     "performance": [
       {
@@ -373,7 +226,6 @@ Parameter | Description
     ]
   }
 }
-
 ```
 
 ```python
@@ -465,10 +317,11 @@ Parameter | Description
 
 Attribute | Description
 --------- | -----------
-`events_by_id` | A list of events related to the performances returned. This is necessary in the case of meta events (events that are made up of multiple component events, for example a touring show) - in that case it is useful to know the details of the component events. (TODO couldn't this just be returned at the event stage?)
+`events_by_id` | A list of events related to the performances returned. This is only present for meta events (events that are made up of multiple component events, for example a touring show).
 `has_perf_names` | Whether the performances returned have performance names (human readable descriptions of the performance). Performance names are not always present but must be displayed when they are. Performance names are typically used where performances of an event differ significantly in more than just date and time (sometimes the supplier system will not return the time to us in a structured format but it will instead be included as part of the performance name). An example performance with a performance name is 6IF-A5R.
+`performance` | An array of performance objects, described below.
 
-### Performance
+**Performance**
 
 Attribute | Description
 --------- | -----------
@@ -484,27 +337,156 @@ Attribute | Description
 `cached_max_seats` | This is the maximum number of contiguous seats that can be booked for this performance, based on Ingresso's cached data. Note that if the event supports seat selection you are not limited by the number of contiguous seats, so this value should be used in the context of best available only. (TODO is this optional?)
 `running_time` | The length / duration of the performance in minutes
 
-## Additional parameters
 
-There are several additional parameters that can be provided to any call where
-a performance is returned in the response. These parameters will supply additional
-information related to the event. 
+## Performances by ID
+
+> **Definition**
+
+```
+GET https://api.ticketswitch.com/f13/performances_by_id.v1/{username}?user_passwd={password}&perf_id_list={perfidlist}
+```
+
+This resource is used to return detail for one or more performances by their ID.
+It returns a dictionary of performances.
+
+If you have a need to request availability for a subset of performances in a
+guaranteed fast response time then one way to achieve it is to use this call
+with the `req_avail_details` parameter - this will return the list of available
+price bands from Ingresso's cached data. Note that the cached data can be out of
+date or not present, and doesn't return seating data, so we do not recommend
+this in most cases.
+
+### Request
+
+> **Example request**
+
+```shell
+curl https://api.ticketswitch.com/f13/performances_by_id.v1/demo \
+    -d "user_passwd=demopass" \
+    -d "perf_id_list=6IF-A8J,6IF-A8K" \
+    -G
+```
+
+```python
+from pyticketswitch import Client
+
+
+client = Client('demo', 'demopass')
+performances = client.get_performances(['6IF-A5R'])
+```
+
+Parameter | Description
+--------- | -----------
+`perf_id_list` | A comma separated list of performance IDs e.g. `6IF-A5R` for a single performance; `6IF-A5R,6IF-A5S` for multiple performances.
+
+These parameters can be passed in to request additional data for each 
+performance, and are described in more detail in the 
+[extra parameters](#extra-parameters) section below:
+
+Parameter | Description
+--------- | -----------
+`req_avail_details` | Returns [availability details](#availability-detail) - a cached list of unique ticket types and price bands available for this performance.
+`req_cost_range` | Returns [cost ranges](#cost-ranges) - a from price and offer detail for each event. *Most partners include this parameter.*
+`req_cost_range_best_value_offer` | Returns the offer with the highest percentage saving. *This is the most commonly used offer cost range.*
+`req_cost_range_details` | Returns a list of unique ticket types and price bands and their cost ranges across all performances.
+`req_cost_range_max_saving_offer` | Returns the offer with the highest absolute saving.
+`req_cost_range_min_cost_offer` | Returns the offer with the lowest cost.
+`req_cost_range_top_price_offer` | Returns the offer with the highest cost. This is the least used offer cost range.
+`req_cost_range_no_singles_data` | This returns another cost range object that excludes availability with only 1 consecutive seat available. The prices in this cost range will therefore be the same or higher than the outer cost range. It has the same structure as the main cost range (so if you want to see the "best value offer" in the no singles data, you need to add `req_cost_range_best_value_offer` and you will see this data in both cost ranges).
+
+### Response
+
+
+> **Example response**
+
+```shell
+{
+  "performances_by_id": {
+    "6IF-A8J": {
+      "date_desc": "Thu, 16th February 2017",
+      "event_id": "6IF",
+      "has_pool_seats": true,
+      "is_ghost": false,
+      "is_limited": false,
+      "iso8601_date_and_time": "2017-02-16T19:30:00Z",
+      "perf_id": "6IF-A8J",
+      "running_time": 120,
+      "time_desc": "7.30 PM",
+      "cached_max_seats": 123
+    },
+    "6IF-A8K": {
+      "date_desc": "Fri, 17th February 2017",
+      "event_id": "6IF",
+      "has_pool_seats": true,
+      "is_ghost": false,
+      "is_limited": true,
+      "iso8601_date_and_time": "2017-02-17T19:30:00Z",
+      "perf_id": "6IF-A8K",
+      "running_time": 120,
+      "time_desc": "7.30 PM",
+      "cached_max_seats": 456
+    }
+  }
+}
+```
+
+```python
+{
+    '6IF-A8J': pyticketswitch.Performance(
+        id='6IF-A8J',
+        event_id='6IF',
+        date_time=datetime.datetime(2017, 2, 16, 19, 30, 0, 0),
+        has_pool_seats=True,
+        is_limited=False,
+        cached_max_seats=123,
+    ),
+    '6IF-A8J': pyticketswitch.Performance(
+        id='6IF-A8K',
+        event_id='6IF',
+        date_time=datetime.datetime(2017, 2, 17, 19, 30, 0, 0),
+        has_pool_seats=True,
+        is_limited=True,
+        cached_max_seats=456,
+    ),
+}
+```
+
+Attribute | Description
+--------- | -----------
+`perf_id` | Unique identifier for the performance.
+`perf_name` | A human readable description of the performance. Performance names are not always present but must be displayed when they are. Performance names are typically used where performances of an event differ significantly in more than just date and time (sometimes the supplier system will not return the time to us in a structured format but it will instead be included as part of the performance name). An example performance with a performance name is 6IF-A5R.
+`event_id` | Unique identifier for the event that this performance is an instance of.
+`iso8601_date_and_time` | ISO 8601 date and time.
+`date_desc` | Human readable date description.
+`time_desc` | Human readable time description.
+`is_limited` | Indicates whether the supply of tickets is known to be extremely limited. This is usually taken to be fewer than four remaining, though not all ticket sources provide this information. Where the information is not available the flag will always be set to `false`.
+`has_pool_seats` | (TODO: Pete what does this mean exactly?)
+`is_ghost` | (TODO: Pete in what scenario would you return perfs with is_ghost = true?)
+`cached_max_seats` | This is the maximum number of contiguous seats that can be booked for this performance, based on Ingresso's cached data. Note that if the event supports seat selection you are not limited by the number of contiguous seats, so this value should be used in the context of best available only. (TODO is this optional?)
+`running_time` | The length / duration of the performance in minutes.
+
+
+## Extra parameters
+
+There are several additional parameters that can be provided to any resource
+where a performance is returned in the response. These parameters will supply
+additional information related to the event.
 
 Most of these additional parameters are either relatively slow or produce lots
 of data, so be aware that may effect your response times.
 
 
-## Cost range
+## Cost ranges
 
 Cost ranges are a cached summary of the pricing that has been seen for your
-username. They are primarily used to retrieve the minimum (or "from") price for
-the event, along with detail of any offers or discounts.
+username. They are used to retrieve the minimum (or "from") price for
+the performance, along with detail of any offers or discounts.
 
 Cost ranges are generated from availability requests made either by end-users or
 by scheduled processes that Ingresso use to update cost range data. You should
 not attempt to make multiple availability requests in order to keep this data up
 to date - please contact us instead to discuss options api@ingresso.co.uk.  Cost
-ranges are only ever returned as part of a parent object (such as event). 
+ranges are only ever returned as part of a parent object. 
 
 <aside class="warning"> Cost ranges (and avail details) are not guaranteed to be
 present (nor accurate) so you should design your application with this in mind,
@@ -646,7 +628,7 @@ Attribute | Description
 `range_currency` | the [currency](#currency-object) for the cost range
 
 
-## Availability details
+## Availability detail
 
 Availability details are a cached list of the price bands for each performance.
 They are cached from previous availability requests made via your username. This
@@ -680,8 +662,7 @@ client.get_events(['6IF'], availability=True, availability_with_performances=Tru
 
 Parameter | Description
 --------- | -----------
-`req_avail_details` | Returns a list of unique ticket types and price bands that are available for this event across all performances.
-`req_avail_details_with_perfs` | This will add the list of available performance dates to each avail detail object. **Only valid if used alongside req_avail_details**
+`req_avail_details` | Returns a list of unique ticket types and price bands that are available for this performance.
 
 ### Response
 
@@ -912,35 +893,30 @@ Parameter | Description
 }
 ```
 
-#### Ticket Type
-
-Ticket types describe a part of house or location within the venue.
+**Ticket types** describe a part of house or location within the venue.
 
 Attribute | Description
 --------- | -----------
-`ticket_type_code` | the identifier of the ticket type, this can be used later in the [trolley](#trolley) or [reserve](#reserve) calls
-`ticket_type_desc` | A human readable description of the price band if applicable
-`price_band` | a list of price bands
+`ticket_type_code` | The identifier of the ticket type, this can be used later in the [trolley](#trolley) or [reserve](#reserve) resource.
+`ticket_type_desc` | A human readable description of the price band if applicable.
+`price_band` | A list of price bands.
 
 
-#### Price Band
-
-Price bands describe the different levels of pricing that are available within a
+**Price bands** describe the different levels of pricing that are available within a
 ticket type. 
 
 Attribute | Description
 --------- | -----------
-`price_band_code` | the identifier of the price band, this can be used later in the [trolley](#trolley) or [reserve](#reserve) calls
-`price_band_desc` | A human readable description of the price band if applicable
-`avail_details` | a list of the prices in this price band and when they are available.
+`price_band_code` | The identifier of the price band, this can be used later in the [trolley](#trolley) or [reserve](#reserve) resource.
+`price_band_desc` | A human readable description of the price band if applicable.
+`avail_details` | A list of the prices in this price band and when they are available.
 
-#### Availability Details
-
-The avail details indicate what prices we have seen for this performance.
+The **avail details** indicate what prices we have seen for this performance.
 
 Attribute | Description
 --------- | -----------
-`avail_currency` | The price [currency](#currency-object) 
-`quantity_options.valid_quantity_bitmask` | the available quantities we have seen for this price band
-`seatprice` | the per-ticket face value
-`surcharge` | the per-ticket booking fee
+`avail_currency` | The price [currency](#currency-object).
+`cached_number_available` | The maximum number of consecutive tickets available.
+`quantity_options.valid_quantity_bitmask` | the available quantities we have seen for this price band.
+`seatprice` | The per-ticket face value.
+`surcharge` | The per-ticket booking fee.

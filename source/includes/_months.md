@@ -4,15 +4,11 @@
 GET https://api.ticketswitch.com/f13/months.v1/{username}?user_passwd={password}&event_id={eventid}
 ```
 
-This section gives a summary of the availability across a calendar month
+This resource gives a summary of the availability across a calendar month
 
 Months are provided for those who wish to display month-level summary data; for 
-example listing the available months above a calendar. This method means that
-you don't need to summarise full performance level data in your applications.
-
-It is possible to request a number of additional attributes for a month - below
-we have listed the default attributes first, followed by the optional
-attributes:
+example listing the available months above a calendar. This resource can remove
+the need to summarise performance-level data in your application.
 
 > **Example request**
 
@@ -36,6 +32,20 @@ Parameter | Description
 --------- | -----------
 `event_id` | Identifier of the event to summarise
 
+These parameters can be passed in to request additional data for each 
+performance, and are described in more detail in the 
+[extra parameters](#extra-parameters) section above for performances.
+
+Parameter | Description
+--------- | -----------
+`req_avail_details` | Returns [availability details](#availability-detail) - a cached list of unique ticket types and price bands available for this event across all performances in the month.
+`req_cost_range` | Returns [cost ranges](#cost-ranges) - a from price and offer detail for each event. *Most partners include this parameter.*
+`req_cost_range_best_value_offer` | Returns the offer with the highest percentage saving. *This is the most commonly used offer cost range.*
+`req_cost_range_details` | Returns a list of unique ticket types and price bands and their cost ranges across all performances.
+`req_cost_range_max_saving_offer` | Returns the offer with the highest absolute saving.
+`req_cost_range_min_cost_offer` | Returns the offer with the lowest cost.
+`req_cost_range_top_price_offer` | Returns the offer with the highest cost. This is the least used offer cost range.
+`req_cost_range_no_singles_data` | This returns another cost range object that excludes availability with only 1 consecutive seat available. The prices in this cost range will therefore be the same or higher than the outer cost range. It has the same structure as the main cost range (so if you want to see the "best value offer" in the no singles data, you need to add `req_cost_range_best_value_offer` and you will see this data in both cost ranges).
 
 > **Example Response**
 
@@ -127,14 +137,15 @@ Parameter | Description
 
 
 <aside class="language-specific shell notice">
-    This resource returns bit masks in some fields, for more information on how
-    to decode this data <a href="#bitmask-fields">click here</a>
+    This resource returns bitmasks in some fields, for more information on how
+    to decode this data see the <a href="#bitmask-fields">Bitmask Fields</a> 
+    section.
 </aside>
 
 Attribute | Description
 --------- | -----------
-`month` | three-character code for the month (TODO is this correct?)
-`month_dates_bitmask` | indicates which dates in the month have valid performances
-`month_desc` | full month name
-`month_weekdays_bitmask` | indicates which weekdays have valid performances for the month
-`year` | the year
+`month` | Three-character code for the month.
+`month_dates_bitmask` | Indicates which dates in the month have valid performances.
+`month_desc` | Full month name.
+`month_weekdays_bitmask` | Indicates which weekdays have valid performances for the month.
+`year` | The year.

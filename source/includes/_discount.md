@@ -65,7 +65,7 @@ Attribute | Description
 > **Definition**
 
 
-This call is used to return availability for a performance. It returns a list of [availability objects](#availability-object).
+This resource is used to return availability for a performance. It returns a list of [availability objects](#availability-object).
 
 > **Example request - price band**
 

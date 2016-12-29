@@ -1,17 +1,302 @@
 # Events
 
-An event describes a product within our system such as a theatre show, a theme
-park, a hotel, or sporting event. The event will also include information about
-the venue and it's geographic location. An event will normally have one or more
-[performances](#performances), an event without performances will be considered
-`dead` and won't be turn up in searches unless explicitly requested.
+An event describes a product within the Ingresso system such as a theatre show,
+a theme park, or a sporting event. The event will also include information about
+the venue and its geographic location. An event will normally have one or more
+[performances](#performances). An event without available performances will be
+considered `dead` and won't be turn up in searches unless explicitly requested.
 
 Each event has a unique `event_id` that identifies the event to other parts of
 the API.
 
+There are two event-related resources:
+
+1. [Events list](#events-list): list all events or search for events.
+
+2. [Events by ID](#events-by-id): return detail for one or more events by 
+their ID.
+
+These two resources are described below, followed by detail of the 
+[additional parameters](#additional-parameters) that can be passed to each.
 
 
-## Retrieving specific events
+## Events list
+
+This resource lists events. It accepts a number of search parameters to
+filter the list returned. The list is paged to avoid large volumes of data being
+accidentally returned.
+
+<aside class="notice">Searching is not case sensitive.</aside>
+
+> **Definition**
+
+```
+GET https://api.ticketswitch.com/f13/events.v1/{username}?user_passwd={password}
+```
+
+### Request
+
+> **Example request**
+
+```shell
+curl https://api.ticketswitch.com/f13/events.v1/demo \
+    -d "user_passwd=demopass" \
+    -d "s_keys=matthew" \
+    -d "s_coco=uk" \
+    -G
+```
+
+```python
+from pyticketswitch import Client
+
+client = Client(user='demo', password='demopass')
+events = client.list_events(keywords=['matthew'], country_code='uk')
+```
+
+These are the available search / filter parameters:
+
+Parameter | Description
+--------- | -----------
+`s_keys` | Space separated list of keywords, e.g. `lion king new york` or `paris tours`.
+`s_dates` | Date range in the form `yyyymmdd:yyyymmdd` (both are optional).
+`s_coco` | 2-digit country code (using [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
+`s_city` | Restrict events to a particular city (TODO do we use a formal type of city code?).
+`s_geo` | Geographical location. Restricts events in a circular search area. Three colon-separated values are needed for **latitude**, **longitude**, and **radius in kilometres**.  Example: `51.52961137:-0.10601562:10`.
+`s_geo_lat` | Alternative to `s_geo`. Specifies latitude.
+`s_geo_long` | Alternative to `s_geo`. Specifies longitude.
+`s_geo_rad_km` | Alternative to `s_geo`. Specifies radius from the coordinates.
+`include_dead` | Include dead events in the results - useful if you want to continue to display an event page after an event dies, for example to help with search engine optimisation.
+`include_non_live` | Include dead, pending and new events. *Unlikely to be useful for partners*.
+
+These parameters are used to control the output if more than one event is returned:
+
+Parameter | Description
+--------- | -----------
+`page_len` | Length of a page, default 50.
+`page_no` | Page number, default 0, ignored if page_len is not present.
+`s_top` | Orders events by the most sales over the last 48 hour period, otherwise orders alphabetically (TODO taken from XML API - is this valid for JSON?).
+
+These parameters can be passed in to request additional data for each event, and 
+are described in more detail in the 
+[additional parameters](#additional-parameters) section below:
+
+Parameter | Description
+--------- | -----------
+`req_avail_details` | Returns [availability details](#availability-details) - a cached list of unique ticket types and price bands available for this event across all performances.
+`req_avail_details_with_perfs` | This will add the list of available performance dates to each avail detail object. *Only valid if used alongside req_avail_details*.
+`req_cost_range` | Returns [cost ranges](#cost-range) - a from price and offer detail for each event. *Most partners include this parameter.*
+`req_cost_range_best_value_offer` | Returns the offer with the highest percentage saving. *This is the most commonly used offer cost range.*
+`req_cost_range_details` | Returns a list of unique ticket types and price bands and their cost ranges across all performances.
+`req_cost_range_max_saving_offer` | Returns the offer with the highest absolute saving.
+`req_cost_range_min_cost_offer` | Returns the offer with the lowest cost.
+`req_cost_range_top_price_offer` | Returns the offer with the highest cost. This is the least used offer cost range.
+`req_cost_range_no_singles_data` | This returns another cost range object that excludes availability with only 1 consecutive seat available. The prices in this cost range will therefore be the same or higher than the outer cost range. It has the same structure as the main cost range (so if you want to see the "best value offer" in the no singles data, you need to add `req_cost_range_best_value_offer` and you will see this data in both cost ranges).
+`req_extra_info` | Returns the [descriptive info](#extra-info) for the event, returned as individual sections (`structured_info`) or as a single summary (`event_info` / `event_info_html`).
+`req_media_triplet_one` | Triplet one (jpg/png 520x390). [See further detail on media](#media).
+`req_media_triplet_two` | Triplet two if available (jpg/png 520x390).
+`req_media_triplet_three` | Triplet three if available (jpg/png 520x390).
+`req_media_triplet_four` | Triplet four if available (jpg/png 520x390).
+`req_media_triplet_five` | Triplet five if available (jpg/png 520x390).
+`req_media_seating_plan` | Graphical seating plan of the venue if available (jpg/png varying size).
+`req_media_square` | Small square image suitable for search or event avatar (jpg/png 140x140).
+`req_media_landscape` | Small landscape banner suitable for search (jpg/png 220x115).
+`req_media_marquee` | Large landscape banner suitable for a page heading, if available (jpg/png 700x300).
+`req_media_supplier` | Logo of the supplier/producer, if available (jpg/png varying size).
+`req_reviews` | Returns [event reviews](#reviews) if available.
+`req_video_iframe` | Returns video iframe information if available.
+
+
+### Response
+
+```shell
+{
+  "results": {
+    "event": [
+      {
+        "city_desc": "London",
+        "class": [
+          {
+            "class_desc": "Ballet & Dance"
+          }
+        ],
+        "country_code": "uk",
+        "country_desc": "United Kingdom",
+        "critic_review_percent": 100,
+        "custom_filter": [],
+        "event_desc": "Matthew Bourne's Nutcracker TEST",
+        "event_id": "6IF",
+        "event_path": "/6IF-matthew-bourne-s-nutcracker-test/",
+        "event_status": "live",
+        "event_type": "simple_ticket",
+        "event_upsell_list": {
+          "event_id": [
+            "6IE",
+            "MH0"
+          ]
+        },
+        "geo_data": {
+          "latitude": 51.52961137,
+          "longitude": -0.10601562
+        },
+        "has_no_perfs": false,
+        "is_seated": true,
+        "max_running_time": 120,
+        "min_running_time": 120,
+        "need_departure_date": false,
+        "need_duration": false,
+        "need_performance": true,
+        "postcode": "EC1R 4TN",
+        "show_perf_time": true,
+        "source_code": "ext_test0",
+        "source_desc": "External Test Backend 0",
+        "user_review_percent": 100,
+        "venue_desc": "Sadler's Wells"
+      },
+      {
+        "city_desc": "London",
+        "class": [
+          {
+            "class_desc": "Ballet & Dance"
+          }
+        ],
+        "country_code": "uk",
+        "country_desc": "United Kingdom",
+        "critic_review_percent": 100,
+        "custom_filter": [],
+        "event_desc": "Matthew Bourne's Swan Lake test",
+        "event_id": "6IE",
+        "event_path": "/6IE-matthew-bourne-s-swan-lake-test/",
+        "event_status": "live",
+        "event_type": "simple_ticket",
+        "event_upsell_list": {
+          "event_id": [
+            "6IF",
+            "6KU",
+            "MH0"
+          ]
+        },
+        "geo_data": {
+          "latitude": 51.52961137,
+          "longitude": -0.10601562
+        },
+        "has_no_perfs": false,
+        "is_seated": true,
+        "max_running_time": 120,
+        "min_running_time": 90,
+        "need_departure_date": false,
+        "need_duration": false,
+        "need_performance": true,
+        "postcode": "EC1R 4TN",
+        "show_perf_time": true,
+        "source_code": "ext_test0",
+        "source_desc": "External Test Backend 0",
+        "user_review_percent": 100,
+        "venue_desc": "Sadler's Wells"
+      }
+    ]
+  }
+}
+```
+
+```python
+[
+    pyticketswitch.Event(
+        id='6IF',
+        status='live',
+        description='Matthew Bourne\'s Nutcracker TEST',
+        source='External Test Backend 0',
+        event_type='simple_ticket',
+        venue='Sadler\'s Wells',
+
+        classes=['Arts & Culture'],
+        filters=[],
+
+        postcode='EC1R 4TN',
+        city='London',
+        country='United Kingdom',
+        country_code='uk',
+        latitude=51.52961137,
+        longditude=-0.10601562,
+
+        max_running_time=120,
+        min_running_time=120,
+
+        show_performance_time=True,
+        has_performances=True,
+        is_seated=True,
+        needs_departure_date=False,
+        needs_duration=False,
+        needs_performance=True,
+
+        upsell_list=['6IE', 'MH0'],
+    ),
+    pyticketswitch.Event(
+        id='6IE',
+        status='live',
+        description='Matthew Bourne\'s Swan Lake TEST',
+        source='External Test Backend 0',
+        event_type='simple_ticket',
+        venue='Sadler\'s Wells',
+
+        classes=['Ballet & Dance'],
+        filters=[],
+
+        postcode='EC1R 4TN',
+        city='London',
+        country='United Kingdom',
+        country_code='uk',
+        latitude=51.52961137,
+        longditude=-0.10601562,
+
+        max_running_time=120,
+        min_running_time=90,
+
+        show_performance_time=True,
+        has_performances=True,
+        is_seated=True,
+        needs_departure_date=False,
+        needs_duration=False,
+        needs_performance=True,
+
+        upsell_list=['6IF', '6KU' 'MH0'],
+    ),
+]
+```
+
+Attribute | Description
+--------- | -----------
+`city_desc` | Name of the city where the event is taking place.
+`class` | Array of class or category objects.
+`country_code` | 2-digit country code (using [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2))
+`country_desc` | Name of the country where the event is taking place.
+`critic_review_percent` | The aggregate critic review score, e.g. `80` for 80%.
+`custom_filter` | Array of custom filter codes. (TODO can we remove this?).
+`date_range_start` | A [date/time object](#date-time-object) for the start of the run.
+`date_range_end` | A [date/time object](#date-time-object) for the end of the run.
+`event_desc` | Name of the show or event e.g. `The Lion King`.
+`event_id` | Unique identifier for the event.
+`event_path` | If you also use a white label website this can be used to navigate to the event page, e.g. `/2J5V-la-pedrera-skip-the-line/`.
+`event_status` | Will be `live` for a normal event search. Other values are `dead` and `pending` but these will only be displayed when using the `include_dead` or `include_non_live` parameters.
+`event_type` | Currently all events are of type `simple_ticket`. In future we may add `hotel_room` and `misc_item`.
+`event_upsell_list` | A list of event IDs that can be presented as an upsell option to customers (not always present).
+`geo_data` | A block containing the following geo co-ordinates:
+`geo_data.latitude` | Latitude of the event.
+`geo_data.longitude` | Longitude of the event.
+`has_no_perfs` | `true` if the event has no performances. For example some attraction tickets are valid for any date, so we do not present a list of performances to select.
+`is_seated` | `true` for seated events.
+`min_running_time` | Minimum length / duration in minutes (not always present).
+`max_running_time` | Maximum length / duration in minutes (not always present).
+`need_departure_date` | Flag indicating whether the event needs a departure date specified. This is `false` for most events. (TODO more detail needed)
+`need_duration` | Flag indicating whether the event needs duration (specific to `hotel_room` events only).
+`need_performance` | Flag indicating if a performance must be selected in order to retrieve availability.
+`postcode` | Postcode of the event location.
+`show_perf_time` | `false` if the performance time is not relevant, for example some events use a performance description rather than specific times.
+`source_desc` | Despription of the source supplier e.g. `Nimax`.
+`user_review_percent` | The aggregate user review score, e.g. `80` for 80%.
+`venue_desc` | Name of the venue e.g. `Sadler's Wells`.
+
+
+## Events by ID
 
 > **Definition**
 
@@ -19,7 +304,7 @@ the API.
 GET https://api.ticketswitch.com/f13/events_by_id.v1/{username}/?user_passwd={password}&event_id_list={eventidlist}
 ```
 
-This call is used to return detail for one or more specific events by their ID. It
+This resource returns detail for one or more specific events by their ID. It
 returns a dictionary of events keyed on the event's `event_id`. 
 
 > **Example request**
@@ -42,7 +327,35 @@ events = client.get_events(event_ids=['6IF'])
 
 Parameter | Description
 --------- | -----------
-`event_id_list` | A comma separated list of event IDs e.g. `25DR` for a single event; `1VLG,1YYO,25DR` for multiple events
+`event_id_list` | A comma separated list of event IDs e.g. `25DR` for a single event; `1VLG,1YYO,25DR` for multiple events.
+
+These parameters can be passed in to request additional data for each event, and are described in more detail in the [additional parameters](#additional-parameters) section below:
+
+Parameter | Description
+--------- | -----------
+`req_avail_details` | Returns [availability details](#availability-details) - a cached list of unique ticket types and price bands available for this event across all performances.
+`req_avail_details_with_perfs` | This will add the list of available performance dates to each avail detail object. *Only valid if used alongside req_avail_details*.
+`req_cost_range` | Returns [cost ranges](#cost-range) - a from price and offer detail for each event. *Most partners include this parameter.*
+`req_cost_range_best_value_offer` | Returns the offer with the highest percentage saving. *This is the most commonly used offer cost range.*
+`req_cost_range_details` | Returns a list of unique ticket types and price bands and their cost ranges across all performances.
+`req_cost_range_max_saving_offer` | Returns the offer with the highest absolute saving.
+`req_cost_range_min_cost_offer` | Returns the offer with the lowest cost.
+`req_cost_range_top_price_offer` | Returns the offer with the highest cost. This is the least used offer cost range.
+`req_cost_range_no_singles_data` | This returns another cost range object that excludes availability with only 1 consecutive seat available. The prices in this cost range will therefore be the same or higher than the outer cost range. It has the same structure as the main cost range (so if you want to see the "best value offer" in the no singles data, you need to add `req_cost_range_best_value_offer` and you will see this data in both cost ranges).
+`req_extra_info` | Returns the [descriptive info](#extra-info) for the event, returned as individual sections (`structured_info`) or as a single summary (`event_info` / `event_info_html`).
+`req_media_triplet_one` | Triplet one (jpg/png 520x390). [See further detail on media](#media).
+`req_media_triplet_two` | Triplet two if available (jpg/png 520x390).
+`req_media_triplet_three` | Triplet three if available (jpg/png 520x390).
+`req_media_triplet_four` | Triplet four if available (jpg/png 520x390).
+`req_media_triplet_five` | Triplet five if available (jpg/png 520x390).
+`req_media_seating_plan` | Graphical seating plan of the venue if available (jpg/png varying size).
+`req_media_square` | Small square image suitable for search or event avatar (jpg/png 140x140).
+`req_media_landscape` | Small landscape banner suitable for search (jpg/png 220x115).
+`req_media_marquee` | Large landscape banner suitable for a page heading, if available (jpg/png 700x300).
+`req_media_supplier` | Logo of the supplier/producer, if available (jpg/png varying size).
+`req_reviews` | Returns [event reviews](#reviews) if available.
+`req_video_iframe` | Returns video iframe information if available.
+
 
 ### Response
 
@@ -216,298 +529,52 @@ Parameter | Description
 
 Attribute | Description
 --------- | -----------
-`city_desc` | Name of the city where the event is taking place
+`city_desc` | Name of the city where the event is taking place.
 `class` | Array of class or category objects.
-`country_desc` | Name of the country where the event is taking place
-`country_code` | ISO3166 county code for the above country
+`country_code` | 2-digit country code (using [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
+`country_desc` | Name of the country where the event is taking place.
 `critic_review_percent` | The aggregate critic review score, e.g. `80` for 80%.
-`custom_filter` | Array of custom filter codes. (TODO can we remove this?)
-`date_range_start` | A [date/time object](#date-time-object) for the start of the run
-`date_range_end` | A [date/time object](#date-time-object) for the end of the run
-`event_desc` | Name of the show or event e.g. `The Lion King`
-`event_id` | Unique identifier for the event
-`event_path` | If you also use a white label website this can be used to navigate to the event page, e.g. `/2J5V-la-pedrera-skip-the-line/`
+`custom_filter` | Array of custom filter codes. (TODO can we remove this?).
+`date_range_start` | A [date/time object](#date-time-object) for the start of the run.
+`date_range_end` | A [date/time object](#date-time-object) for the end of the run.
+`event_desc` | Name of the show or event e.g. `The Lion King`.
+`event_id` | Unique identifier for the event.
+`event_path` | If you also use a white label website this can be used to navigate to the event page, e.g. `/2J5V-la-pedrera-skip-the-line/`.
 `event_status` | Will be `live` for a normal event search. Other values are `dead` and `pending` but these will only be displayed when using the `include_dead` or `include_non_live` parameters.
 `event_type` | Currently all events are of type `simple_ticket`. In future we may add `hotel_room` and `misc_item`.
-`event_upsell_list` | A list of event IDs that can be presented as an upsell option to customers (not always present)
+`event_upsell_list` | A list of event IDs that can be presented as an upsell option to customers (not always present).
 `geo_data` | A block containing the following geo co-ordinates:
-`geo_data.latitude` | Latitude of the event
-`geo_data.longitude` | Longitude of the event
+`geo_data.latitude` | Latitude of the event.
+`geo_data.longitude` | Longitude of the event.
 `has_no_perfs` | `true` if the event has no performances. For example some attraction tickets are valid for any date, so we do not present a list of performances to select.
-`is_seated` | `true` for seated events
-`min_running_time` | Minimum length / duration in minutes (not always present)
-`max_running_time` | Maximum length / duration in minutes (not always present)
+`is_seated` | `true` for seated events.
+`min_running_time` | Minimum length / duration in minutes (not always present).
+`max_running_time` | Maximum length / duration in minutes (not always present).
 `need_departure_date` | Flag indicating whether the event needs a departure date specified. This is `false` for most events. (TODO more detail needed)
-`need_duration` | Flag indicating whether the event needs duration (specific to `hotel_room` events only)
-`need_performance` | Flag indicating if a performance must be selected in order to retrieve availability
-`postcode` | Postcode of the event location
-`show_perf_time` | `false` if the performance time is not relevant, for example some events use a performance description rather than specific times
-`source_desc` | Despription of the source supplier e.g. `Nimax`
+`need_duration` | Flag indicating whether the event needs duration (specific to `hotel_room` events only).
+`need_performance` | Flag indicating if a performance must be selected in order to retrieve availability.
+`postcode` | Postcode of the event location.
+`show_perf_time` | `false` if the performance time is not relevant, for example some events use a performance description rather than specific times.
+`source_desc` | Despription of the source supplier e.g. `Nimax`.
 `user_review_percent` | The aggregate user review score, e.g. `80` for 80%.
-`venue_desc` | Name of the venue e.g. `Sadler's Wells`
-
-
-## List all events or search for events
-
-> **Definition**
-
-```
-GET https://api.ticketswitch.com/f13/events.v1/{username}?user_passwd={password}
-```
-
-This call is used to search for events. It takes filter parameters
-and returns a list of events. The list can be paged to avoid large volumes
-of data being accidentally returned.
-
-<aside class="notice">Searching is not case sensitive.</aside>
-
-> **Example request**
-
-```shell
-curl https://api.ticketswitch.com/f13/events.v1/demo \
-    -d "user_passwd=demopass" \
-    -d "s_keys=matthew" \
-    -d "s_coco=uk" \
-    -G
-```
-
-```python
-from pyticketswitch import Client
-
-client = Client(user='demo', password='demopass')
-events = client.list_events(keywords=['matthew'], country_code='uk')
-```
-
-### Request
-
-These are the available search / filter parameters.
-
-Parameter | Description
---------- | -----------
-`s_keys` | Space separated list of keywords, e.g. `lion king new york` or `paris tours`
-`s_dates` | Date range in the form yyyymmdd:yyyymmdd (both are optional)
-`s_coco` | [ISO 3166](http://en.wikipedia.org/wiki/ISO_3166-1) two letter country code
-`s_city` | Restrict events to a particular city (TODO do we use a formal type of city code?)
-`s_geo` | Geographical location. Restricts events in a circular search area. Three values are needed: latitude and longitude and radius in kilometres.  Exaxmple: `51.52961137:-0.10601562:10`
-`s_geo_lat` | Alternative to `s_geo`. Specifies latitude.
-`s_geo_long` | Alternative to `s_geo`. Specifies longditude.
-`s_geo_rad_km` | Alternative to `s_geo`. Specifies radius from the coordinates
-`include_dead` | Include dead events in the results - useful if you want to continue to display an event page after an event dies, for example to help with search engine optimisation
-`include_non_live` | Include dead, pending and new events. *Unlikely to be useful for partners*
-
-
-These parameters are used to control the output if more than one event is returned:
-
-Parameter | Description
---------- | -----------
-`page_len` | Length of a page, default 50
-`page_no` | Page number, default 0, ignored if page_len is not present
-`s_top` | orders events by the most sales over the last 48 hour period, otherwise orders alphabetically (TODO taken from XML API - is this valid for JSON?)
-
-
-### Response
-
-```shell
-{
-  "results": {
-    "event": [
-      {
-        "city_desc": "London",
-        "class": [
-          {
-            "class_desc": "Ballet & Dance"
-          }
-        ],
-        "country_code": "uk",
-        "country_desc": "United Kingdom",
-        "critic_review_percent": 100,
-        "custom_filter": [],
-        "event_desc": "Matthew Bourne's Nutcracker TEST",
-        "event_id": "6IF",
-        "event_path": "/6IF-matthew-bourne-s-nutcracker-test/",
-        "event_status": "live",
-        "event_type": "simple_ticket",
-        "event_upsell_list": {
-          "event_id": [
-            "6IE",
-            "MH0"
-          ]
-        },
-        "geo_data": {
-          "latitude": 51.52961137,
-          "longitude": -0.10601562
-        },
-        "has_no_perfs": false,
-        "is_seated": true,
-        "max_running_time": 120,
-        "min_running_time": 120,
-        "need_departure_date": false,
-        "need_duration": false,
-        "need_performance": true,
-        "postcode": "EC1R 4TN",
-        "show_perf_time": true,
-        "source_code": "ext_test0",
-        "source_desc": "External Test Backend 0",
-        "user_review_percent": 100,
-        "venue_desc": "Sadler's Wells"
-      },
-      {
-        "city_desc": "London",
-        "class": [
-          {
-            "class_desc": "Ballet & Dance"
-          }
-        ],
-        "country_code": "uk",
-        "country_desc": "United Kingdom",
-        "custom_filter": [],
-        "event_desc": "Matthew Bourne's Swan Lake test",
-        "event_id": "6IE",
-        "event_path": "/6IE-matthew-bourne-s-swan-lake-test/",
-        "event_status": "live",
-        "event_type": "simple_ticket",
-        "event_upsell_list": {
-          "event_id": [
-            "6IF",
-            "6KU",
-            "MH0"
-          ]
-        },
-        "geo_data": {
-          "latitude": 51.52961137,
-          "longitude": -0.10601562
-        },
-        "has_no_perfs": false,
-        "is_seated": true,
-        "max_running_time": 120,
-        "min_running_time": 90,
-        "need_departure_date": false,
-        "need_duration": false,
-        "need_performance": true,
-        "postcode": "EC1R 4TN",
-        "show_perf_time": true,
-        "source_code": "ext_test0",
-        "source_desc": "External Test Backend 0",
-        "venue_desc": "Sadler's Wells"
-      }
-    ]
-  }
-}
-```
-
-```python
-[
-    pyticketswitch.Event(
-        id='6IF',
-        status='live',
-        description='Matthew Bourne\'s Nutcracker TEST',
-        source='External Test Backend 0',
-        event_type='simple_ticket',
-        venue='Sadler\'s Wells',
-
-        classes=['Arts & Culture'],
-        filters=[],
-
-        postcode='EC1R 4TN',
-        city='London',
-        country='United Kingdom',
-        country_code='uk',
-        latitude=51.52961137,
-        longditude=-0.10601562,
-
-        max_running_time=120,
-        min_running_time=120,
-
-        show_performance_time=True,
-        has_performances=True,
-        is_seated=True,
-        needs_departure_date=False,
-        needs_duration=False,
-        needs_performance=True,
-
-        upsell_list=['6IE', 'MH0'],
-    ),
-    pyticketswitch.Event(
-        id='6IE',
-        status='live',
-        description='Matthew Bourne\'s Swan Lake TEST',
-        source='External Test Backend 0',
-        event_type='simple_ticket',
-        venue='Sadler\'s Wells',
-
-        classes=['Ballet & Dance'],
-        filters=[],
-
-        postcode='EC1R 4TN',
-        city='London',
-        country='United Kingdom',
-        country_code='uk',
-        latitude=51.52961137,
-        longditude=-0.10601562,
-
-        max_running_time=120,
-        min_running_time=90,
-
-        show_performance_time=True,
-        has_performances=True,
-        is_seated=True,
-        needs_departure_date=False,
-        needs_duration=False,
-        needs_performance=True,
-
-        upsell_list=['6IF', '6KU' 'MH0'],
-    ),
-]
-
-```
-
-Attribute | Description
---------- | -----------
-`city_desc` | Name of the city where the event is taking place
-`class` | Array of class or category objects.
-`country_desc` | Name of the country where the event is taking place
-`country_code` | ISO3166 county code for the above country
-`critic_review_percent` | The aggregate critic review score, e.g. `80` for 80%.
-`custom_filter` | Array of custom filter codes. (TODO can we remove this?)
-`date_range_start` | A [date/time object](#date-time-object) for the start of the run
-`date_range_end` | A [date/time object](#date-time-object) for the end of the run
-`event_desc` | Name of the show or event e.g. `The Lion King`
-`event_id` | Unique identifier for the event
-`event_path` | If you also use a white label website this can be used to navigate to the event page, e.g. `/2J5V-la-pedrera-skip-the-line/`
-`event_status` | Will be `live` for a normal event search. Other values are `dead` and `pending` but these will only be displayed when using the `include_dead` or `include_non_live` parameters.
-`event_type` | Currently all events are of type `simple_ticket`. In future we may add `hotel_room` and `misc_item`.
-`event_upsell_list` | A list of event IDs that can be presented as an upsell option to customers (not always present)
-`geo_data` | A block containing the following geo co-ordinates:
-`geo_data.latitude` | Latitude of the event
-`geo_data.longitude` | Longitude of the event
-`has_no_perfs` | `true` if the event has no performances. For example some attraction tickets are valid for any date, so we do not present a list of performances to select.
-`is_seated` | `true` for seated events
-`min_running_time` | Minimum length / duration in minutes (not always present)
-`max_running_time` | Maximum length / duration in minutes (not always present)
-`need_departure_date` | Flag indicating whether the event needs a departure date specified. This is `false` for most events. (TODO more detail needed)
-`need_duration` | Flag indicating whether the event needs duration (specific to `hotel_room` events only)
-`need_performance` | Flag indicating if a performance must be selected in order to retrieve availability
-`postcode` | Postcode of the event location
-`show_perf_time` | `false` if the performance time is not relevant, for example some events use a performance description rather than specific times
-`source_desc` | Despription of the source supplier e.g. `Nimax`
-`user_review_percent` | The aggregate user review score, e.g. `80` for 80%.
-`venue_desc` | Name of the venue e.g. `Sadler's Wells`
+`venue_desc` | Name of the venue e.g. `Sadler's Wells`.
 
 
 ## Additional parameters
 
-There are several additional parameters that can be provided to any call where
-an event is returned in the response. These parameters will supply additional
-information related to the event. 
+There are several additional parameters that can be provided to any resource where
+an event is returned in the response, including the two above. These
+parameters will supply additional information related to the event.
 
-Most of these additional parameters are either relatively slow or produce lots
-of data, so be aware that may effect your response times.
+Most of these additional parameters are either relatively slow or produce a lot
+of additional data, so be aware that they may adversely effect response times.
 
 ## Media
 
-Most events will have some kind of media attached to them. Usually this will
-just be a largish marquee image, some promotional shots. However there may
-additional media such as videos and seating plans.
+Most events include image URLs and a YouTube video. Almost all events will
+include the triplet_one, square and landscape images. In most cases the 
+seating_plan, triplet_two and triplet_three images are also provided, along with 
+a video_iframe (typically YouTube).
 
 ### Request
 
@@ -547,18 +614,17 @@ events = client.get_events(['6IF'], media=True)
 
 Parameter | Description
 --------- | -----------
-`req_media_triplet_one` | Triplet one (jpg/png 460x346)
-`req_media_triplet_two` | Triplet two (jpg/png 460x346)
-`req_media_triplet_three` | Triplet three (jpg/png 460x346)
-`req_media_triplet_four` | Triplet four (jpg/png 460x346)
-`req_media_triplet_five` | Triplet five (jpg/png 460x346)
-`req_media_seating_plan` | Graphical seating plan of the venue if available (jpg/png ?x?)
+`req_media_triplet_one` | Triplet one (jpg/png 520x390) - this is our most commonly used event image (ignore the "triplet" in the name which no longer makes sense...)
+`req_media_triplet_two` | Triplet two if available (jpg/png 520x390)
+`req_media_triplet_three` | Triplet three if available (jpg/png 520x390)
+`req_media_triplet_four` | Triplet four if available (jpg/png 520x390)
+`req_media_triplet_five` | Triplet five if available (jpg/png 520x390)
+`req_media_seating_plan` | Graphical seating plan of the venue if available (jpg/png varying size)
 `req_media_square` | Small square image suitable for search or event avatar (jpg/png 140x140)
 `req_media_landscape` | Small landscape banner suitable for search (jpg/png 220x115)
-`req_media_marquee` | Large landscape banner suitable for a page heading (jpg/png 700x300)
-`req_media_supplier` | Logo of the of the supplier/producer (jpg/png ?x?)
+`req_media_marquee` | Large landscape banner suitable for a page heading, if available (jpg/png 700x300)
+`req_media_supplier` | Logo of the supplier/producer, if available (jpg/png varying size)
 `req_video_iframe` | Returns video iframe information if available
-
 
 ### Response
 
@@ -1861,7 +1927,7 @@ Ticket types describe a part of house or location within the venue.
 
 Attribute | Description
 --------- | -----------
-`ticket_type_code` | the identifier of the ticket type, this can be used later in the [trolley](#trolley) or [reserve](#reserve) calls
+`ticket_type_code` | the identifier of the ticket type, this can be used later in the [trolley](#trolley) or [reserve](#reserve) resource.
 `ticket_type_desc` | A human readable description of the price band if applicable
 `price_band` | a list of price bands
 
@@ -1875,7 +1941,7 @@ performance basis.
 
 Attribute | Description
 --------- | -----------
-`price_band_code` | the identifier of the price band, this can be used later in the [trolley](#trolley) or [reserve](#reserve) calls
+`price_band_code` | the identifier of the price band, this can be used later in the [trolley](#trolley) or [reserve](#reserve) resource.
 `price_band_desc` | A human readable description of the price band if applicable
 `cost_range_details` | a list of the cost ranges in this price band.
 
@@ -2358,46 +2424,36 @@ pyticketswitch.Event(
 
 ```
 
-#### Ticket Type
-
-Ticket types describe a part of house or location within the venue.
+**Ticket types** describe a part of house or location within the venue.
 
 Attribute | Description
 --------- | -----------
-`ticket_type_code` | the identifier of the ticket type, this can be used later in the [trolley](#trolley) or [reserve](#reserve) calls
-`ticket_type_desc` | A human readable description of the price band if applicable
-`price_band` | a list of price bands
+`ticket_type_code` | The identifier of the ticket type, this can be used later in the [trolley](#trolley) or [reserve](#reserve) resource.
+`ticket_type_desc` | A human readable description of the price band if applicable.
+`price_band` | A list of price bands.
 
 
-#### Price Band
-
-Price bands describe the different levels of pricing that are available within a
+**Price bands** describe the different levels of pricing that are available within a
 ticket type. It's important to note that a price band may not have a long term
 set price, and as such ticket prices and surcharges might change on a performance to
 performance basis. 
 
 Attribute | Description
 --------- | -----------
-`price_band_code` | the identifier of the price band, this can be used later in the [trolley](#trolley) or [reserve](#reserve) calls
-`price_band_desc` | A human readable description of the price band if applicable
-`avail_details` | a list of the prices in this price band and when they are available.
+`price_band_code` | The identifier of the price band, this can be used later in the [trolley](#trolley) or [reserve](#reserve) resource.
+`price_band_desc` | A human readable description of the price band if applicable.
+`avail_details` | A list of the prices in this price band and when they are available.
 
-#### Availability Details
-
-The avail details indicate what prices we have seen and when they are expected
+The **avail details** indicate which prices we have seen and when they are expected
 to be available. If the `req_avail_details_with_perfs` parameter was included 
 then the availability details will include information on what performances where
 available with that price.
 
 Attribute | Description
 --------- | -----------
-`avail_currency` | The price [currency](#currency-object) 
+`avail_currency` | The price [currency](#currency-object).
 `available_dates` | `first_yyyymmdd` and `last_yyyymmdd` for the range. 
-`available_weekdays_bitmask` | the days of the week where we have seen availability
-`quantity_options.valid_quantity_bitmask` | the available quantities we have seen for this price band
-`seatprice` | the per-ticket face value
-`surcharge` | the per-ticket booking fee
-
-
-
-
+`available_weekdays_bitmask` | The days of the week where we have seen availability.
+`quantity_options.valid_quantity_bitmask` | The available quantities we have seen for this price band.
+`seatprice` | The per-ticket face value.
+`surcharge` | The per-ticket booking fee.
