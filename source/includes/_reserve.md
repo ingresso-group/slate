@@ -23,8 +23,6 @@ optional parameters if necessary.
 orders to your [trolley](#trolley), then `reserve` the trolley by
 specifying a `trolley_token`.
 
-(TODO: check how to post via CURL???)
-
 ### Request
 
 > **Example request - reserving best available tickets, specifying specific discount codes**
