@@ -466,14 +466,14 @@ Attribute | Description
 `running_time` | The length / duration of the performance in minutes.
 
 
-## Extra parameters
+## --- Extra parameters ---
 
-There are several additional parameters that can be provided to any resource
-where a performance is returned in the response. These parameters will supply
-additional information related to the event.
+There are several additional parameters described below that can be provided to
+return additional data for each performance.
 
-Most of these additional parameters are either relatively slow or produce lots
-of data, so be aware that may effect your response times.
+These additional parameters require extra processing to retrieve the requested
+data, which will slow down the resource, sometimes substantially. They should
+therefore only be used where necessary.
 
 
 ## Cost ranges
@@ -488,10 +488,10 @@ not attempt to make multiple availability requests in order to keep this data up
 to date - please contact us instead to discuss options api@ingresso.co.uk.  Cost
 ranges are only ever returned as part of a parent object. 
 
-<aside class="warning"> Cost ranges (and avail details) are not guaranteed to be
+<aside class="notice"> Cost ranges (and avail details) are not guaranteed to be
 present (nor accurate) so you should design your application with this in mind,
 for example by still displaying a performance even if it is missing a from
-price.  </aside>
+price.</aside>
 
 
 ### Request

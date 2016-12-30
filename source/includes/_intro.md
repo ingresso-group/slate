@@ -4,15 +4,14 @@
 * Matt to include detail on how user authentication works now, and what our recommended approach is
 * Matt to include a section describing how our caching works
 * Matt to explain how to distinguish between these no booking fee and discounted face value offers in events / perfs / availability
-* Matt to rerun examples now that bit masks are replaced / flagged (and explain how to use bit masks)
-* Matt to add json_cities and json_categories
+* Matt to add docs for cities and categories
 * Matt to add a small section on versioning.
 * Matt to add a test meta event, and refer to this in the test intro section and wherever meta events are mentioned.
+* Matt to add info about reserving individual seats - can select non-contiguous but only when a flag is included? and only within a single price band
 
 * Error codes need to be added everywhere by Pete.
 
 
-* Simplifying allocation modes for seat selection - perhaps the best approach is to only require ticket type and seat ID, then failing a reserve that doesn't include any of the requested seats (so a reserve with seat_request_status = got_partial or got_all succeeds, but got_none results in a failure if you haven't passed in the price band)
 * Pete to default self_print_mode to html - this normally confuses distributors
 * Amazon suggested we return a 429 - TOO MANY REQUESTS when we return backend_call_failed or backend_call_throttling_failed. Should we use http status codes in this type of case? These cases are an exception where they don't really look like errors (initially by design...)
 * There are a number of places where the JSON object nesting isn't as simple as it could be. Eg instead of "event_upsell_list": ["6IE","MH0"] we have:
@@ -44,10 +43,7 @@
 
   However the bitmasks make sense for avail_details data since it is way too verbose to not use them, and it means you only need to worry about bitmasks if you use that call (which won't be commonly used). I suggest we go with that and remove the flags to use bitmasks or not.
 
-* Currency - just return GBP and add a currency endpoint to get extra stuff if you need it since most people won't need the extra?
-* Can we optimise the performance of json_performances enough that there isn't a need for a json_months call?
 * We should remove user_review_percent until we actually have some reviews in the core
-* Now that we use seat selection widely, should we remove the concept of example seats? Does seat_request_status go along with this?
 * Use a single req_media rather than requesting individual items. Merge images and video into media. Simplify the attributes returned eg just return the URL and is_secure rather than splitting up the URL into components and listing http and https variants.
 
 Possible V2 functionality:
@@ -55,13 +51,13 @@ Possible V2 functionality:
 * Allowing search on cost ranges would be useful
 * Can we be more restful eg /events/25DR to get detail by event ID?
 * A reporting API would be useful - our internal reporting apps should also use this
-* Should we use HTTP authentication?
 * Should we have the concept of a venue with an ID? (when the venue is enforced)
 -->
 
 # IMPORTANT NOTE
 
-This API is currently a work in progress - until this message is removed it is subject to change.
+This API is currently a work in progress - until this message is removed v1 of
+the API is subject to change.
 
 
 # Introduction
@@ -69,12 +65,19 @@ This API is currently a work in progress - until this message is removed it is s
 The Ingresso API is designed to allow you to sell from Ingresso's inventory of
 event tickets.  Ingresso has connected to a large number of ticketing system
 APIs, allowing us to transact directly on the venue's system.  By integrating
-with the Ingresso API you are able to view and purchase live inventory from a
-number of different venues.
+with the Ingresso API you are able to view and purchase live ticketing inventory 
+from a number of different venues. 
+
+We build our own ticketing websites entirely on top
+of our API (for example [Disney Tickets](https://www.disneytickets.co.uk) and
+[From The Box Office](https://www.fromtheboxoffice.com)). Example partners that 
+have integrated with Ingresso APIs are [Amazon](https://tickets.amazon.co.uk/) 
+and [lastminute.com](http://www.lastminute.com/theatre/).
 
 The Ingresso API is a fully transactional API, loosely based on REST. You format
-GET or POST requests in [JSON](http://www.json.org/) and you will receive either 
-a JSON-formatted response or an HTTP error.
+GET or POST requests in [JSON](http://www.json.org/) and you will receive either
+a JSON-formatted response or an HTTP error. The API is known as F13, which
+is why you see /f13 in the endpoint.
 
 We describe objects in a consistent way across different resources (for example the
 output of [events](#events) and [performances](#performances) includes a
@@ -89,8 +92,17 @@ benefit of this change is that a call near the end of the booking process, such
 as [reserve](#reserve), can be called without needing to remake the preceeding
 calls (such as [requesting availability](#availability)).
 
-If you use Postman we have a [public library available](https://www.getpostman.com/collections/27ec338b8f3e932038ba).
 
+## Postman examples
+
+<img src="https://d1wx4w35ubmdix.cloudfront.net/wl-media/images/postman.png" alt="Postman screenshot">
+
+We have a public library available for [Postman](https://www.getpostman.com/) 
+that closely matches the examples included in this documentation.
+
+Click below to import our collection of API examples.
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://www.getpostman.com/collections/7c834c45808672b158a7)
 
 ## How to get access to the API
 
@@ -116,21 +128,17 @@ clear enough)
 
 ## Basic booking flow
 
-The Ingresso API supports multiple use cases and variations, but below is a
+The Ingresso API supports multiple use cases and variations, but below is a 
 typical workflow:
 
-* get a list of [events](#events) based on search criteria.
+* Retrieve a list of [events](#events).
 
-* get a list of [performances](#performances) for an event.
+* Retrieve a list of [performances](#performances) for an event.
 
-* get [availability](#availability) for a performance, including seat numbers if
-the event is seated.
+* Retrieve [availability](#availability) for a performance, including seat
+numbers if the event is seated.
 
-* *Optional:* use a [trolley](#trolley) if you want to purchase multiple events 
-together.
-
-* [reserve](#reserve) specific seats or best available tickets (or items 
-previously added to a trolley) for a set period of time.
+* [reserve](#reserve) tickets for a set period of time.
 
 * [purchase](#purchase) the reserved tickets.
 

@@ -19,6 +19,7 @@ includes:
   - discount
   - trolley
   - reserve
+  - purchase
   - generic_objects
   - bitmask_fields
   - caching

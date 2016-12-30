@@ -20,7 +20,7 @@ out of date.
 ```shell
 curl https://api.ticketswitch.com/f13/send_methods.v1/demo \
     -d "user_passwd=demopass" \
-    -d "perf_id=6IF-A8B" \
+    -d "perf_id=6IF-B0I" \
     -G
 ```
 
@@ -40,21 +40,16 @@ Parameter | Description
 > **Example response**
 
 ```shell
-
 {
   "send_methods": {
     "send_method": [
       {
         "send_code": "COBO",
-        "send_desc": "Collect from the venue",
         "send_cost": 1.5,
+        "send_desc": "Collect from the venue",
         "send_type": "collect"
       },
       {
-        "send_code": "POST",
-        "send_desc": "Post (UK & Ireland only)",
-        "send_cost": 3.5,
-        "send_type": "post",
         "permitted_countries": {
           "country": [
             {
@@ -66,7 +61,11 @@ Parameter | Description
               "country_desc": "United Kingdom"
             }
           ]
-        }
+        },
+        "send_code": "POST",
+        "send_cost": 3.5,
+        "send_desc": "Post (UK & Ireland only)",
+        "send_type": "post"
       }
     ]
   }
@@ -100,10 +99,10 @@ Parameter | Description
 
 Attribute | Description
 --------- | -----------
-`send_code` | the identifier of this send method
-`send_desc` | a human readable description of the send method
-`send_cost` | any additional cost that the customer will have to pay if they chose this send method
-`send_type` | can be `collect` which indicates that the ticket will have to be collected in person, either at the venue or from a confirmation email. A type of `post` indicates that a physical ticket will be posted to the delivery address given at purchase time
-`permitted_countries` | if this is returned it indicates that the send method is only available to addresses in the listed countries
-`permitted_countries.country_code` | 2-digit country code (using [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2))
-`permitted_countries.country_description` | Human readable description of the country
+`send_code` | The identifier of this send method.
+`send_desc` | A human readable description of the send method.
+`send_cost` | Any additional cost that the customer will have to pay if they chose this send method.
+`send_type` | Can be `collect` which indicates that the ticket will have to be collected in person, either at the venue or from a confirmation email. A type of `post` indicates that a physical ticket will be posted to the delivery address given at purchase time.
+`permitted_countries` | If this is returned it indicates that the send method is only available to addresses in the listed countries.
+`permitted_countries.country_code` | 2-digit country code (using [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
+`permitted_countries.country_description` | Human readable description of the country.

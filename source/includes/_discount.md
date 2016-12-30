@@ -1,79 +1,38 @@
 # Discounts
 
+> **Definition**
+
 ```
 GET https://api.ticketswitch.com/f13/discounts.v1/{username}?user_passwd={password}&perf_id={perfid}&price_band_code={pricebandcode}&ticket_type_code={tickettypecode}
 ```
-A `discount` represents a price type or concession that is available for a set
-of available tickets.
 
-> **Example response - best available only**
-
-```shell
-{
-    "absolute_saving": 0,
-    "discount_code": "ADULT",
-    "discount_desc": "Adult standard",
-    "is_alloc": false,
-    "is_offer": false,
-    "non_offer_sale_seatprice": 35,
-    "non_offer_sale_surcharge": 4,
-    "number_available": 6,
-    "percentage_saving": 0,
-    "price_band_code": "A",
-    "sale_seatprice": 35,
-    "sale_surcharge": 4
-}
-```
-
+A **discount** represents a price type or concession that is available for a 
+price band. These are some examples:
 
 * Adult
 * Child
 * Student
+* Senior citizen
+
+When retrieving [availability](#availability) for a performance we return the
+default discount. This `discounts` resource should then be used to get the full 
+list of available discounts. When multiple discounts are returned non-default
+discounts typically have a lower price (for example Child pricing).
 
 When multiple `discounts` are returned, you should present the choice to your
-user (it is possible for you to just purchase the default `discount` even when
-there are multiple `discounts` but this is not recommended). When there are
-multiple offers available on a single ticket these are also presented as
-`discounts` so you can present the choice to your users (multiple offers are
-rare though).
-
-When [retrieving availability for a performance](#retrieve-availability) we
-return the default `discount`, you then call [list discounts](#list discounts)
-for the full list of `discounts`.
-
-The following attributes are returned - these are the same as for the
-[availability object](#availability-object).
-
-Attribute | Description
---------- | -----------
-`absolute_saving` | Defined as (`non_offer_sale_seatprice` + `non_offer_sale_surcharge`) - (`sale_seatprice` + `sale_surcharge`)
-`discount_code` | The unique identifier of the [discount](#discount-object). This is unique to each supplier system, so you cannot assume that if the "ADULT" discount_code is available on one event that it will be available on other events.
-`discount_desc` | The description of the default discount to present to users.
-`is_alloc` | `true` means the availability is from an allocation; `false` means the availability is from the general pool. This is normally `false` and can be ignored for most use cases.
-`is_offer` | `true` if the ticket price is discounted below the full price, i.e. if `absolute_saving` is greater than zero.
-`non_offer_sale_seatprice` | The per-ticket price for full-priced tickets. This will be the face value price when the market has such a concept (for example the London theatre market has this concept, but some New York theatre shows do not). This is the same as the `sale_seatprice` when the price band is not discounted. (TODO can we remove "sale" from the name?)
-`non_offer_sale_surcharge` | The per-ticket booking fee for full-priced tickets. To determine the total ticket price you must add together the `non_offer_sale_seatprice` and the `non_offer_sale_surcharge`.
-`number_available` | This is the maximum number of contiguous seats that can be purchased. This applies to best available only - if you are using seat selection and `contiguous_seat_selection_only` is `false` it is possible to select above this number.
-`percentage_saving` | Defined as `absolute_saving` / (`non_offer_sale_seatprice` + `non_offer_sale_surcharge`) * 100
-`price_band_code` | The code for a price band. To uniquely identify a price band you should take the combination of `ticket_type_code`, `price_band_code` and `is_alloc` (`is_alloc` will default in most cases if you do not specify it).
-`price_band_description??` | (TODO what is the actual name of this attribute?)
-`sale_seatprice` | The per-ticket price. This will be the face value price when the market has such a concept (for example the London theatre market has this concept, but some New York theatre shows do not). This is the same as the `non_offer_sale_seatprice` when the price band is not discounted.
-`sale_surcharge` | The per-ticket booking fee. To determine the total ticket price you must add together the `sale_seatprice` and the `sale_surcharge`.
-
-## List discounts
-
-> **Definition**
-
-
-This resource is used to return availability for a performance. It returns a list of [availability objects](#availability-object).
+user (we use a drop-down list). When there are multiple special offers available
+on a single ticket these are also presented as `discounts` so you can present
+the choice of special offer to your user (multiple offers are rare though). It
+is possible for you to ignore this call and just purchase the default `discount`
+even when there are multiple `discounts`, but that is not recommended.
 
 > **Example request - price band**
 
 ```shell
 curl https://api.ticketswitch.com/f13/discounts.v1/demo \
         -d "user_passwd=demopass" \
-        -d "perf_id=6IF-A8G" \
-        -d "price_band_code=A" \
+        -d "perf_id=6IF-B0I" \
+        -d "price_band_code=A/pool" \
         -d "ticket_type_code=CIRCLE" \
         -G
 ```
@@ -89,7 +48,89 @@ Parameter | Description
 
 ### Response
 
-Returns a list of [discount objects](#discount-object).
+> **Example response**
+
+```shell
+{
+  "discounts": {
+    "discount": [
+      {
+        "absolute_saving": 0,
+        "discount_code": "ADULT",
+        "discount_desc": "Adult standard",
+        "discount_disallowed_seat_no_bitmask": 0,
+        "is_offer": false,
+        "non_offer_sale_seatprice": 35,
+        "non_offer_sale_surcharge": 0,
+        "number_available": 6,
+        "percentage_saving": 0,
+        "price_band_code": "A/pool",
+        "sale_seatprice": 35,
+        "sale_surcharge": 0
+      },
+      {
+        "absolute_saving": 0,
+        "discount_code": "CHILD",
+        "discount_desc": "Child rate",
+        "discount_disallowed_seat_no_bitmask": 0,
+        "is_offer": false,
+        "non_offer_sale_seatprice": 18,
+        "non_offer_sale_surcharge": 0,
+        "number_available": 6,
+        "percentage_saving": 0,
+        "price_band_code": "A/pool",
+        "sale_seatprice": 18,
+        "sale_surcharge": 0
+      },
+      {
+        "absolute_saving": 0,
+        "discount_code": "STUDENT",
+        "discount_desc": "Student rate",
+        "discount_disallowed_seat_no_bitmask": 0,
+        "is_offer": false,
+        "non_offer_sale_seatprice": 26,
+        "non_offer_sale_surcharge": 0,
+        "number_available": 6,
+        "percentage_saving": 0,
+        "price_band_code": "A/pool",
+        "sale_seatprice": 26,
+        "sale_surcharge": 0
+      },
+      {
+        "absolute_saving": 0,
+        "discount_code": "OAP",
+        "discount_desc": "Senior citizen rate",
+        "discount_disallowed_seat_no_bitmask": 0,
+        "is_offer": false,
+        "non_offer_sale_seatprice": 28,
+        "non_offer_sale_surcharge": 0,
+        "number_available": 6,
+        "percentage_saving": 0,
+        "price_band_code": "A/pool",
+        "sale_seatprice": 28,
+        "sale_surcharge": 0
+      }
+    ]
+  }
+}
+```
 
 
-ADD DISCOUNTS
+The following attributes are returned within the `discount` dictionary. These 
+are the same attributes returned in the [availability](#availability) price band
+dictionary.
+
+Attribute | Description
+--------- | -----------
+`absolute_saving` | Defined as (`non_offer_sale_seatprice` + `non_offer_sale_surcharge`) - (`sale_seatprice` + `sale_surcharge`)
+`discount_code` | The unique identifier of the `discount`. This is unique to each supplier system, so you cannot assume that if the "ADULT" discount_code is available on one event that it will be available on other events.
+`discount_desc` | The description of the default discount to present to users.
+`is_offer` | `true` if the ticket price is discounted below the full price, i.e. if `absolute_saving` is greater than zero.
+`non_offer_sale_seatprice` | The per-ticket price for full-priced tickets. This will be the face value price when the market has such a concept (for example the London theatre market has this concept, but some New York theatre shows do not). This is the same as the `sale_seatprice` when the price band is not discounted. (TODO can we remove "sale" from the name?)
+`non_offer_sale_surcharge` | The per-ticket booking fee for full-priced tickets. To determine the total ticket price you must add together the `non_offer_sale_seatprice` and the `non_offer_sale_surcharge`.
+`number_available` | This is the maximum number of contiguous seats that can be purchased. This applies to best available only - if you are using seat selection and `contiguous_seat_selection_only` is `false` it is possible to select above this number.
+`percentage_saving` | Defined as `absolute_saving` / (`non_offer_sale_seatprice` + `non_offer_sale_surcharge`) * 100
+`price_band_code` | The code for a price band. To uniquely identify a price band you should take the combination of `ticket_type_code`, `price_band_code` and `is_alloc` (`is_alloc` will default in most cases if you do not specify it).
+`price_band_description??` | (TODO what is the actual name of this attribute?)
+`sale_seatprice` | The per-ticket price. This will be the face value price when the market has such a concept (for example the London theatre market has this concept, but some New York theatre shows do not). This is the same as the `non_offer_sale_seatprice` when the price band is not discounted.
+`sale_surcharge` | The per-ticket booking fee. To determine the total ticket price you must add together the `sale_seatprice` and the `sale_surcharge`.

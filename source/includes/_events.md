@@ -560,14 +560,15 @@ Attribute | Description
 `venue_desc` | Name of the venue e.g. `Sadler's Wells`.
 
 
-## Additional parameters
+## --- Additional parameters ---
 
-There are several additional parameters that can be provided to any resource where
-an event is returned in the response, including the two above. These
-parameters will supply additional information related to the event.
+There are several additional parameters described below that can be provided to
+return additional data for each event.
 
-Most of these additional parameters are either relatively slow or produce a lot
-of additional data, so be aware that they may adversely effect response times.
+These additional parameters require extra processing to retrieve the requested
+data, which will slow down the resource, sometimes substantially. They should
+therefore only be used where necessary.
+
 
 ## Media
 
@@ -919,8 +920,8 @@ Attribute | Description
 ## Extra info
 
 Most events will have additional information and content available. This data is
-not returned by default because it can significantly slow down response time,
-especially when many events are being returned.
+not returned by default because it can slow down response time, especially when
+many events are being returned.
 
 ### Request
 
@@ -945,7 +946,7 @@ events = client.get_events(['6IF'], extra_info=True)
 
 Parameter | Description
 --------- | -----------
-`req_extra_info` | Returns the descriptive info for the event, returned as individual sections (`structured_info`) or as a single summary (`event_info` / `event_info_html`)
+`req_extra_info` | Returns the descriptive info for the event, returned as individual sections (`structured_info`) and as a single summary (`event_info` / `event_info_html`)
 
 
 ### Response
@@ -1301,10 +1302,10 @@ not attempt to make multiple availability requests in order to keep this data up
 to date - please contact us instead to discuss options api@ingresso.co.uk.  Cost
 ranges are only ever returned as part of a parent object (such as event). 
 
-<aside class="warning"> Cost ranges (and avail details) are not guaranteed to be
+<aside class="notice"> Cost ranges (and avail details) are not guaranteed to be
 present (nor accurate) so you should design your application with this in mind,
-for example by still displaying a performance even if it is missing a from
-price.  </aside>
+for example by still displaying events even if they are missing a from
+price.</aside>
 
 
 ### Request
