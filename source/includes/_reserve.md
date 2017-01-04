@@ -23,6 +23,22 @@ optional parameters if necessary.
 orders to your [trolley](#trolley), then `reserve` the trolley by
 specifying a `trolley_token`.
 
+As with [trolley](#trolley) there are restrictions on reserving individual seats: 
+
+- If the [availability](#availability) response includes 
+  `contiguous_seat_selection_only` = `false` then any seats can be selected, 
+  provided they are within a single `ticket_type_code` and `price_band_code`.
+
+- If the [availability](#availability) response includes 
+  `contiguous_seat_selection_only` = `true` then only contiguous seats within a 
+  single `ticket_type_code` and `price_band_code` can be selected.
+
+If you would like to allow your customers to select seats without restriction
+across price bands and ticket types, you need to add multiple orders to a
+[trolley](#trolley), one order for each ticket type / price band. However there
+are currently some restrictions enforced so if you want to do this you will need
+to contact us first api@ingresso.co.uk.
+
 ### Request
 
 > **Example request - reserving best available tickets, specifying specific discount codes**
@@ -104,6 +120,33 @@ Parameter | Description
 `departure_date` | Specify a departure date for example `departure_date=20170214`.
 `duration` | Specify a duration for hotel product, for example `duration=3`.
 `promo_code` | Specifying a promo codes can unlock a special offer discount code. If you have a promo code it can be specified like this: `promo_code=FOO`. Note that this feature is not commonly used with partners.
+
+All of the following parameters can also be used to request additional data for the event and performance in each order. These are described in more detail in the Events section [here](#additional-parameters).
+
+Parameter | Description
+--------- | -----------
+`req_avail_details` | Returns [availability details](#availability-details) - a cached list of unique ticket types and price bands available for the event and performance in each order.
+`req_avail_details_with_perfs` | This will add the list of available performance dates to each avail detail object. *Only valid if used alongside req_avail_details*.
+`req_cost_range` | Returns [cost ranges](#cost-range) - a from price and offer detail for the event and performance in each order.
+`req_cost_range_best_value_offer` | Returns the offer with the highest percentage saving.
+`req_cost_range_details` | Returns a list of unique ticket types and price bands and their cost ranges across all performances.
+`req_cost_range_max_saving_offer` | Returns the offer with the highest absolute saving.
+`req_cost_range_min_cost_offer` | Returns the offer with the lowest cost.
+`req_cost_range_top_price_offer` | Returns the offer with the highest cost. This is the least used offer cost range.
+`req_cost_range_no_singles_data` | This returns another cost range object that excludes availability with only 1 consecutive seat available. The prices in this cost range will therefore be the same or higher than the outer cost range. It has the same structure as the main cost range (so if you want to see the "best value offer" in the no singles data, you need to add `req_cost_range_best_value_offer` and you will see this data in both cost ranges).
+`req_extra_info` | Returns the [descriptive info](#extra-info) for the event, returned as individual sections (`structured_info`) or as a single summary (`event_info` / `event_info_html`).
+`req_media_triplet_one` | Triplet one (jpg/png 520x390). [See further detail on media](#media).
+`req_media_triplet_two` | Triplet two if available (jpg/png 520x390).
+`req_media_triplet_three` | Triplet three if available (jpg/png 520x390).
+`req_media_triplet_four` | Triplet four if available (jpg/png 520x390).
+`req_media_triplet_five` | Triplet five if available (jpg/png 520x390).
+`req_media_seating_plan` | Graphical seating plan of the venue if available (jpg/png varying size).
+`req_media_square` | Small square image suitable for search or event avatar (jpg/png 140x140).
+`req_media_landscape` | Small landscape banner suitable for search (jpg/png 220x115).
+`req_media_marquee` | Large landscape banner suitable for a page heading, if available (jpg/png 700x300).
+`req_media_supplier` | Logo of the supplier/producer, if available (jpg/png varying size).
+`req_reviews` | Returns [event reviews](#reviews) if available.
+`req_video_iframe` | Returns video iframe information if available.
 
 
 ### Response

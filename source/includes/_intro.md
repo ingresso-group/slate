@@ -1,13 +1,12 @@
 <!---
 # TODOs / Questions
 
-* Matt to include detail on how user authentication works now, and what our recommended approach is
-* Matt to include a section describing how our caching works
+* Add a note in reserve about `seat_request_status` - add a blue note warning that you can receive seats you didn't ask for, if you don't want them you must release them, sometimes it will not be possible to reserve particular seats (eg if they leave a single) so good to suggest to customers not to select the same ones again
 * Matt to explain how to distinguish between these no booking fee and discounted face value offers in events / perfs / availability
 * Matt to add docs for cities and categories
-* Matt to add a small section on versioning.
+* Matt to include detail on how user authentication works now, and what our recommended approach is
+* Matt to include a section describing how our caching works
 * Matt to add a test meta event, and refer to this in the test intro section and wherever meta events are mentioned.
-* Matt to add info about reserving individual seats - can select non-contiguous but only when a flag is included? and only within a single price band
 
 * Error codes need to be added everywhere by Pete.
 
@@ -68,11 +67,12 @@ APIs, allowing us to transact directly on the venue's system.  By integrating
 with the Ingresso API you are able to view and purchase live ticketing inventory 
 from a number of different venues. 
 
-We build our own ticketing websites entirely on top
-of our API (for example [Disney Tickets](https://www.disneytickets.co.uk) and
-[From The Box Office](https://www.fromtheboxoffice.com)). Example partners that 
-have integrated with Ingresso APIs are [Amazon](https://tickets.amazon.co.uk/) 
-and [lastminute.com](http://www.lastminute.com/theatre/).
+Example partners that have integrated with the Ingresso API are 
+[Amazon](https://tickets.amazon.co.uk/) and 
+[lastminute.com](http://www.lastminute.com/theatre/). We also build our own 
+ticketing websites entirely on top of our API (for example 
+[Disney Tickets](https://www.disneytickets.co.uk) and
+[From The Box Office](https://www.fromtheboxoffice.com)). 
 
 The Ingresso API is a fully transactional API, loosely based on REST. You format
 GET or POST requests in [JSON](http://www.json.org/) and you will receive either
@@ -85,12 +85,13 @@ output of [events](#events) and [performances](#performances) includes a
 format. The idea of this is that standard code can be used on the client side to
 read all parts of the output.
 
-This API replaces the [the Ingresso XML API](http://www.ingresso.co.uk/apidocs/).  
-The XML API relies on temporary tokens from the one call being passed in
+This API replaces the [the Ingresso XML API](http://www.ingresso.co.uk/apidocs/). 
+The XML API relies on temporary tokens from each call being passed in
 to the next call; these has been removed in favour of permanent IDs. One
 benefit of this change is that a call near the end of the booking process, such
 as [reserve](#reserve), can be called without needing to remake the preceeding
-calls (such as [requesting availability](#availability)).
+calls (such as [requesting availability](#availability)), opening up additional
+options for integrating partners.
 
 
 ## Postman examples
@@ -202,20 +203,21 @@ The username and password should be passed in to every resource.
 
 The password must be passed in the query string with `user_passwd`.
 
-The username must be passed in explicitly as part of the path, being
-the component after the '.exe'. Some of our partners require sub users for 
-certain use cases such as running their own affiliate programme; if a sub 
-user is to be passed in 
-then this should be the second component, and any explicit language,
-overriding the HTTP header, as the third. A '-' anywhere in this
-set of three path components is treated as a placehold for the information
-not being passed - i.e. it is ignored. So you can, for example,
-call json_events as 'demo' with a language of 'de' like this.:
+The username must be passed in explicitly as part of the path, being the
+component after the '.v1'. Some of our partners require sub users for certain
+use cases such as running their own affiliate programme; if a sub  user is to be
+passed in  then this should be the second component, and any explicit language,
+overriding the HTTP header, as the third. A '-' anywhere in this set of three
+path components is treated as a placehold for the information not being passed -
+i.e. it is ignored. So you can, for example, call json_events as 'demo' with a
+language of 'de' like this.:
 
-`/cgi-bin/json_events.exe/demo/-/de?user_passwd=demopass`
+`/f13/events.v1/demo/-/de?user_passwd=demopass`
 
 The sub user there is not set to '-', instead it is treated as unset 
 and can be passed in as a query string argument if desired.
+
+
 
 
 ## Errors
@@ -362,10 +364,20 @@ allocation, seated, seat selection, no performances, no perf times eg
 goldentours (we should also fix this).
 
 
+## Versioning
+
+The API version forms part of the URL, for example
+https://api.ticketswitch.com/f13/events.v1 uses version 1. We will always
+endeavour to add functionality and make changes in a backward-compatible manner,
+but when that is not possible we will implement a new version. We will then
+introduce a deprecation schedule for the replaced version and notify all
+partners that have integrated.
+
+
 ## API Support
 
-We only provide support to customers that we have provided a test account to. If
-you have a test or live account and you encounter problems with the API:
+We only provide support to partners that we have provided a test account to. 
+If you have a test or live account and you encounter problems with the API:
 
 1. Check the [Ingresso status page](https://status.ingresso.co.uk/)
 

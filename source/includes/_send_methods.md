@@ -1,18 +1,18 @@
 # Send Methods
 
 ```
-GET https://api.ticketswitch.com/f13/send_methods.v1/{username}?user_password={password}&perf_id={performance id}
+GET https://api.ticketswitch.com/f13/send_methods.v1/{username}?user_password={password}&perf_id={performanceid}
 ```
 
 This section describes the available methods of delivery for a given
-performance.
+performance. Each method in the list has an associated cost which will be added
+to the overall charge.
 
 Send methods might change between performances and depending on times when they
 are requested. For example there might not be enough time to post a physical
 ticket to a customer before the performance starts, so those performances would
-not have that optional available. As such it's important that send methods are
-called before any reservation to ensure that user isn't seeing options that are
-out of date.
+not have that option available. As such it's important that send methods are
+called as needed to ensure the user isn't seeing options that are out of date.
 
 
 > **Example request**
@@ -35,7 +35,7 @@ client.get_send_methods('6IF-A8B')
 
 Parameter | Description
 --------- | -----------
-`perf_id` | The performance identifier that you want to display availability for.
+`perf_id` | The performance identifier that you want to display send methods for.
 
 > **Example response**
 

@@ -3,7 +3,7 @@
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/f13/discounts.v1/{username}?user_passwd={password}&perf_id={perfid}&price_band_code={pricebandcode}&ticket_type_code={tickettypecode}
+GET https://api.ticketswitch.com/f13/discounts.v1/{username}?user_passwd={password}&perf_id={performanceid}&price_band_code={pricebandcode}&ticket_type_code={tickettypecode}
 ```
 
 A **discount** represents a price type or concession that is available for a 
@@ -130,7 +130,7 @@ Attribute | Description
 `non_offer_sale_surcharge` | The per-ticket booking fee for full-priced tickets. To determine the total ticket price you must add together the `non_offer_sale_seatprice` and the `non_offer_sale_surcharge`.
 `number_available` | This is the maximum number of contiguous seats that can be purchased. This applies to best available only - if you are using seat selection and `contiguous_seat_selection_only` is `false` it is possible to select above this number.
 `percentage_saving` | Defined as `absolute_saving` / (`non_offer_sale_seatprice` + `non_offer_sale_surcharge`) * 100
-`price_band_code` | The code for a price band. To uniquely identify a price band you should take the combination of `ticket_type_code`, `price_band_code` and `is_alloc` (`is_alloc` will default in most cases if you do not specify it).
+`price_band_code` | The code for a price band. To uniquely identify a price band you should take the combination of `ticket_type_code` and `price_band_code`.
 `price_band_description??` | (TODO what is the actual name of this attribute?)
 `sale_seatprice` | The per-ticket price. This will be the face value price when the market has such a concept (for example the London theatre market has this concept, but some New York theatre shows do not). This is the same as the `non_offer_sale_seatprice` when the price band is not discounted.
 `sale_surcharge` | The per-ticket booking fee. To determine the total ticket price you must add together the `sale_seatprice` and the `sale_surcharge`.

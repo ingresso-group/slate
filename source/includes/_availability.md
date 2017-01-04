@@ -3,7 +3,7 @@
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/f13/availability.v1/{username}?user_passwd={password}&perf_id={perfid}
+GET https://api.ticketswitch.com/f13/availability.v1/{username}?user_passwd={password}&perf_id={performanceid}
 ```
 
 TODO:
@@ -31,7 +31,6 @@ by default. This resource is described first, following by
 [individual seats](#individual-seats), [example seats](#example-seats), 
 [commission](#commission), and the [discounts](#discounts).
 
-T, with the option to also return individual seats.
 
 ## Availability
 
@@ -59,7 +58,7 @@ Attribute | Description
 `no_of_seats` | *Optional*. The number of seats the customer would like. If this is specified then availability will only be shown for price bands with at least that many contiguous seats available.
 
 
-These parameters can be included to request additional data for each performance:
+These parameters can be included to request additional data:
 
 Parameter | Description
 --------- | -----------
@@ -231,7 +230,7 @@ Attribute | Description
 `backend_is_down` | When `true` the supplier system cannot be contacted for some reason, for example they are having technical problems or scheduled maintenance. The response will include empty availability in this case. This is an exceptional circumstance; to check if there is currently a supplier system issue you can check our [status page](https://status.ingresso.co.uk/).
 `backend_throttle_failed` | We allow a certain number of simultaneous requests to hit a supplier system and queue requests when the limit is reached. When this attribute is `true` your request has been sitting in our queue for a long time and we have timed out the request. This is an exceptional circumstance.
 `can_leave_singles` | In most cases this is `true`. When `false` the supplier ticketing system does not allow us to leave single seats (which are difficult to sell). TODO add more detail to this - what should an api user do when this is false?
-`contiguous_seat_selection_only` | If you have requested individual seats a value of `true` indicates that you can only select consecutive seats. `false` indicates that you can select seats without restriction *within a single price band*. If you would like to allow your customers to select seats without restriction across price bands and ticket types, you need to need to add multiple orders to a basket, one order for each price band. However there are currently some restrictions enforced so if you want to do this you will need to contact us first api@ingresso.co.uk.
+`contiguous_seat_selection_only` | If you have requested individual seats a value of `true` indicates that you can only select consecutive seats. `false` indicates that you can select seats without restriction *within a single ticket type and price band*. In most cases this will be `false`. If you would like to allow your customers to select seats without restriction across price bands and ticket types, you need to add multiple orders to a [trolley](#trolley), one order for each price band. However there are currently some restrictions enforced so if you want to do this you will need to contact us first api@ingresso.co.uk.
 `currency` | The [currency](#currency-object) of the availability
 `quantity_options` | The valid [quantity options](#quantity-options-object), a rare example is that some tickets can only be purchased in pairs.
 
@@ -256,7 +255,7 @@ Attribute | Description
 `non_offer_sale_surcharge` | The per-ticket booking fee for full-priced tickets. To determine the total ticket price you must add together the `non_offer_sale_seatprice` and the `non_offer_sale_surcharge`.
 `number_available` | This is the maximum number of contiguous seats that can be purchased. This applies to best available only - if you are using seat selection and `contiguous_seat_selection_only` is `false` it is possible to select above this number.
 `percentage_saving` | Defined as `absolute_saving` / (`non_offer_sale_seatprice` + `non_offer_sale_surcharge`) * 100
-`price_band_code` | The code for a price band. To uniquely identify a price band you should take the combination of `ticket_type_code`, `price_band_code` and `is_alloc` (`is_alloc` will default in most cases if you do not specify it).
+`price_band_code` | The code for a price band. To uniquely identify a price band you should take the combination of `ticket_type_code` and `price_band_code`. The price band code is generally made up of the code from the underlying supplier system, e.g. "C", followed by a "/" separator then "pool" or "alloc", indicating whether the price band is taken from the general pool of tickets or is from a ring-fenced allocation. The combined price_band_code looks like "C/pool". Integrating partners should just work with the full price_band_code, ignoring the constituent parts.
 `price_band_description??` | (TODO what is the actual name of this attribute?)
 `sale_seatprice` | The per-ticket price. This will be the face value price when the market has such a concept (for example the London theatre market has this concept, but some New York theatre shows do not). This is the same as the `non_offer_sale_seatprice` when the price band is not discounted.
 `sale_surcharge` | The per-ticket booking fee. To determine the total ticket price you must add together the `sale_seatprice` and the `sale_surcharge`.

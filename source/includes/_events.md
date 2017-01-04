@@ -1922,9 +1922,7 @@ Parameter | Description
 }
 ```
 
-#### Ticket Type
-
-Ticket types describe a part of house or location within the venue.
+**Ticket types** describe a part of house or location within the venue.
 
 Attribute | Description
 --------- | -----------
@@ -1933,9 +1931,7 @@ Attribute | Description
 `price_band` | a list of price bands
 
 
-#### Price Band
-
-Price bands describe the different levels of pricing that are available within a
+**Price bands** describe the different levels of pricing that are available within a
 ticket type. It's important to note that a price band may not have a long term
 set price, and as such ticket prices and surcharges might change on a performance to
 performance basis. 
@@ -1946,9 +1942,8 @@ Attribute | Description
 `price_band_desc` | A human readable description of the price band if applicable
 `cost_range_details` | a list of the cost ranges in this price band.
 
-#### Cost range
 
-Cost ranges are a cached summary of the pricing that has been seen for your
+**Cost ranges** are a cached summary of the pricing that has been seen for your
 username. They are primarily used to retrieve the minimum (or "from") price for
 the event, along with detail of any offers or discounts.
 
@@ -1961,7 +1956,7 @@ ranges are only ever returned as part of a parent object (such as event).
 <aside class="warning"> Cost ranges (and avail details) are not guaranteed to be
 present (nor accurate) so you should design your application with this in mind,
 for example by still displaying a performance even if it is missing a from
-price.  </aside>
+price.</aside>
 
 
 Attribute | Description
