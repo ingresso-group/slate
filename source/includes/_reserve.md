@@ -2,7 +2,7 @@
 > **Definition**
 
 ```
-POST https://api.ticketswitch.com/f13/reserve.v1/{username}?user_passwd={password}
+POST https://api.ticketswitch.com/f13/reserve.v1
 ```
 
 Before purchasing tickets, you must first `reserve` them. Reserving tickets will
@@ -31,7 +31,8 @@ As with [trolley](#trolley) there are restrictions on reserving individual seats
 
 - If the [availability](#availability) response includes 
   `contiguous_seat_selection_only` = `true` then only contiguous seats within a 
-  single `ticket_type_code` and `price_band_code` can be selected.
+  single `ticket_type_code` and `price_band_code` can be selected. Seats are 
+  contiguous based on the order of the id_details seat array.
 
 If you would like to allow your customers to select seats without restriction
 across price bands and ticket types, you need to add multiple orders to a
@@ -44,16 +45,16 @@ to contact us first api@ingresso.co.uk.
 > **Example request - reserving best available tickets, specifying specific discount codes**
 
 ```shell
-curl https://api.ticketswitch.com/f13/reserve.v1/demo \
-        -d "user_passwd=demopass" \
-        -d "perf_id=6IF-A7N" \
-        -d "ticket_type_code=CIRCLE" \
-        -d "price_band_code=C/pool" \
-        -d "no_of_seats=3" \
-        -d "disc0=ADULT" \
-        -d "disc1=CHILD" \
-        -d "disc2=CHILD" \
-        -G
+curl https://api.ticketswitch.com/f13/reserve.v1 \
+    -u "demo:demopass" \
+    -d "perf_id=6IF-A7N" \
+    -d "ticket_type_code=CIRCLE" \
+    -d "price_band_code=C/pool" \
+    -d "no_of_seats=3" \
+    -d "disc0=ADULT" \
+    -d "disc1=CHILD" \
+    -d "disc2=CHILD" \
+    -G
 ```
 
 ```python
@@ -68,24 +69,24 @@ TODO: FINISH ME NIC
 > **Example request - reserving specific seats**
 
 ```shell
-curl https://api.ticketswitch.com/f13/reserve.v1/demo \
-        -d "user_passwd=demopass" \
-        -d "perf_id=3CVB-22" \
-        -d "ticket_type_code=UPP" \
-        -d "price_band_code=C/pool" \
-        -d "no_of_seats=2" \
-        -d "seat0=C7" \
-        -d "seat1=C8" \
-        -G
+curl https://api.ticketswitch.com/f13/reserve.v1 \
+    -u "demo:demopass" \
+    -d "perf_id=3CVB-22" \
+    -d "ticket_type_code=UPP" \
+    -d "price_band_code=C/pool" \
+    -d "no_of_seats=2" \
+    -d "seat0=C7" \
+    -d "seat1=C8" \
+    -G
 ```
 
 > **Example request - reserving orders previously added to a trolley**
 
 ```shell
-curl https://api.ticketswitch.com/f13/reserve.v1/demo \
-        -d "user_passwd=demopass" \
-        -d "trolley_token=M6--Th1yy_GMHYp_pxuZpgPYa43h-4JJKgwOsTKiSmME9f69ngTVVFnFtyBIDwWfhC59oV4RtGbj_t-hw_U75AHoSbNaxMHOWSzGFBZNceuo7AtApIckL-qbs3700lw2N9zTX12LLHVBSqhRpYEFc7twQ_k5BwieJeLLpHTM9LnB48-BbPT-0tBn9Ylq_a3Y3RHFXZChWiYmsdxsYRE-kgktxd_pdFyGTZNN_mazMGwQFxYQ99nUXVmRsRYeV29d9CKVI1fv6mR81iapKdYiEm1U0r8A5fmdCTFlLO8majLLI07ktEjXzgA63oOa5DoRHTOcD-U6gsOLied869nVXJQWkx6lvBr6InrLdEefg5sDK0WLVFNJ9WT9QsG4Y7opYcOdx6K6U0i7L9f88_d0iurc-FkpC2ils1M21OJY-8_eQvuw1SPqqvqcLqCpR6OnRRGA3vS1LIhtgavvtZ95MvQpBH3DgAwXJtiYdjsXmIlor2pqbfiaZfQXwuC1e8yoNUIBe_yBtsOQnweyoJfIyYOayiajXbOIblwwSiJEJCnDHAaE9jo9kQRu4NdDHNd-O5IoumIoxhj7NIjl6vIb_Klu1wzB7AjeNL4TNubgMMlThGO4TyNrXsww72M_fGQO2pXCkLwXGpLckCqTAUIrNKz7v6Rs-4X3TWaNIcaAbz-Zw5lIboJoPLRgBETn02GHx00gcI1-RT8zxI9-Z" \
-        -G
+curl https://api.ticketswitch.com/f13/reserve.v1 \
+    -u "demo:demopass" \
+    -d "trolley_token=M6--Th1yy_GMHYp_pxuZpgPYa43h-4JJKgwOsTKiSmME9f69ngTVVFnFtyBIDwWfhC59oV4RtGbj_t-hw_U75AHoSbNaxMHOWSzGFBZNceuo7AtApIckL-qbs3700lw2N9zTX12LLHVBSqhRpYEFc7twQ_k5BwieJeLLpHTM9LnB48-BbPT-0tBn9Ylq_a3Y3RHFXZChWiYmsdxsYRE-kgktxd_pdFyGTZNN_mazMGwQFxYQ99nUXVmRsRYeV29d9CKVI1fv6mR81iapKdYiEm1U0r8A5fmdCTFlLO8majLLI07ktEjXzgA63oOa5DoRHTOcD-U6gsOLied869nVXJQWkx6lvBr6InrLdEefg5sDK0WLVFNJ9WT9QsG4Y7opYcOdx6K6U0i7L9f88_d0iurc-FkpC2ils1M21OJY-8_eQvuw1SPqqvqcLqCpR6OnRRGA3vS1LIhtgavvtZ95MvQpBH3DgAwXJtiYdjsXmIlor2pqbfiaZfQXwuC1e8yoNUIBe_yBtsOQnweyoJfIyYOayiajXbOIblwwSiJEJCnDHAaE9jo9kQRu4NdDHNd-O5IoumIoxhj7NIjl6vIb_Klu1wzB7AjeNL4TNubgMMlThGO4TyNrXsww72M_fGQO2pXCkLwXGpLckCqTAUIrNKz7v6Rs-4X3TWaNIcaAbz-Zw5lIboJoPLRgBETn02GHx00gcI1-RT8zxI9-Z" \
+    -G
 ```
 
 ```python
@@ -448,6 +449,15 @@ The response will include an identifier for the reserve, detail of the reserved
 items, detail of items that weren't able to be reserved, and a set of flags 
 that confirm the information you need to collect from your customer when 
 purchasing tickets.
+
+<aside class="notice">
+If you are allowing customers to select their own seats it is important to check
+`seat_request_status` - if this is not `got_all` then we weren't able to reserve
+the requested seats. If you don't want to offer these seats to your customer 
+then you must release them. Note also that it is possible for reserving specific 
+seats to consistently fail - it is therefore advisable to warn your customer of 
+this to avoid them receiving errors consistently.
+</aside>
 
 Ingresso's partners split into the following categories based on how they take
 payment:

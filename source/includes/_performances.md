@@ -33,7 +33,7 @@ These two resources are described below, followed by detail of the
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/f13/performances.v1/{username}?user_passwd={password}&event_id={eventid}
+GET https://api.ticketswitch.com/f13/performances.v1?event_id={eventid}
 ```
 
 This call returns a list of performances for a particular event. The list is
@@ -56,8 +56,8 @@ Typical use cases:
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/performances.v1/demo \
-    -d "user_passwd=demopass" \
+curl https://api.ticketswitch.com/f13/performances.v1 \
+    -u "demo:demopass" \
     -d "event_id=6IF" \
     -d "page_len=10" \
     -G
@@ -343,7 +343,7 @@ Attribute | Description
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/f13/performances_by_id.v1/{username}?user_passwd={password}&perf_id_list={perfidlist}
+GET https://api.ticketswitch.com/f13/performances_by_id.v1?perf_id_list={perfidlist}
 ```
 
 This resource is used to return detail for one or more performances by their ID.
@@ -361,8 +361,8 @@ this in most cases.
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/performances_by_id.v1/demo \
-    -d "user_passwd=demopass" \
+curl https://api.ticketswitch.com/f13/performances_by_id.v1 \
+    -u "demo:demopass" \
     -d "perf_id_list=6IF-A8J,6IF-A8K" \
     -G
 ```
@@ -480,7 +480,9 @@ therefore only be used where necessary.
 
 Cost ranges are a cached summary of the pricing that has been seen for your
 username. They are used to retrieve the minimum (or "from") price for
-the performance, along with detail of any offers or discounts.
+the performance, along with detail of any offers or discounts. They allow you to
+display a from price and whether there is an offer for each performance, so most
+partners request cost ranges.
 
 Cost ranges are generated from availability requests made either by end-users or
 by scheduled processes that Ingresso use to update cost range data. You should
@@ -496,12 +498,12 @@ price.</aside>
 
 ### Request
 
-> **Example requeest**
+> **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/performancess_by_id.v1/demo \
-    -d "user_passwd=demopass" \
-    -d "perf_id_list=6IF-A8K" \
+curl https://api.ticketswitch.com/f13/performancess_by_id.v1 \
+    -u "demo:demopass" \
+    -d "perf_id_list=6L9-M2R" \
     -d "req_cost_range" \
     -d "req_cost_range_best_value_offer" \
     -d "req_cost_range_max_saving_offer" \
@@ -547,45 +549,108 @@ Parameter | Description
 
 > **Example response**
 
-
 ```shell
 {
   "performances_by_id": {
-    "6IF-A8K": {
-      "cached_max_seats": 51,
+    "6L9-M2R": {
+      "cached_max_seats": 15,
       "cost_range": {
-        "max_seatprice": 47,
-        "max_surcharge": 0,
-        "min_seatprice": 18,
-        "min_surcharge": 0,
+        "best_value_offer": {
+          "absolute_saving": 9,
+          "full_seatprice": 75,
+          "full_surcharge": 5,
+          "offer_seatprice": 68,
+          "offer_surcharge": 3,
+          "percentage_saving": 11
+        },
+        "max_saving_offer": {
+          "absolute_saving": 9,
+          "full_seatprice": 75,
+          "full_surcharge": 5,
+          "offer_seatprice": 68,
+          "offer_surcharge": 3,
+          "percentage_saving": 11
+        },
+        "max_seatprice": 68,
+        "max_surcharge": 3,
+        "min_cost_offer": {
+          "absolute_saving": 9,
+          "full_seatprice": 75,
+          "full_surcharge": 5,
+          "offer_seatprice": 68,
+          "offer_surcharge": 3,
+          "percentage_saving": 11
+        },
+        "min_seatprice": 68,
+        "min_surcharge": 3,
         "no_singles_cost_range": {
-          "max_seatprice": 47,
-          "max_surcharge": 0,
-          "min_seatprice": 18,
-          "min_surcharge": 0,
+          "best_value_offer": {
+            "absolute_saving": 9,
+            "full_seatprice": 75,
+            "full_surcharge": 5,
+            "offer_seatprice": 68,
+            "offer_surcharge": 3,
+            "percentage_saving": 11
+          },
+          "max_saving_offer": {
+            "absolute_saving": 9,
+            "full_seatprice": 75,
+            "full_surcharge": 5,
+            "offer_seatprice": 68,
+            "offer_surcharge": 3,
+            "percentage_saving": 11
+          },
+          "max_seatprice": 68,
+          "max_surcharge": 3,
+          "min_cost_offer": {
+            "absolute_saving": 9,
+            "full_seatprice": 75,
+            "full_surcharge": 5,
+            "offer_seatprice": 68,
+            "offer_surcharge": 3,
+            "percentage_saving": 11
+          },
+          "min_seatprice": 68,
+          "min_surcharge": 3,
           "quantity_options": {
-            "valid_quantity_bitmask": 126
+            "valid_quantity_bitmask": 30
           },
           "range_currency": {
-            "currency_code": "gbp"
+            "currency_code": "usd"
+          },
+          "top_price_offer": {
+            "absolute_saving": 9,
+            "full_seatprice": 75,
+            "full_surcharge": 5,
+            "offer_seatprice": 68,
+            "offer_surcharge": 3,
+            "percentage_saving": 11
           }
         },
         "quantity_options": {
-          "valid_quantity_bitmask": 126
+          "valid_quantity_bitmask": 30
         },
         "range_currency": {
-          "currency_code": "gbp"
+          "currency_code": "usd"
+        },
+        "top_price_offer": {
+          "absolute_saving": 9,
+          "full_seatprice": 75,
+          "full_surcharge": 5,
+          "offer_seatprice": 68,
+          "offer_surcharge": 3,
+          "percentage_saving": 11
         }
       },
-      "date_desc": "Fri, 17th February 2017",
-      "event_id": "6IF",
+      "date_desc": "Wed, 5th April 2017",
+      "event_id": "6L9",
       "has_pool_seats": true,
       "is_ghost": false,
-      "is_limited": true,
-      "iso8601_date_and_time": "2017-02-17T19:30:00Z",
-      "perf_id": "6IF-A8K",
+      "is_limited": false,
+      "iso8601_date_and_time": "2017-04-05T22:30:00-07:00",
+      "perf_id": "6L9-M2R",
       "running_time": 120,
-      "time_desc": "7.30 PM"
+      "time_desc": "10.30 PM"
     }
   }
 }
@@ -617,15 +682,41 @@ pyticketswitch.Performance(
 )
 ```
 
+<aside class="notice">Particularly in the UK market, offers are classified as 
+either "discounted face value" or "no booking fee". Discounted face value 
+offers have an offer seatprice that is lower than the full price seatprice (and
+normally they have an offer surcharge of zero). No booking fee offers have
+an offer seatprice equal to the full price seatprice, and an offer surcharge
+equal to zero. The standard is to not display a saving percentage for no booking
+fee offers (some suppliers do not like their offers to show as percentage 
+discounts), and instead display "No fees" or similar.</aside>
+
+Each performance returned includes a `cost_range` object with the following attributes:
+
 Attribute | Description
 --------- | -----------
-`max_seatprice` | the face value for the highest price (seatprice + surcharge)
-`max_surcharge` | the booking fee for the highest price (seatprice + surcharge)
-`max_seatprice` | the face value for the lowest price (seatprice + surcharge)
-`max_surcharge` | the booking fee for the lowest price (seatprice + surcharge)
-`no_singles_cost_range` | this returns another cost range object that excludes availability with only 1 consecutive seat available. The prices in this cost range will therefore be the same or higher than the outer cost range.
-`quantity_options` | the quantities with availability
-`range_currency` | the [currency](#currency-object) for the cost range
+`best_value_offer` | The offer with the highest percentage saving. This is the most commonly used offer cost range.
+`max_saving_offer` | The offer with the highest absolute saving.
+`max_seatprice` | The per-ticket face value for the highest price (seatprice + surcharge)
+`max_surcharge` | The per-ticket booking fee for the highest price (seatprice + surcharge)
+`min_cost_offer` | The offer with the lowest cost.
+`min_seatprice` | The per-ticket face value for the lowest price (seatprice + surcharge)
+`min_surcharge` | The per-ticket booking fee for the lowest price (seatprice + surcharge)
+`no_singles_cost_range` | This returns another cost range object that excludes availability with only one consecutive seat available. The prices in this cost range will therefore be the same as or higher than the outer cost range.
+`quantity_options` | The ticket quantities that have availability.
+`range_currency` | The currency for the cost range.
+`top_price_offer` | The offer with the highest cost. This is the least used offer cost range.
+
+The **offer** objects contain the following attributes:
+
+Attribute | Description
+--------- | -----------
+`absolute_saving` | Defined as (`full_seatprice` + `full_surcharge`) - (`offer_seatprice` + `offer_surcharge`).
+`full_seatprice` | The non-offer per-ticket face value.
+`full_surcharge` | The non-offer per-ticket booking fee.
+`offer_seatprice` | The offer per-ticket face value.
+`offer_surcharge` | The offer per-ticket booking fee.
+`percentage_saving` | Defined as `absolute_saving` / (`full_seatprice` + `full_surcharge`) * 100.
 
 
 ## Availability detail
@@ -646,8 +737,8 @@ data up to date - please contact us instead to discuss options
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/performances_by_id.v1/demo \
-    -d "user_passwd=demopass" \
+curl https://api.ticketswitch.com/f13/performances_by_id.v1 \
+    -u "demo:demopass" \
     -d "perf_id_list=6IF-A8K" \
     -d "req_avail_details" \
     -G

@@ -3,7 +3,7 @@
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/f13/availability.v1/{username}?user_passwd={password}&perf_id={performanceid}
+GET https://api.ticketswitch.com/f13/availability.v1?perf_id={performanceid}
 ```
 
 TODO:
@@ -39,8 +39,8 @@ by default. This resource is described first, following by
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/availability.v1/demo \
-    -d "user_passwd=demopass" \
+curl https://api.ticketswitch.com/f13/availability.v1 \
+    -u "demo:demopass" \
     -d "perf_id=6IF-B0I" \
     -G
 ```
@@ -208,17 +208,25 @@ subdivided into price bands. If you request individual seats for a seated event
 each price band includes seat blocks for the contiguous seats. The structure of
 the availability data returned is therefore:
 
---> availability
+<img src="https://d1wx4w35ubmdix.cloudfront.net/wl-media/images/availability-hierarchy.png" alt="Availability Hierarchy">
 
------> ticket types
+If you wish to retrieve individual seats and offer seat selection to your
+customer then you should include `add_seat_blocks` in your request. If the event
+is seated and the supplier system supports seat selection then we will return
+seat blocks containing seats. You can check for the presence of the seat blocks
+to determine whether you can offer seat selection to your customer. Note that
+implementing seat selection can be quite involved because you need to integrate
+a third-party seat renderer or implement your own - we are happy to discuss this
+further with you and offer our advice.
 
---------> price bands
-
------------> seat blocks
-
---------------> seats
-
-If you wish to retrieve individual seats and offer seat selection to your customer then you should include `add_seat_blocks` in your request. If the event is seated and the supplier system supports seat selection then we will return seat blocks containing seats. You can check for the presence of the seat blocks to determine whether you can offer seat selection to your customer. Note that implementing seat selection can be quite involved because you need to integrate a third-party seat renderer or implement your own - we are happy to discuss this further with you and offer our advice. 
+<aside class="notice">Particularly in the UK market, offers are classified as 
+either "discounted face value" or "no booking fee". Discounted face value 
+offers have an offer seatprice that is lower than the full price seatprice (and
+normally they have an offer surcharge of zero). No booking fee offers have
+an offer seatprice equal to the full price seatprice, and an offer surcharge
+equal to zero. The standard is to not display a saving percentage for no booking
+fee offers (some suppliers do not like their offers to show as percentage 
+discounts), and instead display "No fees" or similar.</aside>
 
 This example response is for best available - following this there is an example response that includes seats.
 
@@ -230,8 +238,8 @@ Attribute | Description
 `backend_is_down` | When `true` the supplier system cannot be contacted for some reason, for example they are having technical problems or scheduled maintenance. The response will include empty availability in this case. This is an exceptional circumstance; to check if there is currently a supplier system issue you can check our [status page](https://status.ingresso.co.uk/).
 `backend_throttle_failed` | We allow a certain number of simultaneous requests to hit a supplier system and queue requests when the limit is reached. When this attribute is `true` your request has been sitting in our queue for a long time and we have timed out the request. This is an exceptional circumstance.
 `can_leave_singles` | In most cases this is `true`. When `false` the supplier ticketing system does not allow us to leave single seats (which are difficult to sell). TODO add more detail to this - what should an api user do when this is false?
-`contiguous_seat_selection_only` | If you have requested individual seats a value of `true` indicates that you can only select consecutive seats. `false` indicates that you can select seats without restriction *within a single ticket type and price band*. In most cases this will be `false`. If you would like to allow your customers to select seats without restriction across price bands and ticket types, you need to add multiple orders to a [trolley](#trolley), one order for each price band. However there are currently some restrictions enforced so if you want to do this you will need to contact us first api@ingresso.co.uk.
-`currency` | The [currency](#currency-object) of the availability
+`contiguous_seat_selection_only` | If you have requested individual seats a value of `true` indicates that you can only select consecutive seats. `false` indicates that you can select seats without restriction *within a single ticket type and price band*. In most cases this will be `false`. If you would like to allow your customers to select seats without restriction across price bands and ticket types, you need to add multiple orders to a [trolley](#trolley), one order for each price band. However there are currently some restrictions enforced so if you want to do this you will need to contact us first api@ingresso.co.uk
+`currency` | The [currency](#currency-object) of the availability.
 `quantity_options` | The valid [quantity options](#quantity-options-object), a rare example is that some tickets can only be purchased in pairs.
 
 
@@ -287,11 +295,11 @@ can embed our seat selection widget within your site.</aside>
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/availability.v1/demo \
-        -d "user_passwd=demopass" \
-        -d "perf_id=3CVB-22" \
-        -d "add_seat_blocks" \
-        -G
+curl https://api.ticketswitch.com/f13/availability.v1 \
+    -u "demo:demopass" \
+    -d "perf_id=3CVB-22" \
+    -d "add_seat_blocks" \
+    -G
 ```
 
 Parameter | Description
@@ -803,7 +811,7 @@ The response includes the following attributes in the `seat_block`:
 Attribute | Description
 --------- | -----------
 `block_length` | The number of seats in the block. Seats are included in the same seat block when they are contiguous. 
-`id_details` | The description of an individual seat.
+`id_details` | An array of individual seats. The array order determines whether seats are contiguous, so when `contiguous_seat_selection_only` = `true` then you can only reserve seats that are in a continuous order in the array.
 `id_details.col_id` | The column identifier, normally a number.
 `id_details.full_id` | The unique identifier for the seat.
 `id_details.is_restricted_view` | `true` if the seat is marked as having a restricted view.
@@ -829,11 +837,11 @@ no need to also request example seats.
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/availability.v1/demo \
-        -d "user_passwd=demopass" \
-        -d "perf_id=3CVB-22" \
-        -d "add_example_seats" \
-        -G
+curl https://api.ticketswitch.com/f13/availability.v1 \
+    -u "demo:demopass" \
+    -d "perf_id=3CVB-22" \
+    -d "add_example_seats" \
+    -G
 ```
 
 Parameter | Description
@@ -1070,11 +1078,11 @@ subtract commission from the total ticket price (`sale_seatprice` +
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/availability.v1/demo \
-        -d "user_passwd=demopass" \
-        -d "perf_id=6IF-B0I" \
-        -d "add_user_commission" \
-        -G
+curl https://api.ticketswitch.com/f13/availability.v1 \
+    -u "demo:demopass" \
+    -d "perf_id=6IF-B0I" \
+    -d "add_user_commission" \
+    -G
 ```
 
 Parameter | Description
@@ -1313,11 +1321,11 @@ of available tickets.
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/availability.v1/demo \
-        -d "user_passwd=demopass" \
-        -d "perf_id=6IF-B0I" \
-        -d "add_discounts" \
-        -G
+curl https://api.ticketswitch.com/f13/availability.v1 \
+    -u "demo:demopass" \
+    -d "perf_id=6IF-B0I" \
+    -d "add_discounts" \
+    -G
 ```
 
 Parameter | Description
@@ -1755,5 +1763,7 @@ Parameter | Description
 }
 ```
 
-
-The response includes a `possible_discounts` dictionary, that contains a list of discounts (or concessions) that are available on each price band. Each discount contains the same price band attributes that are returned in [availability](#availability).
+The response includes a `possible_discounts` dictionary, that contains a list of
+discounts (or concessions) that are available on each price band. Each discount
+contains the same price band attributes that are returned in
+[availability](#availability).

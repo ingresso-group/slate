@@ -1,15 +1,28 @@
 <!---
 # TODOs / Questions
 
-* Add a note in reserve about `seat_request_status` - add a blue note warning that you can receive seats you didn't ask for, if you don't want them you must release them, sometimes it will not be possible to reserve particular seats (eg if they leave a single) so good to suggest to customers not to select the same ones again
-* Matt to explain how to distinguish between these no booking fee and discounted face value offers in events / perfs / availability
+* WHAT ABOUT THIS:
+The username must be passed in explicitly as part of the path, being the
+component after the '.v1'. Some of our partners require sub users for certain
+use cases such as running their own affiliate programme; if a sub  user is to be
+passed in  then this should be the second component, and any explicit language,
+overriding the HTTP header, as the third. A '-' anywhere in this set of three
+path components is treated as a placehold for the information not being passed -
+i.e. it is ignored. So you can, for example, call json_events as 'demo' with a
+language of 'de' like this.:
+
+`/f13/events.v1/demo/-/de?user_passwd=demopass`
+
+The sub user there is not set to '-', instead it is treated as unset 
+and can be passed in as a query string argument if desired.
+
 * Matt to add docs for cities and categories
-* Matt to include detail on how user authentication works now, and what our recommended approach is
 * Matt to include a section describing how our caching works
 * Matt to add a test meta event, and refer to this in the test intro section and wherever meta events are mentioned.
+* Purchase
+* Transaction Info
 
 * Error codes need to be added everywhere by Pete.
-
 
 * Pete to default self_print_mode to html - this normally confuses distributors
 * Amazon suggested we return a 429 - TOO MANY REQUESTS when we return backend_call_failed or backend_call_throttling_failed. Should we use http status codes in this type of case? These cases are an exception where they don't really look like errors (initially by design...)
@@ -105,15 +118,6 @@ Click below to import our collection of API examples.
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://www.getpostman.com/collections/7c834c45808672b158a7)
 
-## How to get access to the API
-
-All examples shown in this documentation are for the `demo` user. This user has
-access to test product only - you can make purchases with this  user without any
-impact on live tickets, or any need to contact us first.
-
-If you would like your own API credentials in order to start selling please 
-email us: api@ingresso.co.uk
-
 
 ## Philosophy
 
@@ -174,6 +178,7 @@ send your customer to our white label website for checkout. It is possible for
 Ingresso to then redirect the customer back to your confirmation page if the
 purchase is successful.
 
+
 ## Payment Options
 
 If you use the checkout page of Ingresso's white label website, then Ingresso
@@ -196,28 +201,44 @@ by Ingresso. This is not typically offered to partners - if you think this is
 required please contact us: api@ingresso.co.uk.
 
 
+## How to get access to the API
+
+All examples shown in this documentation are for the `demo` user. This user has
+access to test product only - you can make purchases with this  user without any
+impact on live tickets, or any need to contact us first.
+
+If you would like your own API credentials in order to start selling please 
+email us: api@ingresso.co.uk
+
+
 ## Authentication
 
-The username and password should be passed in to every resource. 
-(TODO does it only need to be set once for the client libraries?)
+> **Example request**
 
-The password must be passed in the query string with `user_passwd`.
+```shell
+curl https://api.ticketswitch.com/f13/events.v1 \
+    -u "demo:demopass" \
+    -d "s_keys=matthew" \
+    -d "s_coco=uk" \
+    -G
+```
 
-The username must be passed in explicitly as part of the path, being the
-component after the '.v1'. Some of our partners require sub users for certain
-use cases such as running their own affiliate programme; if a sub  user is to be
-passed in  then this should be the second component, and any explicit language,
-overriding the HTTP header, as the third. A '-' anywhere in this set of three
-path components is treated as a placehold for the information not being passed -
-i.e. it is ignored. So you can, for example, call json_events as 'demo' with a
-language of 'de' like this.:
+```python
+from pyticketswitch import Client
 
-`/f13/events.v1/demo/-/de?user_passwd=demopass`
+client = Client(user='demo', password='demopass')
+```
 
-The sub user there is not set to '-', instead it is treated as unset 
-and can be passed in as a query string argument if desired.
+Authenticate when using the API by including your username and password in the 
+request. Authentication to the API is performed via 
+[HTTP Basic Auth](https://en.wikipedia.org/wiki/Basic_access_authentication). 
 
+<aside class="notice">Please ensure you keep your username and password secret - do not share 
+these in publicly accessible areas such GitHub, client-side code, etc.</aside>
 
+<blockquote class="lang-specific shell">
+curl uses the -u flag to pass basic auth credentials in the format user:password.
+</blockquote>
 
 
 ## Errors

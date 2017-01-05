@@ -3,7 +3,7 @@
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/f13/discounts.v1/{username}?user_passwd={password}&perf_id={performanceid}&price_band_code={pricebandcode}&ticket_type_code={tickettypecode}
+GET https://api.ticketswitch.com/f13/discounts.v1?perf_id={performanceid}&price_band_code={pricebandcode}&ticket_type_code={tickettypecode}
 ```
 
 A **discount** represents a price type or concession that is available for a 
@@ -29,12 +29,12 @@ even when there are multiple `discounts`, but that is not recommended.
 > **Example request - price band**
 
 ```shell
-curl https://api.ticketswitch.com/f13/discounts.v1/demo \
-        -d "user_passwd=demopass" \
-        -d "perf_id=6IF-B0I" \
-        -d "price_band_code=A/pool" \
-        -d "ticket_type_code=CIRCLE" \
-        -G
+curl https://api.ticketswitch.com/f13/discounts.v1 \
+    -u "demo:demopass" \
+    -d "perf_id=6IF-B0I" \
+    -d "price_band_code=A/pool" \
+    -d "ticket_type_code=CIRCLE" \
+    -G
 ```
 
 ### Request

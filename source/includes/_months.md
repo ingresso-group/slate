@@ -1,7 +1,7 @@
 # Months
 
 ```
-GET https://api.ticketswitch.com/f13/months.v1/{username}?user_passwd={password}&event_id={eventid}
+GET https://api.ticketswitch.com/f13/months.v1?event_id={eventid}
 ```
 
 This resource gives a summary of the availability across a calendar month
@@ -13,8 +13,8 @@ the need to summarise performance-level data in your application.
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/months.v1/demo \
-    -d "user_passwd=demopass" \
+curl https://api.ticketswitch.com/f13/months.v1 \
+    -u "demo:demopass" \
     -d "event_id=6IF" \
     -G
 ```
@@ -134,7 +134,6 @@ Parameter | Description
 ```
 
 ### Response
-
 
 <aside class="language-specific shell notice">
     This resource returns bitmasks in some fields, for more information on how
