@@ -1,30 +1,15 @@
 <!---
 # TODOs / Questions
 
-* WHAT ABOUT THIS:
-The username must be passed in explicitly as part of the path, being the
-component after the '.v1'. Some of our partners require sub users for certain
-use cases such as running their own affiliate programme; if a sub  user is to be
-passed in  then this should be the second component, and any explicit language,
-overriding the HTTP header, as the third. A '-' anywhere in this set of three
-path components is treated as a placehold for the information not being passed -
-i.e. it is ignored. So you can, for example, call json_events as 'demo' with a
-language of 'de' like this.:
-
-`/f13/events.v1/demo/-/de?user_passwd=demopass`
-
-The sub user there is not set to '-', instead it is treated as unset 
-and can be passed in as a query string argument if desired.
-
+* Status
+* Note re similarity of trolley object across calls
 * Matt to add docs for cities and categories
 * Matt to include a section describing how our caching works
 * Matt to add a test meta event, and refer to this in the test intro section and wherever meta events are mentioned.
 * Purchase
-* Transaction Info
 
 * Error codes need to be added everywhere by Pete.
 
-* Pete to default self_print_mode to html - this normally confuses distributors
 * Amazon suggested we return a 429 - TOO MANY REQUESTS when we return backend_call_failed or backend_call_throttling_failed. Should we use http status codes in this type of case? These cases are an exception where they don't really look like errors (initially by design...)
 * There are a number of places where the JSON object nesting isn't as simple as it could be. Eg instead of "event_upsell_list": ["6IE","MH0"] we have:
   "event_upsell_list": {
@@ -119,19 +104,57 @@ Click below to import our collection of API examples.
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://www.getpostman.com/collections/7c834c45808672b158a7)
 
 
-## Philosophy
-
-* Returned data is as simple as possible for the task in-hand
-
-* Transacton flow is as simple as possible for the task in hand (TODO this isn't
-clear enough)
-
-* Default missing parameters sensibly instead of erroring
-
-* Always try and complete a call in some way instead of erroring
-
-
 ## Basic booking flow
+
+> **List events with prices and standard image**
+
+```shell
+curl https://demo.ticketswitch.com/f13/events.v1 \
+    -u "demo:demopass" \
+    -d "req_cost_range" \
+    -d "req_media_triplet_one" \
+    -G
+```
+
+> **List performances for event ID 6IF**
+
+```shell
+curl https://demo.ticketswitch.com/f13/performances.v1 \
+    -u "demo:demopass" \
+    -d "event_id=6IF" \
+    -d "page_len=200" \
+    -G
+```
+
+> **Display availability for the 9th May performance**
+
+```shell
+curl https://demo.ticketswitch.com/f13/availability.v1 \
+    -u "demo:demopass" \
+    -d "perf_id=6IF-B0T" \
+    -G
+```
+
+> **Reserve 2 tickets in price band A in the Circle**
+
+```shell
+curl https://demo.ticketswitch.com/f13/reserve.v1 \
+    -u "demo:demopass" \
+    -d "perf_id=6IF-B0T" \
+    -d "ticket_type_code=CIRCLE" \
+    -d "price_band_code=A/pool" \
+    -d "no_of_seats=2" \
+    -G
+```
+
+> **Purchase the tickets**
+
+```shell
+curl https://demo.ticketswitch.com/f13/purchase.v1 \
+    -u "demo:demopass" \
+    -d "transaction_uuid=XXXXXXXX" \
+    -G
+```
 
 The Ingresso API supports multiple use cases and variations, but below is a 
 typical workflow:
@@ -143,9 +166,20 @@ typical workflow:
 * Retrieve [availability](#availability) for a performance, including seat
 numbers if the event is seated.
 
+* *Optionally you can request [discounts](#discounts) for the selected tickets,
+and purchase multiple items at once by adding them to a [trolley](#trolley).*
+
 * [reserve](#reserve) tickets for a set period of time.
 
 * [purchase](#purchase) the reserved tickets.
+
+
+## Philosophy
+
+* Returned data is as simple as possible for the task in-hand
+* Transaction flow is as simple as possible for the task in hand
+* Default missing parameters sensibly instead of erroring
+* Always try and complete a call in some way instead of erroring
 
 
 ## Types of API integration
@@ -216,7 +250,7 @@ email us: api@ingresso.co.uk
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/events.v1 \
+curl https://demo.ticketswitch.com/f13/events.v1 \
     -u "demo:demopass" \
     -d "s_keys=matthew" \
     -d "s_coco=uk" \
@@ -229,6 +263,17 @@ from pyticketswitch import Client
 client = Client(user='demo', password='demopass')
 ```
 
+> Connect as the `demosub` subuser with Dutch as the preferred language
+
+```shell
+curl https://demo.ticketswitch.com/f13/events.v1/demo/demosub/nl \
+    -u "demo:demopass" \
+    -d "s_keys=matthew" \
+    -d "req_extra_info" \
+    -G
+```
+
+
 Authenticate when using the API by including your username and password in the 
 request. Authentication to the API is performed via 
 [HTTP Basic Auth](https://en.wikipedia.org/wiki/Basic_access_authentication). 
@@ -239,6 +284,23 @@ these in publicly accessible areas such GitHub, client-side code, etc.</aside>
 <blockquote class="lang-specific shell">
 curl uses the -u flag to pass basic auth credentials in the format user:password.
 </blockquote>
+
+
+Two additional parameters can be included to control the user you connect with:
+
+1. Some of our partners require sub users for certain use cases such as running 
+their own affiliate programme.
+
+2. It is possible to pass in a preferred language, overriding the HTTP header. 
+
+These parameters are included in the URL after the version:
+
+`/f13/events.v1/USER/SUBUSER/LANG_CODE`
+
+Using a '-' for the subuser or language code will cause it to be ignored, so to
+ignore the subuser:
+
+`/f13/events.v1/USER/-/LANG_CODE`
 
 
 ## Errors
@@ -262,8 +324,8 @@ page](https://status.ingresso.co.uk/).
 The output from a given resource may be augmented beyond the
 basic result in one of two ways. Firstly there are extra functions
 which may be availble for a given resource, which are specific to
-that resource. These are triggered using variables with the prefix `add_`
-or `include_` such as `add_discount_codes` on the availability resource which
+that resource. These are triggered using variables with the prefix `add_` 
+such as `add_discount_codes` on the availability resource which
 is used to control whether or not discount codes are also retrieved and
 returned.
 
@@ -274,7 +336,7 @@ with many extra pieces of information about it. These varaibles are all prefixed
 with `req_` as they are requests to the objects to output something extra or
 different about themselves, for example `req_cost_range`.
 
-Note that the `req_` and `add_` / `include_` variables all result in extra
+Note that the `req_` and `add_` variables all result in extra
 processing to retrieve the requested data, which will slow down the resource,
 sometimes substantially. They should therefore only be used where necessary.
 
@@ -307,7 +369,7 @@ pyticketswitch.Core()
 import pyticketswitch
 
 api = pyticketswitch.Core(
-        url='https://api.ticketswitch.com/tickets/xml_core.exe',
+        url='https://demo.ticketswitch.com/tickets/xml_core.exe',
         username='demo',
         password='demopass',
 )
@@ -378,17 +440,10 @@ Some of the test events have specific conditions that you can check:
 - Flamingoland family passes (6KU) are not valid on Mondays
 
 
-## API Variations
-
-TODO is it worth describing some high-level variations here? Freesale,
-allocation, seated, seat selection, no performances, no perf times eg
-goldentours (we should also fix this).
-
-
 ## Versioning
 
 The API version forms part of the URL, for example
-https://api.ticketswitch.com/f13/events.v1 uses version 1. We will always
+https://demo.ticketswitch.com/f13/events.v1 uses version 1. We will always
 endeavour to add functionality and make changes in a backward-compatible manner,
 but when that is not possible we will implement a new version. We will then
 introduce a deprecation schedule for the replaced version and notify all

@@ -1,7 +1,7 @@
 # Months
 
 ```
-GET https://api.ticketswitch.com/f13/months.v1?event_id={eventid}
+GET https://demo.ticketswitch.com/f13/months.v1?event_id={eventid}
 ```
 
 This resource gives a summary of the availability across a calendar month
@@ -13,7 +13,7 @@ the need to summarise performance-level data in your application.
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/months.v1 \
+curl https://demo.ticketswitch.com/f13/months.v1 \
     -u "demo:demopass" \
     -d "event_id=6IF" \
     -G

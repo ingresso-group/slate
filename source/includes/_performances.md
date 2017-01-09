@@ -33,7 +33,7 @@ These two resources are described below, followed by detail of the
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/f13/performances.v1?event_id={eventid}
+GET https://demo.ticketswitch.com/f13/performances.v1?event_id={eventid}
 ```
 
 This call returns a list of performances for a particular event. The list is
@@ -56,7 +56,7 @@ Typical use cases:
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/performances.v1 \
+curl https://demo.ticketswitch.com/f13/performances.v1 \
     -u "demo:demopass" \
     -d "event_id=6IF" \
     -d "page_len=10" \
@@ -343,7 +343,7 @@ Attribute | Description
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/f13/performances_by_id.v1?perf_id_list={perfidlist}
+GET https://demo.ticketswitch.com/f13/performances_by_id.v1?perf_id_list={perfidlist}
 ```
 
 This resource is used to return detail for one or more performances by their ID.
@@ -361,7 +361,7 @@ this in most cases.
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/performances_by_id.v1 \
+curl https://demo.ticketswitch.com/f13/performances_by_id.v1 \
     -u "demo:demopass" \
     -d "perf_id_list=6IF-A8J,6IF-A8K" \
     -G
@@ -501,7 +501,7 @@ price.</aside>
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/performancess_by_id.v1 \
+curl https://demo.ticketswitch.com/f13/performancess_by_id.v1 \
     -u "demo:demopass" \
     -d "perf_id_list=6L9-M2R" \
     -d "req_cost_range" \
@@ -737,7 +737,7 @@ data up to date - please contact us instead to discuss options
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/performances_by_id.v1 \
+curl https://demo.ticketswitch.com/f13/performances_by_id.v1 \
     -u "demo:demopass" \
     -d "perf_id_list=6IF-A8K" \
     -d "req_avail_details" \

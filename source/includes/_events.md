@@ -31,7 +31,7 @@ accidentally returned.
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/f13/events.v1
+GET https://demo.ticketswitch.com/f13/events.v1
 ```
 
 ### Request
@@ -39,7 +39,7 @@ GET https://api.ticketswitch.com/f13/events.v1
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/events.v1 \
+curl https://demo.ticketswitch.com/f13/events.v1 \
     -u "demo:demopass" \
     -d "s_keys=matthew" \
     -d "s_coco=uk" \
@@ -300,7 +300,7 @@ Attribute | Description
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/f13/events_by_id.v1?event_id_list={eventidlist}
+GET https://demo.ticketswitch.com/f13/events_by_id.v1?event_id_list={eventidlist}
 ```
 
 This resource returns detail for one or more specific events by their ID. It
@@ -309,7 +309,7 @@ returns a dictionary of events keyed on the event's `event_id`.
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/events_by_id.v1 \
+curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
     -u "demo:demopass" \
     -d "event_id_list=6IF,6IE" \
     -G
@@ -586,7 +586,7 @@ all media requests are consolidated.
 > **Example Request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/events_by_id.v1 \
+curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
     -u "demo:demopass" \
     -d "event_id_list=6IF" \
     -d "req_media_triplet_one" \
@@ -928,7 +928,7 @@ many events are being returned.
 
 ```shell
 
-curl https://api.ticketswitch.com/f13/events_by_id.v1 \
+curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
     -u "demo:demopass" \
     -d "event_id_list=6IF" \
     -d "req_extra_info" \
@@ -1142,7 +1142,7 @@ our user reviews as well.
 > **Example Request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/events_by_id.v1 \
+curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
     -u "demo:demopass" \
     -d "event_id_list=6IF" \
     -d "req_reviews" \
@@ -1314,7 +1314,7 @@ price.</aside>
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/events_by_id.v1 \
+curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
     -u "demo:demopass" \
     -d "event_id_list=6L9" \
     -d "req_cost_range" \
@@ -1588,7 +1588,7 @@ the parent event object.
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/events_by_id.v1 \
+curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
     -u "demo:demopass" \
     -d "event_id_list=6IF" \
     -d "req_cost_range_details" \
@@ -2089,7 +2089,7 @@ data up to date - please contact us instead to discuss options
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/events_by_id.v1 \
+curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
     -u "demo:demopass" \
     -d "event_id_list=6IF" \
     -d "req_avail_details" \
@@ -2541,6 +2541,7 @@ Attribute | Description
 `price_band_code` | The identifier of the price band, this can be used later in the [trolley](#trolley) or [reserve](#reserve) resource.
 `price_band_desc` | A human readable description of the price band if applicable.
 `avail_details` | A list of the prices in this price band and when they are available.
+
 
 The **avail details** indicate which prices we have seen and when they are expected
 to be available. If the `req_avail_details_with_perfs` parameter was included 

@@ -21,6 +21,7 @@ includes:
   - reserve
   - release
   - purchase
+  - status
   - bitmask_fields
   - caching
 

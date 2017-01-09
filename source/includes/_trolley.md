@@ -3,7 +3,7 @@
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/f13/trolley.v1
+GET https://demo.ticketswitch.com/f13/trolley.v1
 ```
 
 A `trolley` allows multiple orders to be purchased in a single transaction.
@@ -28,7 +28,7 @@ used to identify your trolley as you add or remove orders.
 > **Example request - adding best available tickets to a new trolley, specifying specific discount codes**
 
 ```shell
-curl https://api.ticketswitch.com/f13/trolley.v1 \
+curl https://demo.ticketswitch.com/f13/trolley.v1 \
     -u "demo:demopass" \
     -d "perf_id=6IF-A7N" \
     -d "ticket_type_code=CIRCLE" \
@@ -56,7 +56,7 @@ trolley = client.get_trolley(
 > **Example request - adding specific seats to an existing trolley**
 
 ```shell
-curl https://api.ticketswitch.com/f13/trolley.v1 \
+curl https://demo.ticketswitch.com/f13/trolley.v1 \
     -u "demo:demopass" \
     -d "trolley_token=U3--tgaXeGJ3jY8-7bxaEyEcKhrbmYsrFkLAQh2wn89J9IFevORBYwlCveIJxP51WpqbA0tih8NmBuDvAegm37cFhVZA7yIGKjbEIetqsk2z_MGFMfiY9f11oM3MOpxlcLLE7vehHd5qyL4ozVZNtTOtxrJHhntmDqb-SyNhtAD0xWakXhUPlGVqQvnqQ2feu0moVJ_Wn9ROLz8C6p65Epz6kxGYBaNg0zkAawIttK3IY1LbiRxEHS10-R-7f0FVbg9kq0X6S8oIiWwjCqYJ9OEktXo-bdasYe4wu0yfki9N4WmuDrpTBgOkS7618nMbTvpYzPPacne8hGRCmH6e3GjPRtvZAilpaol5rKX3zgjN30cpLpsXpFo7ZZkJXOr5YMj-rNTXs0xg3trhrePeOdFFjTuN06iHrX2W2ylETgQ4hS2uXZoBVNmg4R8IQqvq4xuMmvRMYz2kXkC5wJF7pAG9J0--Z" \
     -d "perf_id=3CVB-22" \
@@ -72,7 +72,7 @@ curl https://api.ticketswitch.com/f13/trolley.v1 \
 > **Example request - view the current state of the trolley**
 
 ```shell
-curl https://api.ticketswitch.com/f13/trolley.v1 \
+curl https://demo.ticketswitch.com/f13/trolley.v1 \
     -u "demo:demopass" \
     -d "trolley_token=M6--Th1yy_GMHYp_pxuZpgPYa43h-4JJKgwOsTKiSmME9f69ngTVVFnFtyBIDwWfhC59oV4RtGbj_t-hw_U75AHoSbNaxMHOWSzGFBZNceuo7AtApIckL-qbs3700lw2N9zTX12LLHVBSqhRpYEFc7twQ_k5BwieJeLLpHTM9LnB48-BbPT-0tBn9Ylq_a3Y3RHFXZChWiYmsdxsYRE-kgktxd_pdFyGTZNN_mazMGwQFxYQ99nUXVmRsRYeV29d9CKVI1fv6mR81iapKdYiEm1U0r8A5fmdCTFlLO8majLLI07ktEjXzgA63oOa5DoRHTOcD-U6gsOLied869nVXJQWkx6lvBr6InrLdEefg5sDK0WLVFNJ9WT9QsG4Y7opYcOdx6K6U0i7L9f88_d0iurc-FkpC2ils1M21OJY-8_eQvuw1SPqqvqcLqCpR6OnRRGA3vS1LIhtgavvtZ95MvQpBH3DgAwXJtiYdjsXmIlor2pqbfiaZfQXwuC1e8yoNUIBe_yBtsOQnweyoJfIyYOayiajXbOIblwwSiJEJCnDHAaE9jo9kQRu4NdDHNd-O5IoumIoxhj7NIjl6vIb_Klu1wzB7AjeNL4TNubgMMlThGO4TyNrXsww72M_fGQO2pXCkLwXGpLckCqTAUIrNKz7v6Rs-4X3TWaNIcaAbz-Zw5lIboJoPLRgBETn02GHx00gcI1-RT8zxI9-Z" \
     -G
@@ -95,7 +95,7 @@ trolley = client.get_trolley(
 > **Example request - removing the first order from the trolley**
 
 ```shell
-curl https://api.ticketswitch.com/f13/trolley.v1 \
+curl https://demo.ticketswitch.com/f13/trolley.v1 \
     -u "demo:demopass" \
     -d "trolley_token=M6--Th1yy_GMHYp_pxuZpgPYa43h-4JJKgwOsTKiSmME9f69ngTVVFnFtyBIDwWfhC59oV4RtGbj_t-hw_U75AHoSbNaxMHOWSzGFBZNceuo7AtApIckL-qbs3700lw2N9zTX12LLHVBSqhRpYEFc7twQ_k5BwieJeLLpHTM9LnB48-BbPT-0tBn9Ylq_a3Y3RHFXZChWiYmsdxsYRE-kgktxd_pdFyGTZNN_mazMGwQFxYQ99nUXVmRsRYeV29d9CKVI1fv6mR81iapKdYiEm1U0r8A5fmdCTFlLO8majLLI07ktEjXzgA63oOa5DoRHTOcD-U6gsOLied869nVXJQWkx6lvBr6InrLdEefg5sDK0WLVFNJ9WT9QsG4Y7opYcOdx6K6U0i7L9f88_d0iurc-FkpC2ils1M21OJY-8_eQvuw1SPqqvqcLqCpR6OnRRGA3vS1LIhtgavvtZ95MvQpBH3DgAwXJtiYdjsXmIlor2pqbfiaZfQXwuC1e8yoNUIBe_yBtsOQnweyoJfIyYOayiajXbOIblwwSiJEJCnDHAaE9jo9kQRu4NdDHNd-O5IoumIoxhj7NIjl6vIb_Klu1wzB7AjeNL4TNubgMMlThGO4TyNrXsww72M_fGQO2pXCkLwXGpLckCqTAUIrNKz7v6Rs-4X3TWaNIcaAbz-Zw5lIboJoPLRgBETn02GHx00gcI1-RT8zxI9-Z" \
     -d "remove_items_list=1" \

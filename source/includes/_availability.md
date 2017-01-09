@@ -3,7 +3,7 @@
 > **Definition**
 
 ```
-GET https://api.ticketswitch.com/f13/availability.v1?perf_id={performanceid}
+GET https://demo.ticketswitch.com/f13/availability.v1?perf_id={performanceid}
 ```
 
 TODO:
@@ -29,7 +29,7 @@ We have a single availability resource that will return best available seating
 by default. This resource is described first, following by 
 [optional parameters](#optional-parameters) that can be passed to request 
 [individual seats](#individual-seats), [example seats](#example-seats), 
-[commission](#commission), and the [discounts](#discounts).
+[commission](#commission), and [discounts](#add-discounts).
 
 
 ## Availability
@@ -39,7 +39,7 @@ by default. This resource is described first, following by
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/availability.v1 \
+curl https://demo.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
     -d "perf_id=6IF-B0I" \
     -G
@@ -295,7 +295,7 @@ can embed our seat selection widget within your site.</aside>
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/availability.v1 \
+curl https://demo.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
     -d "perf_id=3CVB-22" \
     -d "add_seat_blocks" \
@@ -837,7 +837,7 @@ no need to also request example seats.
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/availability.v1 \
+curl https://demo.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
     -d "perf_id=3CVB-22" \
     -d "add_example_seats" \
@@ -1078,7 +1078,7 @@ subtract commission from the total ticket price (`sale_seatprice` +
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/availability.v1 \
+curl https://demo.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
     -d "perf_id=6IF-B0I" \
     -d "add_user_commission" \
@@ -1311,7 +1311,7 @@ Attribute | Description
 `commission_currency` | The currency of the commission amount.
 
 
-## Discounts
+## Add Discounts
 
 A `discount` represents a price type or concession that is available for a set
 of available tickets.
@@ -1321,7 +1321,7 @@ of available tickets.
 > **Example request**
 
 ```shell
-curl https://api.ticketswitch.com/f13/availability.v1 \
+curl https://demo.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
     -d "perf_id=6IF-B0I" \
     -d "add_discounts" \
