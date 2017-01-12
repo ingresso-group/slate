@@ -26,14 +26,14 @@ partner that is not releasing tickets when they should be.</aside>
 curl https://demo.ticketswitch.com/f13/release.v1 \
     -u "demo:demopass" \
     -d "transaction_uuid=f2158be3-d29e-11e6-8aab-0025903268dc" \
-    -G
+    -X POST
 ```
 
 ```python
 from pyticketswitch import Client
 
 client = Client('demo', 'demopass')
-TODO: FINISH ME NIC
+released = client.release_reservation('f2158be3-d29e-11e6-8aab-0025903268dc')
 ```
 
 Parameter | Description
@@ -49,6 +49,10 @@ Parameter | Description
 {
   "released_ok": true
 }
+```
+
+```python
+True
 ```
 
 This resource will return the same response when called multiple times.
