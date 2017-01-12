@@ -54,14 +54,20 @@ curl https://demo.ticketswitch.com/f13/reserve.v1 \
     -d "disc0=ADULT" \
     -d "disc1=CHILD" \
     -d "disc2=CHILD" \
-    -G
+    -X POST
 ```
 
 ```python
 from pyticketswitch import Client
 
 client = Client('demo', 'demopass')
-TODO: FINISH ME NIC
+reservation = client.make_reservation(
+    performance_id='6IF-A7N',
+    ticket_type_code='CIRCLE',
+    price_band_code='C/pool',
+    number_of_seats=3,
+    discounts=['ADULT', 'CHILD', 'CHILD']
+)
 ```
 
 
@@ -77,8 +83,22 @@ curl https://demo.ticketswitch.com/f13/reserve.v1 \
     -d "no_of_seats=2" \
     -d "seat0=C7" \
     -d "seat1=C8" \
-    -G
+    -X POST
 ```
+
+```python
+from pyticketswitch import Client
+
+client = Client('demo', 'demopass')
+reservation = client.make_reservation(
+    performance_id='3CVB-22',
+    ticket_type_code='UPP',
+    price_band_code='C/pool',
+    number_of_seats=2,
+    seats=['C7', 'C8']
+)
+```
+
 
 > **Example request - reserving orders previously added to a trolley**
 
@@ -86,14 +106,14 @@ curl https://demo.ticketswitch.com/f13/reserve.v1 \
 curl https://demo.ticketswitch.com/f13/reserve.v1 \
     -u "demo:demopass" \
     -d "trolley_token=M6--Th1yy_GMHYp_pxuZpgPYa43h-4JJKgwOsTKiSmME9f69ngTVVFnFtyBIDwWfhC59oV4RtGbj_t-hw_U75AHoSbNaxMHOWSzGFBZNceuo7AtApIckL-qbs3700lw2N9zTX12LLHVBSqhRpYEFc7twQ_k5BwieJeLLpHTM9LnB48-BbPT-0tBn9Ylq_a3Y3RHFXZChWiYmsdxsYRE-kgktxd_pdFyGTZNN_mazMGwQFxYQ99nUXVmRsRYeV29d9CKVI1fv6mR81iapKdYiEm1U0r8A5fmdCTFlLO8majLLI07ktEjXzgA63oOa5DoRHTOcD-U6gsOLied869nVXJQWkx6lvBr6InrLdEefg5sDK0WLVFNJ9WT9QsG4Y7opYcOdx6K6U0i7L9f88_d0iurc-FkpC2ils1M21OJY-8_eQvuw1SPqqvqcLqCpR6OnRRGA3vS1LIhtgavvtZ95MvQpBH3DgAwXJtiYdjsXmIlor2pqbfiaZfQXwuC1e8yoNUIBe_yBtsOQnweyoJfIyYOayiajXbOIblwwSiJEJCnDHAaE9jo9kQRu4NdDHNd-O5IoumIoxhj7NIjl6vIb_Klu1wzB7AjeNL4TNubgMMlThGO4TyNrXsww72M_fGQO2pXCkLwXGpLckCqTAUIrNKz7v6Rs-4X3TWaNIcaAbz-Zw5lIboJoPLRgBETn02GHx00gcI1-RT8zxI9-Z" \
-    -G
+    -X POST
 ```
 
 ```python
 from pyticketswitch import Client
 
 client = Client('demo', 'demopass')
-TODO: FINISH ME NIC
+reservation = client.make_reservation(token='M6--Th1yy_GMHYp_pxuZpgPYa43h-4JJKgwOsTKiSmME9f69ngTVVFnFtyBIDwWfhC59oV4RtGbj_t-hw_U75AHoSbNaxMHOWSzGFBZNceuo7AtApIckL-qbs3700lw2N9zTX12LLHVBSqhRpYEFc7twQ_k5BwieJeLLpHTM9LnB48-BbPT-0tBn9Ylq_a3Y3RHFXZChWiYmsdxsYRE-kgktxd_pdFyGTZNN_mazMGwQFxYQ99nUXVmRsRYeV29d9CKVI1fv6mR81iapKdYiEm1U0r8A5fmdCTFlLO8majLLI07ktEjXzgA63oOa5DoRHTOcD-U6gsOLied869nVXJQWkx6lvBr6InrLdEefg5sDK0WLVFNJ9WT9QsG4Y7opYcOdx6K6U0i7L9f88_d0iurc-FkpC2ils1M21OJY-8_eQvuw1SPqqvqcLqCpR6OnRRGA3vS1LIhtgavvtZ95MvQpBH3DgAwXJtiYdjsXmIlor2pqbfiaZfQXwuC1e8yoNUIBe_yBtsOQnweyoJfIyYOayiajXbOIblwwSiJEJCnDHAaE9jo9kQRu4NdDHNd-O5IoumIoxhj7NIjl6vIb_Klu1wzB7AjeNL4TNubgMMlThGO4TyNrXsww72M_fGQO2pXCkLwXGpLckCqTAUIrNKz7v6Rs-4X3TWaNIcaAbz-Zw5lIboJoPLRgBETn02GHx00gcI1-RT8zxI9-Z')
 ```
 
 Note that the request parameters and response attributes are similar to
@@ -443,6 +463,199 @@ Parameter | Description
   },
   "unreserved_orders": []
 }
+```
+
+```python
+from pyticketswitch.reservation import Reservation
+from pyticketswitch.country import Country
+from pyticketswitch.address import Address
+from pyticketswitch.trolley import Trolley
+from pyticketswitch.bundle import Bundle
+from pyticketswitch.currency import Currency
+from pyticketswitch.order import TicketOrder, Order
+from pyticketswitch.event import Event
+
+Reservation(
+    needs_payment_card=False,
+    needs_email_address=False,
+    needs_agent_reference=False,
+    allowed_countries = [
+        Country(code='ad', description='Andorra'),
+        Country(code='ae', description='United Arab Emirates'),
+        Country(code='af', description='Afghanistan'),
+        Country(code='ag', description='Antigua and Barbuda'),
+        Country(code='uk', description='United Kingdom'),
+        Country(code='um', description='The United States Minor Outlying Islands'),
+        Country(code='us', description='United States of America'),
+        Country(code='uy', description='Uruguay'),
+    ],
+    prefilled_address=Address(
+        lines=[],
+        country_code='uk',
+        county='',
+        email_address='',
+        postcode='',
+        town='',
+        home_phone='',
+        work_phone='',
+    ),
+    trolley=Trolley(
+        minutes_left=15,
+        transaction_uuid='0a50248e-cd0c-11e6-ae47-0025903268a2',
+        bundles=[
+            Bundle(
+                source_code='ext_test0',
+                description='External Test Backend 0',
+                total=52.5,
+                total_seatprice=51.0,
+                total_surcharge=0.0,
+                total_send_cost=1.5,
+                currency=Currency(code='gbp'),
+                orders=[
+                    Order(
+                        item=1,
+                        price_band_code='C/pool',
+                        ticket_type_code='CIRCLE',
+                        ticket_type_description='Upper Circle',
+                        number_of_seats=3,
+                        total_seatprice=51.0,
+                        total_surcharge=0,
+                        seat_request_status='not_requested',
+                        event=Event(
+                            id='6IF',
+                            status='live',
+                            description='Matthew Bourne\'s Nutcracker TEST',
+                            source='External Test Backend 0',
+                            event_type='simple_ticket',
+                            venue='Sadler\'s Wells',
+
+                            classes=['Arts & Culture'],
+                            filters=[],
+
+                            postcode='EC1R 4TN',
+                            city='London',
+                            country='United Kingdom',
+                            country_code='uk',
+                            latitude=51.52961137,
+                            longditude=-0.10601562,
+
+                            max_running_time=120,
+                            min_running_time=120,
+
+                            show_performance_time=True,
+                            has_performances=True,
+                            is_seated=True,
+                            needs_departure_date=False,
+                            needs_duration=False,
+                            needs_performance=True,
+
+                            upsell_list=['6IE', 'MH0'],
+                        ),
+                        performance=Performance(
+                            id='6IF-A7N',
+                            event_id='6IF',
+                            date_time=datetime.datetime(2017, 1, 15, 19, 30, 0),
+                            has_pool_seats=True,
+                            is_limited=False,
+                        ),
+                        ticket_orders=[
+                            TicketOrder(
+                                code='ADULT',
+                                description='Adult standard',
+                                number_of_seats=1,
+                                total_seatprice=25.0,
+                                total_surcharge=0.0,
+                                disallowed_mask=0,
+                                seats=[
+                                    Seat(id_='GQ361', column='361', row='GQ'),
+                                ]
+                            ),
+                            TicketOrder(
+                                code='CHILD',
+                                description='Child rate',
+                                number_of_seats=2,
+                                total_seatprice=26.0,
+                                total_surcharge=0.0,
+                                disallowed_mask=0,
+                                seats=[
+                                    Seat(id_='GQ358', column='358', row='GQ'),
+                                    Seat(id_='GQ355', column='355', row='GQ'),
+                                ]
+                            )
+                        ],
+                    ),
+                ]
+            ),
+            Bundle(
+                source_code='ingresso_one_test',
+                description='Ingresso',
+                total=40.0,
+                total_seatprice=0.0,
+                total_surcharge=0.0,
+                total_send_cost=0.0,
+                currency=Currency(code='gbp'),
+                orders=[
+                    Order(
+                        item=2,
+                        price_band_code='C/pool',
+                        ticket_type_code='CIRCLE',
+                        ticket_type_description='Upper Circle',
+                        number_of_seats=3,
+                        total_seatprice=51.0,
+                        total_surcharge=0,
+                        seat_request_status='got_all',
+                        event=Event(
+                            id='3CVB',
+                            status='live',
+                            description='Test Event - Type 10 (d)',
+                            source='ingresso_one_test',
+                            event_type='simple_ticket',
+                            venue='Belfast Tours Ltd',
+                            classes=['Theater'],
+                            postcode='BT1 2BE',
+                            country='United Kingdom',
+                            country_code='uk',
+                            latitude=10,
+                            longditude=20,
+                            show_performance_time=True,
+                            has_performances=True,
+                            is_seated=True,
+                            needs_departure_date=False,
+                            needs_duration=False,
+                            needs_performance=True,
+                        ),
+                        performance=Performance(
+                            id='3CVB-22',
+                            event_id='3CVB',
+                            date_time=datetime.datetime(2017, 2, 10, 20, 0, 0),
+                            has_pool_seats=True,
+                            is_limited=False,
+                        ),
+                        requested_seats=[
+                            Seat(id_='C7', column='7', row='C'),
+                            Seat(id_='C8', column='8', row='C'),
+                        ],
+                        ticket_orders=[
+                            TicketOrder(
+                                code='RED/RED/1',
+                                description='FULL PRICE',
+                                number_of_seats=2,
+                                total_seatprice=40.0,
+                                total_surcharge=0.0,
+                                disallowed_mask=0,
+                                seats=[
+                                    Seat(id_='C7', column='7', row='C'),
+                                    Seat(id_='C8', column='8', row='C'),
+                                ],
+                            ),
+                        ],
+                    ),
+                ]
+            )
+        ]
+    )
+)
+
 ```
 
 The response will include an identifier for the reserve, detail of the reserved
