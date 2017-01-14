@@ -1,12 +1,13 @@
 <!---
 # TODOs / Questions
 
-* Status
+* GET for Status?
 * Note re similarity of trolley object across calls
 * Matt to add docs for cities and categories
 * Matt to include a section describing how our caching works
 * Matt to add a test meta event, and refer to this in the test intro section and wherever meta events are mentioned.
 * Purchase
+* avail_details needs a link to the bitmask explanation (and needs the fields updated)
 
 * Error codes need to be added everywhere by Pete.
 
@@ -77,11 +78,11 @@ GET or POST requests in [JSON](http://www.json.org/) and you will receive either
 a JSON-formatted response or an HTTP error. The API is known as F13, which
 is why you see /f13 in the endpoint.
 
-We describe objects in a consistent way across different resources (for example the
-output of [events](#events) and [performances](#performances) includes a
-[cost_range object](#cost-range-object) and this is described in the same
-format. The idea of this is that standard code can be used on the client side to
-read all parts of the output.
+We describe objects in a consistent way across different resources (for example
+the output of [events](#events) and [performances](#performances) includes a
+cost_range object and this is described in the same format. The idea of this is
+that standard code can be used on the client side to read all parts of the
+output.
 
 This API replaces the [the Ingresso XML API](http://www.ingresso.co.uk/apidocs/). 
 The XML API relies on temporary tokens from each call being passed in
@@ -89,7 +90,7 @@ to the next call; these has been removed in favour of permanent IDs. One
 benefit of this change is that a call near the end of the booking process, such
 as [reserve](#reserve), can be called without needing to remake the preceeding
 calls (such as [requesting availability](#availability)), opening up additional
-options for integrating partners.
+potential solutions.
 
 
 ## Postman examples
@@ -106,7 +107,7 @@ Click below to import our collection of API examples.
 
 ## Basic booking flow
 
-> **List events with prices and standard image**
+> **List events including from prices and a single image**
 
 ```shell
 curl https://demo.ticketswitch.com/f13/events.v1 \
@@ -186,8 +187,8 @@ and purchase multiple items at once by adding them to a [trolley](#trolley).*
 
 The Ingresso API supports a variety of different integration types. The most
 common is a **full integration** - this is where our partner uses all
-functionality of the Ingresso API - to retrieve listings of events and
-performance (often in advance to populate their own database) then to request
+functionality of the Ingresso API to retrieve listings of events and
+performances (often in advance to populate their own database) then to request
 availability and reserve and purchase tickets in real-time.
 
 Ingresso also offer partners an individually branded "white label" ticketing
@@ -232,7 +233,7 @@ integration support for Stripe - this is explained in more detail in
 3. **Venue or other payment provider**: you either pass the customer's card
 details to the supplier or redirect the customer to a payment provider specified
 by Ingresso. This is not typically offered to partners - if you think this is
-required please contact us: api@ingresso.co.uk.
+required you need to contact us first: api@ingresso.co.uk.
 
 
 ## How to get access to the API
@@ -247,7 +248,7 @@ email us: api@ingresso.co.uk
 
 ## Authentication
 
-> **Example request**
+> Example request with authentication
 
 ```shell
 curl https://demo.ticketswitch.com/f13/events.v1 \
@@ -286,14 +287,16 @@ curl uses the -u flag to pass basic auth credentials in the format user:password
 </blockquote>
 
 
-Two additional parameters can be included to control the user you connect with:
+This is all you need, but there are two additional optional parameters that can 
+be included:
 
-1. Some of our partners require sub users for certain use cases such as running 
+1. Some of our partners require sub users for particular use cases such as running 
 their own affiliate programme.
 
-2. It is possible to pass in a preferred language, overriding the HTTP header. 
+2. It is possible to pass in a preferred language code, overriding the language
+code/s in the HTTP header. 
 
-These parameters are included in the URL after the version:
+These parameters are included in the URL after the version number:
 
 `/f13/events.v1/USER/SUBUSER/LANG_CODE`
 
@@ -442,7 +445,7 @@ Some of the test events have specific conditions that you can check:
 
 ## Versioning
 
-The API version forms part of the URL, for example
+The API version number forms part of the URL, for example
 https://demo.ticketswitch.com/f13/events.v1 uses version 1. We will always
 endeavour to add functionality and make changes in a backward-compatible manner,
 but when that is not possible we will implement a new version. We will then
@@ -455,11 +458,9 @@ partners that have integrated.
 We only provide support to partners that we have provided a test account to. 
 If you have a test or live account and you encounter problems with the API:
 
-1. Check the [Ingresso status page](https://status.ingresso.co.uk/)
+1. Check the [Ingresso status page](https://status.ingresso.co.uk/). If there is 
+an issue reported on the status page this indicates we are already aware.
 
-2. If there is an issue reported on the status page this indicates we are
-already aware.
-
-3. If your issue does not fit the description of the current issue, or we have
+2. If your issue does not fit the description of the current issue, or we have
 not reported an issue you should contact us under the SLAs and with the contact 
 details we have previously agreed.

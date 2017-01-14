@@ -7,8 +7,9 @@ POST https://demo.ticketswitch.com/f13/status.v1?transaction_uuid={trans_uuid}
 
 This resource allows you to view the details and status of a transaction. A
 transaction is created when tickets are [reserved](#reserve), and it changes
-status if it is purchased or released. Status can be called on transactions in
-any state, for example to display information on a confirmation page.
+status if it is [purchased](#purchase) or [released](#release). Status can be
+called on transactions in any state. An example use is to retrieve information
+to display on a confirmation page.
 
 ### Request
 
@@ -185,4 +186,4 @@ Attribute | Description
 `purchase_iso8601_date_and_time` | The time the tickets were successfully purchased. 
 `reserve_iso8601_date_and_time` | The time the tickets were successfully reserved.
 `transaction_status` | One of `reserved`, `released` or `purchased` (TODO: anything else?)
-`trolley` | The `trolley` object. If the `transaction_status` is `reserved` or `released`, the trolley attributes are as described in the [reserve](#reserve) response. If the `transaction_status` is `purchased` the trolley attributes are as described in the [purchase](#purchase) response.
+`trolley` | The `trolley` object. If the `transaction_status` is `reserved` or `released`, the trolley attributes are as described in the [reserve](#reserve) response. If the `transaction_status` is `purchased` the trolley attributes are as described in the [purchase](#purchase) response. Note that if the `transaction_status` is `released` you should ignore the value of `minutes_left_on_reserve`.
