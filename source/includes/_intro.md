@@ -4,6 +4,7 @@
 * GET for Status?
 * Note re similarity of trolley object across calls
 * Matt to add docs for cities and categories
+* Need to document the disallowed discount codes - need a test event with this data
 * Matt to include a section describing how our caching works
 * Matt to add a test meta event, and refer to this in the test intro section and wherever meta events are mentioned.
 * Purchase
@@ -29,17 +30,6 @@
 
   be simplified to this:
   "class": ["Arts & Culture"]
-
-* For bitmasks, rather than this:
-  "quantity_options": {
-    "valid_quantity_bitmask": 126
-  }
-  We should be returning:
-  "valid_quantities": [2, 3, 4, 5, 6, 7]
-
-  Similarly for discount_disallowed_seat_no_bitmask, use "discount_disallowed_seat_no": [3, 4]
-
-  However the bitmasks make sense for avail_details data since it is way too verbose to not use them, and it means you only need to worry about bitmasks if you use that call (which won't be commonly used). I suggest we go with that and remove the flags to use bitmasks or not.
 
 * We should remove user_review_percent until we actually have some reviews in the core
 * Use a single req_media rather than requesting individual items. Merge images and video into media. Simplify the attributes returned eg just return the URL and is_secure rather than splitting up the URL into components and listing http and https variants.

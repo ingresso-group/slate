@@ -2,7 +2,7 @@
 > **Definition**
 
 ```
-POST https://demo.ticketswitch.com/f13/status.v1?transaction_uuid={trans_uuid}
+GET https://demo.ticketswitch.com/f13/status.v1?transaction_uuid={trans_uuid}
 ```
 
 This resource allows you to view the details and status of a transaction. A
@@ -135,7 +135,6 @@ Parameter | Description
                 {
                   "discount_code": "",
                   "discount_desc": "",
-                  "discount_disallowed_seat_no_bitmask": 0,
                   "no_of_seats": 2,
                   "sale_seatprice": 35,
                   "sale_surcharge": 0,

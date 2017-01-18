@@ -84,7 +84,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "",
             "discount_desc": "",
-            "discount_disallowed_seat_no_bitmask": 0,
             "is_offer": false,
             "non_offer_sale_seatprice": 35,
             "non_offer_sale_surcharge": 0,
@@ -98,7 +97,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "",
             "discount_desc": "",
-            "discount_disallowed_seat_no_bitmask": 0,
             "is_offer": false,
             "non_offer_sale_seatprice": 30,
             "non_offer_sale_surcharge": 0,
@@ -112,7 +110,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "",
             "discount_desc": "",
-            "discount_disallowed_seat_no_bitmask": 0,
             "is_offer": false,
             "non_offer_sale_seatprice": 25,
             "non_offer_sale_surcharge": 0,
@@ -132,7 +129,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "",
             "discount_desc": "",
-            "discount_disallowed_seat_no_bitmask": 0,
             "is_offer": false,
             "non_offer_sale_seatprice": 21,
             "non_offer_sale_surcharge": 0,
@@ -146,7 +142,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "",
             "discount_desc": "",
-            "discount_disallowed_seat_no_bitmask": 0,
             "is_offer": false,
             "non_offer_sale_seatprice": 18,
             "non_offer_sale_surcharge": 0,
@@ -166,7 +161,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "",
             "discount_desc": "",
-            "discount_disallowed_seat_no_bitmask": 0,
             "is_offer": false,
             "non_offer_sale_seatprice": 47,
             "non_offer_sale_surcharge": 0,
@@ -188,11 +182,21 @@ Parameter | Description
   "can_leave_singles": true,
   "contiguous_seat_selection_only": true,
   "currency": {
-    "currency_code": "gbp"
+    "currency_code": "gbp",
+    "currency_factor": 100,
+    "currency_number": 826,
+    "currency_places": 2,
+    "currency_post_symbol": "",
+    "currency_pre_symbol": "£"
   },
-  "quantity_options": {
-    "valid_quantity_bitmask": 126
-  }
+  "valid_quantities": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ]
 }
 ```
 
@@ -219,16 +223,17 @@ implementing seat selection can be quite involved because you need to integrate
 a third-party seat renderer or implement your own - we are happy to discuss this
 further with you and offer our advice.
 
-<aside class="notice">Particularly in the UK market, offers are classified as 
-either "discounted face value" or "no booking fee". Discounted face value 
-offers have an offer seatprice that is lower than the full price seatprice (and
-normally they have an offer surcharge of zero). No booking fee offers have
-an offer seatprice equal to the full price seatprice, and an offer surcharge
-equal to zero. The standard is to not display a saving percentage for no booking
-fee offers (some suppliers do not like their offers to show as percentage 
+<aside class="notice">In the UK market, offers are typically classified as
+either "discounted face value" or "no booking fee". Discounted face value offers
+have an offer seatprice that is lower than the full price seatprice (and
+normally they have an offer surcharge of zero). No booking fee offers have an
+offer seatprice equal to the full price seatprice, and an offer surcharge equal
+to zero. The standard is to not display a saving percentage for no booking fee
+offers (some suppliers do not like their offers to show as percentage
 discounts), and instead display "No fees" or similar.</aside>
 
-This example response is for best available - following this there is an example response that includes seats.
+This example response is for best available - following this there is an example
+response that includes seats.
 
 Availability-level attributes:
 
@@ -320,7 +325,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "RED/RED/1",
             "discount_desc": "FULL PRICE",
-            "discount_disallowed_seat_no_bitmask": 0,
             "free_seat_blocks": {
               "seat_block": [
                 {
@@ -439,7 +443,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "RED/RED/1",
             "discount_desc": "FULL PRICE",
-            "discount_disallowed_seat_no_bitmask": 0,
             "free_seat_blocks": {
               "seat_block": [
                 {
@@ -558,7 +561,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "RED/RED/1",
             "discount_desc": "FULL PRICE",
-            "discount_disallowed_seat_no_bitmask": 0,
             "free_seat_blocks": {
               "seat_block": [
                 {
@@ -677,7 +679,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "RED/RED/1",
             "discount_desc": "FULL PRICE",
-            "discount_disallowed_seat_no_bitmask": 0,
             "free_seat_blocks": {
               "seat_block": [
                 {
@@ -800,9 +801,14 @@ Parameter | Description
   "currency": {
     "currency_code": "gbp"
   },
-  "quantity_options": {
-    "valid_quantity_bitmask": 2046
-  }
+  "valid_quantities": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ]
 }
 ```
 
@@ -862,7 +868,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "RED/RED/1",
             "discount_desc": "FULL PRICE",
-            "discount_disallowed_seat_no_bitmask": 0,
             "example_seats": {
               "id_details": [
                 {
@@ -905,7 +910,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "RED/RED/1",
             "discount_desc": "FULL PRICE",
-            "discount_disallowed_seat_no_bitmask": 0,
             "example_seats": {
               "id_details": [
                 {
@@ -948,7 +952,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "RED/RED/1",
             "discount_desc": "FULL PRICE",
-            "discount_disallowed_seat_no_bitmask": 0,
             "example_seats": {
               "id_details": [
                 {
@@ -991,7 +994,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "RED/RED/1",
             "discount_desc": "FULL PRICE",
-            "discount_disallowed_seat_no_bitmask": 0,
             "example_seats": {
               "id_details": [
                 {
@@ -1038,9 +1040,14 @@ Parameter | Description
   "currency": {
     "currency_code": "gbp"
   },
-  "quantity_options": {
-    "valid_quantity_bitmask": 2046
-  }
+  "valid_quantities": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ]
 }
 ```
 
@@ -1105,7 +1112,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "",
             "discount_desc": "",
-            "discount_disallowed_seat_no_bitmask": 0,
             "gross_commission": {
               "amount_excluding_vat": 4.38,
               "amount_including_vat": 5.25,
@@ -1133,7 +1139,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "",
             "discount_desc": "",
-            "discount_disallowed_seat_no_bitmask": 0,
             "gross_commission": {
               "amount_excluding_vat": 3.75,
               "amount_including_vat": 4.5,
@@ -1161,7 +1166,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "",
             "discount_desc": "",
-            "discount_disallowed_seat_no_bitmask": 0,
             "gross_commission": {
               "amount_excluding_vat": 3.13,
               "amount_including_vat": 3.75,
@@ -1195,7 +1199,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "",
             "discount_desc": "",
-            "discount_disallowed_seat_no_bitmask": 0,
             "gross_commission": {
               "amount_excluding_vat": 2.63,
               "amount_including_vat": 3.15,
@@ -1223,7 +1226,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "",
             "discount_desc": "",
-            "discount_disallowed_seat_no_bitmask": 0,
             "gross_commission": {
               "amount_excluding_vat": 2.25,
               "amount_including_vat": 2.7,
@@ -1257,7 +1259,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "",
             "discount_desc": "",
-            "discount_disallowed_seat_no_bitmask": 0,
             "gross_commission": {
               "amount_excluding_vat": 5.88,
               "amount_including_vat": 7.05,
@@ -1295,9 +1296,14 @@ Parameter | Description
   "currency": {
     "currency_code": "gbp"
   },
-  "quantity_options": {
-    "valid_quantity_bitmask": 126
-  }
+  "valid_quantities": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ]
 }
 ```
 
@@ -1347,7 +1353,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "",
             "discount_desc": "",
-            "discount_disallowed_seat_no_bitmask": 0,
             "is_offer": false,
             "non_offer_sale_seatprice": 35,
             "non_offer_sale_surcharge": 0,
@@ -1359,7 +1364,6 @@ Parameter | Description
                   "absolute_saving": 0,
                   "discount_code": "ADULT",
                   "discount_desc": "Adult standard",
-                  "discount_disallowed_seat_no_bitmask": 0,
                   "is_offer": false,
                   "non_offer_sale_seatprice": 35,
                   "non_offer_sale_surcharge": 0,
@@ -1373,7 +1377,6 @@ Parameter | Description
                   "absolute_saving": 0,
                   "discount_code": "CHILD",
                   "discount_desc": "Child rate",
-                  "discount_disallowed_seat_no_bitmask": 0,
                   "is_offer": false,
                   "non_offer_sale_seatprice": 18,
                   "non_offer_sale_surcharge": 0,
@@ -1387,7 +1390,6 @@ Parameter | Description
                   "absolute_saving": 0,
                   "discount_code": "STUDENT",
                   "discount_desc": "Student rate",
-                  "discount_disallowed_seat_no_bitmask": 0,
                   "is_offer": false,
                   "non_offer_sale_seatprice": 26,
                   "non_offer_sale_surcharge": 0,
@@ -1401,7 +1403,6 @@ Parameter | Description
                   "absolute_saving": 0,
                   "discount_code": "OAP",
                   "discount_desc": "Senior citizen rate",
-                  "discount_disallowed_seat_no_bitmask": 0,
                   "is_offer": false,
                   "non_offer_sale_seatprice": 28,
                   "non_offer_sale_surcharge": 0,
@@ -1421,7 +1422,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "",
             "discount_desc": "",
-            "discount_disallowed_seat_no_bitmask": 0,
             "is_offer": false,
             "non_offer_sale_seatprice": 30,
             "non_offer_sale_surcharge": 0,
@@ -1433,7 +1433,6 @@ Parameter | Description
                   "absolute_saving": 0,
                   "discount_code": "ADULT",
                   "discount_desc": "Adult standard",
-                  "discount_disallowed_seat_no_bitmask": 0,
                   "is_offer": false,
                   "non_offer_sale_seatprice": 30,
                   "non_offer_sale_surcharge": 0,
@@ -1447,7 +1446,6 @@ Parameter | Description
                   "absolute_saving": 0,
                   "discount_code": "CHILD",
                   "discount_desc": "Child rate",
-                  "discount_disallowed_seat_no_bitmask": 0,
                   "is_offer": false,
                   "non_offer_sale_seatprice": 15,
                   "non_offer_sale_surcharge": 0,
@@ -1467,7 +1465,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "",
             "discount_desc": "",
-            "discount_disallowed_seat_no_bitmask": 0,
             "is_offer": false,
             "non_offer_sale_seatprice": 25,
             "non_offer_sale_surcharge": 0,
@@ -1479,7 +1476,6 @@ Parameter | Description
                   "absolute_saving": 0,
                   "discount_code": "ADULT",
                   "discount_desc": "Adult standard",
-                  "discount_disallowed_seat_no_bitmask": 0,
                   "is_offer": false,
                   "non_offer_sale_seatprice": 25,
                   "non_offer_sale_surcharge": 0,
@@ -1493,7 +1489,6 @@ Parameter | Description
                   "absolute_saving": 0,
                   "discount_code": "CHILD",
                   "discount_desc": "Child rate",
-                  "discount_disallowed_seat_no_bitmask": 0,
                   "is_offer": false,
                   "non_offer_sale_seatprice": 13,
                   "non_offer_sale_surcharge": 0,
@@ -1507,7 +1502,6 @@ Parameter | Description
                   "absolute_saving": 0,
                   "discount_code": "STUDENT",
                   "discount_desc": "Student rate",
-                  "discount_disallowed_seat_no_bitmask": 0,
                   "is_offer": false,
                   "non_offer_sale_seatprice": 19,
                   "non_offer_sale_surcharge": 0,
@@ -1521,7 +1515,6 @@ Parameter | Description
                   "absolute_saving": 0,
                   "discount_code": "OAP",
                   "discount_desc": "Senior citizen rate",
-                  "discount_disallowed_seat_no_bitmask": 0,
                   "is_offer": false,
                   "non_offer_sale_seatprice": 20,
                   "non_offer_sale_surcharge": 0,
@@ -1547,7 +1540,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "",
             "discount_desc": "",
-            "discount_disallowed_seat_no_bitmask": 0,
             "is_offer": false,
             "non_offer_sale_seatprice": 21,
             "non_offer_sale_surcharge": 0,
@@ -1559,7 +1551,6 @@ Parameter | Description
                   "absolute_saving": 0,
                   "discount_code": "ADULT",
                   "discount_desc": "Adult standard",
-                  "discount_disallowed_seat_no_bitmask": 0,
                   "is_offer": false,
                   "non_offer_sale_seatprice": 21,
                   "non_offer_sale_surcharge": 0,
@@ -1573,7 +1564,6 @@ Parameter | Description
                   "absolute_saving": 0,
                   "discount_code": "CHILD",
                   "discount_desc": "Child rate",
-                  "discount_disallowed_seat_no_bitmask": 0,
                   "is_offer": false,
                   "non_offer_sale_seatprice": 11,
                   "non_offer_sale_surcharge": 0,
@@ -1587,7 +1577,6 @@ Parameter | Description
                   "absolute_saving": 0,
                   "discount_code": "STUDENT",
                   "discount_desc": "Student rate",
-                  "discount_disallowed_seat_no_bitmask": 0,
                   "is_offer": false,
                   "non_offer_sale_seatprice": 16,
                   "non_offer_sale_surcharge": 0,
@@ -1601,7 +1590,6 @@ Parameter | Description
                   "absolute_saving": 0,
                   "discount_code": "OAP",
                   "discount_desc": "Senior citizen rate",
-                  "discount_disallowed_seat_no_bitmask": 0,
                   "is_offer": false,
                   "non_offer_sale_seatprice": 17,
                   "non_offer_sale_surcharge": 0,
@@ -1621,7 +1609,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "",
             "discount_desc": "",
-            "discount_disallowed_seat_no_bitmask": 0,
             "is_offer": false,
             "non_offer_sale_seatprice": 18,
             "non_offer_sale_surcharge": 0,
@@ -1633,7 +1620,6 @@ Parameter | Description
                   "absolute_saving": 0,
                   "discount_code": "ADULT",
                   "discount_desc": "Adult standard",
-                  "discount_disallowed_seat_no_bitmask": 0,
                   "is_offer": false,
                   "non_offer_sale_seatprice": 18,
                   "non_offer_sale_surcharge": 0,
@@ -1647,7 +1633,6 @@ Parameter | Description
                   "absolute_saving": 0,
                   "discount_code": "CHILD",
                   "discount_desc": "Child rate",
-                  "discount_disallowed_seat_no_bitmask": 0,
                   "is_offer": false,
                   "non_offer_sale_seatprice": 9,
                   "non_offer_sale_surcharge": 0,
@@ -1673,7 +1658,6 @@ Parameter | Description
             "absolute_saving": 0,
             "discount_code": "",
             "discount_desc": "",
-            "discount_disallowed_seat_no_bitmask": 0,
             "is_offer": false,
             "non_offer_sale_seatprice": 47,
             "non_offer_sale_surcharge": 0,
@@ -1685,7 +1669,6 @@ Parameter | Description
                   "absolute_saving": 0,
                   "discount_code": "ADULT",
                   "discount_desc": "Adult standard",
-                  "discount_disallowed_seat_no_bitmask": 0,
                   "is_offer": false,
                   "non_offer_sale_seatprice": 47,
                   "non_offer_sale_surcharge": 0,
@@ -1699,7 +1682,6 @@ Parameter | Description
                   "absolute_saving": 0,
                   "discount_code": "CHILD",
                   "discount_desc": "Child rate",
-                  "discount_disallowed_seat_no_bitmask": 0,
                   "is_offer": false,
                   "non_offer_sale_seatprice": 24,
                   "non_offer_sale_surcharge": 0,
@@ -1713,7 +1695,6 @@ Parameter | Description
                   "absolute_saving": 0,
                   "discount_code": "STUDENT",
                   "discount_desc": "Student rate",
-                  "discount_disallowed_seat_no_bitmask": 0,
                   "is_offer": false,
                   "non_offer_sale_seatprice": 35,
                   "non_offer_sale_surcharge": 0,
@@ -1727,7 +1708,6 @@ Parameter | Description
                   "absolute_saving": 0,
                   "discount_code": "OAP",
                   "discount_desc": "Senior citizen rate",
-                  "discount_disallowed_seat_no_bitmask": 0,
                   "is_offer": false,
                   "non_offer_sale_seatprice": 38,
                   "non_offer_sale_surcharge": 0,
@@ -1757,9 +1737,14 @@ Parameter | Description
   "currency": {
     "currency_code": "gbp"
   },
-  "quantity_options": {
-    "valid_quantity_bitmask": 126
-  }
+  "valid_quantities": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ]
 }
 ```
 

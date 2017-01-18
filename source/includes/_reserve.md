@@ -146,11 +146,11 @@ All of the following parameters can also be used to request additional data for 
 
 Parameter | Description
 --------- | -----------
-`req_avail_details` | Returns [availability details](#availability-details) - a cached list of unique ticket types and price bands available for the event and performance in each order.
+`req_avail_details` | Returns [availability details](#availability-details) - a cached list of unique ticket types and price bands available for the event and performance in each order. **This parameter is not commonly used.**
 `req_avail_details_with_perfs` | This will add the list of available performance dates to each avail detail object. *Only valid if used alongside req_avail_details*.
 `req_cost_range` | Returns [cost ranges](#cost-range) - a from price and offer detail for the event and performance in each order.
 `req_cost_range_best_value_offer` | Returns the offer with the highest percentage saving.
-`req_cost_range_details` | Returns a list of unique ticket types and price bands and their cost ranges across all performances.
+`req_cost_range_details` | Returns a list of unique ticket types and price bands and their cost ranges across all performances. **This parameter is not commonly used.**
 `req_cost_range_max_saving_offer` | Returns the offer with the highest absolute saving.
 `req_cost_range_min_cost_offer` | Returns the offer with the lowest cost.
 `req_cost_range_top_price_offer` | Returns the offer with the highest cost. This is the least used offer cost range.
@@ -275,7 +275,6 @@ Parameter | Description
                 {
                   "discount_code": "ADULT",
                   "discount_desc": "Adult standard",
-                  "discount_disallowed_seat_no_bitmask": 0,
                   "no_of_seats": 1,
                   "sale_seatprice": 25,
                   "sale_surcharge": 0,
@@ -297,7 +296,6 @@ Parameter | Description
                 {
                   "discount_code": "CHILD",
                   "discount_desc": "Child rate",
-                  "discount_disallowed_seat_no_bitmask": 0,
                   "no_of_seats": 2,
                   "sale_seatprice": 13,
                   "sale_surcharge": 0,
@@ -416,7 +414,6 @@ Parameter | Description
                 {
                   "discount_code": "RED/RED/1",
                   "discount_desc": "FULL PRICE",
-                  "discount_disallowed_seat_no_bitmask": 0,
                   "no_of_seats": 2,
                   "sale_seatprice": 20,
                   "sale_surcharge": 0,
@@ -808,7 +805,6 @@ Attribute | Description
 --------- | -----------
 `discount_code` | The discount code that applies to this ticket_order.
 `discount_desc` | The description for the discount code.
-`discount_disallowed_seat_no_bitmask` | (TODO: what is this)
 `no_of_seats` | The number of tickets in this ticket_order.
 `sale_seatprice` | The face value per ticket in this ticket_order.
 `sale_seatprice_in_desired` | The face value per ticket in this ticket_order, converted to your `desired_currency`. This field will not be present for most partners.

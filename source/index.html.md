@@ -22,6 +22,8 @@ includes:
   - release
   - purchase
   - status
+  - cities
+  - classes
   - bitmask_fields
   - caching
 

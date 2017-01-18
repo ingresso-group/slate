@@ -83,7 +83,7 @@ performance, and are described in more detail in the
 
 Parameter | Description
 --------- | -----------
-`req_avail_details` | Returns [availability details](#availability-detail) - a cached list of unique ticket types and price bands available for this performance.
+`req_avail_details` | Returns [availability details](#availability-detail) - a cached list of unique ticket types and price bands available for this performance. **This parameter is not commonly used.**
 `req_cost_range` | Returns [cost ranges](#cost-ranges) - a from price and offer detail for each event. *Most partners include this parameter.*
 `req_cost_range_best_value_offer` | Returns the offer with the highest percentage saving. *This is the most commonly used offer cost range.*
 `req_cost_range_details` | Returns a list of unique ticket types and price bands and their cost ranges across all performances.
@@ -385,7 +385,7 @@ performance, and are described in more detail in the
 
 Parameter | Description
 --------- | -----------
-`req_avail_details` | Returns [availability details](#availability-detail) - a cached list of unique ticket types and price bands available for this performance.
+`req_avail_details` | Returns [availability details](#availability-detail) - a cached list of unique ticket types and price bands available for this performance. **This parameter is not commonly used.**
 `req_cost_range` | Returns [cost ranges](#cost-ranges) - a from price and offer detail for each event. *Most partners include this parameter.*
 `req_cost_range_best_value_offer` | Returns the offer with the highest percentage saving. *This is the most commonly used offer cost range.*
 `req_cost_range_details` | Returns a list of unique ticket types and price bands and their cost ranges across all performances.
@@ -612,11 +612,13 @@ Parameter | Description
           },
           "min_seatprice": 68,
           "min_surcharge": 3,
-          "quantity_options": {
-            "valid_quantity_bitmask": 30
-          },
           "range_currency": {
-            "currency_code": "usd"
+            "currency_code": "usd",
+            "currency_factor": 100,
+            "currency_number": 840,
+            "currency_places": 2,
+            "currency_post_symbol": "",
+            "currency_pre_symbol": "$"
           },
           "top_price_offer": {
             "absolute_saving": 9,
@@ -625,13 +627,21 @@ Parameter | Description
             "offer_seatprice": 68,
             "offer_surcharge": 3,
             "percentage_saving": 11
-          }
-        },
-        "quantity_options": {
-          "valid_quantity_bitmask": 30
+          },
+          "valid_quantities": [
+            1,
+            2,
+            3,
+            4
+          ]
         },
         "range_currency": {
-          "currency_code": "usd"
+          "currency_code": "usd",
+          "currency_factor": 100,
+          "currency_number": 840,
+          "currency_places": 2,
+          "currency_post_symbol": "",
+          "currency_pre_symbol": "$"
         },
         "top_price_offer": {
           "absolute_saving": 9,
@@ -640,7 +650,13 @@ Parameter | Description
           "offer_seatprice": 68,
           "offer_surcharge": 3,
           "percentage_saving": 11
-        }
+        },
+        "valid_quantities": [
+          1,
+          2,
+          3,
+          4
+        ]
       },
       "date_desc": "Wed, 5th April 2017",
       "event_id": "6L9",
@@ -682,13 +698,13 @@ pyticketswitch.Performance(
 )
 ```
 
-<aside class="notice">Particularly in the UK market, offers are classified as 
-either "discounted face value" or "no booking fee". Discounted face value 
+<aside class="notice">In the UK market, offers are typically classified as
+either "discounted face value" or "no booking fee". Discounted face value
 offers have an offer seatprice that is lower than the full price seatprice (and
-normally they have an offer surcharge of zero). No booking fee offers have
-an offer seatprice equal to the full price seatprice, and an offer surcharge
-equal to zero. The standard is to not display a saving percentage for no booking
-fee offers (some suppliers do not like their offers to show as percentage 
+normally they have an offer surcharge of zero). No booking fee offers have an
+offer seatprice equal to the full price seatprice, and an offer surcharge equal
+to zero. The standard is to not display a saving percentage for no booking fee
+offers (some suppliers do not like their offers to show as percentage
 discounts), and instead display "No fees" or similar.</aside>
 
 Each performance returned includes a `cost_range` object with the following attributes:
@@ -753,7 +769,7 @@ client.get_events(['6IF'], availability=True, availability_with_performances=Tru
 
 Parameter | Description
 --------- | -----------
-`req_avail_details` | Returns a list of unique ticket types and price bands that are available for this performance.
+`req_avail_details` | Returns a list of unique ticket types and price bands that are available for this performance. **This parameter is not commonly used.**
 
 ### Response
 
@@ -762,7 +778,7 @@ Parameter | Description
 ```shell
 {
   "performances_by_id": {
-    "6IF-A8K": {
+    "6L9-M2R": {
       "avail_details": {
         "ticket_type": [
           {
@@ -770,136 +786,50 @@ Parameter | Description
               {
                 "avail_detail": [
                   {
+                    "absolute_saving": 9,
                     "avail_currency": {
-                      "currency_code": "gbp"
+                      "currency_code": "usd",
+                      "currency_factor": 100,
+                      "currency_number": 840,
+                      "currency_places": 2,
+                      "currency_post_symbol": "",
+                      "currency_pre_symbol": "$"
                     },
-                    "cached_number_available": 6,
-                    "quantity_options": {
-                      "valid_quantity_bitmask": 126
-                    },
-                    "seatprice": 47,
-                    "surcharge": 0
+                    "cached_number_available": 4,
+                    "full_seatprice": 75,
+                    "full_surcharge": 5,
+                    "percentage_saving": 11,
+                    "seatprice": 68,
+                    "surcharge": 3,
+                    "valid_quantities": [
+                      1,
+                      2,
+                      3,
+                      4
+                    ]
                   }
                 ],
                 "price_band_code": "A",
                 "price_band_desc": ""
               }
             ],
-            "ticket_type_code": "BALCONY",
-            "ticket_type_desc": "Balcony"
-          },
-          {
-            "price_band": [
-              {
-                "avail_detail": [
-                  {
-                    "avail_currency": {
-                      "currency_code": "gbp"
-                    },
-                    "cached_number_available": 6,
-                    "quantity_options": {
-                      "valid_quantity_bitmask": 126
-                    },
-                    "seatprice": 35,
-                    "surcharge": 0
-                  }
-                ],
-                "price_band_code": "A",
-                "price_band_desc": ""
-              },
-              {
-                "avail_detail": [
-                  {
-                    "avail_currency": {
-                      "currency_code": "gbp"
-                    },
-                    "cached_number_available": 6,
-                    "quantity_options": {
-                      "valid_quantity_bitmask": 126
-                    },
-                    "seatprice": 30,
-                    "surcharge": 0
-                  }
-                ],
-                "price_band_code": "B",
-                "price_band_desc": ""
-              },
-              {
-                "avail_detail": [
-                  {
-                    "avail_currency": {
-                      "currency_code": "gbp"
-                    },
-                    "cached_number_available": 6,
-                    "quantity_options": {
-                      "valid_quantity_bitmask": 126
-                    },
-                    "seatprice": 25,
-                    "surcharge": 0
-                  }
-                ],
-                "price_band_code": "C",
-                "price_band_desc": ""
-              }
-            ],
-            "ticket_type_code": "CIRCLE",
-            "ticket_type_desc": "Upper circle"
-          },
-          {
-            "price_band": [
-              {
-                "avail_detail": [
-                  {
-                    "avail_currency": {
-                      "currency_code": "gbp"
-                    },
-                    "cached_number_available": 6,
-                    "quantity_options": {
-                      "valid_quantity_bitmask": 126
-                    },
-                    "seatprice": 21,
-                    "surcharge": 0
-                  }
-                ],
-                "price_band_code": "A",
-                "price_band_desc": ""
-              },
-              {
-                "avail_detail": [
-                  {
-                    "avail_currency": {
-                      "currency_code": "gbp"
-                    },
-                    "cached_number_available": 3,
-                    "quantity_options": {
-                      "valid_quantity_bitmask": 14
-                    },
-                    "seatprice": 18,
-                    "surcharge": 0
-                  }
-                ],
-                "price_band_code": "B",
-                "price_band_desc": ""
-              }
-            ],
-            "ticket_type_code": "STALLS",
-            "ticket_type_desc": "Stalls"
+            "ticket_type_code": "PREF",
+            "ticket_type_desc": "Preferred seating"
           }
         ]
       },
-      "date_desc": "Fri, 17th February 2017",
-      "event_id": "6IF",
+      "date_desc": "Wed, 5th April 2017",
+      "event_id": "6L9",
       "has_pool_seats": true,
       "is_ghost": false,
-      "is_limited": true,
-      "iso8601_date_and_time": "2017-02-17T19:30:00Z",
-      "perf_id": "6IF-A8K",
+      "is_limited": false,
+      "iso8601_date_and_time": "2017-04-05T22:30:00-07:00",
+      "perf_id": "6L9-M2R",
       "running_time": 120,
-      "time_desc": "7.30 PM"
+      "time_desc": "10.30 PM"
     }
   }
 }
-
 ```
 
 ```python
@@ -1008,6 +938,6 @@ Attribute | Description
 --------- | -----------
 `avail_currency` | The price [currency](#currency-object).
 `cached_number_available` | The maximum number of consecutive tickets available.
-`quantity_options.valid_quantity_bitmask` | the available quantities we have seen for this price band.
+`valid_quantities` | An array of available quantities we have seen for this price band.
 `seatprice` | The per-ticket face value.
 `surcharge` | The per-ticket booking fee.

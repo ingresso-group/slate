@@ -41,8 +41,8 @@ GET https://demo.ticketswitch.com/f13/events.v1
 ```shell
 curl https://demo.ticketswitch.com/f13/events.v1 \
     -u "demo:demopass" \
-    -d "s_keys=matthew" \
-    -d "s_coco=uk" \
+    -d "keywords=matthew" \
+    -d "country_code=uk" \
     -G
 ```
 
@@ -57,15 +57,13 @@ These are the available search / filter parameters:
 
 Parameter | Description
 --------- | -----------
-`s_keys` | Space separated list of keywords, e.g. `lion king new york` or `paris tours`.
-`s_dates` | Date range in the form `yyyymmdd:yyyymmdd` (both are optional).
-`s_coco` | 2-digit country code (using [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-`s_city` | Restrict events to a particular city (TODO do we use a formal type of city code?).
-`s_geo` | Geographical location. Restricts events in a circular search area. Three colon-separated values are needed for **latitude**, **longitude**, and **radius in kilometres**.  Example: `51.52961137:-0.10601562:10`.
-`s_geo_lat` | Alternative to `s_geo`. Specifies latitude.
-`s_geo_long` | Alternative to `s_geo`. Specifies longitude.
-`s_geo_rad_km` | Alternative to `s_geo`. Specifies radius from the coordinates.
-`include_dead` | Include dead events in the results - useful if you want to continue to display an event page after an event dies, for example to help with search engine optimisation.
+`keywords` | Space separated list of search keywords, e.g. `lion king new york` or `paris tours`.
+`date_range` | Date range in the form `yyyymmdd:yyyymmdd` (both are optional) to filter events to those with performances within the date range.
+`country_code` | 2-digit country code (using [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
+`city_code` | Return events in a particular city. The list of city codes can be retrieved using the [cities](#cities) resource.
+`circle` | Return events within in a circular geographical area. Three colon-separated values are needed for **latitude**, **longitude**, and **radius in kilometres**.  Example: `51.52961137:-0.10601562:10`.
+`airport_code` | Return events near an airport (specified using an [IATA airport code](https://en.wikipedia.org/wiki/International_Air_Transport_Association_airport_code))
+`include_dead` | Include dead events in the results. This could be useful if you dynamically retrieve the list of events from Ingresso and want to continue to display an event page after an event dies, for example to help with search engine optimisation.
 
 These parameters are used to control the output if more than one event is returned:
 
@@ -73,7 +71,7 @@ Parameter | Description
 --------- | -----------
 `page_len` | Length of a page, default 50.
 `page_no` | Page number, default 0, ignored if page_len is not present.
-`s_top` | Orders events by the most sales over the last 48 hour period, otherwise orders alphabetically (TODO taken from XML API - is this valid for JSON?).
+`sort_order` | Valid values are `most_popular` (based on sales across all partners over the last 48 hours), `alphabetic`, `cost_ascending` (lowest price first, based on the minimum total price [seatprice + surcharge] for the event), `cost_descending` (highest price first, based on the *maximum* total price for the event), `critic_rating` (average critic rating, highest to lowest), `recent`, `last_sale`. When there is a tie alphabetic ordering is used to break the tie.
 
 These parameters can be passed in to request additional data for each event, and 
 are described in more detail in the 
@@ -81,11 +79,11 @@ are described in more detail in the
 
 Parameter | Description
 --------- | -----------
-`req_avail_details` | Returns [availability details](#availability-details) - a cached list of unique ticket types and price bands available for this event across all performances.
+`req_avail_details` | Returns [availability details](#availability-details) - a cached list of unique ticket types and price bands available for this event across all performances. **This parameter is not commonly used.**
 `req_avail_details_with_perfs` | This will add the list of available performance dates to each avail detail object. *Only valid if used alongside req_avail_details*.
 `req_cost_range` | Returns [cost ranges](#cost-range) - a from price and offer detail for each event. *Most partners include this parameter.*
 `req_cost_range_best_value_offer` | Returns the offer with the highest percentage saving. *This is the most commonly used offer cost range.*
-`req_cost_range_details` | Returns a list of unique ticket types and price bands and their cost ranges across all performances.
+`req_cost_range_details` | Returns a list of unique ticket types and price bands and their cost ranges across all performances. **This parameter is not commonly used.**
 `req_cost_range_max_saving_offer` | Returns the offer with the highest absolute saving.
 `req_cost_range_min_cost_offer` | Returns the offer with the lowest cost.
 `req_cost_range_top_price_offer` | Returns the offer with the highest cost. This is the least used offer cost range.
@@ -332,11 +330,11 @@ These parameters can be passed in to request additional data for each event, and
 
 Parameter | Description
 --------- | -----------
-`req_avail_details` | Returns [availability details](#availability-details) - a cached list of unique ticket types and price bands available for this event across all performances.
+`req_avail_details` | Returns [availability details](#availability-details) - a cached list of unique ticket types and price bands available for this event across all performances. **This parameter is not commonly used.**
 `req_avail_details_with_perfs` | This will add the list of available performance dates to each avail detail object. *Only valid if used alongside req_avail_details*.
 `req_cost_range` | Returns [cost ranges](#cost-range) - a from price and offer detail for each event. *Most partners include this parameter.*
 `req_cost_range_best_value_offer` | Returns the offer with the highest percentage saving. *This is the most commonly used offer cost range.*
-`req_cost_range_details` | Returns a list of unique ticket types and price bands and their cost ranges across all performances.
+`req_cost_range_details` | Returns a list of unique ticket types and price bands and their cost ranges across all performances. **This parameter is not commonly used.**
 `req_cost_range_max_saving_offer` | Returns the offer with the highest absolute saving.
 `req_cost_range_min_cost_offer` | Returns the offer with the lowest cost.
 `req_cost_range_top_price_offer` | Returns the offer with the highest cost. This is the least used offer cost range.
@@ -365,12 +363,11 @@ Parameter | Description
   "events_by_id": {
     "6IE": {
       "event": {
+        "city_code": "london-uk",
         "city_desc": "London",
-        "class": [
-          {
-            "class_desc": "Ballet & Dance"
-          }
-        ],
+        "classes": {
+          "dance": "Ballet & Dance"
+        },
         "country_code": "uk",
         "country_desc": "United Kingdom",
         "custom_filter": [],
@@ -386,6 +383,7 @@ Parameter | Description
             "MH0"
           ]
         },
+        "event_uri_desc": "Matthew-Bourne%27s-Swan-Lake-test",
         "geo_data": {
           "latitude": 51.52961137,
           "longitude": -0.10601562
@@ -401,21 +399,26 @@ Parameter | Description
         "show_perf_time": true,
         "source_code": "ext_test0",
         "source_desc": "External Test Backend 0",
-        "venue_desc": "Sadler's Wells"
+        "venue_desc": "Sadler's Wells",
+        "venue_uri_desc": "Sadler%27s-Wells"
       },
-      "quantity_options": {
-        "valid_quantity_bitmask": 126
-      },
+      "valid_quantities": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
       "venue_is_enforced": true
     },
     "6IF": {
       "event": {
+        "city_code": "london-uk",
         "city_desc": "London",
-        "class": [
-          {
-            "class_desc": "Ballet & Dance"
-          }
-        ],
+        "classes": {
+          "dance": "Ballet & Dance"
+        },
         "country_code": "uk",
         "country_desc": "United Kingdom",
         "critic_review_percent": 100,
@@ -431,6 +434,7 @@ Parameter | Description
             "MH0"
           ]
         },
+        "event_uri_desc": "Matthew-Bourne%27s-Nutcracker-TEST",
         "geo_data": {
           "latitude": 51.52961137,
           "longitude": -0.10601562
@@ -447,11 +451,17 @@ Parameter | Description
         "source_code": "ext_test0",
         "source_desc": "External Test Backend 0",
         "user_review_percent": 100,
-        "venue_desc": "Sadler's Wells"
+        "venue_desc": "Sadler's Wells",
+        "venue_uri_desc": "Sadler%27s-Wells"
       },
-      "quantity_options": {
-        "valid_quantity_bitmask": 126
-      },
+      "valid_quantities": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
       "venue_is_enforced": true
     }
   }
@@ -635,12 +645,11 @@ Parameter | Description
   "events_by_id": {
     "6IF": {
       "event": {
+        "city_code": "london-uk",
         "city_desc": "London",
-        "class": [
-          {
-            "class_desc": "Ballet & Dance"
-          }
-        ],
+        "classes": {
+          "dance": "Ballet & Dance"
+        },
         "country_code": "uk",
         "country_desc": "United Kingdom",
         "critic_review_percent": 100,
@@ -656,6 +665,7 @@ Parameter | Description
             "MH0"
           ]
         },
+        "event_uri_desc": "Matthew-Bourne%27s-Nutcracker-TEST",
         "geo_data": {
           "latitude": 51.52961137,
           "longitude": -0.10601562
@@ -776,22 +786,28 @@ Parameter | Description
         "source_desc": "External Test Backend 0",
         "user_review_percent": 100,
         "venue_desc": "Sadler's Wells",
+        "venue_uri_desc": "Sadler%27s-Wells",
         "video_iframe": {
           "video_iframe_caption": "",
           "video_iframe_caption_html": "",
           "video_iframe_height": 315,
           "video_iframe_host": "www.youtube.com",
-          "video_iframe_path": "/embed/G1JpEHGizk4",
+          "video_iframe_path": "/embed/G1JpEHGizk4?rel=0",
           "video_iframe_supports_http": false,
           "video_iframe_supports_https": true,
-          "video_iframe_url_when_insecure": "https://www.youtube.com/embed/G1JpEHGizk4",
-          "video_iframe_url_when_secure": "https://www.youtube.com/embed/G1JpEHGizk4",
+          "video_iframe_url_when_insecure": "https://www.youtube.com/embed/G1JpEHGizk4?rel=0",
+          "video_iframe_url_when_secure": "https://www.youtube.com/embed/G1JpEHGizk4?rel=0",
           "video_iframe_width": 420
         }
       },
-      "quantity_options": {
-        "valid_quantity_bitmask": 126
-      },
+      "valid_quantities": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
       "venue_is_enforced": true
     }
   }
@@ -957,20 +973,19 @@ Parameter | Description
   "events_by_id": {
     "6IF": {
       "event": {
+        "city_code": "london-uk",
         "city_desc": "London",
-        "class": [
-          {
-            "class_desc": "Ballet & Dance"
-          }
-        ],
+        "classes": {
+          "dance": "Ballet & Dance"
+        },
         "country_code": "uk",
         "country_desc": "United Kingdom",
         "critic_review_percent": 100,
         "custom_filter": [],
         "event_desc": "Matthew Bourne's Nutcracker TEST",
         "event_id": "6IF",
-        "event_info": "Matthew Bourne's stunning production of Nutcracker! returns in 2008 to Sadler's Wells having broken all box office records during last year's sell-out season.\n\nThis festive treat is full of his trademark style of wit, pathos and theatrical magic. Nutcracker! follows Clara's journey from a bleak Christmas Eve at Dr.Dross' Orphanage, through a shimmering ice-skating wonderland and to the spectacular candy folk of Sweetieland.\n\nOliver award-winning designer Anthony Ward and Tchaikovsky's much-loved score combined with sizzling choreography guarantee that Matthew Bourne's Nutcracker! is a fresh, lip-smacking, serving of traditional Christmas fare.\n\nMatthew Bourne has achieved both artistic and commercial success with his imaginative new versions of classical ballets. Last year his Play Without Words made for the Royal National Theatre, received two Olivier Awards and is shortly to be revived.\n\nDuration\n\nA Goldilocks duration - not too long, not too short, just the right amount of time.\n\n\nPerformance Times\n\nAnytime you like! As long as there's a show on...\n\n\nWhere Do I Go\n\nTo Sadler's Wells of course!\n\n\nWhat's Included\n\nEverything you need.\n\n\nGood To Know\n\nWarning! Men in very tight tights.\n\n\nSuitable For Children\n\nSure, just be aware of the aforementioned tights.\n\n",
-        "event_info_html": "<div><p>Matthew Bourne's stunning production of Nutcracker! returns in 2008 to Sadler's Wells having broken all box office records during last year's sell-out season.</p>\r\n<p>This festive treat is full of his trademark style of wit, pathos and theatrical magic. Nutcracker! follows Clara's journey from a bleak Christmas Eve at Dr.Dross' Orphanage, through a shimmering ice-skating wonderland and to the spectacular candy folk of Sweetieland.</p>\r\n<p>Oliver award-winning designer Anthony Ward and Tchaikovsky's much-loved score combined with sizzling choreography guarantee that Matthew Bourne's Nutcracker! is a fresh, lip-smacking, serving of traditional Christmas fare.</p>\r\n<p>Matthew Bourne has achieved both artistic and commercial success with his imaginative new versions of classical ballets. Last year his Play Without Words made for the Royal National Theatre, received two Olivier Awards and is shortly to be revived.</p></div>\n\n<h4>Duration</h4>\n<div><p>A Goldilocks duration - not <em>too</em> long, not <em>too</em> short, just the right amount of time.</p></div>\n\n<h4>Performance Times</h4>\n<div><p>Anytime you like! As long as there's a show on...</p></div>\n\n<h4>Where Do I Go</h4>\n<div><p>To Sadler's Wells of course!</p></div>\n\n<h4>What&#39;s Included</h4>\n<div><p>Everything you need.</p></div>\n\n<h4>Good To Know</h4>\n<div><p>Warning! Men in very tight tights.</p></div>\n\n<h4>Suitable For Children</h4>\n<div><p>Sure, just be aware of the aforementioned tights.</p></div>\n",
+        "event_info": "Matthew Bourne's stunning production of Nutcracker! returns in 2008 to Sadler's Wells having broken all box office records during last year's sell-out season.\n\nThis festive treat is full of his trademark style of wit, pathos and theatrical magic. Nutcracker! follows Clara's journey from a bleak Christmas Eve at Dr.Dross' Orphanage, through a shimmering ice-skating wonderland and to the spectacular candy folk of Sweetieland.\n\nOliver award-winning designer Anthony Ward and Tchaikovsky's much-loved score combined with sizzling choreography guarantee that Matthew Bourne's Nutcracker! is a fresh, lip-smacking, serving of traditional Christmas fare.\n\nMatthew Bourne has achieved both artistic and commercial success with his imaginative new versions of classical ballets. Last year his Play Without Words made for the Royal National Theatre, received two Olivier Awards and is shortly to be revived.\n\nDuration\n\nA Goldilocks duration - not too long, not too short, just the right amount of time.\n\n\nPerformance Times\n\nAnytime you like! As long as there's a show on...\n\n\nWhere Do I Go\n\nTo Sadler's Wells of course!\n\n\nWhat's Included\n\nEverything you need.\n\n\nGood To Know\n\nWarning! Men in very tight tights.\n\n\nSuitable For Children\n\nSure, just be aware of the aforementioned tights.\n\n\nOffers Information\n\nThis is some offers information\n\n",
+        "event_info_html": "<div><p>Matthew Bourne's stunning production of Nutcracker! returns in 2008 to Sadler's Wells having broken all box office records during last year's sell-out season.</p>\r\n<p>This festive treat is full of his trademark style of wit, pathos and theatrical magic. Nutcracker! follows Clara's journey from a bleak Christmas Eve at Dr.Dross' Orphanage, through a shimmering ice-skating wonderland and to the spectacular candy folk of Sweetieland.</p>\r\n<p>Oliver award-winning designer Anthony Ward and Tchaikovsky's much-loved score combined with sizzling choreography guarantee that Matthew Bourne's Nutcracker! is a fresh, lip-smacking, serving of traditional Christmas fare.</p>\r\n<p>Matthew Bourne has achieved both artistic and commercial success with his imaginative new versions of classical ballets. Last year his Play Without Words made for the Royal National Theatre, received two Olivier Awards and is shortly to be revived.</p></div>\n\n<h4>Duration</h4>\n<div><p>A Goldilocks duration - not <em>too</em> long, not <em>too</em> short, just the right amount of time.</p></div>\n\n<h4>Performance Times</h4>\n<div><p>Anytime you like! As long as there's a show on...</p></div>\n\n<h4>Where Do I Go</h4>\n<div><p>To Sadler's Wells of course!</p></div>\n\n<h4>What&#39;s Included</h4>\n<div><p>Everything you need.</p></div>\n\n<h4>Good To Know</h4>\n<div><p>Warning! Men in very tight tights.</p></div>\n\n<h4>Suitable For Children</h4>\n<div><p>Sure, just be aware of the aforementioned tights.</p></div>\n\n<h4>Offers Information</h4>\n<div><p>This is some offers information</p></div>\n",
         "event_path": "/6IF-matthew-bourne-s-nutcracker-test/",
         "event_status": "live",
         "event_type": "simple_ticket",
@@ -980,6 +995,7 @@ Parameter | Description
             "MH0"
           ]
         },
+        "event_uri_desc": "Matthew-Bourne%27s-Nutcracker-TEST",
         "geo_data": {
           "latitude": 51.52961137,
           "longitude": -0.10601562
@@ -1010,6 +1026,11 @@ Parameter | Description
             "name": "Good To Know",
             "value": "Warning! Men in very tight tights.\n",
             "value_html": "<p>Warning! Men in very tight tights.</p>"
+          },
+          "offers": {
+            "name": "Offers Information",
+            "value": "This is some offers information\n",
+            "value_html": "<p>This is some offers information</p>"
           },
           "overview": {
             "name": "Overview",
@@ -1045,11 +1066,17 @@ Parameter | Description
         "user_review_percent": 100,
         "venue_addr": "Roseberry Avenue\r\nIslington\r\nLondon\r\nUK",
         "venue_addr_html": "<div><p>Roseberry Avenue\r\nIslington\r\nLondon\r\nUK</p></div>\n",
-        "venue_desc": "Sadler's Wells"
+        "venue_desc": "Sadler's Wells",
+        "venue_uri_desc": "Sadler%27s-Wells"
       },
-      "quantity_options": {
-        "valid_quantity_bitmask": 126
-      },
+      "valid_quantities": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
       "venue_is_enforced": true
     }
   }
@@ -1170,12 +1197,11 @@ Parameter | Description
   "events_by_id": {
     "6IF": {
       "event": {
+        "city_code": "london-uk",
         "city_desc": "London",
-        "class": [
-          {
-            "class_desc": "Ballet & Dance"
-          }
-        ],
+        "classes": {
+          "dance": "Ballet & Dance"
+        },
         "country_code": "uk",
         "country_desc": "United Kingdom",
         "critic_review_percent": 100,
@@ -1191,6 +1217,7 @@ Parameter | Description
             "MH0"
           ]
         },
+        "event_uri_desc": "Matthew-Bourne%27s-Nutcracker-TEST",
         "geo_data": {
           "latitude": 51.52961137,
           "longitude": -0.10601562
@@ -1235,11 +1262,17 @@ Parameter | Description
         "source_code": "ext_test0",
         "source_desc": "External Test Backend 0",
         "user_review_percent": 100,
-        "venue_desc": "Sadler's Wells"
+        "venue_desc": "Sadler's Wells",
+        "venue_uri_desc": "Sadler%27s-Wells"
       },
-      "quantity_options": {
-        "valid_quantity_bitmask": 126
-      },
+      "valid_quantities": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
       "venue_is_enforced": true
     }
   }
@@ -1367,12 +1400,11 @@ Parameter | Description
   "events_by_id": {
     "6L9": {
       "event": {
+        "city_code": "las_vegas-us",
         "city_desc": "Las Vegas",
-        "class": [
-          {
-            "class_desc": "Circus, Cabaret & Variety"
-          }
-        ],
+        "classes": {
+          "circuscabaret": "Circus, Cabaret & Variety"
+        },
         "cost_range": {
           "best_value_offer": {
             "absolute_saving": 9,
@@ -1390,8 +1422,8 @@ Parameter | Description
             "offer_surcharge": 3,
             "percentage_saving": 11
           },
-          "max_seatprice": 75,
-          "max_surcharge": 5,
+          "max_seatprice": 68,
+          "max_surcharge": 3,
           "min_cost_offer": {
             "absolute_saving": 9,
             "full_seatprice": 75,
@@ -1419,8 +1451,8 @@ Parameter | Description
               "offer_surcharge": 3,
               "percentage_saving": 11
             },
-            "max_seatprice": 75,
-            "max_surcharge": 5,
+            "max_seatprice": 68,
+            "max_surcharge": 3,
             "min_cost_offer": {
               "absolute_saving": 9,
               "full_seatprice": 75,
@@ -1431,11 +1463,13 @@ Parameter | Description
             },
             "min_seatprice": 68,
             "min_surcharge": 3,
-            "quantity_options": {
-              "valid_quantity_bitmask": 30
-            },
             "range_currency": {
-              "currency_code": "usd"
+              "currency_code": "usd",
+              "currency_factor": 100,
+              "currency_number": 840,
+              "currency_places": 2,
+              "currency_post_symbol": "",
+              "currency_pre_symbol": "$"
             },
             "top_price_offer": {
               "absolute_saving": 9,
@@ -1444,13 +1478,21 @@ Parameter | Description
               "offer_seatprice": 68,
               "offer_surcharge": 3,
               "percentage_saving": 11
-            }
-          },
-          "quantity_options": {
-            "valid_quantity_bitmask": 30
+            },
+            "valid_quantities": [
+              1,
+              2,
+              3,
+              4
+            ]
           },
           "range_currency": {
-            "currency_code": "usd"
+            "currency_code": "usd",
+            "currency_factor": 100,
+            "currency_number": 840,
+            "currency_places": 2,
+            "currency_post_symbol": "",
+            "currency_pre_symbol": "$"
           },
           "top_price_offer": {
             "absolute_saving": 9,
@@ -1459,7 +1501,13 @@ Parameter | Description
             "offer_seatprice": 68,
             "offer_surcharge": 3,
             "percentage_saving": 11
-          }
+          },
+          "valid_quantities": [
+            1,
+            2,
+            3,
+            4
+          ]
         },
         "country_code": "us",
         "country_desc": "United States of America",
@@ -1469,6 +1517,7 @@ Parameter | Description
         "event_path": "/6L9-la-femme/",
         "event_status": "live",
         "event_type": "simple_ticket",
+        "event_uri_desc": "La-Femme",
         "geo_data": {
           "latitude": 36.1034,
           "longitude": -115.1721
@@ -1484,11 +1533,15 @@ Parameter | Description
         "show_perf_time": true,
         "source_code": "ext_test1",
         "source_desc": "External Test Backend 1",
-        "venue_desc": "MGM Grand Las Vegas"
+        "venue_desc": "MGM Grand Las Vegas",
+        "venue_uri_desc": "MGM-Grand-Las-Vegas"
       },
-      "quantity_options": {
-        "valid_quantity_bitmask": 30
-      },
+      "valid_quantities": [
+        1,
+        2,
+        3,
+        4
+      ],
       "venue_is_enforced": true
     }
   }
@@ -1531,7 +1584,7 @@ pyticketswitch.Event(
 )
 ```
 
-<aside class="notice">Particularly in the UK market, offers are classified as 
+<aside class="notice">In the UK market, offers are typically classified as 
 either "discounted face value" or "no booking fee". Discounted face value 
 offers have an offer seatprice that is lower than the full price seatprice (and
 normally they have an offer surcharge of zero). No booking fee offers have
@@ -1626,12 +1679,11 @@ Parameter | Description
   "events_by_id": {
     "6IF": {
       "event": {
+        "city_code": "london-uk",
         "city_desc": "London",
-        "class": [
-          {
-            "class_desc": "Ballet & Dance"
-          }
-        ],
+        "classes": {
+          "dance": "Ballet & Dance"
+        },
         "cost_range_details": {
           "ticket_type": [
             {
@@ -1642,12 +1694,22 @@ Parameter | Description
                     "max_surcharge": 0,
                     "min_seatprice": 47,
                     "min_surcharge": 0,
-                    "quantity_options": {
-                      "valid_quantity_bitmask": 126
-                    },
                     "range_currency": {
-                      "currency_code": "gbp"
-                    }
+                      "currency_code": "gbp",
+                      "currency_factor": 100,
+                      "currency_number": 826,
+                      "currency_places": 2,
+                      "currency_post_symbol": "",
+                      "currency_pre_symbol": "£"
+                    },
+                    "valid_quantities": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6
+                    ]
                   },
                   "price_band_code": "A",
                   "price_band_desc": ""
@@ -1664,12 +1726,22 @@ Parameter | Description
                     "max_surcharge": 0,
                     "min_seatprice": 35,
                     "min_surcharge": 0,
-                    "quantity_options": {
-                      "valid_quantity_bitmask": 126
-                    },
                     "range_currency": {
-                      "currency_code": "gbp"
-                    }
+                      "currency_code": "gbp",
+                      "currency_factor": 100,
+                      "currency_number": 826,
+                      "currency_places": 2,
+                      "currency_post_symbol": "",
+                      "currency_pre_symbol": "£"
+                    },
+                    "valid_quantities": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6
+                    ]
                   },
                   "price_band_code": "A",
                   "price_band_desc": ""
@@ -1680,12 +1752,22 @@ Parameter | Description
                     "max_surcharge": 0,
                     "min_seatprice": 30,
                     "min_surcharge": 0,
-                    "quantity_options": {
-                      "valid_quantity_bitmask": 126
-                    },
                     "range_currency": {
-                      "currency_code": "gbp"
-                    }
+                      "currency_code": "gbp",
+                      "currency_factor": 100,
+                      "currency_number": 826,
+                      "currency_places": 2,
+                      "currency_post_symbol": "",
+                      "currency_pre_symbol": "£"
+                    },
+                    "valid_quantities": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6
+                    ]
                   },
                   "price_band_code": "B",
                   "price_band_desc": ""
@@ -1696,12 +1778,22 @@ Parameter | Description
                     "max_surcharge": 0,
                     "min_seatprice": 25,
                     "min_surcharge": 0,
-                    "quantity_options": {
-                      "valid_quantity_bitmask": 126
-                    },
                     "range_currency": {
-                      "currency_code": "gbp"
-                    }
+                      "currency_code": "gbp",
+                      "currency_factor": 100,
+                      "currency_number": 826,
+                      "currency_places": 2,
+                      "currency_post_symbol": "",
+                      "currency_pre_symbol": "£"
+                    },
+                    "valid_quantities": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6
+                    ]
                   },
                   "price_band_code": "C",
                   "price_band_desc": ""
@@ -1718,12 +1810,22 @@ Parameter | Description
                     "max_surcharge": 0,
                     "min_seatprice": 21,
                     "min_surcharge": 0,
-                    "quantity_options": {
-                      "valid_quantity_bitmask": 126
-                    },
                     "range_currency": {
-                      "currency_code": "gbp"
-                    }
+                      "currency_code": "gbp",
+                      "currency_factor": 100,
+                      "currency_number": 826,
+                      "currency_places": 2,
+                      "currency_post_symbol": "",
+                      "currency_pre_symbol": "£"
+                    },
+                    "valid_quantities": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6
+                    ]
                   },
                   "price_band_code": "A",
                   "price_band_desc": ""
@@ -1734,12 +1836,19 @@ Parameter | Description
                     "max_surcharge": 0,
                     "min_seatprice": 18,
                     "min_surcharge": 0,
-                    "quantity_options": {
-                      "valid_quantity_bitmask": 14
-                    },
                     "range_currency": {
-                      "currency_code": "gbp"
-                    }
+                      "currency_code": "gbp",
+                      "currency_factor": 100,
+                      "currency_number": 826,
+                      "currency_places": 2,
+                      "currency_post_symbol": "",
+                      "currency_pre_symbol": "£"
+                    },
+                    "valid_quantities": [
+                      1,
+                      2,
+                      3
+                    ]
                   },
                   "price_band_code": "B",
                   "price_band_desc": ""
@@ -1765,6 +1874,7 @@ Parameter | Description
             "MH0"
           ]
         },
+        "event_uri_desc": "Matthew-Bourne%27s-Nutcracker-TEST",
         "geo_data": {
           "latitude": 51.52961137,
           "longitude": -0.10601562
@@ -1781,11 +1891,17 @@ Parameter | Description
         "source_code": "ext_test0",
         "source_desc": "External Test Backend 0",
         "user_review_percent": 100,
-        "venue_desc": "Sadler's Wells"
+        "venue_desc": "Sadler's Wells",
+        "venue_uri_desc": "Sadler%27s-Wells"
       },
-      "quantity_options": {
-        "valid_quantity_bitmask": 126
-      },
+      "valid_quantities": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
       "venue_is_enforced": true
     }
   }
@@ -2106,7 +2222,7 @@ client.get_events(['6IF'], availability=True, availability_with_performances=Tru
 
 Parameter | Description
 --------- | -----------
-`req_avail_details` | Returns a list of unique ticket types and price bands that are available for this event across all performances.
+`req_avail_details` | Returns a list of unique ticket types and price bands that are available for this event across all performances. **This parameter is not commonly used.**
 `req_avail_details_with_perfs` | This will add the list of available performance dates to each avail detail object. **Only valid if used alongside req_avail_details**
 
 ### Response
@@ -2126,27 +2242,35 @@ Parameter | Description
                   "avail_detail": [
                     {
                       "avail_currency": {
-                        "currency_code": "gbp"
+                        "currency_code": "gbp",
+                        "currency_factor": 100,
+                        "currency_number": 826,
+                        "currency_places": 2,
+                        "currency_post_symbol": "",
+                        "currency_pre_symbol": "£"
                       },
                       "available_dates": {
-                        "first_yyyymmdd": "20161221",
-                        "last_yyyymmdd": "20170419",
-                        "year_2016": {
-                          "dec_bitmask": 1064304640
-                        },
+                        "first_yyyymmdd": "20170119",
+                        "last_yyyymmdd": "20170518",
                         "year_2017": {
-                          "apr_bitmask": 507774,
+                          "apr_bitmask": 803192702,
                           "feb_bitmask": 251526135,
-                          "jan_bitmask": 2012209087,
-                          "mar_bitmask": 2130574327
+                          "jan_bitmask": 2011955200,
+                          "mar_bitmask": 2130574327,
+                          "may_bitmask": 258015
                         }
                       },
                       "available_weekdays_bitmask": 63,
-                      "quantity_options": {
-                        "valid_quantity_bitmask": 126
-                      },
                       "seatprice": 47,
-                      "surcharge": 0
+                      "surcharge": 0,
+                      "valid_quantities": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6
+                      ]
                     }
                   ],
                   "price_band_code": "A",
@@ -2162,27 +2286,35 @@ Parameter | Description
                   "avail_detail": [
                     {
                       "avail_currency": {
-                        "currency_code": "gbp"
+                        "currency_code": "gbp",
+                        "currency_factor": 100,
+                        "currency_number": 826,
+                        "currency_places": 2,
+                        "currency_post_symbol": "",
+                        "currency_pre_symbol": "£"
                       },
                       "available_dates": {
-                        "first_yyyymmdd": "20161221",
-                        "last_yyyymmdd": "20170419",
-                        "year_2016": {
-                          "dec_bitmask": 1064304640
-                        },
+                        "first_yyyymmdd": "20170119",
+                        "last_yyyymmdd": "20170518",
                         "year_2017": {
-                          "apr_bitmask": 507774,
+                          "apr_bitmask": 803192702,
                           "feb_bitmask": 251526135,
-                          "jan_bitmask": 2012209087,
-                          "mar_bitmask": 2130574327
+                          "jan_bitmask": 2011955200,
+                          "mar_bitmask": 2130574327,
+                          "may_bitmask": 258015
                         }
                       },
                       "available_weekdays_bitmask": 63,
-                      "quantity_options": {
-                        "valid_quantity_bitmask": 126
-                      },
                       "seatprice": 35,
-                      "surcharge": 0
+                      "surcharge": 0,
+                      "valid_quantities": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6
+                      ]
                     }
                   ],
                   "price_band_code": "A",
@@ -2192,27 +2324,35 @@ Parameter | Description
                   "avail_detail": [
                     {
                       "avail_currency": {
-                        "currency_code": "gbp"
+                        "currency_code": "gbp",
+                        "currency_factor": 100,
+                        "currency_number": 826,
+                        "currency_places": 2,
+                        "currency_post_symbol": "",
+                        "currency_pre_symbol": "£"
                       },
                       "available_dates": {
-                        "first_yyyymmdd": "20161221",
-                        "last_yyyymmdd": "20170419",
-                        "year_2016": {
-                          "dec_bitmask": 1064304640
-                        },
+                        "first_yyyymmdd": "20170119",
+                        "last_yyyymmdd": "20170518",
                         "year_2017": {
-                          "apr_bitmask": 507774,
+                          "apr_bitmask": 803192702,
                           "feb_bitmask": 251526135,
-                          "jan_bitmask": 2012209087,
-                          "mar_bitmask": 2130574327
+                          "jan_bitmask": 2011955200,
+                          "mar_bitmask": 2130574327,
+                          "may_bitmask": 258015
                         }
                       },
                       "available_weekdays_bitmask": 63,
-                      "quantity_options": {
-                        "valid_quantity_bitmask": 126
-                      },
                       "seatprice": 30,
-                      "surcharge": 0
+                      "surcharge": 0,
+                      "valid_quantities": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6
+                      ]
                     }
                   ],
                   "price_band_code": "B",
@@ -2222,27 +2362,35 @@ Parameter | Description
                   "avail_detail": [
                     {
                       "avail_currency": {
-                        "currency_code": "gbp"
+                        "currency_code": "gbp",
+                        "currency_factor": 100,
+                        "currency_number": 826,
+                        "currency_places": 2,
+                        "currency_post_symbol": "",
+                        "currency_pre_symbol": "£"
                       },
                       "available_dates": {
-                        "first_yyyymmdd": "20161221",
-                        "last_yyyymmdd": "20170419",
-                        "year_2016": {
-                          "dec_bitmask": 1064304640
-                        },
+                        "first_yyyymmdd": "20170119",
+                        "last_yyyymmdd": "20170518",
                         "year_2017": {
-                          "apr_bitmask": 507774,
+                          "apr_bitmask": 803192702,
                           "feb_bitmask": 251526135,
-                          "jan_bitmask": 2012209087,
-                          "mar_bitmask": 2130574327
+                          "jan_bitmask": 2011955200,
+                          "mar_bitmask": 2130574327,
+                          "may_bitmask": 258015
                         }
                       },
                       "available_weekdays_bitmask": 63,
-                      "quantity_options": {
-                        "valid_quantity_bitmask": 126
-                      },
                       "seatprice": 25,
-                      "surcharge": 0
+                      "surcharge": 0,
+                      "valid_quantities": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6
+                      ]
                     }
                   ],
                   "price_band_code": "C",
@@ -2258,27 +2406,35 @@ Parameter | Description
                   "avail_detail": [
                     {
                       "avail_currency": {
-                        "currency_code": "gbp"
+                        "currency_code": "gbp",
+                        "currency_factor": 100,
+                        "currency_number": 826,
+                        "currency_places": 2,
+                        "currency_post_symbol": "",
+                        "currency_pre_symbol": "£"
                       },
                       "available_dates": {
-                        "first_yyyymmdd": "20161221",
-                        "last_yyyymmdd": "20170419",
-                        "year_2016": {
-                          "dec_bitmask": 1064304640
-                        },
+                        "first_yyyymmdd": "20170119",
+                        "last_yyyymmdd": "20170518",
                         "year_2017": {
-                          "apr_bitmask": 507774,
+                          "apr_bitmask": 803192702,
                           "feb_bitmask": 251526135,
-                          "jan_bitmask": 2012209087,
-                          "mar_bitmask": 2130574327
+                          "jan_bitmask": 2011955200,
+                          "mar_bitmask": 2130574327,
+                          "may_bitmask": 258015
                         }
                       },
                       "available_weekdays_bitmask": 63,
-                      "quantity_options": {
-                        "valid_quantity_bitmask": 126
-                      },
                       "seatprice": 21,
-                      "surcharge": 0
+                      "surcharge": 0,
+                      "valid_quantities": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6
+                      ]
                     }
                   ],
                   "price_band_code": "A",
@@ -2288,27 +2444,32 @@ Parameter | Description
                   "avail_detail": [
                     {
                       "avail_currency": {
-                        "currency_code": "gbp"
+                        "currency_code": "gbp",
+                        "currency_factor": 100,
+                        "currency_number": 826,
+                        "currency_places": 2,
+                        "currency_post_symbol": "",
+                        "currency_pre_symbol": "£"
                       },
                       "available_dates": {
-                        "first_yyyymmdd": "20161221",
-                        "last_yyyymmdd": "20170419",
-                        "year_2016": {
-                          "dec_bitmask": 1064304640
-                        },
+                        "first_yyyymmdd": "20170119",
+                        "last_yyyymmdd": "20170518",
                         "year_2017": {
-                          "apr_bitmask": 507774,
+                          "apr_bitmask": 803192702,
                           "feb_bitmask": 251526135,
-                          "jan_bitmask": 2012209087,
-                          "mar_bitmask": 2130574327
+                          "jan_bitmask": 2011955200,
+                          "mar_bitmask": 2130574327,
+                          "may_bitmask": 258015
                         }
                       },
                       "available_weekdays_bitmask": 63,
-                      "quantity_options": {
-                        "valid_quantity_bitmask": 14
-                      },
                       "seatprice": 18,
-                      "surcharge": 0
+                      "surcharge": 0,
+                      "valid_quantities": [
+                        1,
+                        2,
+                        3
+                      ]
                     }
                   ],
                   "price_band_code": "B",
@@ -2320,12 +2481,11 @@ Parameter | Description
             }
           ]
         },
+        "city_code": "london-uk",
         "city_desc": "London",
-        "class": [
-          {
-            "class_desc": "Ballet & Dance"
-          }
-        ],
+        "classes": {
+          "dance": "Ballet & Dance"
+        },
         "country_code": "uk",
         "country_desc": "United Kingdom",
         "critic_review_percent": 100,
@@ -2341,6 +2501,7 @@ Parameter | Description
             "MH0"
           ]
         },
+        "event_uri_desc": "Matthew-Bourne%27s-Nutcracker-TEST",
         "geo_data": {
           "latitude": 51.52961137,
           "longitude": -0.10601562
@@ -2357,11 +2518,17 @@ Parameter | Description
         "source_code": "ext_test0",
         "source_desc": "External Test Backend 0",
         "user_review_percent": 100,
-        "venue_desc": "Sadler's Wells"
+        "venue_desc": "Sadler's Wells",
+        "venue_uri_desc": "Sadler%27s-Wells"
       },
-      "quantity_options": {
-        "valid_quantity_bitmask": 126
-      },
+      "valid_quantities": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
       "venue_is_enforced": true
     }
   }
@@ -2553,6 +2720,6 @@ Attribute | Description
 `avail_currency` | The price [currency](#currency-object).
 `available_dates` | `first_yyyymmdd` and `last_yyyymmdd` for the range. 
 `available_weekdays_bitmask` | The days of the week where we have seen availability.
-`quantity_options.valid_quantity_bitmask` | The available quantities we have seen for this price band.
+`valid_quantities` | An array of available quantities we have seen for this price band.
 `seatprice` | The per-ticket face value.
 `surcharge` | The per-ticket booking fee.
