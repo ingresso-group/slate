@@ -184,5 +184,5 @@ Attribute | Description
 `external_sale_page` | The detail of the confirmation page that was displayed to customers. Only included when the `add_external_sale_page` parameter is present and the `transaction_status` is `purchased`.
 `purchase_iso8601_date_and_time` | The time the tickets were successfully purchased. 
 `reserve_iso8601_date_and_time` | The time the tickets were successfully reserved.
-`transaction_status` | One of `reserved`, `released` or `purchased` (TODO: anything else?)
+`transaction_status` | One of `reserved`, `released`, `purchased`, `failed`, or `attempting` (will only be seen if the customer is being redirected to a payment page - most partners will not see this).
 `trolley` | The `trolley` object. If the `transaction_status` is `reserved` or `released`, the trolley attributes are as described in the [reserve](#reserve) response. If the `transaction_status` is `purchased` the trolley attributes are as described in the [purchase](#purchase) response. Note that if the `transaction_status` is `released` you should ignore the value of `minutes_left_on_reserve`.

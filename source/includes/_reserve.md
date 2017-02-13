@@ -787,9 +787,9 @@ Attribute | Description
 `event` | The [event](#event-object) for this order.
 `item_number` | A unique sequential number for the `order`. The second order added to the trolley will have `item_number` 2. The `item_number` remains constant as orders are added or removed, so if `item_number` 1 is removed, the first order will be `item_number` 2.
 `performance` | The [performance](#performance-object) for this order.
-`price_band_code` | The code for a price band. To uniquely identify a price band you should take the combination of `ticket_type_code`
+`price_band_code` | The code for a price band, for example "C/pool". The price band code is generally made up of the code from the underlying supplier system, e.g. "C", followed by a "/" separator then "pool" or "alloc", indicating whether the price band is taken from the general pool of tickets or is from a ring-fenced allocation.
 `seat_request_status` | The status of your tickets after they have been reserved. Possible values are `not_requested` (specific seats not requested), `got_none` (you requested A13 and A14 but we gave you A15 and A16), `got_partial` (you requested A13 and A14 but we gave you A14 and A15), `got_all` (you requested A13 and A14 and you got A13 and A14 - by far the most common response when requesting specific seats). 
-`ticket_orders` | A number of ticket_order objects, details below.
+`ticket_orders` | An array of ticket_order objects, one for each discount code. See below for detail.
 `ticket_type_code` | The unique identifier for the ticket type. For seated events this refers to a part of house / seating area such as Grand Circle.
 `ticket_type_desc` | The description for the ticket type. This should be displayed to the customer
 `total_no_of_seats` | The number of seats for this order.
@@ -810,14 +810,18 @@ Attribute | Description
 `sale_seatprice_in_desired` | The face value per ticket in this ticket_order, converted to your `desired_currency`. This field will not be present for most partners.
 `sale_surcharge` | The booking fee per ticket in this ticket_order.
 `sale_surcharge_in_desired` | The booking fee per ticket in this ticket_order, converted to your `desired_currency`. This field will not be present for most partners.
-`seats` | For seated events, an array of reserved seats.
-`seats.col_id` | The column identifier of the seat.
-`seats.full_id` | The ID of the seat - comprised of the `col_id` and the `row_id`, sometimes with a separator between them.
-`seats.is_restricted_view` | `true` if the seat is classified as having a restricted view.
-`seats.row_id` | The row identifier of the seat.
-`seats.seat_text` | A message about the seat that must be displayed to customers.
-`seats.seat_text_code` | An identifier for the seat text (only unique within the current `bundle_source_code`). Not useful for most partners.
+`seats` | For seated events, an array of reserved seats. See below for detail.
 `total_sale_seatprice` | The total face value of all tickets in this ticket_order.
 `total_sale_seatprice_in_desired` | The total face value of all tickets in this ticket_order, converted to your `desired_currency`. This field will not be present for most partners.
 `total_sale_surcharge` | The total booking fee of all tickets in this ticket_order.
 `total_sale_surcharge_in_desired` | The total booking fee of all tickets in this ticket_order, converted to your `desired_currency`. This field will not be present for most partners.
+
+
+**`seats` attributes:**
+
+`col_id` | The column identifier of the seat.
+`full_id` | The ID of the seat - comprised of the `col_id` and the `row_id`, sometimes with a separator between them.
+`is_restricted_view` | `true` if the seat is classified as having a restricted view.
+`row_id` | The row identifier of the seat.
+`seat_text` | A message about the seat that must be displayed to customers.
+`seat_text_code` | An identifier for the seat text (only unique within the current `bundle_source_code`). Not useful for most partners.

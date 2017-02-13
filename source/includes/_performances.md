@@ -75,7 +75,7 @@ Parameter | Description
 `event_id` | Identifier of the event you want to see performances for.
 `page_len` | Length of a page, default 50.
 `page_no` | Page number, default 0, ignored if page_len is not present.
-`s_dates` | Date range in the form `yyyymmdd:yyyymmdd` (both are optional)
+`date_range` | Date range in the form `yyyymmdd:yyyymmdd` (both are optional)
 
 These parameters can be passed in to request additional data for each 
 performance, and are described in more detail in the 

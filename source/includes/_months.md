@@ -4,11 +4,13 @@
 GET https://demo.ticketswitch.com/f13/months.v1?event_id={eventid}
 ```
 
-This resource gives a summary of the availability across a calendar month
+This resource gives a summary of the availability across calendar months
 
-Months are provided for those who wish to display month-level summary data; for 
-example listing the available months above a calendar. This resource can remove
-the need to summarise performance-level data in your application.
+`months` is provided for those who wish to display month-level summary data; for 
+example listing the available months in tabs above a calendar. This resource can 
+remove the need to summarise performance-level data in your application.
+
+It is an optional resource that not all partners choose to use.
 
 > **Example request**
 

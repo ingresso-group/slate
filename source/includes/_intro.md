@@ -1,18 +1,20 @@
 <!---
 # TODOs / Questions
 
+* Improve test events
+* Purchase
+* Explain why you sometimes get unreserved_orders
 * GET for Status?
 * Note re similarity of trolley object across calls
 * Matt to add docs for cities and categories
 * Need to document the disallowed discount codes - need a test event with this data
-* Matt to include a section describing how our caching works
 * Matt to add a test meta event, and refer to this in the test intro section and wherever meta events are mentioned.
-* Purchase
 * avail_details needs a link to the bitmask explanation (and needs the fields updated)
-
+* benchmark old vs new API
 * Error codes need to be added everywhere by Pete.
 
 * Amazon suggested we return a 429 - TOO MANY REQUESTS when we return backend_call_failed or backend_call_throttling_failed. Should we use http status codes in this type of case? These cases are an exception where they don't really look like errors (initially by design...)
+
 * There are a number of places where the JSON object nesting isn't as simple as it could be. Eg instead of "event_upsell_list": ["6IE","MH0"] we have:
   "event_upsell_list": {
     "event_id": [
@@ -36,9 +38,8 @@
 
 Possible V2 functionality:
 * A test API server or some form of rate limiting for particular users would help. Would allow us to give open access without worrying about someone hammering our main API server.
-* Allowing search on cost ranges would be useful
-* Can we be more restful eg /events/25DR to get detail by event ID?
 * A reporting API would be useful - our internal reporting apps should also use this
+* Can we be more restful eg /events/25DR to get detail by event ID?
 * Should we have the concept of a venue with an ID? (when the venue is enforced)
 -->
 
@@ -401,8 +402,8 @@ events: 3CVA, 3CVB, 3CVC, 3CVD, 3CVE, 3CVF or 3CVG.
 Note that we have a seat selection seating plan available for 3CVE - this will
 be helpful if you decide to implement seat selection on your front end (please
 email  api@ingresso.co.uk and we can talk you through this). The availability on
-these seat selection events is limited, so please keep test purchasing to a
-minimum.
+these seat selection events is limited, so please limit test purchasing to manual
+purchases only, do not use automated purchasing for these events.
 
 It may be useful to use our [B2B website](https://b2b.ingresso.co.uk/b2b/) as a
 working example during your development.

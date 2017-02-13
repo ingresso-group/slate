@@ -268,7 +268,7 @@ Attribute | Description
 `non_offer_sale_surcharge` | The per-ticket booking fee for full-priced tickets. To determine the total ticket price you must add together the `non_offer_sale_seatprice` and the `non_offer_sale_surcharge`.
 `number_available` | This is the maximum number of contiguous seats that can be purchased. This applies to best available only - if you are using seat selection and `contiguous_seat_selection_only` is `false` it is possible to select above this number.
 `percentage_saving` | Defined as `absolute_saving` / (`non_offer_sale_seatprice` + `non_offer_sale_surcharge`) * 100
-`price_band_code` | The code for a price band. To uniquely identify a price band you should take the combination of `ticket_type_code` and `price_band_code`. The price band code is generally made up of the code from the underlying supplier system, e.g. "C", followed by a "/" separator then "pool" or "alloc", indicating whether the price band is taken from the general pool of tickets or is from a ring-fenced allocation. The combined price_band_code looks like "C/pool". Integrating partners should just work with the full price_band_code, ignoring the constituent parts.
+`price_band_code` | The code for a price band, for example "C/pool". To uniquely identify a price band you should take the combination of `ticket_type_code` and `price_band_code`. The price band code is generally made up of the code from the underlying supplier system, e.g. "C", followed by a "/" separator then "pool" or "alloc", indicating whether the price band is taken from the general pool of tickets or is from a ring-fenced allocation. Integrating partners should just work with the full price_band_code, ignoring the constituent parts.
 `price_band_description??` | (TODO what is the actual name of this attribute?)
 `sale_seatprice` | The per-ticket price. This will be the face value price when the market has such a concept (for example the London theatre market has this concept, but some New York theatre shows do not). This is the same as the `non_offer_sale_seatprice` when the price band is not discounted.
 `sale_surcharge` | The per-ticket booking fee. To determine the total ticket price you must add together the `sale_seatprice` and the `sale_surcharge`.
@@ -1314,7 +1314,7 @@ Attribute | Description
 --------- | -----------
 `amount_excluding_vat` | The commission you will earn per ticket, excluding sales tax.
 `amount_including_vat` | The commission you will earn per ticket, including sales tax.
-`commission_currency` | The currency of the commission amount.
+`commission_currency` | The commission currency (note that this can be different to the currency of the price paid by the customer).
 
 
 ## Add Discounts

@@ -71,7 +71,7 @@ Parameter | Description
 --------- | -----------
 `page_len` | Length of a page, default 50.
 `page_no` | Page number, default 0, ignored if page_len is not present.
-`sort_order` | Valid values are `most_popular` (based on sales across all partners over the last 48 hours), `alphabetic`, `cost_ascending` (lowest price first, based on the minimum total price [seatprice + surcharge] for the event), `cost_descending` (highest price first, based on the *maximum* total price for the event), `critic_rating` (average critic rating, highest to lowest), `recent`, `last_sale`. When there is a tie alphabetic ordering is used to break the tie.
+`sort_order` | Valid values are `most_popular` (based on sales across all partners over the last 48 hours), `alphabetic`, `cost_ascending` (lowest price first, based on the minimum total price [seatprice + surcharge] for the event), `cost_descending` (highest price first, based on the *maximum* total price for the event), `critic_rating` (average critic rating, highest to lowest), `recent`, `last_sale`. When there is a tie alphabetic ordering is used to break the tie. **Note: there is a slight performance impact to using `cost_ascending` or `cost_descending` if you are not also using the `req_cost_range` parameter.**
 
 These parameters can be passed in to request additional data for each event, and 
 are described in more detail in the 
@@ -2710,16 +2710,16 @@ Attribute | Description
 `avail_details` | A list of the prices in this price band and when they are available.
 
 
-The **avail details** indicate which prices we have seen and when they are expected
-to be available. If the `req_avail_details_with_perfs` parameter was included 
-then the availability details will include information on what performances where
-available with that price.
+The **avail details** indicate which prices we have seen and when they are
+expected to be available. If the `req_avail_details_with_perfs` parameter was
+included  then the availability details will include information on what
+performances where available with that price.
 
 Attribute | Description
 --------- | -----------
 `avail_currency` | The price [currency](#currency-object).
-`available_dates` | `first_yyyymmdd` and `last_yyyymmdd` for the range. 
-`available_weekdays_bitmask` | The days of the week where we have seen availability.
-`valid_quantities` | An array of available quantities we have seen for this price band.
+`available_dates` | `first_yyyymmdd` and `last_yyyymmdd` for the range, and year_YYYY includes a bitmask for each month of the year (if, for example, the `jan_bitmask` is 1959 (i.e. "11110100111") this means there is availability on the following days of the month only: 1,2,3,6,8,9,10,11).
+`available_weekdays_bitmask` | The days of the week where we have seen availability - see the example in the [bitmask fields](#bitmask-fields) explanation.
 `seatprice` | The per-ticket face value.
 `surcharge` | The per-ticket booking fee.
+`valid_quantities` | An array of available quantities we have seen for this price band.

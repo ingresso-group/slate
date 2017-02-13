@@ -1,6 +1,6 @@
 # Bitmask Fields
 
-This section describes the bitmasks fields returned in response to some api
+This section describes the bitmasks fields returned in response to some API
 calls and explains how to decode their data. 
 
 The bitmask is an positive integer whose binary representation can be considered
@@ -49,11 +49,6 @@ converts binary data into integers.
 
 ## Decoding
 
-
-Assume that you have received `91` as the week day mask in a response from the
-API and you want to see if the event has a performance on a Wednesday. You can
-quickly check this a number of ways. 
-
 ```
 using bitwise OR:
 
@@ -71,14 +66,14 @@ using bitwise OR:
 
 ```
 
-Firstly you can `OR` the mask against the correct day of the week in binary. For
+Assume that you have received `91` as the week day mask in a response from the
+API and you want to see if the event has a performance on a Wednesday. You can
+quickly check this with an `OR` of the mask against the correct day of the week in binary. For
 example the number you get when you put a `1` in only the Wednesday column is
 `8` or `00001000`. When you use `OR` it will give you a `1` if there is a `1` in
 that column in the mask or in your day of the week. `00001000 | 01011011 ==
-01011011` or `91`. Because the output is the same as the  mask you now know that
+01011011` or `91`. Because the output is the same as the mask you now know that
 there is a `1` in the 4th bit of the mask.  If you wanted to check Tuesday you
 could use `4` or `00000100` against the mask, this would return `01011111` or
-`95`, the output is different from your mask, therefore we don't have anything
-on a tuesday. You can do compound `OR` as well `00001000 | 00000100 == 00001100`
-or `12` so 
-(TODO: Nic please finish)
+`95`; the output is different from your mask, therefore we don't have anything
+on a Tuesday.
