@@ -21,6 +21,7 @@ called as needed to ensure the user isn't seeing options that are out of date.
 curl https://demo.ticketswitch.com/f13/send_methods.v1 \
     -u "demo:demopass" \
     -d "perf_id=6IF-B0I" \
+    --compressed \
     -G
 ```
 

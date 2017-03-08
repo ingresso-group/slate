@@ -18,6 +18,7 @@ It is an optional resource that not all partners choose to use.
 curl https://demo.ticketswitch.com/f13/months.v1 \
     -u "demo:demopass" \
     -d "event_id=6IF" \
+    --compressed \
     -G
 ```
 

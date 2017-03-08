@@ -60,6 +60,7 @@ curl https://demo.ticketswitch.com/f13/performances.v1 \
     -u "demo:demopass" \
     -d "event_id=6IF" \
     -d "page_len=10" \
+    --compressed \
     -G
 ```
 
@@ -364,6 +365,7 @@ this in most cases.
 curl https://demo.ticketswitch.com/f13/performances_by_id.v1 \
     -u "demo:demopass" \
     -d "perf_id_list=6IF-A8J,6IF-A8K" \
+    --compressed \
     -G
 ```
 
@@ -510,6 +512,7 @@ curl https://demo.ticketswitch.com/f13/performancess_by_id.v1 \
     -d "req_cost_range_min_cost_offer" \
     -d "req_cost_range_top_price_offer" \
     -d "req_cost_range_no_singles_data" \
+    --compressed \
     -G
 ```
 
@@ -757,6 +760,7 @@ curl https://demo.ticketswitch.com/f13/performances_by_id.v1 \
     -u "demo:demopass" \
     -d "perf_id_list=6IF-A8K" \
     -d "req_avail_details" \
+    --compressed \
     -G
 ```
 

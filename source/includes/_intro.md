@@ -103,6 +103,7 @@ curl https://demo.ticketswitch.com/f13/events.v1 \
     -u "demo:demopass" \
     -d "req_cost_range" \
     -d "req_media_triplet_one" \
+    --compressed \
     -G
 ```
 
@@ -113,6 +114,7 @@ curl https://demo.ticketswitch.com/f13/performances.v1 \
     -u "demo:demopass" \
     -d "event_id=6IF" \
     -d "page_len=200" \
+    --compressed \
     -G
 ```
 
@@ -122,6 +124,7 @@ curl https://demo.ticketswitch.com/f13/performances.v1 \
 curl https://demo.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
     -d "perf_id=6IF-B0T" \
+    --compressed \
     -G
 ```
 
@@ -134,6 +137,7 @@ curl https://demo.ticketswitch.com/f13/reserve.v1 \
     -d "ticket_type_code=CIRCLE" \
     -d "price_band_code=A/pool" \
     -d "no_of_seats=2" \
+    --compressed \
     -G
 ```
 
@@ -143,6 +147,7 @@ curl https://demo.ticketswitch.com/f13/reserve.v1 \
 curl https://demo.ticketswitch.com/f13/purchase.v1 \
     -u "demo:demopass" \
     -d "transaction_uuid=XXXXXXXX" \
+    --compressed \
     -G
 ```
 
@@ -249,6 +254,7 @@ curl https://demo.ticketswitch.com/f13/events.v1 \
     -u "demo:demopass" \
     -d "s_keys=matthew" \
     -d "s_coco=uk" \
+    --compressed \
     -G
 ```
 
@@ -265,6 +271,7 @@ curl https://demo.ticketswitch.com/f13/events.v1/demo/demosub/nl \
     -u "demo:demopass" \
     -d "s_keys=matthew" \
     -d "req_extra_info" \
+    --compressed \
     -G
 ```
 

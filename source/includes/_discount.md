@@ -34,6 +34,7 @@ curl https://demo.ticketswitch.com/f13/discounts.v1 \
     -d "perf_id=6IF-B0I" \
     -d "price_band_code=A/pool" \
     -d "ticket_type_code=CIRCLE" \
+    --compressed \
     -G
 ```
 

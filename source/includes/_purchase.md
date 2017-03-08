@@ -123,6 +123,7 @@ curl https://demo.ticketswitch.com/f13/purchase.v1 \
     -d "country_code=uk" \
     -d "phone=0203 137 7420" \
     -d "email_address=tester@gmail.com" \
+    --compressed \
     -X POST
 ```
 
@@ -608,6 +609,7 @@ curl https://demo.ticketswitch.com/f13/purchase.v1 \
     -d "return_url=https://demo.ticketswitch.com/116daeee-fffb-11e6-8dd3-002590326932.1" \
     -d "client_http_user_agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8" \
     -d "client_http_accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" \
+    --compressed \
     -X POST
 ```
 
@@ -1021,6 +1023,7 @@ curl https://demo.ticketswitch.com/f13/callback.v1/this.FIRST_RANDOM_TOKEN/next.
     -u "demo-redirect:demopass" \
     -d "param1=asdfasdfsdfasdff" \
     -r "https://www.thepaymentpage.com/asdfsadfsdafasdf" \
+    --compressed
     -X POST
 ```
 

@@ -43,6 +43,7 @@ curl https://demo.ticketswitch.com/f13/events.v1 \
     -u "demo:demopass" \
     -d "keywords=matthew" \
     -d "country_code=uk" \
+    --compressed \
     -G
 ```
 
@@ -310,6 +311,7 @@ returns a dictionary of events keyed on the event's `event_id`.
 curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
     -u "demo:demopass" \
     -d "event_id_list=6IF,6IE" \
+    --compressed \
     -G
 ```
 
@@ -610,6 +612,7 @@ curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
     -d "req_media_marquee" \
     -d "req_media_supplier" \
     -d "req_video_iframe" \
+    --compressed \
     -G
 ```
 
@@ -948,6 +951,7 @@ curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
     -u "demo:demopass" \
     -d "event_id_list=6IF" \
     -d "req_extra_info" \
+    --compressed \
     -G
 ```
 
@@ -1173,6 +1177,7 @@ curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
     -u "demo:demopass" \
     -d "event_id_list=6IF" \
     -d "req_reviews" \
+    --compressed \
     -G
 ```
 
@@ -1356,6 +1361,7 @@ curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
     -d "req_cost_range_min_cost_offer" \
     -d "req_cost_range_top_price_offer" \
     -d "req_cost_range_no_singles_data" \
+    --compressed \
     -G
 ```
 
@@ -1645,6 +1651,7 @@ curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
     -u "demo:demopass" \
     -d "event_id_list=6IF" \
     -d "req_cost_range_details" \
+    --compressed \
     -G
 ```
 
@@ -2210,6 +2217,7 @@ curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
     -d "event_id_list=6IF" \
     -d "req_avail_details" \
     -d "req_avail_details_with_perfs" \
+    --compressed \
     -G
 ```
 

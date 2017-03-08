@@ -54,6 +54,7 @@ curl https://demo.ticketswitch.com/f13/reserve.v1 \
     -d "disc0=ADULT" \
     -d "disc1=CHILD" \
     -d "disc2=CHILD" \
+    --compressed \
     -X POST
 ```
 
@@ -83,6 +84,7 @@ curl https://demo.ticketswitch.com/f13/reserve.v1 \
     -d "no_of_seats=2" \
     -d "seat0=C7" \
     -d "seat1=C8" \
+    --compressed \
     -X POST
 ```
 
@@ -106,6 +108,7 @@ reservation = client.make_reservation(
 curl https://demo.ticketswitch.com/f13/reserve.v1 \
     -u "demo:demopass" \
     -d "trolley_token=M6--Th1yy_GMHYp_pxuZpgPYa43h-4JJKgwOsTKiSmME9f69ngTVVFnFtyBIDwWfhC59oV4RtGbj_t-hw_U75AHoSbNaxMHOWSzGFBZNceuo7AtApIckL-qbs3700lw2N9zTX12LLHVBSqhRpYEFc7twQ_k5BwieJeLLpHTM9LnB48-BbPT-0tBn9Ylq_a3Y3RHFXZChWiYmsdxsYRE-kgktxd_pdFyGTZNN_mazMGwQFxYQ99nUXVmRsRYeV29d9CKVI1fv6mR81iapKdYiEm1U0r8A5fmdCTFlLO8majLLI07ktEjXzgA63oOa5DoRHTOcD-U6gsOLied869nVXJQWkx6lvBr6InrLdEefg5sDK0WLVFNJ9WT9QsG4Y7opYcOdx6K6U0i7L9f88_d0iurc-FkpC2ils1M21OJY-8_eQvuw1SPqqvqcLqCpR6OnRRGA3vS1LIhtgavvtZ95MvQpBH3DgAwXJtiYdjsXmIlor2pqbfiaZfQXwuC1e8yoNUIBe_yBtsOQnweyoJfIyYOayiajXbOIblwwSiJEJCnDHAaE9jo9kQRu4NdDHNd-O5IoumIoxhj7NIjl6vIb_Klu1wzB7AjeNL4TNubgMMlThGO4TyNrXsww72M_fGQO2pXCkLwXGpLckCqTAUIrNKz7v6Rs-4X3TWaNIcaAbz-Zw5lIboJoPLRgBETn02GHx00gcI1-RT8zxI9-Z" \
+    --compressed \
     -X POST
 ```
 

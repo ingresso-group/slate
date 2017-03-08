@@ -19,6 +19,7 @@ to display on a confirmation page.
 curl https://demo.ticketswitch.com/f13/status.v1 \
     -u "demo:demopass" \
     -d "transaction_uuid=284d9c3a-d698-11e6-be8c-002590326962" \
+    --compressed \
     -G
 ```
 

@@ -42,6 +42,7 @@ by default. This resource is described first, following by
 curl https://demo.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
     -d "perf_id=6IF-B0I" \
+    --compressed \
     -G
 ```
 
@@ -306,6 +307,7 @@ curl https://demo.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
     -d "perf_id=3CVB-22" \
     -d "add_seat_blocks" \
+    --compressed \
     -G
 ```
 
@@ -849,6 +851,7 @@ curl https://demo.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
     -d "perf_id=3CVB-22" \
     -d "add_example_seats" \
+    --compressed \
     -G
 ```
 
@@ -1091,6 +1094,7 @@ curl https://demo.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
     -d "perf_id=6IF-B0I" \
     -d "add_user_commission" \
+    --compressed \
     -G
 ```
 
@@ -1333,6 +1337,7 @@ curl https://demo.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
     -d "perf_id=6IF-B0I" \
     -d "add_discounts" \
+    --compressed \
     -G
 ```
 
