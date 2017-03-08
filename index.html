@@ -124,14 +124,12 @@
 # TODOs / Questions
 
 * Improve test events
-* Purchase
+* Redo docs for currencies
 * Explain why you sometimes get unreserved_orders
-* GET for Status?
 * Note re similarity of trolley object across calls
 * Matt to add docs for cities and categories
 * Need to document the disallowed discount codes - need a test event with this data
 * Matt to add a test meta event, and refer to this in the test intro section and wherever meta events are mentioned.
-* avail_details needs a link to the bitmask explanation (and needs the fields updated)
 * benchmark old vs new API
 * Error codes need to be added everywhere by Pete.
 
@@ -167,8 +165,8 @@ Possible V2 functionality:
 
 <h1 id="important-note">IMPORTANT NOTE</h1>
 
-<p>This API is currently a work in progress - until this message is removed v1 of
-the API is subject to change.</p>
+<p>This API is close to completion but is still a work in progress - until this 
+note is removed v1 of the API is subject to change.</p>
 
 <h1 id="introduction">Introduction</h1>
 
@@ -187,16 +185,16 @@ ticketing websites entirely on top of our API (for example
 
 <p>The Ingresso API is a fully transactional API, loosely based on REST. You format
 GET or POST requests in <a href="http://www.json.org/">JSON</a> and you will receive either
-a JSON-formatted response or an HTTP error. The API is known as F13, which
-is why you see /f13 in the endpoint.</p>
+a JSON-formatted response or an HTTP error. The API is internally known as F13, 
+which is why you see /f13 in the endpoints.</p>
 
 <p>We describe objects in a consistent way across different resources (for example
 the output of <a href="#events">events</a> and <a href="#performances">performances</a> includes a
-cost_range object and this is described in the same format. The idea of this is
+cost_range object and this is described in the same format). The idea of this is
 that standard code can be used on the client side to read all parts of the
 output.</p>
 
-<p>This API replaces the <a href="http://www.ingresso.co.uk/apidocs/">the Ingresso XML API</a>. 
+<p>This API replaces the <a href="http://www.ingresso.co.uk/apidocs/">Ingresso XML API</a>. 
 The XML API relies on temporary tokens from each call being passed in
 to the next call; these has been removed in favour of permanent IDs. One
 benefit of this change is that a call near the end of the booking process, such
@@ -224,6 +222,7 @@ that closely matches the examples included in this documentation.</p>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"req_cost_range"</span> <span class="se">\</span>
     -d <span class="s2">"req_media_triplet_one"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre>
 <blockquote>
@@ -233,6 +232,7 @@ that closely matches the examples included in this documentation.</p>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"event_id=6IF"</span> <span class="se">\</span>
     -d <span class="s2">"page_len=200"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre>
 <blockquote>
@@ -241,6 +241,7 @@ that closely matches the examples included in this documentation.</p>
 <pre class="highlight shell"><code>curl https://demo.ticketswitch.com/f13/availability.v1 <span class="se">\</span>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"perf_id=6IF-B0T"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre>
 <blockquote>
@@ -252,6 +253,7 @@ that closely matches the examples included in this documentation.</p>
     -d <span class="s2">"ticket_type_code=CIRCLE"</span> <span class="se">\</span>
     -d <span class="s2">"price_band_code=A/pool"</span> <span class="se">\</span>
     -d <span class="s2">"no_of_seats=2"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre>
 <blockquote>
@@ -260,6 +262,7 @@ that closely matches the examples included in this documentation.</p>
 <pre class="highlight shell"><code>curl https://demo.ticketswitch.com/f13/purchase.v1 <span class="se">\</span>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"transaction_uuid=XXXXXXXX"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre>
 <p>The Ingresso API supports multiple use cases and variations, but below is a 
@@ -322,19 +325,25 @@ will take care of collecting payment from the customer. However if you wish to
 develop your own checkout page these are the options for taking payment:</p>
 
 <ol>
-<li><p><strong>On-credit</strong>: you purchase tickets from Ingresso on-credit and take payment
-from the customer yourself. You will be invoiced regularly by Ingresso.</p></li>
-<li><p><strong>Stripe</strong>: you use <a href="https://stripe.com">Stripe</a> to take payment for all
-Ingresso tickets, either into your own Stripe account (you will then be invoiced
-by Ingresso) or directly into Ingresso&rsquo;s Stripe account. Stripe is a developer-
-friendly payment provider that is simple to integrate with. Our API provides
-integration support for Stripe - this is explained in more detail in
-<a href="#reserve">reserve</a>.</p></li>
-<li><p><strong>Venue or other payment provider</strong>: you either pass the customer&rsquo;s card
-details to the supplier or redirect the customer to a payment provider specified
-by Ingresso. This is not typically offered to partners - if you think this is
-required you need to contact us first: api@ingresso.co.uk.</p></li>
+<li><p><strong>You take payment</strong>: you purchase tickets from Ingresso on credit / on
+account and take payment from the customer yourself. You will be invoiced
+regularly by Ingresso. This option is typically only offered to partners with 
+the capability to sell a high volume of tickets.
+There are two ways for you to take payment:</p>
+
+<p>a) Using a payment provider of your choosing.</p>
+
+<p>b) Using your own Stripe account. Stripe is a developer-friendly payment 
+provider that is simple to integrate with. Our API provides integration support 
+for Stripe. You just need to collect a Stripe token after your customer enters 
+their payment details; Ingresso&rsquo;s Stripe integration will then ensure the 
+payment is captured and all edge cases are handled.</p></li>
+<li><p><strong>Ingresso takes payment</strong>: for the majority of partners Ingresso will take 
+payment using Stripe, so you need to collect a Stripe token and pass that in 
+when purchasing tickets.</p></li>
 </ol>
+
+<p>These options are discussed in more detail in <a href="#purchase">purchase</a>.</p>
 
 <h2 id="how-to-get-access-to-the-api">How to get access to the API</h2>
 
@@ -354,6 +363,7 @@ email us: api@ingresso.co.uk</p>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"s_keys=matthew"</span> <span class="se">\</span>
     -d <span class="s2">"s_coco=uk"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 
@@ -366,6 +376,7 @@ email us: api@ingresso.co.uk</p>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"s_keys=matthew"</span> <span class="se">\</span>
     -d <span class="s2">"req_extra_info"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre>
 <p>Authenticate when using the API by including your username and password in the 
@@ -592,6 +603,7 @@ accidentally returned.</p>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"keywords=matthew"</span> <span class="se">\</span>
     -d <span class="s2">"country_code=uk"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 
@@ -1049,6 +1061,7 @@ returns a dictionary of events keyed on the event&rsquo;s <code class="prettypri
 <pre class="highlight shell"><code>curl https://demo.ticketswitch.com/f13/events_by_id.v1 <span class="se">\</span>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"event_id_list=6IF,6IE"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 
@@ -1509,6 +1522,7 @@ all media requests are consolidated.</p>
     -d <span class="s2">"req_media_marquee"</span> <span class="se">\</span>
     -d <span class="s2">"req_media_supplier"</span> <span class="se">\</span>
     -d <span class="s2">"req_video_iframe"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 
@@ -1942,6 +1956,7 @@ curl https://demo.ticketswitch.com/f13/events_by_id.v1 <span class="se">\</span>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"event_id_list=6IF"</span> <span class="se">\</span>
     -d <span class="s2">"req_extra_info"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 
@@ -2188,6 +2203,7 @@ our user reviews as well.</p>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"event_id_list=6IF"</span> <span class="se">\</span>
     -d <span class="s2">"req_reviews"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 
@@ -2405,6 +2421,7 @@ price.</aside>
     -d <span class="s2">"req_cost_range_min_cost_offer"</span> <span class="se">\</span>
     -d <span class="s2">"req_cost_range_top_price_offer"</span> <span class="se">\</span>
     -d <span class="s2">"req_cost_range_no_singles_data"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 
@@ -2763,6 +2780,7 @@ the parent event object.</p>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"event_id_list=6IF"</span> <span class="se">\</span>
     -d <span class="s2">"req_cost_range_details"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketickswitch</span> <span class="kn">import</span> <span class="n">client</span>
 
@@ -3425,6 +3443,7 @@ data up to date - please contact us instead to discuss options
     -d <span class="s2">"event_id_list=6IF"</span> <span class="se">\</span>
     -d <span class="s2">"req_avail_details"</span> <span class="se">\</span>
     -d <span class="s2">"req_avail_details_with_perfs"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketickswitch</span> <span class="kn">import</span> <span class="n">client</span>
 
@@ -4056,6 +4075,7 @@ when a user needs to select on a calendar.</li>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"event_id=6IF"</span> <span class="se">\</span>
     -d <span class="s2">"page_len=10"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 
@@ -4448,6 +4468,7 @@ this in most cases.</p>
 <pre class="highlight shell"><code>curl https://demo.ticketswitch.com/f13/performances_by_id.v1 <span class="se">\</span>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"perf_id_list=6IF-A8J,6IF-A8K"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 
@@ -4657,6 +4678,7 @@ price.</aside>
     -d <span class="s2">"req_cost_range_min_cost_offer"</span> <span class="se">\</span>
     -d <span class="s2">"req_cost_range_top_price_offer"</span> <span class="se">\</span>
     -d <span class="s2">"req_cost_range_no_singles_data"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 
@@ -4977,6 +4999,7 @@ data up to date - please contact us instead to discuss options
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"perf_id_list=6IF-A8K"</span> <span class="se">\</span>
     -d <span class="s2">"req_avail_details"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketickswitch</span> <span class="kn">import</span> <span class="n">client</span>
 
@@ -5226,6 +5249,7 @@ remove the need to summarise performance-level data in your application.</p>
 <pre class="highlight shell"><code>curl https://demo.ticketswitch.com/f13/months.v1 <span class="se">\</span>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"event_id=6IF"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 
@@ -5451,6 +5475,7 @@ by default. This resource is described first, following by
 <pre class="highlight shell"><code>curl https://demo.ticketswitch.com/f13/availability.v1 <span class="se">\</span>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"perf_id=6IF-B0I"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 
@@ -5790,6 +5815,8 @@ therefore only be used where necessary.</p>
 
 <h2 id="individual-seats">Individual Seats</h2>
 
+<aside class="warning">NOTE: we are going to change the format of the seats to better support large seated venues. The change will not be dramatic, but if you integrate against the current version you will need to update your integration later.</aside>
+
 <p>The Ingresso API can return a list of all available seats, allowing you to give
 your customers the choice rather than forcing them to take the best available
 seats. </p>
@@ -5808,6 +5835,7 @@ can embed our seat selection widget within your site.</aside>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"perf_id=3CVB-22"</span> <span class="se">\</span>
     -d <span class="s2">"add_seat_blocks"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre>
 <table><thead>
@@ -6390,6 +6418,7 @@ no need to also request example seats.</p>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"perf_id=3CVB-22"</span> <span class="se">\</span>
     -d <span class="s2">"add_example_seats"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre>
 <table><thead>
@@ -6672,6 +6701,7 @@ subtract commission from the total ticket price (<code class="prettyprint">sale_
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"perf_id=6IF-B0I"</span> <span class="se">\</span>
     -d <span class="s2">"add_user_commission"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre>
 <table><thead>
@@ -6932,6 +6962,7 @@ of available tickets.</p>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"perf_id=6IF-B0I"</span> <span class="se">\</span>
     -d <span class="s2">"add_discounts"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre>
 <table><thead>
@@ -7378,6 +7409,7 @@ called as needed to ensure the user isn&rsquo;t seeing options that are out of d
 <pre class="highlight shell"><code>curl https://demo.ticketswitch.com/f13/send_methods.v1 <span class="se">\</span>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"perf_id=6IF-B0I"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswith</span> <span class="kn">import</span> <span class="n">Client</span>
 
@@ -7525,6 +7557,7 @@ even when there are multiple <code class="prettyprint">discounts</code>, but tha
     -d <span class="s2">"perf_id=6IF-B0I"</span> <span class="se">\</span>
     -d <span class="s2">"price_band_code=A/pool"</span> <span class="se">\</span>
     -d <span class="s2">"ticket_type_code=CIRCLE"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre>
 <h3 id="request">Request</h3>
@@ -7710,6 +7743,7 @@ used to identify your trolley as you add or remove orders.</p>
     -d <span class="s2">"disc0=ADULT"</span> <span class="se">\</span>
     -d <span class="s2">"disc1=CHILD"</span> <span class="se">\</span>
     -d <span class="s2">"disc2=CHILD"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 
@@ -7733,6 +7767,7 @@ used to identify your trolley as you add or remove orders.</p>
     -d <span class="s2">"no_of_seats=2"</span> <span class="se">\</span>
     -d <span class="s2">"seat0=C7"</span> <span class="se">\</span>
     -d <span class="s2">"seat1=C8"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre>
 <blockquote>
@@ -7741,6 +7776,7 @@ used to identify your trolley as you add or remove orders.</p>
 <pre class="highlight shell"><code>curl https://demo.ticketswitch.com/f13/trolley.v1 <span class="se">\</span>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"trolley_token=M6--Th1yy_GMHYp_pxuZpgPYa43h-4JJKgwOsTKiSmME9f69ngTVVFnFtyBIDwWfhC59oV4RtGbj_t-hw_U75AHoSbNaxMHOWSzGFBZNceuo7AtApIckL-qbs3700lw2N9zTX12LLHVBSqhRpYEFc7twQ_k5BwieJeLLpHTM9LnB48-BbPT-0tBn9Ylq_a3Y3RHFXZChWiYmsdxsYRE-kgktxd_pdFyGTZNN_mazMGwQFxYQ99nUXVmRsRYeV29d9CKVI1fv6mR81iapKdYiEm1U0r8A5fmdCTFlLO8majLLI07ktEjXzgA63oOa5DoRHTOcD-U6gsOLied869nVXJQWkx6lvBr6InrLdEefg5sDK0WLVFNJ9WT9QsG4Y7opYcOdx6K6U0i7L9f88_d0iurc-FkpC2ils1M21OJY-8_eQvuw1SPqqvqcLqCpR6OnRRGA3vS1LIhtgavvtZ95MvQpBH3DgAwXJtiYdjsXmIlor2pqbfiaZfQXwuC1e8yoNUIBe_yBtsOQnweyoJfIyYOayiajXbOIblwwSiJEJCnDHAaE9jo9kQRu4NdDHNd-O5IoumIoxhj7NIjl6vIb_Klu1wzB7AjeNL4TNubgMMlThGO4TyNrXsww72M_fGQO2pXCkLwXGpLckCqTAUIrNKz7v6Rs-4X3TWaNIcaAbz-Zw5lIboJoPLRgBETn02GHx00gcI1-RT8zxI9-Z"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 
@@ -7760,6 +7796,7 @@ used to identify your trolley as you add or remove orders.</p>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"trolley_token=M6--Th1yy_GMHYp_pxuZpgPYa43h-4JJKgwOsTKiSmME9f69ngTVVFnFtyBIDwWfhC59oV4RtGbj_t-hw_U75AHoSbNaxMHOWSzGFBZNceuo7AtApIckL-qbs3700lw2N9zTX12LLHVBSqhRpYEFc7twQ_k5BwieJeLLpHTM9LnB48-BbPT-0tBn9Ylq_a3Y3RHFXZChWiYmsdxsYRE-kgktxd_pdFyGTZNN_mazMGwQFxYQ99nUXVmRsRYeV29d9CKVI1fv6mR81iapKdYiEm1U0r8A5fmdCTFlLO8majLLI07ktEjXzgA63oOa5DoRHTOcD-U6gsOLied869nVXJQWkx6lvBr6InrLdEefg5sDK0WLVFNJ9WT9QsG4Y7opYcOdx6K6U0i7L9f88_d0iurc-FkpC2ils1M21OJY-8_eQvuw1SPqqvqcLqCpR6OnRRGA3vS1LIhtgavvtZ95MvQpBH3DgAwXJtiYdjsXmIlor2pqbfiaZfQXwuC1e8yoNUIBe_yBtsOQnweyoJfIyYOayiajXbOIblwwSiJEJCnDHAaE9jo9kQRu4NdDHNd-O5IoumIoxhj7NIjl6vIb_Klu1wzB7AjeNL4TNubgMMlThGO4TyNrXsww72M_fGQO2pXCkLwXGpLckCqTAUIrNKz7v6Rs-4X3TWaNIcaAbz-Zw5lIboJoPLRgBETn02GHx00gcI1-RT8zxI9-Z"</span> <span class="se">\</span>
     -d <span class="s2">"remove_items_list=1"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 
@@ -8456,6 +8493,7 @@ to contact us first api@ingresso.co.uk.</p>
     -d <span class="s2">"disc0=ADULT"</span> <span class="se">\</span>
     -d <span class="s2">"disc1=CHILD"</span> <span class="se">\</span>
     -d <span class="s2">"disc2=CHILD"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -X POST
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 
@@ -8479,6 +8517,7 @@ to contact us first api@ingresso.co.uk.</p>
     -d <span class="s2">"no_of_seats=2"</span> <span class="se">\</span>
     -d <span class="s2">"seat0=C7"</span> <span class="se">\</span>
     -d <span class="s2">"seat1=C8"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -X POST
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 
@@ -8497,6 +8536,7 @@ to contact us first api@ingresso.co.uk.</p>
 <pre class="highlight shell"><code>curl https://demo.ticketswitch.com/f13/reserve.v1 <span class="se">\</span>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"trolley_token=M6--Th1yy_GMHYp_pxuZpgPYa43h-4JJKgwOsTKiSmME9f69ngTVVFnFtyBIDwWfhC59oV4RtGbj_t-hw_U75AHoSbNaxMHOWSzGFBZNceuo7AtApIckL-qbs3700lw2N9zTX12LLHVBSqhRpYEFc7twQ_k5BwieJeLLpHTM9LnB48-BbPT-0tBn9Ylq_a3Y3RHFXZChWiYmsdxsYRE-kgktxd_pdFyGTZNN_mazMGwQFxYQ99nUXVmRsRYeV29d9CKVI1fv6mR81iapKdYiEm1U0r8A5fmdCTFlLO8majLLI07ktEjXzgA63oOa5DoRHTOcD-U6gsOLied869nVXJQWkx6lvBr6InrLdEefg5sDK0WLVFNJ9WT9QsG4Y7opYcOdx6K6U0i7L9f88_d0iurc-FkpC2ils1M21OJY-8_eQvuw1SPqqvqcLqCpR6OnRRGA3vS1LIhtgavvtZ95MvQpBH3DgAwXJtiYdjsXmIlor2pqbfiaZfQXwuC1e8yoNUIBe_yBtsOQnweyoJfIyYOayiajXbOIblwwSiJEJCnDHAaE9jo9kQRu4NdDHNd-O5IoumIoxhj7NIjl6vIb_Klu1wzB7AjeNL4TNubgMMlThGO4TyNrXsww72M_fGQO2pXCkLwXGpLckCqTAUIrNKz7v6Rs-4X3TWaNIcaAbz-Zw5lIboJoPLRgBETn02GHx00gcI1-RT8zxI9-Z"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -X POST
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 
@@ -9169,45 +9209,6 @@ seats to consistently fail - it is therefore advisable to warn your customer of
 this to avoid them receiving errors consistently.
 </aside>
 
-<p>Ingresso&rsquo;s partners split into the following categories based on how they take
-payment:</p>
-
-<ul>
-<li><p><strong>On-credit</strong>: those who purchase on-credit, and are regularly invoiced by 
-Ingresso.</p></li>
-<li><p><strong>Stripe</strong>: those who exclusively use Stripe to take payment, either
-into their own bank account (and are invoiced by Ingresso) or directly into
-Ingresso&rsquo;s bank account.</p></li>
-<li><p><strong>Venue or other payment provider</strong>: those who send payment direct to the
-venue or to the payment provider specified by Ingresso.</p></li>
-</ul>
-
-<p>Most partners are on-credit, some are Stripe-only, and very few are venue or
-other payment provider - this option is not typically offered to partners.</p>
-
-<p>Partners who wish to take payment via Stripe should note the following:</p>
-
-<ul>
-<li><p>The simplest option is to use Ingresso&rsquo;s Stripe account, however it is
-possible to use your own. Once this has been agreed you can contact Stripe, and
-provide Ingresso with your Stripe keys.</p></li>
-<li><p>We recommend that you use Stripe.js to collect card details on your own
-checkout page and pass them directly to Stripe in a secure, PCI-compliant
-manner. You should follow the <a href="https://stripe.com/docs/custom-form">Stripe.js docs</a> 
-to implement this. When passing card details to Stripe you will need to
-include a publishable key - this will be returned by Ingresso via
-bundle.debitor.debitor_integration_data.publishable_key.</p></li>
-<li><p>If there are no errors with the card details then Stripe will return a 
-single-use Stripe token. You should then pass that token to Ingresso and we 
-will ask Stripe to authorise payment. We will then purchase tickets from the 
-supplier, and if that is successful we will ask Stripe to capture the payment, 
-otherwise we refund the authorisation. This is taken care of by the Ingresso 
-API. 
-(TODO: Nic to help with more detail on what is passed where.)</p></li>
-<li><p>You will likely wish to give customers the option of entering a separate 
-billing address if they are having tickets posted. </p></li>
-</ul>
-
 <table><thead>
 <tr>
 <th>Attribute</th>
@@ -9216,7 +9217,7 @@ billing address if they are having tickets posted. </p></li>
 </thead><tbody>
 <tr>
 <td><code class="prettyprint">accepted_payment_cards</code></td>
-<td>For the vast majority of partners this will not be present and can be ignored (it won&rsquo;t be present for partners who purchase on-credit or who use Stripe). For partners who send payment direct to the venue, this field presents a list of payment card types.</td>
+<td>This should not be present for partners and can be ignored.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">allowed_countries</code></td>
@@ -9236,7 +9237,7 @@ billing address if they are having tickets posted. </p></li>
 </tr>
 <tr>
 <td><code class="prettyprint">needs_payment_card</code></td>
-<td>This will be <code class="prettyprint">false</code> for almost all partners (it doesn&rsquo;t apply to partners who purchase on-credit or use Stripe). If this is <code class="prettyprint">true</code> you need to collect card details from the customer and include them when purchasing.</td>
+<td>This will be <code class="prettyprint">false</code> for all partners so can be ignored. If this is <code class="prettyprint">true</code> you need to collect card details from the customer and include them when purchasing.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">prefilled_address</code></td>
@@ -9280,7 +9281,7 @@ billing address if they are having tickets posted. </p></li>
 </tr>
 <tr>
 <td><code class="prettyprint">supports_billing_address</code></td>
-<td>For the vast majority of partners this can be ignored (it isn&rsquo;t relevant to partners who purchase on-credit or who use Stripe). When it is <code class="prettyprint">true</code> a separate address may be provided when purchasing tickets, and this will be used to validate the payment card address for venue systems that perform address verification checks.</td>
+<td>For the vast majority of partners this can be ignored (it isn&rsquo;t relevant to partners who purchase on-credit). When it is <code class="prettyprint">true</code> a separate address may be provided when purchasing tickets, and this will be used to validate the payment card address for venue systems that perform address verification checks.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">unreserved_orders</code></td>
@@ -9392,12 +9393,42 @@ will contain a single <code class="prettyprint">order</code> within a single <co
 <td>The <a href="#currency-object">currency</a> of the bundle, which by default just contains the currency_code. To include full currency detail add the parameter <code class="prettyprint">req_currency_details</code>.</td>
 </tr>
 <tr>
+<td><code class="prettyprint">debitor_choices</code></td>
+<td>A list of debitors. See below for object detail.</td>
+</tr>
+<tr>
 <td><code class="prettyprint">desired_currency</code></td>
 <td>Most partners will not see a <code class="prettyprint">desired_currency</code>, but it is possible for a partner to request to always view prices in a specific currency. For example if a product is supplied in GBP, but your <code class="prettyprint">desired_currency</code> is set to USD, we will return prices in GBP along with <code class="prettyprint">_desired</code> prices in USD. If you are taking payment using Ingresso&rsquo;s Stripe connection, then payment will be taken in the default currency (GBP, in the example), and if you are being invoiced by Ingresso we will invoice you in the default currency (GBP, in the example). So the <code class="prettyprint">_desired</code> prices are typically used to just display an indicative amount to the customer (in USD, in the example). Currency conversion rates are taken from a daily European Central Bank feed. To include the full currency object detail add the parameter <code class="prettyprint">req_currency_details</code>.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">order</code></td>
 <td>See below for object detail.</td>
+</tr>
+</tbody></table>
+
+<p><strong><code class="prettyprint">debitor</code> attributes:</strong></p>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">debitor_desc</code></td>
+<td>TODO</td>
+</tr>
+<tr>
+<td><code class="prettyprint">debitor_integration_data</code></td>
+<td>TODO</td>
+</tr>
+<tr>
+<td><code class="prettyprint">debitor_name</code></td>
+<td>TODO</td>
+</tr>
+<tr>
+<td><code class="prettyprint">debitor_type</code></td>
+<td>TODO</td>
 </tr>
 </tbody></table>
 
@@ -9558,6 +9589,7 @@ partner that is not releasing tickets when they should be.</aside>
 <pre class="highlight shell"><code>curl https://demo.ticketswitch.com/f13/release.v1 <span class="se">\</span>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"transaction_uuid=f2158be3-d29e-11e6-8aab-0025903268dc"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -X POST
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 
@@ -9608,29 +9640,54 @@ partner that is not releasing tickets when they should be.</aside>
 <pre class="highlight plaintext"><code>POST https://demo.ticketswitch.com/f13/purchase.v1
 </code></pre>
 <p>To purchase tickets you must first <a href="#reserve">reserve</a> them. You can then
-attempt to purchase the reserved tickets at any time within the reserve window.
-A successful result means that the order has been confirmed in the supplier
-ticketing system. If you have attempted to purchase multiple events from a
-single trolley it is possible for a purchase to partially succeed, with some
-events unable to be purchased from the corresponding supplier ticketing system.</p>
+attempt to purchase the reserved tickets at any time within the reserve time
+(<code class="prettyprint">minutes_left_on_reserve</code>). A successful result from <code class="prettyprint">purchase</code> means that the
+order has been confirmed in the supplier ticketing system. Note that if you have
+attempted to purchase multiple events from a single trolley it is possible for a
+purchase to partially succeed, with some events unable to be purchased from the
+corresponding supplier ticketing system.</p>
 
-<p>The <a href="#payment-options">payment option</a> you are using will determine how you use
-purchase. </p>
+<p>If a purchase fails due to incomplete or incorrect customer data then you can
+reattempt the purchase call with corrected data. If a purchase fails due to the
+reservation having timed out, then it is necessary to <a href="#reserve">reserve</a>
+tickets again. The output data is structured such that permanent failures are
+not reported as errors, but are reported as an actual result from a successful
+operation.</p>
 
-<ol>
-<li><p>If you purchase on credit then you just need to provide customer data.</p></li>
-<li><p>If payment is taken using Stripe then you need to provide customer data and a
-redirect URL. </p></li>
-<li><p>If the venue takes payment or you use other payment providers then you need 
-to support both passing card details directly and redirecting the customer to
-third-party payment pages. We do not typically offer this option to partners so
-this has not been documented below. If you wish to use this option then contact
-use at api@ingresso.co.uk.</p></li>
-</ol>
+<p>For purchases where a despatch method with a type of <code class="prettyprint">selfprint</code> was selected,
+the URL returned should be presented to the customer.</p>
 
-<p>The first two options are outlined below.</p>
+<p>Your <a href="#payment-options">payment option</a> determines how you should call purchase.
+The two main options are:</p>
 
-<p><em>Notes on sending customer data</em></p>
+<h3 id="on-credit-purchasing">On credit purchasing</h3>
+
+<p>You take payment using a payment provider of your own choosing. When calling
+purchase you should just provide customer data, and the purchase call will
+return a success or failure.</p>
+
+<h3 id="stripe">Stripe</h3>
+
+<p>Stripe is a developer-friendly payment provider that is simple to integrate
+with. The Ingresso API provides integration support for Stripe - you pass us a
+Stripe token and we handle the rest. We support partners collecting payment via
+their own Stripe account or into Ingresso&rsquo;s Stripe account.</p>
+
+<p>In either case you need to collect a Stripe token after your customer enters
+their payment details, and pass that to Ingresso after making the purchase
+call.</p>
+
+<p>If you want to collect payment via your own Stripe account you will need to get
+agreement to sell tickets on credit, and you will need to provide Ingresso your 
+Stripe keys to allow us to process payment on your behalf. </p>
+
+<p>In the examples below we will describe how to purchase using the on-credit and
+Stripe options in more detail. We then describe how to handle generic redirects
+which are needed for other supported payment providers such as Global Collect.
+The vast majority of partners are either on-credit or Stripe, and so do not need
+to implement generic redirects.</p>
+
+<h3 id="notes-on-sending-customer-data">Notes on sending customer data</h3>
 
 <ul>
 <li><p>You must pass in the customer name, phone number and address for the purchase
@@ -9660,18 +9717,17 @@ The only use for these is for tickets that will be posted by Ingresso or the
 supplier, so it is possible to only pass the customer&rsquo;s address when the
 customer has selected a despatch method with <code class="prettyprint">send_type</code> = <code class="prettyprint">post</code>. In all other
 cases you can pass a default address such as your company headquarters (in case
-it turns out that tickets need to be unexpectedly posted).</p></li>
+it turns out that tickets need to be unexpectedly posted). Note that if you are 
+purchasing with Stripe and are using 
+<a href="https://support.stripe.com/questions/what-is-avs">AVS</a> (this is common) then 
+you may wish to allow your customer to enter separate post or zip codes - one to
+submit to Ingresso (postal address) and one to submit to Stripe (billing address).</p></li>
+<li><p>If the <code class="prettyprint">send_type</code> = <code class="prettyprint">post</code> and you are purchasing with Stripe you may 
+wish to give customers the option of entering a separate billing address (if 
+the zip or postal code passed to Stripe is not where the customer wants the 
+tickets to be posted to). Note that you may not wish to support separate
+addresses to discourage fraud.</p></li>
 </ul>
-
-<p>If a purchase fails due to incomplete or incorrect customer data then you can
-reattempt the purchase call with corrected data. If a purchase fails due to the
-reservation having timed out, then it is necessary to <a href="#reserve">reserve</a>
-tickets again. The output data is structured such that permanent failures are
-not reported as errors, but are reported as an actual result from a successful
-operation.</p>
-
-<p>For purchases where a despatch method with a type of <code class="prettyprint">selfprint</code> was selected,
-the URL returned should be presented to the customer.</p>
 
 <h2 id="purchasing-on-credit">Purchasing on credit</h2>
 
@@ -9693,6 +9749,7 @@ the URL returned should be presented to the customer.</p>
     -d <span class="s2">"country_code=uk"</span> <span class="se">\</span>
     -d <span class="s2">"phone=0203 137 7420"</span> <span class="se">\</span>
     -d <span class="s2">"email_address=tester@gmail.com"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -X POST
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 
@@ -9700,8 +9757,8 @@ the URL returned should be presented to the customer.</p>
 
 <span class="p">(</span><span class="n">TODO</span><span class="p">:</span> <span class="n">finish</span><span class="p">)</span>
 </code></pre>
-<p>Most partners will manage payment themselves - this is how to purchase if you 
-use this option.</p>
+<p>This section describes how to purchase on credit. This is for partner using this 
+option: <strong>Option 1a (on credit): you take payment using a payment provider of your own choosing.</strong> </p>
 
 <table><thead>
 <tr>
@@ -9715,11 +9772,11 @@ use this option.</p>
 </tr>
 <tr>
 <td><code class="prettyprint">address_line_two</code></td>
-<td>The second line of the customer&rsquo;s address. <strong>Optional if <code class="prettyprint">address_line_one</code> is provided.</strong></td>
+<td>The second line of the customer&rsquo;s address. <em>Optional if <code class="prettyprint">address_line_one</code> is provided.</em></td>
 </tr>
 <tr>
 <td><code class="prettyprint">agent_ref</code></td>
-<td>Partners can pass their own transaction reference to be stored in the Ingresso platform. <strong>Optional.</strong></td>
+<td>Partners can pass their own transaction reference to be stored in the Ingresso platform. <em>Optional.</em></td>
 </tr>
 <tr>
 <td><code class="prettyprint">country_code</code></td>
@@ -9727,19 +9784,19 @@ use this option.</p>
 </tr>
 <tr>
 <td><code class="prettyprint">county</code></td>
-<td>The county of region of the customer&rsquo;s address. <strong>Optional.</strong></td>
+<td>The county of region of the customer&rsquo;s address. <em>Optional.</em></td>
 </tr>
 <tr>
 <td><code class="prettyprint">dp_supplier</code></td>
-<td>(TODO: incorrect param name) Data protection question - set to <code class="prettyprint">true</code> if the customer has opted in to receiving marketing emails from the ticket supplier. <strong>Optional - it will default to false.</strong></td>
+<td>(TODO: incorrect param name) Data protection question - set to <code class="prettyprint">true</code> if the customer has opted in to receiving marketing emails from the ticket supplier. <em>Optional - it will default to false.</em></td>
 </tr>
 <tr>
 <td><code class="prettyprint">dp_user</code></td>
-<td>(TODO: incorrect param name) Data protection question - set to <code class="prettyprint">true</code> if the customer has opted in to receiving marketing emails from you. Most partners manage marketing opt-ins themselves so do not provide this. <strong>Optional - it will default to false.</strong></td>
+<td>(TODO: incorrect param name) Data protection question - set to <code class="prettyprint">true</code> if the customer has opted in to receiving marketing emails from you. Most partners manage marketing opt-ins themselves so do not provide this. <em>Optional - it will default to false.</em></td>
 </tr>
 <tr>
 <td><code class="prettyprint">dp_world</code></td>
-<td>(TODO: incorrect param name) Data protection question - set to <code class="prettyprint">true</code> if the customer has opted in to receiving marketing emails communication from you and third-parties. <strong>Optional - it will default to false.</strong></td>
+<td>(TODO: incorrect param name) Data protection question - set to <code class="prettyprint">true</code> if the customer has opted in to receiving marketing emails communication from you and third-parties. <em>Optional - it will default to false.</em></td>
 </tr>
 <tr>
 <td><code class="prettyprint">email_address</code></td>
@@ -9751,11 +9808,11 @@ use this option.</p>
 </tr>
 <tr>
 <td><code class="prettyprint">home_phone</code></td>
-<td>The customer&rsquo;s home phone number. <strong>Optional if <code class="prettyprint">phone</code> is provided.</strong></td>
+<td>The customer&rsquo;s home phone number. <em>Optional if <code class="prettyprint">phone</code> is provided.</em></td>
 </tr>
 <tr>
 <td><code class="prettyprint">initials</code></td>
-<td>The customer&rsquo;s initials for their name. <strong>Optional.</strong></td>
+<td>The customer&rsquo;s initials for their name. <em>Optional.</em></td>
 </tr>
 <tr>
 <td><code class="prettyprint">last_name</code></td>
@@ -9767,19 +9824,19 @@ use this option.</p>
 </tr>
 <tr>
 <td><code class="prettyprint">postcode</code></td>
-<td>The ZIP or postal code of the customer&rsquo;s address. <strong>Optional.</strong></td>
+<td>The ZIP or postal code of the customer&rsquo;s address. <em>Optional.</em></td>
 </tr>
 <tr>
 <td><code class="prettyprint">suffix</code></td>
-<td>The suffix of the customer&rsquo;s name, for example &ldquo;Jr.&rdquo; or &ldquo;CPA&rdquo; <strong>Optional.</strong></td>
+<td>The suffix of the customer&rsquo;s name, for example &ldquo;Jr.&rdquo; or &ldquo;CPA&rdquo; <em>Optional.</em></td>
 </tr>
 <tr>
 <td><code class="prettyprint">title</code></td>
-<td>The title of the customer&rsquo;s name, for example &ldquo;Mr.&rdquo; or &ldquo;Dr.&rdquo; <strong>Optional.</strong></td>
+<td>The title of the customer&rsquo;s name, for example &ldquo;Mr.&rdquo; or &ldquo;Dr.&rdquo; <em>Optional.</em></td>
 </tr>
 <tr>
 <td><code class="prettyprint">town</code></td>
-<td>The city or town of the customer&rsquo;s address. <strong>Optional.</strong></td>
+<td>The city or town of the customer&rsquo;s address. <em>Optional.</em></td>
 </tr>
 <tr>
 <td><code class="prettyprint">transaction_uuid</code></td>
@@ -9787,7 +9844,7 @@ use this option.</p>
 </tr>
 <tr>
 <td><code class="prettyprint">work_phone</code></td>
-<td>The customer&rsquo;s work phone number. <strong>Optional if <code class="prettyprint">phone</code> is provided.</strong></td>
+<td>The customer&rsquo;s work phone number. <em>Optional if <code class="prettyprint">phone</code> is provided.</em></td>
 </tr>
 </tbody></table>
 
@@ -10481,12 +10538,416 @@ use this option.</p>
 <code class="prettyprint">seat_text</code> | A message about the seat that must be displayed to customers.
 <code class="prettyprint">seat_text_code</code> | An identifier for the seat text (only unique within the current <code class="prettyprint">bundle_source_code</code>). Not useful for most partners.</p>
 
-<h2 id="purchasing-with-redirect">Purchasing with redirect</h2>
+<h2 id="purchasing-with-stripe">Purchasing with Stripe</h2>
 
-<h3 id="request">Request</h3>
+<p>In order to purchase with Stripe you need the following steps:</p>
+
+<ol>
+<li>Retrieve a Stripe token (further detail below).</li>
+<li>Call <code class="prettyprint">purchase</code> and ensure the response includes a <code class="prettyprint">callout</code> element.</li>
+<li>Call <code class="prettyprint">callback</code> passing in the Stripe token from step 1.</li>
+</ol>
+
+<p>Note that these three steps need to be implemented for each <code class="prettyprint">bundle</code> that you
+reserve. If you only support the purchase of one item at a time, or you don&rsquo;t
+use the Ingresso API to help manage basketing then you can ignore this.</p>
+
+<p>The reason there are more steps than necessary is that Ingresso&rsquo;s Stripe 
+implementation is part of generic redirect functionality that does require the
+extra steps. We plan to simplify this in future.</p>
+
+<p>Stripe collects payment information on your behalf, and returns a single-use 
+token. The payment information can either be collected on your own checkout page
+in a PCI-compliant manner (&ldquo;Elements&rdquo;), with a mobile-friendly form 
+(&ldquo;Checkout&rdquo;), or via their mobile SDKs. See <a href="https://stripe.com/docs/quickstart">Stripe&rsquo;s Quickstart guide</a>.</p>
+
+<p>You will need to provide Stripe with the appropriate publishable key -
+this is returned by Ingresso in the <a href="#reserve">reserve call</a> as
+bundle.debitor.debitor_integration_data.publishable_key.</p>
+
+<p>Retrieving the Stripe token is the first half of the payment process - further
+server-side code is required to complete the second half. You don&rsquo;t need to 
+worry about this as Ingresso&rsquo;s Stripe integration takes care of it. Once you 
+have provided the Stripe token we will:</p>
+
+<ul>
+<li><p>Authorise the payment with Stripe.</p></li>
+<li><p>Purchase your reserved tickets with the supplier ticketing system. <em>If this 
+step fails we automatically refund the Stripe payment.</em></p></li>
+<li><p>Capture the payment with Stripe.</p></li>
+</ul>
+
+<h3 id="purchase-request">Purchase request</h3>
 
 <blockquote>
-<p><strong>Example request - purchasing with a redirecting debitor such as Stripe</strong></p>
+<p><strong>Example purchase request - Stripe</strong></p>
+</blockquote>
+<pre class="highlight shell"><code>curl https://demo.ticketswitch.com/f13/purchase.v1 <span class="se">\</span>
+    -u <span class="s2">"demo-stripe:demopass"</span> <span class="se">\</span>
+    -d <span class="s2">"transaction_uuid=116daeee-fffb-11e6-8dd3-002590326932"</span> <span class="se">\</span>
+    -d <span class="s2">"first_name=Test"</span> <span class="se">\</span>
+    -d <span class="s2">"last_name=Tester"</span> <span class="se">\</span>
+    -d <span class="s2">"address_line_one=Metro Building"</span> <span class="se">\</span>
+    -d <span class="s2">"address_line_two=1 Butterwick"</span> <span class="se">\</span>
+    -d <span class="s2">"town=London"</span> <span class="se">\</span>
+    -d <span class="s2">"county=London"</span> <span class="se">\</span>
+    -d <span class="s2">"postcode=W6 8DL"</span> <span class="se">\</span>
+    -d <span class="s2">"country_code=uk"</span> <span class="se">\</span>
+    -d <span class="s2">"phone=0203 137 7420"</span> <span class="se">\</span>
+    -d <span class="s2">"email_address=tester@gmail.com"</span> <span class="se">\</span>
+    -d <span class="s2">"return_token=116daeee-fffb-11e6-8dd3-002590326932.1"</span> <span class="se">\</span>
+    -d <span class="s2">"return_url=https://demo.ticketswitch.com/116daeee-fffb-11e6-8dd3-002590326932.1"</span> <span class="se">\</span>
+    -d <span class="s2">"client_http_user_agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8"</span> <span class="se">\</span>
+    -d <span class="s2">"client_http_accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
+    -X POST
+</code></pre>
+<p>All of the parameters mentioned above in the 
+<a href="#purchasing-on-credit">purchasing on credit</a> section are used. In addition the 
+following parameters should be specified:</p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">return_token</code></td>
+<td>A unique token (e.g. a UUID) is required by the Ingresso API, even though for Stripe it will not be used. This token must be alphanumeric with &rsquo;-&rsquo;, &rsquo;<em>&rsquo; and &rsquo;.&rsquo; also allowed. In the Stripe example request we have used `[transaction</em>uuid].1<code class="prettyprint">where</code>1` is the first bundle.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">return_url</code></td>
+<td>The <code class="prettyprint">return_token</code> also has to be present in the path for the return_url and no query string parameters are allowed in the return_url. For Stripe this can be hardcoded.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">client_http_user_agent</code></td>
+<td>The user agent, taken from the headers of your customer&rsquo;s web browser. For Stripe this can be hardcoded, for example to the value used in the example request.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">client_http_accept</code></td>
+<td>The accept content types, from the headers of your customer&rsquo;s web browser. For Stripe this can be hardcoded, for example to the value used in the example request.</td>
+</tr>
+</tbody></table>
+
+<h3 id="purchase-response">Purchase response</h3>
+
+<blockquote>
+<p><strong>Example purchase response - Stripe</strong></p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"callout"</span>: <span class="o">{</span>
+    <span class="s2">"callout_destination_url"</span>: <span class="s2">"https://demo.ticketswitch.com/tickets/stripe_form.buy"</span>,
+    <span class="s2">"callout_parameters"</span>: <span class="o">{</span>
+      <span class="s2">"crypto_block"</span>: <span class="s2">"U1--qkE2UEVr656qYqxDv1zYf1Tcd0fwYyRHhSydziYqoyUMSa1tNAKeGPUDZBoU70AOmZ9iTeDSpUX7IGKjMGN7no54a-cI4JpmIIegNnsxXSznBUlRR3mtlM4lJxMGypa5sCm62MovYz5_YxtVkPYkbw3eNNnVgvWVIiMnQpkVOIUpL23S6ZXaiyV6onfJZv5ifLAFJ_0fOpfT3P6y5-fsJhKxLmhBtW-d1D_bQ1J2BDLVB8MWDuy9cfguf8mwxs_H8nBLQKSDw2hq7fi8lkJL8SROaC3_CzAeI85ziMUxe57-Z"</span>,
+      <span class="s2">"user_id"</span>: <span class="s2">"demo-stripe"</span>
+    <span class="o">}</span>,
+    <span class="s2">"callout_parameters_order"</span>: <span class="o">[]</span>,
+    <span class="s2">"callout_type"</span>: <span class="s2">"post"</span>,
+    <span class="s2">"debitor_integration_data"</span>: <span class="o">{</span>
+      <span class="s2">"debit_amount"</span>: 62.5,
+      <span class="s2">"debit_base_amount"</span>: 6250,
+      <span class="s2">"debit_currency"</span>: <span class="s2">"gbp"</span>,
+      <span class="s2">"debitor_type"</span>: <span class="s2">"stripe"</span>
+    <span class="o">}</span>
+  <span class="o">}</span>,
+  <span class="s2">"currency_details"</span>: <span class="o">{</span>
+    <span class="s2">"gbp"</span>: <span class="o">{</span>
+      <span class="s2">"currency_code"</span>: <span class="s2">"gbp"</span>,
+      <span class="s2">"currency_factor"</span>: 100,
+      <span class="s2">"currency_number"</span>: 826,
+      <span class="s2">"currency_places"</span>: 2,
+      <span class="s2">"currency_post_symbol"</span>: <span class="s2">""</span>,
+      <span class="s2">"currency_pre_symbol"</span>: <span class="s2">"£"</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">callout</code></td>
+<td>For Stripe you only need to check that callout data is returned - the contents can be ignored. The detail of the callout object is described in the <a href="#purchasing-with-redirect">purchasing with redirect</a> section below.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">currency_details</code></td>
+<td>Further details of the currencies found in the callout data.</td>
+</tr>
+</tbody></table>
+
+<h3 id="callback-request">Callback request</h3>
+
+<blockquote>
+<p><strong>Example callback request - Stripe</strong></p>
+</blockquote>
+<pre class="highlight shell"><code>curl https://demo.ticketswitch.com/f13/callback.v1/this.116daeee-fffb-11e6-8dd3-002590326932.1/next.116daeee-fffb-11e6-8dd3-002590326932.101 <span class="se">\</span>
+    -u <span class="s2">"demo-stripe:demopass"</span> <span class="se">\</span>
+    -d <span class="s2">"stripeToken=tok_19sdLzHIklODsaxBTUuIs3xo"</span> <span class="se">\</span>
+    -X POST
+</code></pre>
+<p><code class="prettyprint">callback</code> is used to pass in the single-use token you have retrieved from 
+Stripe. </p>
+
+<p>Note that the URL structure is <code class="prettyprint">callback.v1/this.[original token used in purchase]/next.[a new token]</code>.
+In the Stripe example request we have used <code class="prettyprint">[transaction_uuid].101</code> as the &ldquo;next&rdquo; token where <code class="prettyprint">1</code> is the first bundle.</p>
+
+<p>During testing it is possible to retrieve test Stripe tokens using the Stripe 
+API or manually with the example in the <a href="https://stripe.com/docs/elements">Stripe Elements documentation</a>.</p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">stripeToken</code></td>
+<td>The single-use token retrieved from Stripe.</td>
+</tr>
+</tbody></table>
+
+<h3 id="callback-response">Callback response</h3>
+
+<blockquote>
+<p><strong>Example callback response - Stripe</strong></p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"currency_details"</span>: <span class="o">{</span>
+    <span class="s2">"gbp"</span>: <span class="o">{</span>
+      <span class="s2">"currency_code"</span>: <span class="s2">"gbp"</span>,
+      <span class="s2">"currency_factor"</span>: 100,
+      <span class="s2">"currency_number"</span>: 826,
+      <span class="s2">"currency_places"</span>: 2,
+      <span class="s2">"currency_post_symbol"</span>: <span class="s2">""</span>,
+      <span class="s2">"currency_pre_symbol"</span>: <span class="s2">"£"</span>
+    <span class="o">}</span>
+  <span class="o">}</span>,
+  <span class="s2">"customer"</span>: <span class="o">{</span>
+    <span class="s2">"addr_line_one"</span>: <span class="s2">"Metro Building"</span>,
+    <span class="s2">"addr_line_one_latin"</span>: <span class="s2">"Metro Building"</span>,
+    <span class="s2">"addr_line_two"</span>: <span class="s2">"1 Butterwick"</span>,
+    <span class="s2">"addr_line_two_latin"</span>: <span class="s2">"1 Butterwick"</span>,
+    <span class="s2">"agent_ref"</span>: <span class="s2">""</span>,
+    <span class="s2">"country"</span>: <span class="s2">"United Kingdom"</span>,
+    <span class="s2">"country_code"</span>: <span class="s2">"uk"</span>,
+    <span class="s2">"country_latin"</span>: <span class="s2">"United Kingdom"</span>,
+    <span class="s2">"county"</span>: <span class="s2">""</span>,
+    <span class="s2">"county_latin"</span>: <span class="s2">""</span>,
+    <span class="s2">"dp_supplier"</span>: <span class="nb">false</span>,
+    <span class="s2">"dp_user"</span>: <span class="nb">false</span>,
+    <span class="s2">"dp_world"</span>: <span class="nb">false</span>,
+    <span class="s2">"email_addr"</span>: <span class="s2">"tester@gmail.com"</span>,
+    <span class="s2">"first_name"</span>: <span class="s2">"Test"</span>,
+    <span class="s2">"first_name_latin"</span>: <span class="s2">"Test"</span>,
+    <span class="s2">"home_phone"</span>: <span class="s2">"0203 137 7420"</span>,
+    <span class="s2">"initials"</span>: <span class="s2">""</span>,
+    <span class="s2">"initials_latin"</span>: <span class="s2">""</span>,
+    <span class="s2">"last_name"</span>: <span class="s2">"Tester"</span>,
+    <span class="s2">"last_name_latin"</span>: <span class="s2">"Tester"</span>,
+    <span class="s2">"postcode"</span>: <span class="s2">"W6 8DL"</span>,
+    <span class="s2">"postcode_latin"</span>: <span class="s2">"W6 8DL"</span>,
+    <span class="s2">"suffix"</span>: <span class="s2">""</span>,
+    <span class="s2">"suffix_latin"</span>: <span class="s2">""</span>,
+    <span class="s2">"title"</span>: <span class="s2">""</span>,
+    <span class="s2">"title_latin"</span>: <span class="s2">""</span>,
+    <span class="s2">"town"</span>: <span class="s2">"London"</span>,
+    <span class="s2">"town_latin"</span>: <span class="s2">"London"</span>,
+    <span class="s2">"work_phone"</span>: <span class="s2">"0203 137 7420"</span>
+  <span class="o">}</span>,
+  <span class="s2">"language_list"</span>: <span class="s2">"en-gb,en,en-us,nl"</span>,
+  <span class="s2">"purchase_iso8601_date_and_time"</span>: <span class="s2">"2017-03-03T15:58:26Z"</span>,
+  <span class="s2">"reserve_iso8601_date_and_time"</span>: <span class="s2">"2017-03-03T15:58:01Z"</span>,
+  <span class="s2">"transaction_status"</span>: <span class="s2">"purchased"</span>,
+  <span class="s2">"trolley_contents"</span>: <span class="o">{</span>
+    <span class="s2">"bundle"</span>: <span class="o">[</span>
+      <span class="o">{</span>
+        <span class="s2">"bundle_order_count"</span>: 1,
+        <span class="s2">"bundle_source_code"</span>: <span class="s2">"ext_test0"</span>,
+        <span class="s2">"bundle_source_desc"</span>: <span class="s2">"External Test Backend 0"</span>,
+        <span class="s2">"bundle_total_cost"</span>: 62.5,
+        <span class="s2">"bundle_total_seatprice"</span>: 51,
+        <span class="s2">"bundle_total_send_cost"</span>: 1.5,
+        <span class="s2">"bundle_total_surcharge"</span>: 10,
+        <span class="s2">"currency_code"</span>: <span class="s2">"gbp"</span>,
+        <span class="s2">"order"</span>: <span class="o">[</span>
+          <span class="o">{</span>
+            <span class="s2">"backend_purchase_reference"</span>: <span class="s2">"PURCHASE-17BB2-1"</span>,
+            <span class="s2">"event"</span>: <span class="o">{</span>
+              <span class="s2">"city_code"</span>: <span class="s2">"london-uk"</span>,
+              <span class="s2">"city_desc"</span>: <span class="s2">"London"</span>,
+              <span class="s2">"classes"</span>: <span class="o">{</span>
+                <span class="s2">"dance"</span>: <span class="s2">"Ballet &amp; Dance"</span>
+              <span class="o">}</span>,
+              <span class="s2">"country_code"</span>: <span class="s2">"uk"</span>,
+              <span class="s2">"country_desc"</span>: <span class="s2">"United Kingdom"</span>,
+              <span class="s2">"critic_review_percent"</span>: 100,
+              <span class="s2">"custom_filter"</span>: <span class="o">[]</span>,
+              <span class="s2">"event_desc"</span>: <span class="s2">"Matthew Bourne's Nutcracker TEST"</span>,
+              <span class="s2">"event_id"</span>: <span class="s2">"6IF"</span>,
+              <span class="s2">"event_path"</span>: <span class="s2">"/6IF-matthew-bourne-s-nutcracker-test/"</span>,
+              <span class="s2">"event_status"</span>: <span class="s2">"live"</span>,
+              <span class="s2">"event_type"</span>: <span class="s2">"simple_ticket"</span>,
+              <span class="s2">"event_upsell_list"</span>: <span class="o">{</span>
+                <span class="s2">"event_id"</span>: <span class="o">[</span>
+                  <span class="s2">"6IE"</span>,
+                  <span class="s2">"MH0"</span>
+                <span class="o">]</span>
+              <span class="o">}</span>,
+              <span class="s2">"event_uri_desc"</span>: <span class="s2">"Matthew-Bourne%27s-Nutcracker-TEST"</span>,
+              <span class="s2">"geo_data"</span>: <span class="o">{</span>
+                <span class="s2">"latitude"</span>: 51.52961137,
+                <span class="s2">"longitude"</span>: -0.10601562
+              <span class="o">}</span>,
+              <span class="s2">"has_no_perfs"</span>: <span class="nb">false</span>,
+              <span class="s2">"is_seated"</span>: <span class="nb">true</span>,
+              <span class="s2">"max_running_time"</span>: 120,
+              <span class="s2">"min_running_time"</span>: 120,
+              <span class="s2">"need_departure_date"</span>: <span class="nb">false</span>,
+              <span class="s2">"need_duration"</span>: <span class="nb">false</span>,
+              <span class="s2">"need_performance"</span>: <span class="nb">true</span>,
+              <span class="s2">"postcode"</span>: <span class="s2">"EC1R 4TN"</span>,
+              <span class="s2">"show_perf_time"</span>: <span class="nb">true</span>,
+              <span class="s2">"source_code"</span>: <span class="s2">"ext_test0"</span>,
+              <span class="s2">"source_desc"</span>: <span class="s2">"External Test Backend 0"</span>,
+              <span class="s2">"user_review_percent"</span>: 100,
+              <span class="s2">"venue_desc"</span>: <span class="s2">"Sadler's Wells"</span>,
+              <span class="s2">"venue_uri_desc"</span>: <span class="s2">"Sadler%27s-Wells"</span>
+            <span class="o">}</span>,
+            <span class="s2">"got_requested_seats"</span>: <span class="nb">false</span>,
+            <span class="s2">"gross_commission"</span>: <span class="o">{</span>
+              <span class="s2">"amount_excluding_vat"</span>: 7.13,
+              <span class="s2">"amount_including_vat"</span>: 8.55,
+              <span class="s2">"commission_currency_code"</span>: <span class="s2">"gbp"</span>
+            <span class="o">}</span>,
+            <span class="s2">"item_number"</span>: 1,
+            <span class="s2">"performance"</span>: <span class="o">{</span>
+              <span class="s2">"date_desc"</span>: <span class="s2">"Tue, 13th June 2017"</span>,
+              <span class="s2">"event_id"</span>: <span class="s2">"6IF"</span>,
+              <span class="s2">"has_pool_seats"</span>: <span class="nb">true</span>,
+              <span class="s2">"is_ghost"</span>: <span class="nb">false</span>,
+              <span class="s2">"is_limited"</span>: <span class="nb">false</span>,
+              <span class="s2">"iso8601_date_and_time"</span>: <span class="s2">"2017-06-13T19:30:00+01:00"</span>,
+              <span class="s2">"perf_id"</span>: <span class="s2">"6IF-B1S"</span>,
+              <span class="s2">"perf_name"</span>: <span class="s2">"Including back stage pass"</span>,
+              <span class="s2">"running_time"</span>: 120,
+              <span class="s2">"time_desc"</span>: <span class="s2">"7.30 PM"</span>
+            <span class="o">}</span>,
+            <span class="s2">"price_band_code"</span>: <span class="s2">"C/pool"</span>,
+            <span class="s2">"send_method"</span>: <span class="o">{</span>
+              <span class="s2">"send_code"</span>: <span class="s2">"COBO"</span>,
+              <span class="s2">"send_cost"</span>: 1.5,
+              <span class="s2">"send_desc"</span>: <span class="s2">"Collect from the venue"</span>,
+              <span class="s2">"send_final_type"</span>: <span class="s2">"collect"</span>,
+              <span class="s2">"send_type"</span>: <span class="s2">"collect"</span>
+            <span class="o">}</span>,
+            <span class="s2">"ticket_orders"</span>: <span class="o">{</span>
+              <span class="s2">"ticket_order"</span>: <span class="o">[</span>
+                <span class="o">{</span>
+                  <span class="s2">"discount_code"</span>: <span class="s2">"ADULT"</span>,
+                  <span class="s2">"discount_desc"</span>: <span class="s2">"Adult"</span>,
+                  <span class="s2">"no_of_seats"</span>: 1,
+                  <span class="s2">"sale_seatprice"</span>: 25,
+                  <span class="s2">"sale_surcharge"</span>: 4,
+                  <span class="s2">"seats"</span>: <span class="o">[</span>
+                    <span class="o">{</span>
+                      <span class="s2">"col_id"</span>: <span class="s2">"419"</span>,
+                      <span class="s2">"full_id"</span>: <span class="s2">"OR419"</span>,
+                      <span class="s2">"is_restricted_view"</span>: <span class="nb">false</span>,
+                      <span class="s2">"row_id"</span>: <span class="s2">"OR"</span>
+                    <span class="o">}</span>
+                  <span class="o">]</span>,
+                  <span class="s2">"total_sale_seatprice"</span>: 25,
+                  <span class="s2">"total_sale_surcharge"</span>: 4
+                <span class="o">}</span>,
+                <span class="o">{</span>
+                  <span class="s2">"discount_code"</span>: <span class="s2">"CHILD"</span>,
+                  <span class="s2">"discount_desc"</span>: <span class="s2">"Child rate"</span>,
+                  <span class="s2">"no_of_seats"</span>: 2,
+                  <span class="s2">"sale_seatprice"</span>: 13,
+                  <span class="s2">"sale_surcharge"</span>: 3,
+                  <span class="s2">"seats"</span>: <span class="o">[</span>
+                    <span class="o">{</span>
+                      <span class="s2">"col_id"</span>: <span class="s2">"416"</span>,
+                      <span class="s2">"full_id"</span>: <span class="s2">"OR416"</span>,
+                      <span class="s2">"is_restricted_view"</span>: <span class="nb">false</span>,
+                      <span class="s2">"row_id"</span>: <span class="s2">"OR"</span>
+                    <span class="o">}</span>,
+                    <span class="o">{</span>
+                      <span class="s2">"col_id"</span>: <span class="s2">"413"</span>,
+                      <span class="s2">"full_id"</span>: <span class="s2">"OR413"</span>,
+                      <span class="s2">"is_restricted_view"</span>: <span class="nb">false</span>,
+                      <span class="s2">"row_id"</span>: <span class="s2">"OR"</span>
+                    <span class="o">}</span>
+                  <span class="o">]</span>,
+                  <span class="s2">"total_sale_seatprice"</span>: 26,
+                  <span class="s2">"total_sale_surcharge"</span>: 6
+                <span class="o">}</span>
+              <span class="o">]</span>
+            <span class="o">}</span>,
+            <span class="s2">"ticket_type_code"</span>: <span class="s2">"CIRCLE"</span>,
+            <span class="s2">"ticket_type_desc"</span>: <span class="s2">"Upper circle"</span>,
+            <span class="s2">"total_no_of_seats"</span>: 3,
+            <span class="s2">"total_sale_seatprice"</span>: 51,
+            <span class="s2">"total_sale_surcharge"</span>: 10,
+            <span class="s2">"user_commission"</span>: <span class="o">{</span>
+              <span class="s2">"amount_excluding_vat"</span>: 0,
+              <span class="s2">"amount_including_vat"</span>: 0,
+              <span class="s2">"commission_currency_code"</span>: <span class="s2">"gbp"</span>
+            <span class="o">}</span>
+          <span class="o">}</span>
+        <span class="o">]</span>,
+        <span class="s2">"purchase_result"</span>: <span class="o">{</span>
+          <span class="s2">"is_semi_credit"</span>: <span class="nb">false</span>,
+          <span class="s2">"success"</span>: <span class="nb">true</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+    <span class="o">]</span>,
+    <span class="s2">"purchase_result"</span>: <span class="o">{</span>
+      <span class="s2">"is_partial"</span>: <span class="nb">false</span>,
+      <span class="s2">"success"</span>: <span class="nb">true</span>
+    <span class="o">}</span>,
+    <span class="s2">"transaction_id"</span>: <span class="s2">"T000-0000-8N66-K30B"</span>,
+    <span class="s2">"transaction_uuid"</span>: <span class="s2">"2dac0d00-002a-11e7-975c-002590326962"</span>,
+    <span class="s2">"trolley_bundle_count"</span>: 1,
+    <span class="s2">"trolley_order_count"</span>: 1
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+<p>The response is identical to the <code class="prettyprint">purchase</code> response described in <a href="#purchasing-on-credit">purchasing on credit</a>.</p>
+
+<h2 id="purchasing-with-redirect">Purchasing with redirect</h2>
+
+<p>This section describes how to handle generic redirects which are needed for
+other supported payment providers such as Global Collect. The vast majority of
+partners are either on-credit or Stripe, and so will not  need to read this
+section.</p>
+
+<p>Redirects are required when:</p>
+
+<ul>
+<li>Payment is taken on a third party payment page such as PayPal (customers are redirected to that page)</li>
+<li>3D Secure is used (Verified by Visa or MasterCard SecureCode)</li>
+</ul>
+
+<p>To support generic redirects you should use the following sequence:</p>
+
+<ol>
+<li>Call the <code class="prettyprint">purchase</code> endpoint</li>
+<li>The Ingresso platform will determine whether you need to redirect your customer. If so the response will include a <code class="prettyprint">callout</code> section with the information you need to redirect your customer.</li>
+<li>Redirect your customer to <code class="prettyprint">callout_destination_url</code>, including the <code class="prettyprint">callout_parameters</code> in the query string (they must be URL encoded). </li>
+<li>After the redirect your customer will arrive back at your <code class="prettyprint">return_url</code>, and you may receive query string or post parameters.</li>
+<li>You should then call the <code class="prettyprint">callback</code> endpoint, passing in verbatim all query string and post parameters you have received. These are needed by Ingresso to for example finalise the payment collection.</li>
+<li>If any further redirects are required, the <code class="prettyprint">callback</code> response will include a <code class="prettyprint">callout</code> section. You should continue to follow steps 3, 4 and 5 until the <code class="prettyprint">callback</code> response no longer includes a <code class="prettyprint">callout</code> section. At this point the purchase will be complete (it will have either succeeded or failed). </li>
+</ol>
+
+<h3 id="purchase-request">Purchase request</h3>
+
+<blockquote>
+<p><strong>Example purchase request - generic redirects</strong></p>
 </blockquote>
 <pre class="highlight shell"><code>curl https://demo.ticketswitch.com/f13/purchase.v1 <span class="se">\</span>
     -u <span class="s2">"demo-redirect:demopass"</span> <span class="se">\</span>
@@ -10501,30 +10962,15 @@ use this option.</p>
     -d <span class="s2">"country_code=uk"</span> <span class="se">\</span>
     -d <span class="s2">"phone=0203 137 7420"</span> <span class="se">\</span>
     -d <span class="s2">"email_address=tester@gmail.com"</span> <span class="se">\</span>
-    -d <span class="s2">"return_token=ffa02aad-e936-11e6-8ea7-001d9263ab24"</span> <span class="se">\</span>
-    -d <span class="s2">"return_url=https://www.yourticketingsite.com/token.ffa02aad-e936-11e6-8ea7-001d9263ab24/return.php"</span> <span class="se">\</span>
+    -d <span class="s2">"return_token=FIRST_RANDOM_TOKEN"</span> <span class="se">\</span>
+    -d <span class="s2">"return_url=https://www.yourticketingsite.com/token.FIRST_RANDOM_TOKEN/return.php"</span> <span class="se">\</span>
     -d <span class="s2">"client_http_user_agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8"</span> <span class="se">\</span>
     -d <span class="s2">"client_http_accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"</span> <span class="se">\</span>
     -X POST
 </code></pre>
-<p>If you do not purchase on credit and want Ingresso&rsquo;s help to manage payment, then it is necessary to support redirects. </p>
-
-<p>Redirects are necessary when:</p>
-
-<ul>
-<li>Payment is taken with Stripe (we have internally set Stripe up as a redirecting payment provider, even though it doesn&rsquo;t necessarily need to redirect)</li>
-<li>Payment is taken on a third party payment page such as PayPal (customers are redirected to that page)</li>
-<li>3D Secure is used (Verified by Visa or MasterCard SecureCode)</li>
-</ul>
-
-<p>To support redirects you should use the following sequence:</p>
-
-<ol>
-<li>You call purchase, passing in the parameters below</li>
-<li>The Ingresso platform will determine whether you need to redirect your customer. If so the response will assess </li>
-</ol>
-
-<p>All of the parameters mentioned above in the <a href="#purchasing-on-credit">purchasing on credit</a> section are used.</p>
+<p>All of the parameters mentioned above in the 
+<a href="#purchasing-on-credit">purchasing on credit</a> section are used. In addition the 
+following parameters must be specified:</p>
 
 <table><thead>
 <tr>
@@ -10534,11 +10980,11 @@ use this option.</p>
 </thead><tbody>
 <tr>
 <td><code class="prettyprint">return_token</code></td>
-<td>This token must be alphanumeric with &rsquo;-&rsquo;, &rsquo;_&rsquo; and &rsquo;.&rsquo; also allowed. We recommend that partners generate a UUID for this token.</td>
+<td>This token must be alphanumeric with <code class="prettyprint">-</code>, <code class="prettyprint">_</code> and <code class="prettyprint">.</code> also allowed. We recommend that partners generate a UUID for this token.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">return_url</code></td>
-<td>The <code class="prettyprint">return_token</code> also has to be present in the path for the return_url and no query string parameters are allowed in the return_url.</td>
+<td>The URL that your customer should arrive back to after being redirected. The <code class="prettyprint">return_token</code> also has to be present in the path for the return_url and no query string parameters are allowed in the return_url.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">client_http_user_agent</code></td>
@@ -10550,23 +10996,39 @@ use this option.</p>
 </tr>
 </tbody></table>
 
-<h3 id="response">Response</h3>
+<h3 id="purchase-response">Purchase response</h3>
 
 <blockquote>
-<p><strong>Example response - purchasing on-credit</strong></p>
+<p><strong>Example purchase response - generic redirects</strong></p>
 </blockquote>
 <pre class="highlight shell"><code><span class="o">{</span>
   <span class="s2">"callout"</span>: <span class="o">{</span>
+    <span class="s2">"callout_destination_url"</span>: <span class="s2">"https://demo.ticketswitch.com/tickets/dummy_redirect.buy/demo-redirect"</span>,
+    <span class="s2">"callout_parameters"</span>: <span class="o">{</span>
+      <span class="s2">"return_url"</span>: <span class="s2">"https://www.yourticketingsite.com/token.FIRST_RANDOM_TOKEN/return.php"</span>,
+      <span class="s2">"title"</span>: <span class="s2">"Dummy external card details page for debit on system 'ext_test0'"</span>
+    <span class="o">}</span>,
+    <span class="s2">"callout_parameters_order"</span>: <span class="o">[]</span>,
+    <span class="s2">"callout_type"</span>: <span class="s2">"get"</span>,
     <span class="s2">"debitor_integration_data"</span>: <span class="o">{</span>
-      <span class="s2">"debit_amount"</span>: 76.5,
-      <span class="s2">"debit_base_amount"</span>: 7650,
+      <span class="s2">"debit_amount"</span>: 62.5,
+      <span class="s2">"debit_base_amount"</span>: 6250,
       <span class="s2">"debit_currency"</span>: <span class="s2">"gbp"</span>,
       <span class="s2">"debitor_specific_data"</span>: <span class="o">{</span>
         <span class="s2">"is_dummy_3d_secure"</span>: <span class="nb">false</span>
       <span class="o">}</span>,
       <span class="s2">"debitor_type"</span>: <span class="s2">"dummy"</span>
-    <span class="o">}</span>,
-    <span class="s2">"redirect_html_page_data"</span>: <span class="s2">"&lt;html&gt;&lt;head&gt;</span><span class="se">\n</span><span class="s2">&lt;script type=</span><span class="se">\"</span><span class="s2">text/javascript</span><span class="se">\"</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">window.location=</span><span class="se">\"</span><span class="s2">https:</span><span class="se">\\</span><span class="s2">/</span><span class="se">\\</span><span class="s2">/api.ticketswitch.com</span><span class="se">\\</span><span class="s2">/cgi-bin</span><span class="se">\\</span><span class="s2">/dummy_redirect.buy</span><span class="se">\\</span><span class="s2">/tswitch?return_url=https%3A%2F%2Fdemo.ticketswitch.com%2Ftoken.ffa02aad-e936-11e6-8ea7-001d9263ab24%2Freturn.php</span><span class="se">\\</span><span class="s2">u0026title=Dummy%20external%20card%20details%20page%20for%20debit%20on%20system%20%27ext_test0%27</span><span class="se">\"</span><span class="s2">;</span><span class="se">\n</span><span class="s2">&lt;/script&gt;&lt;/head&gt;</span><span class="se">\n</span><span class="s2">&lt;body&gt;&lt;/body&gt;&lt;/html&gt;"</span>
+    <span class="o">}</span>
+  <span class="o">}</span>,
+  <span class="s2">"currency_details"</span>: <span class="o">{</span>
+    <span class="s2">"gbp"</span>: <span class="o">{</span>
+      <span class="s2">"currency_code"</span>: <span class="s2">"gbp"</span>,
+      <span class="s2">"currency_factor"</span>: 100,
+      <span class="s2">"currency_number"</span>: 826,
+      <span class="s2">"currency_places"</span>: 2,
+      <span class="s2">"currency_post_symbol"</span>: <span class="s2">""</span>,
+      <span class="s2">"currency_pre_symbol"</span>: <span class="s2">"£"</span>
+    <span class="o">}</span>
   <span class="o">}</span>
 <span class="o">}</span>
 </code></pre>
@@ -10577,32 +11039,16 @@ use this option.</p>
 </tr>
 </thead><tbody>
 <tr>
-<td><code class="prettyprint">customer</code></td>
+<td><code class="prettyprint">callout</code></td>
 <td>See below for object detail.</td>
 </tr>
 <tr>
-<td><code class="prettyprint">language_list</code></td>
-<td>(TODO)</td>
-</tr>
-<tr>
-<td><code class="prettyprint">purchase_iso8601_date_and_time</code></td>
-<td>The purchase time in ISO 8601 format.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">reserve_iso8601_date_and_time</code></td>
-<td>The reserve time in ISO 8601 format.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">transaction_status</code></td>
-<td><code class="prettyprint">purchased</code>, <code class="prettyprint">failed</code> or <code class="prettyprint">attempting</code> (will only be seen if the customer is being redirected to a payment page - most partners will not see this).</td>
-</tr>
-<tr>
-<td><code class="prettyprint">trolley_contents</code></td>
-<td>See below for object detail.</td>
+<td><code class="prettyprint">currency_details</code></td>
+<td>Further details of the currencies found in the callout data.</td>
 </tr>
 </tbody></table>
 
-<p><strong><code class="prettyprint">customer</code> attributes:</strong></p>
+<p><strong><code class="prettyprint">callout</code> attributes:</strong></p>
 
 <table><thead>
 <tr>
@@ -10611,14 +11057,55 @@ use this option.</p>
 </tr>
 </thead><tbody>
 <tr>
-<td><code class="prettyprint">addr_line_one</code></td>
-<td>The first line of the customer&rsquo;s address.</td>
+<td><code class="prettyprint">callout_destination_url</code></td>
+<td>The URL you should redirect your customer to.</td>
 </tr>
 <tr>
-<td><code class="prettyprint">addr_line_one_latin</code></td>
-<td>The first line of the customer&rsquo;s address, (TODO finish).</td>
+<td><code class="prettyprint">callout_parameters</code></td>
+<td>The parameters that should be passed. The <code class="prettyprint">callout_type</code> will specify whether to use GET or POST.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">callout_parameters_order</code></td>
+<td>In most cases this will be blank, and it can be ignored. In very rare cases, for <code class="prettyprint">callout_type=get</code>, it will include all <code class="prettyprint">callout_parameters</code> in a specific order - you should then specify the parameters in that order.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">callout_type</code></td>
+<td>Whether you should make a GET or POST request.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">debitor_integration_data</code></td>
+<td>This data is not needed when redirecting (so is not of use to most partners). It provides information needed to avoid redirecting.</td>
 </tr>
 </tbody></table>
+
+<h3 id="callback-request">Callback request</h3>
+
+<blockquote>
+<p><strong>Example callback request - generic redirects</strong></p>
+</blockquote>
+<pre class="highlight shell"><code>curl https://demo.ticketswitch.com/f13/callback.v1/this.FIRST_RANDOM_TOKEN/next.NEXT_RANDOM_TOKEN <span class="se">\</span>
+    -u <span class="s2">"demo-redirect:demopass"</span> <span class="se">\</span>
+    -d <span class="s2">"param1=asdfasdfsdfasdff"</span> <span class="se">\</span>
+    -r <span class="s2">"https://www.thepaymentpage.com/asdfsadfsdafasdf"</span> <span class="se">\</span>
+    --compressed
+    -X POST
+</code></pre>
+<p>If the <code class="prettyprint">purchase</code> response received includes <code class="prettyprint">callout</code> data then you need to redirect your customer and afterwards use the <code class="prettyprint">callback</code> endpoint.</p>
+
+<p>Note that the URL structure is <code class="prettyprint">callback.v1/this.[previous token used]/next.[new token]</code>. If <code class="prettyprint">purchase</code> was the last endpoint hit, then the &ldquo;previous token used&rdquo; is the <code class="prettyprint">return_token</code> that was passed in to <code class="prettyprint">purchase</code>. If the last endpoint hit was <code class="prettyprint">callback</code> then &ldquo;previous token used&rdquo; is the &ldquo;new token&rdquo; you generated for the previous <code class="prettyprint">callback</code>.</p>
+
+<p>You should pass the payment page URL you have been referred from as the Referrer in the headers.</p>
+
+<p>You should pass in verbatim all query string and post parameters you have received. These are needed by Ingresso to for example finalise the payment collection.</p>
+
+<p>The <code class="prettyprint">callback</code> response will either:</p>
+
+<ul>
+<li>include further <code class="prettyprint">callout</code> data, as in the <code class="prettyprint">purchase</code> response example above, in which case you should redirect your customer and call <code class="prettyprint">callback</code> again; or </li>
+<li>include similar data to the <code class="prettyprint">purchase</code> response described in <a href="#purchasing-on-credit">purchasing on credit</a> - the purchase is complete and has either succeeded or failed. </li>
+</ul>
+
+<p>You should continue to call <code class="prettyprint">callback</code> until you no longer see <code class="prettyprint">callout</code> data.</p>
 
           <h1 id="status">Status</h1>
 
@@ -10641,6 +11128,7 @@ to display on a confirmation page.</p>
 <pre class="highlight shell"><code>curl https://demo.ticketswitch.com/f13/status.v1 <span class="se">\</span>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"transaction_uuid=284d9c3a-d698-11e6-be8c-002590326962"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
     -G
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 
@@ -10848,6 +11336,8 @@ transaction.</p>
 </blockquote>
 <pre class="highlight plaintext"><code>GET https://demo.ticketswitch.com/f13/cities.v1
 </code></pre>
+<p>This call is not currently available - it will be added soon.</p>
+
           <h1 id="classes">Classes</h1>
 
 <blockquote>
@@ -10855,68 +11345,52 @@ transaction.</p>
 </blockquote>
 <pre class="highlight plaintext"><code>GET https://demo.ticketswitch.com/f13/classes.v1
 </code></pre>
+<p>This call is not currently available - it will be added soon.</p>
+
           <h1 id="bitmask-fields">Bitmask Fields</h1>
 
 <p>This section describes the bitmasks fields returned in response to some API
 calls and explains how to decode their data. </p>
 
-<p>The bitmask is an positive integer whose binary representation can be considered
-as a sequence of boolean values. Bitmasks are little-endian; As such the start
-of the sequence is the last (or right-most) bit of the byte.</p>
+<p>The &lsquo;bitmask&rsquo; fields are compact representations of arrays of flags, where
+the binary digits of the number represent true and false flags as 0 and 1.</p>
 
-<h2 id="encoding">Encoding</h2>
-<pre class="highlight plaintext"><code> Sun | Mon | Tue | Wed | Thu | Fri | Sat
------|-----|-----|-----|-----|-----|-----
-  X  |  X  |     |  X  |  X  |     |  X
-</code></pre>
-<p>Consider the situation where we have a show with a performance on every day of
-the week with the exception of Tuesday and Friday. </p>
-<pre class="highlight plaintext"><code> Sun | Mon | Tue | Wed | Thu | Fri | Sat
------|-----|-----|-----|-----|-----|-----
-  1  |  1  |  0  |  1  |  1  |  0  |  1
-</code></pre>
-<p>If we put a <code class="prettyprint">1</code> in the column for every day of the week when the performance is
-available, and <code class="prettyprint">0</code> for every day when it&rsquo;s not available then we get something
-that looks a lot like binary! Indeed as we have 7 bits (one for each day of the
-week) we could represent this as the 8bit number 218.</p>
-<pre class="highlight plaintext"><code>  X  | Sat | Fri | Thu | Wed | Tue | Mon | Sun
------|-----|-----|-----|-----|-----|-----|-----
-  0  |  1  |  0  |  1  |  1  |  0  |  1  |  1    ==  91
-</code></pre>
-<p>If we pad the table with an additional day of the week (day <code class="prettyprint">X</code> in this example)
-where the value is always 0, reorder the days of the week from right to left
-starting at Sunday we can now read this as the 8 bit integer <code class="prettyprint">91</code></p>
+<p>We number our bits in the conventional way with the least significant bit
+being bit zero.</p>
 
-<p>This reordering is important as it&rsquo;s probably the direction that your language
-converts binary data into integers.</p>
+<p>The correspondance between bits numbers and actual things is:</p>
 
-<h2 id="decoding">Decoding</h2>
-<pre class="highlight plaintext"><code>using bitwise OR:
+<ol>
+<li><p>For weekdays, 0 = Sunday, 1 = Monday, 2 = Tuesday etc&hellip;</p></li>
+<li><p>For months 0 is not used, 1 = 1st, 2 = 2nd, 3 = 3rd etc. (Note that this 
+means all month bitmasks will be even numbers).</p></li>
+<li><p>For tickets, 0 = first ticket, 1 = second ticket, like an array index</p></li>
+</ol>
 
-  X  | Sat | Fri | Thu | Wed | Tue | Mon | Sun
------|-----|-----|-----|-----|-----|-----|-----
-  0  |  1  |  0  |  1  |  1  |  0  |  1  |  1    ==             91
-  0  |  0  |  0  |  0  |  1  |  0  |  0  |  0    ==              8
-  0  |  1  |  0  |  1  |  1  |  0  |  1  |  1    == (91 | 8) == 91
+<p>Check check one of the bits in the bitmask you can use the following syntax in
+most languages:
+<code class="prettyprint">((1 &lt;&lt; bit_number) &amp; bitmask)</code></p>
 
-  X  | Sat | Fri | Thu | Wed | Tue | Mon | Sun
------|-----|-----|-----|-----|-----|-----|-----
-  0  |  1  |  0  |  1  |  1  |  0  |  1  |  1    ==             91
-  0  |  0  |  0  |  0  |  0  |  1  |  0  |  0    ==              4
-  0  |  1  |  0  |  1  |  1  |  0  |  1  |  1    == (91 | 4) == 95
+<p>For example if the API returns <code class="prettyprint">91</code> as a weekday bitmask you could make the 
+following checks in Python.</p>
 
-</code></pre>
-<p>Assume that you have received <code class="prettyprint">91</code> as the week day mask in a response from the
-API and you want to see if the event has a performance on a Wednesday. You can
-quickly check this with an <code class="prettyprint">OR</code> of the mask against the correct day of the week in binary. For
-example the number you get when you put a <code class="prettyprint">1</code> in only the Wednesday column is
-<code class="prettyprint">8</code> or <code class="prettyprint">00001000</code>. When you use <code class="prettyprint">OR</code> it will give you a <code class="prettyprint">1</code> if there is a <code class="prettyprint">1</code> in
-that column in the mask or in your day of the week. <code class="prettyprint">00001000 | 01011011 ==
-01011011</code> or <code class="prettyprint">91</code>. Because the output is the same as the mask you now know that
-there is a <code class="prettyprint">1</code> in the 4th bit of the mask.  If you wanted to check Tuesday you
-could use <code class="prettyprint">4</code> or <code class="prettyprint">00000100</code> against the mask, this would return <code class="prettyprint">01011111</code> or
-<code class="prettyprint">95</code>; the output is different from your mask, therefore we don&rsquo;t have anything
-on a Tuesday.</p>
+<p>There is availability on Sunday:</p>
+
+<p><code class="prettyprint">&gt;&gt;&gt; ((1 &lt;&lt; 0) &amp; 91)</code></p>
+
+<p><code class="prettyprint">1</code></p>
+
+<p>There isn&rsquo;t availability on Tuesday:</p>
+
+<p><code class="prettyprint">&gt;&gt;&gt; ((1 &lt;&lt; 2) &amp; 91)</code></p>
+
+<p><code class="prettyprint">0</code></p>
+
+<p>There is availability on Saturday:</p>
+
+<p><code class="prettyprint">&gt;&gt;&gt; ((1 &lt;&lt; 6) &amp; 91)</code></p>
+
+<p><code class="prettyprint">1</code></p>
 
           <h1 id="caching">Caching</h1>
 
