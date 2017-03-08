@@ -181,7 +181,7 @@ transaction.
 
 Attribute | Description
 --------- | -----------
-`customer` | Detail of the purchasing customer (TODO: can we refer to the purchase response for these fields?). Only included when the `add_customer` parameter is present and the `transaction_status` is `purchased`.
+`customer` | Detail of the purchasing customer; only included when the `add_customer` parameter is present and the `transaction_status` is `purchased`. The fields returned are as described in [purchase](#purchasing-on-credit).
 `external_sale_page` | The detail of the confirmation page that was displayed to customers. Only included when the `add_external_sale_page` parameter is present and the `transaction_status` is `purchased`.
 `purchase_iso8601_date_and_time` | The time the tickets were successfully purchased. 
 `reserve_iso8601_date_and_time` | The time the tickets were successfully reserved.

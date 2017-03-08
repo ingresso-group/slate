@@ -47,7 +47,7 @@ to contact us first api@ingresso.co.uk.
 ```shell
 curl https://demo.ticketswitch.com/f13/reserve.v1 \
     -u "demo:demopass" \
-    -d "perf_id=6IF-A7N" \
+    -d "perf_id=6IF-B1S" \
     -d "ticket_type_code=CIRCLE" \
     -d "price_band_code=C/pool" \
     -d "no_of_seats=3" \
@@ -78,7 +78,7 @@ reservation = client.make_reservation(
 ```shell
 curl https://demo.ticketswitch.com/f13/reserve.v1 \
     -u "demo:demopass" \
-    -d "perf_id=3CVB-22" \
+    -d "perf_id=3CVB-108" \
     -d "ticket_type_code=UPP" \
     -d "price_band_code=C/pool" \
     -d "no_of_seats=2" \
@@ -107,7 +107,7 @@ reservation = client.make_reservation(
 ```shell
 curl https://demo.ticketswitch.com/f13/reserve.v1 \
     -u "demo:demopass" \
-    -d "trolley_token=M6--Th1yy_GMHYp_pxuZpgPYa43h-4JJKgwOsTKiSmME9f69ngTVVFnFtyBIDwWfhC59oV4RtGbj_t-hw_U75AHoSbNaxMHOWSzGFBZNceuo7AtApIckL-qbs3700lw2N9zTX12LLHVBSqhRpYEFc7twQ_k5BwieJeLLpHTM9LnB48-BbPT-0tBn9Ylq_a3Y3RHFXZChWiYmsdxsYRE-kgktxd_pdFyGTZNN_mazMGwQFxYQ99nUXVmRsRYeV29d9CKVI1fv6mR81iapKdYiEm1U0r8A5fmdCTFlLO8majLLI07ktEjXzgA63oOa5DoRHTOcD-U6gsOLied869nVXJQWkx6lvBr6InrLdEefg5sDK0WLVFNJ9WT9QsG4Y7opYcOdx6K6U0i7L9f88_d0iurc-FkpC2ils1M21OJY-8_eQvuw1SPqqvqcLqCpR6OnRRGA3vS1LIhtgavvtZ95MvQpBH3DgAwXJtiYdjsXmIlor2pqbfiaZfQXwuC1e8yoNUIBe_yBtsOQnweyoJfIyYOayiajXbOIblwwSiJEJCnDHAaE9jo9kQRu4NdDHNd-O5IoumIoxhj7NIjl6vIb_Klu1wzB7AjeNL4TNubgMMlThGO4TyNrXsww72M_fGQO2pXCkLwXGpLckCqTAUIrNKz7v6Rs-4X3TWaNIcaAbz-Zw5lIboJoPLRgBETn02GHx00gcI1-RT8zxI9-Z" \
+    -d "trolley_token=s2--pFMaAzbxn3wG3zY-OAuclGgU9zzsUFJOLXpOquDKNGpwGn205i4_XzD6O6i8ZCqo2qxmA5QdvETbr7DlqTsbLayzHrvvf9zrz2NdGZuggwXHdx3cgPdbJzFeexIylGsxo7d3T9FWUkViv76Rz7qUH8qXeb9nWjF7ahrNsuHA8w_R63XmOQVNDIvJFS1hC6vFO3sD3t0MqKKguqRWuP4mM2vRN6BimgWYqrNqQw5D_-bfumE1Xl2vXu3FgSEp_N9dpsQ1fXK3qfoOiH-Hsd0F2Zh84IyMcrJkGZH8dlhdEWbvaMlu1rQ8Kw6hJMUigc31jbfHjuquCpDgI-OKyV8LQuQGz8wZsxj3jwWmLClcl50W7p1dTVLEYIW52jWqALRYFAresEGqzct0xDCeaoAjZ5vagMS2KXVmZ" \
     --compressed \
     -X POST
 ```
@@ -116,7 +116,7 @@ curl https://demo.ticketswitch.com/f13/reserve.v1 \
 from pyticketswitch import Client
 
 client = Client('demo', 'demopass')
-reservation = client.make_reservation(token='M6--Th1yy_GMHYp_pxuZpgPYa43h-4JJKgwOsTKiSmME9f69ngTVVFnFtyBIDwWfhC59oV4RtGbj_t-hw_U75AHoSbNaxMHOWSzGFBZNceuo7AtApIckL-qbs3700lw2N9zTX12LLHVBSqhRpYEFc7twQ_k5BwieJeLLpHTM9LnB48-BbPT-0tBn9Ylq_a3Y3RHFXZChWiYmsdxsYRE-kgktxd_pdFyGTZNN_mazMGwQFxYQ99nUXVmRsRYeV29d9CKVI1fv6mR81iapKdYiEm1U0r8A5fmdCTFlLO8majLLI07ktEjXzgA63oOa5DoRHTOcD-U6gsOLied869nVXJQWkx6lvBr6InrLdEefg5sDK0WLVFNJ9WT9QsG4Y7opYcOdx6K6U0i7L9f88_d0iurc-FkpC2ils1M21OJY-8_eQvuw1SPqqvqcLqCpR6OnRRGA3vS1LIhtgavvtZ95MvQpBH3DgAwXJtiYdjsXmIlor2pqbfiaZfQXwuC1e8yoNUIBe_yBtsOQnweyoJfIyYOayiajXbOIblwwSiJEJCnDHAaE9jo9kQRu4NdDHNd-O5IoumIoxhj7NIjl6vIb_Klu1wzB7AjeNL4TNubgMMlThGO4TyNrXsww72M_fGQO2pXCkLwXGpLckCqTAUIrNKz7v6Rs-4X3TWaNIcaAbz-Zw5lIboJoPLRgBETn02GHx00gcI1-RT8zxI9-Z')
+reservation = client.make_reservation(token='s2--pFMaAzbxn3wG3zY-OAuclGgU9zzsUFJOLXpOquDKNGpwGn205i4_XzD6O6i8ZCqo2qxmA5QdvETbr7DlqTsbLayzHrvvf9zrz2NdGZuggwXHdx3cgPdbJzFeexIylGsxo7d3T9FWUkViv76Rz7qUH8qXeb9nWjF7ahrNsuHA8w_R63XmOQVNDIvJFS1hC6vFO3sD3t0MqKKguqRWuP4mM2vRN6BimgWYqrNqQw5D_-bfumE1Xl2vXu3FgSEp_N9dpsQ1fXK3qfoOiH-Hsd0F2Zh84IyMcrJkGZH8dlhdEWbvaMlu1rQ8Kw6hJMUigc31jbfHjuquCpDgI-OKyV8LQuQGz8wZsxj3jwWmLClcl50W7p1dTVLEYIW52jWqALRYFAresEGqzct0xDCeaoAjZ5vagMS2KXVmZ')
 ```
 
 Note that the request parameters and response attributes are similar to
@@ -130,7 +130,6 @@ Parameter | Description
 `perf_id` | The performance identifier for the tickets that you want to reserve.
 `price_band_code` | The price band identifier for the tickets that you want to reserve.
 `remove_items_list` | A comma separated list of order `item_number`s that you want to remove from the trolley before reserving.
-`req_currency_details` | Include full detail in the [currency object](#currency-object). Without this only the currency_code field is returned.
 `seatX` | Specify a specific seat for ticket number X, with zero-based numbering (so to specify seat A12 as the first ticket use `seat0=A12`). If seat numbers are not specified then you will receive best available seats.
 `X_send_code` | Specify a send / despatch method for supplier system X. If this is not present it will default to the first send method. For example, to specify the POST send method for the nimax supplier system, use `nimax_send_code=POST`.
 `ticket_type_code` | The ticket type identifier for the tickets that you want to add to your trolley.
@@ -184,48 +183,49 @@ Parameter | Description
     "ae": "United Arab Emirates",
     "af": "Afghanistan",
     "ag": "Antigua and Barbuda",
+    ....
     "uk": "United Kingdom",
     "um": "The United States Minor Outlying Islands",
     "us": "United States of America",
     "uy": "Uruguay"
   },
   "can_edit_address": true,
+  "currency_details": {
+    "gbp": {
+      "currency_code": "gbp",
+      "currency_factor": 100,
+      "currency_number": 826,
+      "currency_places": 2,
+      "currency_post_symbol": "",
+      "currency_pre_symbol": "£"
+    }
+  },
+  "minutes_left_on_reserve": 15,
   "needs_agent_reference": false,
   "needs_email_address": false,
   "needs_payment_card": false,
   "prefilled_address": {
-    "address_line_one": "",
-    "address_line_two": "",
-    "country_code": "uk",
-    "county": "",
-    "email_address": "",
-    "home_phone": "",
-    "postcode": "",
-    "town": "",
-    "work_phone": ""
+    "country_code": "uk"
   },
-  "reserved_trolley": {
+  "trolley_contents": {
     "bundle": [
       {
         "bundle_order_count": 1,
         "bundle_source_code": "ext_test0",
         "bundle_source_desc": "External Test Backend 0",
-        "bundle_total_cost": 52.5,
-        "bundle_total_seatprice": 51,
+        "bundle_total_cost": 76.5,
+        "bundle_total_seatprice": 75,
         "bundle_total_send_cost": 1.5,
         "bundle_total_surcharge": 0,
-        "currency": {
-          "currency_code": "gbp"
-        },
+        "currency_code": "gbp",
         "order": [
           {
             "event": {
+              "city_code": "london-uk",
               "city_desc": "London",
-              "class": [
-                {
-                  "class_desc": "Ballet & Dance"
-                }
-              ],
+              "classes": {
+                "dance": "Ballet & Dance"
+              },
               "country_code": "uk",
               "country_desc": "United Kingdom",
               "critic_review_percent": 100,
@@ -241,6 +241,7 @@ Parameter | Description
                   "MH0"
                 ]
               },
+              "event_uri_desc": "Matthew-Bourne%27s-Nutcracker-TEST",
               "geo_data": {
                 "latitude": 51.52961137,
                 "longitude": -0.10601562
@@ -257,72 +258,59 @@ Parameter | Description
               "source_code": "ext_test0",
               "source_desc": "External Test Backend 0",
               "user_review_percent": 100,
-              "venue_desc": "Sadler's Wells"
+              "venue_desc": "Sadler's Wells",
+              "venue_uri_desc": "Sadler%27s-Wells"
             },
+            "got_requested_seats": false,
             "item_number": 1,
             "performance": {
-              "date_desc": "Sun, 15th January 2017",
+              "date_desc": "Tue, 13th June 2017",
               "event_id": "6IF",
               "has_pool_seats": true,
               "is_ghost": false,
               "is_limited": false,
-              "iso8601_date_and_time": "2017-01-15T19:30:00Z",
-              "perf_id": "6IF-A7N",
+              "iso8601_date_and_time": "2017-06-13T19:30:00+01:00",
+              "perf_id": "6IF-B1S",
+              "perf_name": "Including back stage pass",
               "running_time": 120,
               "time_desc": "7.30 PM"
             },
             "price_band_code": "C/pool",
-            "seat_request_status": "not_requested",
+            "send_method": {
+              "send_code": "COBO",
+              "send_cost": 1.5,
+              "send_desc": "Collect from the venue",
+              "send_type": "collect"
+            },
             "ticket_orders": {
               "ticket_order": [
                 {
                   "discount_code": "ADULT",
-                  "discount_desc": "Adult standard",
-                  "no_of_seats": 1,
+                  "discount_desc": "Adult",
+                  "no_of_seats": 3,
                   "sale_seatprice": 25,
                   "sale_surcharge": 0,
-                  "seats": {
-                    "id_details": [
-                      {
-                        "col_id": "361",
-                        "full_id": "GQ361",
-                        "is_restricted_view": false,
-                        "row_id": "GQ",
-                        "seat_text_code": "",
-                        "separator": ""
-                      }
-                    ]
-                  },
-                  "total_sale_seatprice": 25,
-                  "total_sale_surcharge": 0
-                },
-                {
-                  "discount_code": "CHILD",
-                  "discount_desc": "Child rate",
-                  "no_of_seats": 2,
-                  "sale_seatprice": 13,
-                  "sale_surcharge": 0,
-                  "seats": {
-                    "id_details": [
-                      {
-                        "col_id": "358",
-                        "full_id": "GQ358",
-                        "is_restricted_view": false,
-                        "row_id": "GQ",
-                        "seat_text_code": "",
-                        "separator": ""
-                      },
-                      {
-                        "col_id": "355",
-                        "full_id": "GQ355",
-                        "is_restricted_view": false,
-                        "row_id": "GQ",
-                        "seat_text_code": "",
-                        "separator": ""
-                      }
-                    ]
-                  },
-                  "total_sale_seatprice": 26,
+                  "seats": [
+                    {
+                      "col_id": "424",
+                      "full_id": "GL424",
+                      "is_restricted_view": false,
+                      "row_id": "GL"
+                    },
+                    {
+                      "col_id": "421",
+                      "full_id": "GL421",
+                      "is_restricted_view": false,
+                      "row_id": "GL"
+                    },
+                    {
+                      "col_id": "418",
+                      "full_id": "GL418",
+                      "is_restricted_view": false,
+                      "row_id": "GL"
+                    }
+                  ],
+                  "total_sale_seatprice": 75,
                   "total_sale_surcharge": 0
                 }
               ]
@@ -330,136 +318,15 @@ Parameter | Description
             "ticket_type_code": "CIRCLE",
             "ticket_type_desc": "Upper circle",
             "total_no_of_seats": 3,
-            "total_sale_seatprice": 51,
-            "total_sale_surcharge": 0
-          }
-        ]
-      },
-      {
-        "bundle_order_count": 1,
-        "bundle_source_code": "ingresso_one_test",
-        "bundle_source_desc": "Ingresso",
-        "bundle_total_cost": 40,
-        "bundle_total_seatprice": 40,
-        "bundle_total_send_cost": 0,
-        "bundle_total_surcharge": 0,
-        "currency": {
-          "currency_code": "gbp"
-        },
-        "order": [
-          {
-            "event": {
-              "class": [
-                {
-                  "class_desc": "Theatre"
-                }
-              ],
-              "country_code": "uk",
-              "country_desc": "United Kingdom",
-              "custom_filter": [],
-              "event_desc": "Test Event - Type 10 (d)",
-              "event_id": "3CVB",
-              "event_path": "/3CVB-test-event-type-10-d/",
-              "event_status": "live",
-              "event_type": "simple_ticket",
-              "geo_data": {
-                "latitude": 10,
-                "longitude": 20
-              },
-              "has_no_perfs": false,
-              "is_seated": true,
-              "need_departure_date": false,
-              "need_duration": false,
-              "need_performance": true,
-              "postcode": "BT1 2BE",
-              "show_perf_time": true,
-              "source_code": "ingresso_one_test",
-              "source_desc": "Ingresso",
-              "venue_desc": "Belfast Tours Ltd"
-            },
-            "item_number": 2,
-            "performance": {
-              "date_desc": "Fri, 10th February 2017",
-              "event_id": "3CVB",
-              "has_pool_seats": true,
-              "is_ghost": false,
-              "is_limited": false,
-              "iso8601_date_and_time": "2017-02-10T20:00:00Z",
-              "perf_id": "3CVB-22",
-              "time_desc": "8.00 PM"
-            },
-            "price_band_code": "C/pool",
-            "requested_seats": {
-              "id_details": [
-                {
-                  "col_id": "7",
-                  "full_id": "C7",
-                  "is_restricted_view": false,
-                  "row_id": "C",
-                  "seat_subdata": "1/7",
-                  "seat_text_code": "",
-                  "separator": ""
-                },
-                {
-                  "col_id": "8",
-                  "full_id": "C8",
-                  "is_restricted_view": false,
-                  "row_id": "C",
-                  "seat_subdata": "1/8",
-                  "seat_text_code": "",
-                  "separator": ""
-                }
-              ]
-            },
-            "seat_request_status": "got_all",
-            "ticket_orders": {
-              "ticket_order": [
-                {
-                  "discount_code": "RED/RED/1",
-                  "discount_desc": "FULL PRICE",
-                  "no_of_seats": 2,
-                  "sale_seatprice": 20,
-                  "sale_surcharge": 0,
-                  "seats": {
-                    "id_details": [
-                      {
-                        "col_id": "7",
-                        "full_id": "C7",
-                        "is_restricted_view": false,
-                        "row_id": "C",
-                        "seat_subdata": "1/7",
-                        "seat_text_code": "",
-                        "separator": ""
-                      },
-                      {
-                        "col_id": "8",
-                        "full_id": "C8",
-                        "is_restricted_view": false,
-                        "row_id": "C",
-                        "seat_subdata": "1/8",
-                        "seat_text_code": "",
-                        "separator": ""
-                      }
-                    ]
-                  },
-                  "total_sale_seatprice": 40,
-                  "total_sale_surcharge": 0
-                }
-              ]
-            },
-            "ticket_type_code": "UPP",
-            "ticket_type_desc": "Upper Circle",
-            "total_no_of_seats": 2,
-            "total_sale_seatprice": 40,
+            "total_sale_seatprice": 75,
             "total_sale_surcharge": 0
           }
         ]
       }
     ],
-    "minutes_left_on_reserve": 15,
-    "transaction_uuid": "0a50248e-cd0c-11e6-ae47-0025903268a2",
-    "trolley_bundle_count": 2,
-    "trolley_order_count": 2
+    "transaction_uuid": "e18c20fc-042e-11e7-975c-002590326962",
+    "trolley_bundle_count": 1,
+    "trolley_order_count": 1
   },
   "unreserved_orders": []
 }
@@ -700,8 +567,8 @@ Attribute | Description
 Attribute | Description
 --------- | -----------
 `bundle` | See below for object detail.
-`minutes_left_on_reserve` | A numeric representation of the number of minutes that your reserve will be held open for. For example, 12.5 is 12 minutes and 30 seconds. (TODO: confirm this is correct)
-`transaction_uuid` | The unique reference for this reservation. This is needed for any further interactions with the 
+`minutes_left_on_reserve` | A numeric representation of the number of minutes that your reserve will be held open for. For example, 12.5 is 12 minutes and 30 seconds.
+`transaction_uuid` | The unique reference for this reservation. This is needed for any further interactions with the reservation.
 `trolley_bundle_count` | The number of bundles in the trolley.
 `trolley_order_count` | The number of orders in the trolley. There will be at least one order for every bundle.
 
@@ -737,20 +604,24 @@ Attribute | Description
 `bundle_total_send_cost_in_desired` | The despatch cost for this bundle, converted to your `desired_currency`. This field will not be present for most partners.
 `bundle_total_surcharge` | The total booking fee for this bundle.
 `bundle_total_surcharge_in_desired` | The total booking fee for this bundle, converted to your `desired_currency`. This field will not be present for most partners.
-`currency` | The [currency](#currency-object) of the bundle, which by default just contains the currency_code. To include full currency detail add the parameter `req_currency_details`.
+`currency_code` | The currency code for the price - further detail for the currency can be found in the `currency_details` object, described below.
 `debitor_choices` | A list of debitors. See below for object detail. 
-`desired_currency` | Most partners will not see a `desired_currency`, but it is possible for a partner to request to always view prices in a specific currency. For example if a product is supplied in GBP, but your `desired_currency` is set to USD, we will return prices in GBP along with `_desired` prices in USD. If you are taking payment using Ingresso's Stripe connection, then payment will be taken in the default currency (GBP, in the example), and if you are being invoiced by Ingresso we will invoice you in the default currency (GBP, in the example). So the `_desired` prices are typically used to just display an indicative amount to the customer (in USD, in the example). Currency conversion rates are taken from a daily European Central Bank feed. To include the full currency object detail add the parameter `req_currency_details`.
+`desired_currency_code` | Most partners will not see a `desired_currency_code`, but it is possible for a partner to request to always view prices in a specific currency. For example if a product is supplied in GBP, but your `desired_currency_code` is set to USD, we will return prices in GBP along with `_desired` prices in USD. If you are taking payment using Ingresso's Stripe connection, then payment will be taken in the default currency (GBP, in the example), and if you are being invoiced by Ingresso we will invoice you in the default currency (GBP, in the example). So the `_desired` prices are typically used to just display an indicative amount to the customer (in USD, in the example). Currency conversion rates are taken from a daily European Central Bank feed.
 `order` | See below for object detail.
 
+
+Debitor data is returned when payment should be taken via Stripe. Stripe 
+integration is described in detail within [purchase](#purchasing-with-stripe).
 
 **`debitor` attributes:**
 
 Attribute | Description
 --------- | -----------
-`debitor_desc` | TODO
-`debitor_integration_data` | TODO
-`debitor_name` | TODO
-`debitor_type` | TODO
+`debitor_desc` | A human-readable description of the debitor.
+`debitor_integration_data` | Data you will need t
+`debitor_name` | The name of the debitor. For Stripe transactions this will be `stripe`.
+`debitor_type` | The type of the debitor. For Stripe transactions this will be `stripe`.
+
 
 
 **`order` attributes:**
@@ -798,3 +669,17 @@ Attribute | Description
 `row_id` | The row identifier of the seat.
 `seat_text` | A message about the seat that must be displayed to customers.
 `seat_text_code` | An identifier for the seat text (only unique within the current `bundle_source_code`). Not useful for most partners.
+
+
+The outer object includes a **`currency_details`** object containing one currency
+object (indexed on the currency code) for every currency referenced in the
+JSON response. Each currency has the following attributes:
+
+Attribute | Description
+--------- | -----------
+`currency_code` | [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) three letter code
+`currency_factor` | Multiply by this number to get values in the base unit (e.g. multiplying $47.11 by the currency_factor will give 4711 cents)
+`currency_number` | [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) numeric identifier
+`currency_places` | The number of decimal places to display (eg 45.5 usd should be displayed as 45.50)
+`currency_post_symbol` | A symbol to display at the end of the price
+`currency_pre_symbol` | A symbol to display in front of the price

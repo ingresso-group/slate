@@ -349,8 +349,7 @@ sometimes substantially. They should therefore only be used where necessary.
 
 Our API libraries implement a thin client over the API. Where the API 
 will return JSON, the API wrappers return language-specific objects. We 
-have developed a [Python API library](https://github.com/ingresso-group/pyticketswitch) 
-(TODO replace URL).
+have developed a [Python API library](https://github.com/ingresso-group/pyticketswitch).
 
 
 <blockquote class="lang-specific python">

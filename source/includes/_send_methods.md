@@ -42,6 +42,17 @@ Parameter | Description
 
 ```shell
 {
+  "currency_code": "gbp",
+  "currency_details": {
+    "gbp": {
+      "currency_code": "gbp",
+      "currency_factor": 100,
+      "currency_number": 826,
+      "currency_places": 2,
+      "currency_post_symbol": "",
+      "currency_pre_symbol": "£"
+    }
+  },
   "send_methods": {
     "send_method": [
       {
@@ -107,3 +118,16 @@ Attribute | Description
 `permitted_countries` | If this is returned it indicates that the send method is only available to addresses in the listed countries.
 `permitted_countries.country_code` | 2-digit country code (using [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
 `permitted_countries.country_description` | Human readable description of the country.
+
+
+The outer object also includes a `currency_code` and a `currency_details` object
+containing further currency detail:
+
+Attribute | Description
+--------- | -----------
+`currency_code` | [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) three letter code
+`currency_factor` | Multiply by this number to get values in the base unit (e.g. multiplying $47.11 by the currency_factor will give 4711 cents)
+`currency_number` | [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) numeric identifier
+`currency_places` | The number of decimal places to display (eg 45.5 usd should be displayed as 45.50)
+`currency_post_symbol` | A symbol to display at the end of the price
+`currency_pre_symbol` | A symbol to display in front of the price

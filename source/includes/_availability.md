@@ -6,30 +6,19 @@
 GET https://demo.ticketswitch.com/f13/availability.v1?perf_id={performanceid}
 ```
 
-TODO:
-
-- Are send methods returned by availability? If so how?  "A list of possible methods of despatching the tickets to the customer is also provided. Depending on the particular product, a ticket may be held for collection, or posted to the customer (subject to a number of restrictions on timing and postal areas). Each method in the list has an associated cost which will be added to the overall ticket charge."
-- What other parameters am I missing?
-- Promo codes?
-- Do we need to include anything on allocation modes now that we have price bands with /pool?
-
-
 **`availability`** lists the tickets that are currently available for a performance.
 In most cases the availability provided is in real time (although we do
 sometimes [cache](#caching) availability) and represents the tickets available
 at the time the request was made. There is therefore no guarantee that the
 tickets will still be available to purchase at some future time. Tickets are
-only guaranteed to be held after you have [reserved tickets](#reserve).
-
-Availability is divided into a set of ticket types, and each ticket type is
-subdivided into price bands. If you request individual seats for a seated event
-then each price band includes seat blocks containing contiguous seats.
+only guaranteed to be held after you [reserve tickets](#reserve).
 
 We have a single availability resource that will return best available seating
-by default. This resource is described first, following by 
+by default. This resource is described first and is important to read. We then describe
 [optional parameters](#optional-parameters) that can be passed to request 
 [individual seats](#individual-seats), [example seats](#example-seats), 
 [commission](#commission), and [discounts](#add-discounts).
+
 
 
 ## Availability
@@ -68,8 +57,6 @@ Parameter | Description
 `add_seat_blocks` | Include to retrieve [individual seats](#individual-seats) (if, for example, you wish to offer seat selection to your customer). The inclusion of this parameter does not guarantee that individual seat data will be returned - this also depends on (a) whether the event is seated and (b) whether the supplier system supports seat selection.
 `add_user_commission` | Include to retrieve [commission](#commission) data. For most partners this will include user_commission only (the amount you earn per ticket). Some partners will also see gross_commission, which is the total commission available to be shared between Ingresso and our partner. By default you will see user_commission only - if you think you need to see gross_commission as well then please get in touch. 
 
-(TODO should be req_seat_blocks for consistency?)
-
 
 ### Response
 
@@ -87,12 +74,12 @@ Parameter | Description
             "discount_desc": "",
             "is_offer": false,
             "non_offer_sale_seatprice": 35,
-            "non_offer_sale_surcharge": 0,
+            "non_offer_sale_surcharge": 4,
             "number_available": 6,
             "percentage_saving": 0,
             "price_band_code": "A/pool",
             "sale_seatprice": 35,
-            "sale_surcharge": 0
+            "sale_surcharge": 4
           },
           {
             "absolute_saving": 0,
@@ -100,12 +87,12 @@ Parameter | Description
             "discount_desc": "",
             "is_offer": false,
             "non_offer_sale_seatprice": 30,
-            "non_offer_sale_surcharge": 0,
+            "non_offer_sale_surcharge": 4,
             "number_available": 6,
             "percentage_saving": 0,
             "price_band_code": "B/pool",
             "sale_seatprice": 30,
-            "sale_surcharge": 0
+            "sale_surcharge": 4
           },
           {
             "absolute_saving": 0,
@@ -113,12 +100,12 @@ Parameter | Description
             "discount_desc": "",
             "is_offer": false,
             "non_offer_sale_seatprice": 25,
-            "non_offer_sale_surcharge": 0,
+            "non_offer_sale_surcharge": 4,
             "number_available": 6,
             "percentage_saving": 0,
             "price_band_code": "C/pool",
             "sale_seatprice": 25,
-            "sale_surcharge": 0
+            "sale_surcharge": 4
           }
         ],
         "ticket_type_code": "CIRCLE",
@@ -132,12 +119,12 @@ Parameter | Description
             "discount_desc": "",
             "is_offer": false,
             "non_offer_sale_seatprice": 21,
-            "non_offer_sale_surcharge": 0,
+            "non_offer_sale_surcharge": 3,
             "number_available": 6,
             "percentage_saving": 0,
             "price_band_code": "A/pool",
             "sale_seatprice": 21,
-            "sale_surcharge": 0
+            "sale_surcharge": 3
           },
           {
             "absolute_saving": 0,
@@ -145,12 +132,12 @@ Parameter | Description
             "discount_desc": "",
             "is_offer": false,
             "non_offer_sale_seatprice": 18,
-            "non_offer_sale_surcharge": 0,
+            "non_offer_sale_surcharge": 3,
             "number_available": 3,
             "percentage_saving": 0,
             "price_band_code": "B/pool",
             "sale_seatprice": 18,
-            "sale_surcharge": 0
+            "sale_surcharge": 3
           }
         ],
         "ticket_type_code": "STALLS",
@@ -164,12 +151,12 @@ Parameter | Description
             "discount_desc": "",
             "is_offer": false,
             "non_offer_sale_seatprice": 47,
-            "non_offer_sale_surcharge": 0,
+            "non_offer_sale_surcharge": 5,
             "number_available": 6,
             "percentage_saving": 0,
             "price_band_code": "A/pool",
             "sale_seatprice": 47,
-            "sale_surcharge": 0
+            "sale_surcharge": 5
           }
         ],
         "ticket_type_code": "BALCONY",
@@ -182,13 +169,16 @@ Parameter | Description
   "backend_throttle_failed": false,
   "can_leave_singles": true,
   "contiguous_seat_selection_only": true,
-  "currency": {
-    "currency_code": "gbp",
-    "currency_factor": 100,
-    "currency_number": 826,
-    "currency_places": 2,
-    "currency_post_symbol": "",
-    "currency_pre_symbol": "£"
+  "currency_code": "gbp",
+  "currency_details": {
+    "gbp": {
+      "currency_code": "gbp",
+      "currency_factor": 100,
+      "currency_number": 826,
+      "currency_places": 2,
+      "currency_post_symbol": "",
+      "currency_pre_symbol": "£"
+    }
   },
   "valid_quantities": [
     1,
@@ -201,28 +191,12 @@ Parameter | Description
 }
 ```
 
-`Availability` lists the tickets that are currently available for a performance.
-In most cases the availability provided is in real time (although we do
-sometimes [cache](#caching) availability) and represents the tickets available
-at the time the request was made. There is therefore no guarantee that the
-tickets will still be available to purchase at some future time. Tickets are
-only guaranteed to be held after you have [reserved tickets](#reserve).
-
 Availability is divided into a set of ticket types, and each ticket type is
 subdivided into price bands. If you request individual seats for a seated event
 each price band includes seat blocks for the contiguous seats. The structure of
 the availability data returned is therefore:
 
 <img src="https://d1wx4w35ubmdix.cloudfront.net/wl-media/images/availability-hierarchy.png" alt="Availability Hierarchy">
-
-If you wish to retrieve individual seats and offer seat selection to your
-customer then you should include `add_seat_blocks` in your request. If the event
-is seated and the supplier system supports seat selection then we will return
-seat blocks containing seats. You can check for the presence of the seat blocks
-to determine whether you can offer seat selection to your customer. Note that
-implementing seat selection can be quite involved because you need to integrate
-a third-party seat renderer or implement your own - we are happy to discuss this
-further with you and offer our advice.
 
 <aside class="notice">In the UK market, offers are typically classified as
 either "discounted face value" or "no booking fee". Discounted face value offers
@@ -236,28 +210,45 @@ discounts), and instead display "No fees" or similar.</aside>
 This example response is for best available - following this there is an example
 response that includes seats.
 
-Availability-level attributes:
+Top-level attributes:
 
 Attribute | Description
 --------- | -----------
+`availability` | Contains ticket types, object described below.
 `backend_is_broken` | If we see an unexpected error from the supplier system (for example a 500 error) we mark the system as "broken" for a period of time afterwards (the time can vary from nothing to 2 minutes). During this period of time this attribute will be `true` and we will return empty availability. This is an exceptional circumstance; to check if there is currently a supplier system issue you can check our [status page](https://status.ingresso.co.uk/).
 `backend_is_down` | When `true` the supplier system cannot be contacted for some reason, for example they are having technical problems or scheduled maintenance. The response will include empty availability in this case. This is an exceptional circumstance; to check if there is currently a supplier system issue you can check our [status page](https://status.ingresso.co.uk/).
 `backend_throttle_failed` | We allow a certain number of simultaneous requests to hit a supplier system and queue requests when the limit is reached. When this attribute is `true` your request has been sitting in our queue for a long time and we have timed out the request. This is an exceptional circumstance.
-`can_leave_singles` | In most cases this is `true`. When `false` the supplier ticketing system does not allow us to leave single seats (which are difficult to sell). TODO add more detail to this - what should an api user do when this is false?
+`can_leave_singles` | In most cases this is `true`. When `false` the supplier ticketing system does not allow us to leave single seats (which are difficult to sell). If you attempt to reserve when leaving a single seat the reserve will fail, so you should prevent your customer from making a selection that leaves a single seat.
 `contiguous_seat_selection_only` | If you have requested individual seats a value of `true` indicates that you can only select consecutive seats. `false` indicates that you can select seats without restriction *within a single ticket type and price band*. In most cases this will be `false`. If you would like to allow your customers to select seats without restriction across price bands and ticket types, you need to add multiple orders to a [trolley](#trolley), one order for each price band. However there are currently some restrictions enforced so if you want to do this you will need to contact us first api@ingresso.co.uk
-`currency` | The [currency](#currency-object) of the availability.
-`quantity_options` | The valid [quantity options](#quantity-options-object), a rare example is that some tickets can only be purchased in pairs.
+`currency_code` | The currency code for the availability.
+`currency_details` | Further detail for the currency, object described below.
+`valid_quantities` | An array of valid quantities.
 
 
-Ticket type attributes:
+The **currency_details** object containing one currency
+object (indexed on the currency code) for every currency referenced in the
+JSON response. Each currency has the following attributes:
 
 Attribute | Description
 --------- | -----------
+`currency_code` | [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) three letter code
+`currency_factor` | Multiply by this number to get values in the base unit (e.g. multiplying $47.11 by the currency_factor will give 4711 cents)
+`currency_number` | [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) numeric identifier
+`currency_places` | The number of decimal places to display (eg 45.5 usd should be displayed as 45.50)
+`currency_post_symbol` | A symbol to display at the end of the price
+`currency_pre_symbol` | A symbol to display in front of the price
+
+
+**Ticket type** attributes:
+
+Attribute | Description
+--------- | -----------
+`price_band` | Object described below.
 `ticket_type_code` | The unique identifier for the ticket type. For seated events this refers to a part of house / seating area such as Grand Circle.
 `ticket_type_desc` | The description for the ticket type. This should be displayed to the customer (if you are offering seat selection to your customer then you would typically hard-code the description when drawing a seating plan).
 
 
-Price band attributes:
+**Price band** attributes:
 
 Attribute | Description
 --------- | -----------
@@ -265,12 +256,12 @@ Attribute | Description
 `discount_code` | The unique identifier of the default [discount](#discount-object). Each price band has a default discount, but additional discounts can be requested for a price band with [list discounts](#list-discounts).
 `discount_desc` | The description of the default discount. We recommend to present this text to customers when `is_offer` is `true` to describe the offer.
 `is_offer` | `true` if the ticket price is discounted below the full price, i.e. if `absolute_saving` is greater than zero.
-`non_offer_sale_seatprice` | The per-ticket price for full-priced tickets. This will be the face value price when the market has such a concept (for example the London theatre market has this concept, but some New York theatre shows do not). This is the same as the `sale_seatprice` when the price band is not discounted. (TODO can we remove "sale" from the name?)
+`non_offer_sale_seatprice` | The per-ticket price for full-priced tickets. This will be the face value price when the market has such a concept (for example the London theatre market has this concept, but some New York theatre shows do not). This is the same as the `sale_seatprice` when the price band is not discounted.
 `non_offer_sale_surcharge` | The per-ticket booking fee for full-priced tickets. To determine the total ticket price you must add together the `non_offer_sale_seatprice` and the `non_offer_sale_surcharge`.
 `number_available` | This is the maximum number of contiguous seats that can be purchased. This applies to best available only - if you are using seat selection and `contiguous_seat_selection_only` is `false` it is possible to select above this number.
 `percentage_saving` | Defined as `absolute_saving` / (`non_offer_sale_seatprice` + `non_offer_sale_surcharge`) * 100
-`price_band_code` | The code for a price band, for example "C/pool". To uniquely identify a price band you should take the combination of `ticket_type_code` and `price_band_code`. The price band code is generally made up of the code from the underlying supplier system, e.g. "C", followed by a "/" separator then "pool" or "alloc", indicating whether the price band is taken from the general pool of tickets or is from a ring-fenced allocation. Integrating partners should just work with the full price_band_code, ignoring the constituent parts.
-`price_band_description??` | (TODO what is the actual name of this attribute?)
+`price_band_code` | The code for the price band, for example "C/pool". To uniquely identify a price band you should take the combination of `ticket_type_code` and `price_band_code`. The price band code is generally made up of the code from the underlying supplier system, e.g. "C", followed by a "/" separator then "pool" or "alloc", indicating whether the price band is taken from the general pool of tickets or is from a ring-fenced allocation. Integrating partners should just work with the full price_band_code, ignoring the constituent parts.
+`price_band_desc` | The description for the price band. This will often not be present (not all supplier ticketing systems provide it) but when it is present it should be displayed to the customer.
 `sale_seatprice` | The per-ticket price. This will be the face value price when the market has such a concept (for example the London theatre market has this concept, but some New York theatre shows do not). This is the same as the `non_offer_sale_seatprice` when the price band is not discounted.
 `sale_surcharge` | The per-ticket booking fee. To determine the total ticket price you must add together the `sale_seatprice` and the `sale_surcharge`.
 
@@ -290,13 +281,13 @@ therefore only be used where necessary.
 <aside class="warning">NOTE: we are going to change the format of the seats to better support large seated venues. The change will not be dramatic, but if you integrate against the current version you will need to update your integration later.</aside>
 
 The Ingresso API can return a list of all available seats, allowing you to give
-your customers the choice rather than forcing them to take the best available
-seats. 
+your customers choice rather than forcing them to take the best available
+seats. If you have included `add_seat_blocks` in your request, the event
+is seated, and the supplier system supports seat selection, then we will return
+seat blocks containing seats. You can check for the presence of the seat blocks
+to determine whether you can offer seat selection to your customer.
 
-<aside class="notice">To save development effort, it is possible to link to
-Ingresso's booking page and we will automatically redirect back to your checkout
-page once the customer has successfully reserved their seats. Alternatively you
-can embed our seat selection widget within your site.</aside>
+<aside class="notice">We have some options to save development effort when implementing seat selection. Please contact us for more detail api@ingresso.co.uk</aside>
 
 ### Request
 
@@ -305,7 +296,7 @@ can embed our seat selection widget within your site.</aside>
 ```shell
 curl https://demo.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
-    -d "perf_id=3CVB-22" \
+    -d "perf_id=3CVB-108" \
     -d "add_seat_blocks" \
     --compressed \
     -G
@@ -339,90 +330,70 @@ Parameter | Description
                       "full_id": "D1",
                       "is_restricted_view": false,
                       "row_id": "D",
-                      "seat_subdata": "1/1",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/1"
                     },
                     {
                       "col_id": "2",
                       "full_id": "D2",
                       "is_restricted_view": false,
                       "row_id": "D",
-                      "seat_subdata": "1/2",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/2"
                     },
                     {
                       "col_id": "3",
                       "full_id": "D3",
                       "is_restricted_view": false,
                       "row_id": "D",
-                      "seat_subdata": "1/3",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/3"
                     },
                     {
                       "col_id": "4",
                       "full_id": "D4",
                       "is_restricted_view": false,
                       "row_id": "D",
-                      "seat_subdata": "1/4",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/4"
                     },
                     {
                       "col_id": "5",
                       "full_id": "D5",
                       "is_restricted_view": false,
                       "row_id": "D",
-                      "seat_subdata": "1/5",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/5"
                     },
                     {
                       "col_id": "6",
                       "full_id": "D6",
                       "is_restricted_view": false,
                       "row_id": "D",
-                      "seat_subdata": "1/6",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/6"
                     },
                     {
                       "col_id": "7",
                       "full_id": "D7",
                       "is_restricted_view": false,
                       "row_id": "D",
-                      "seat_subdata": "1/7",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/7"
                     },
                     {
                       "col_id": "8",
                       "full_id": "D8",
                       "is_restricted_view": false,
                       "row_id": "D",
-                      "seat_subdata": "1/8",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/8"
                     },
                     {
                       "col_id": "9",
                       "full_id": "D9",
                       "is_restricted_view": false,
                       "row_id": "D",
-                      "seat_subdata": "1/9",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/9"
                     },
                     {
                       "col_id": "10",
                       "full_id": "D10",
                       "is_restricted_view": false,
                       "row_id": "D",
-                      "seat_subdata": "1/10",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/10"
                     }
                   ]
                 }
@@ -457,90 +428,70 @@ Parameter | Description
                       "full_id": "B1",
                       "is_restricted_view": false,
                       "row_id": "B",
-                      "seat_subdata": "1/1",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/1"
                     },
                     {
                       "col_id": "2",
                       "full_id": "B2",
                       "is_restricted_view": false,
                       "row_id": "B",
-                      "seat_subdata": "1/2",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/2"
                     },
                     {
                       "col_id": "3",
                       "full_id": "B3",
                       "is_restricted_view": false,
                       "row_id": "B",
-                      "seat_subdata": "1/3",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/3"
                     },
                     {
                       "col_id": "4",
                       "full_id": "B4",
                       "is_restricted_view": false,
                       "row_id": "B",
-                      "seat_subdata": "1/4",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/4"
                     },
                     {
                       "col_id": "5",
                       "full_id": "B5",
                       "is_restricted_view": false,
                       "row_id": "B",
-                      "seat_subdata": "1/5",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/5"
                     },
                     {
                       "col_id": "6",
                       "full_id": "B6",
                       "is_restricted_view": false,
                       "row_id": "B",
-                      "seat_subdata": "1/6",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/6"
                     },
                     {
                       "col_id": "7",
                       "full_id": "B7",
                       "is_restricted_view": false,
                       "row_id": "B",
-                      "seat_subdata": "1/7",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/7"
                     },
                     {
                       "col_id": "8",
                       "full_id": "B8",
                       "is_restricted_view": false,
                       "row_id": "B",
-                      "seat_subdata": "1/8",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/8"
                     },
                     {
                       "col_id": "9",
                       "full_id": "B9",
                       "is_restricted_view": false,
                       "row_id": "B",
-                      "seat_subdata": "1/9",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/9"
                     },
                     {
                       "col_id": "10",
                       "full_id": "B10",
                       "is_restricted_view": false,
                       "row_id": "B",
-                      "seat_subdata": "1/10",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/10"
                     }
                   ]
                 }
@@ -575,90 +526,70 @@ Parameter | Description
                       "full_id": "A1",
                       "is_restricted_view": false,
                       "row_id": "A",
-                      "seat_subdata": "1/1",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/1"
                     },
                     {
                       "col_id": "2",
                       "full_id": "A2",
                       "is_restricted_view": false,
                       "row_id": "A",
-                      "seat_subdata": "1/2",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/2"
                     },
                     {
                       "col_id": "3",
                       "full_id": "A3",
                       "is_restricted_view": false,
                       "row_id": "A",
-                      "seat_subdata": "1/3",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/3"
                     },
                     {
                       "col_id": "4",
                       "full_id": "A4",
                       "is_restricted_view": false,
                       "row_id": "A",
-                      "seat_subdata": "1/4",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/4"
                     },
                     {
                       "col_id": "5",
                       "full_id": "A5",
                       "is_restricted_view": false,
                       "row_id": "A",
-                      "seat_subdata": "1/5",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/5"
                     },
                     {
                       "col_id": "6",
                       "full_id": "A6",
                       "is_restricted_view": false,
                       "row_id": "A",
-                      "seat_subdata": "1/6",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/6"
                     },
                     {
                       "col_id": "7",
                       "full_id": "A7",
                       "is_restricted_view": false,
                       "row_id": "A",
-                      "seat_subdata": "1/7",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/7"
                     },
                     {
                       "col_id": "8",
                       "full_id": "A8",
                       "is_restricted_view": false,
                       "row_id": "A",
-                      "seat_subdata": "1/8",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/8"
                     },
                     {
                       "col_id": "9",
                       "full_id": "A9",
                       "is_restricted_view": false,
                       "row_id": "A",
-                      "seat_subdata": "1/9",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/9"
                     },
                     {
                       "col_id": "10",
                       "full_id": "A10",
                       "is_restricted_view": false,
                       "row_id": "A",
-                      "seat_subdata": "1/10",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/10"
                     }
                   ]
                 }
@@ -693,90 +624,70 @@ Parameter | Description
                       "full_id": "C1",
                       "is_restricted_view": false,
                       "row_id": "C",
-                      "seat_subdata": "1/1",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/1"
                     },
                     {
                       "col_id": "2",
                       "full_id": "C2",
                       "is_restricted_view": false,
                       "row_id": "C",
-                      "seat_subdata": "1/2",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/2"
                     },
                     {
                       "col_id": "3",
                       "full_id": "C3",
                       "is_restricted_view": false,
                       "row_id": "C",
-                      "seat_subdata": "1/3",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/3"
                     },
                     {
                       "col_id": "4",
                       "full_id": "C4",
                       "is_restricted_view": false,
                       "row_id": "C",
-                      "seat_subdata": "1/4",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/4"
                     },
                     {
                       "col_id": "5",
                       "full_id": "C5",
                       "is_restricted_view": false,
                       "row_id": "C",
-                      "seat_subdata": "1/5",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/5"
                     },
                     {
                       "col_id": "6",
                       "full_id": "C6",
                       "is_restricted_view": false,
                       "row_id": "C",
-                      "seat_subdata": "1/6",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/6"
                     },
                     {
                       "col_id": "7",
                       "full_id": "C7",
                       "is_restricted_view": false,
                       "row_id": "C",
-                      "seat_subdata": "1/7",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/7"
                     },
                     {
                       "col_id": "8",
                       "full_id": "C8",
                       "is_restricted_view": false,
                       "row_id": "C",
-                      "seat_subdata": "1/8",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/8"
                     },
                     {
                       "col_id": "9",
                       "full_id": "C9",
                       "is_restricted_view": false,
                       "row_id": "C",
-                      "seat_subdata": "1/9",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/9"
                     },
                     {
                       "col_id": "10",
                       "full_id": "C10",
                       "is_restricted_view": false,
                       "row_id": "C",
-                      "seat_subdata": "1/10",
-                      "seat_text_code": "",
-                      "separator": ""
+                      "seat_subdata": "1/10"
                     }
                   ]
                 }
@@ -802,8 +713,16 @@ Parameter | Description
   "backend_throttle_failed": false,
   "can_leave_singles": true,
   "contiguous_seat_selection_only": false,
-  "currency": {
-    "currency_code": "gbp"
+  "currency_code": "gbp",
+  "currency_details": {
+    "gbp": {
+      "currency_code": "gbp",
+      "currency_factor": 100,
+      "currency_number": 826,
+      "currency_places": 2,
+      "currency_post_symbol": "",
+      "currency_pre_symbol": "£"
+    }
   },
   "valid_quantities": [
     1,
@@ -811,7 +730,11 @@ Parameter | Description
     3,
     4,
     5,
-    6
+    6,
+    7,
+    8,
+    9,
+    10
   ]
 }
 ```
@@ -849,7 +772,7 @@ no need to also request example seats.
 ```shell
 curl https://demo.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
-    -d "perf_id=3CVB-22" \
+    -d "perf_id=3CVB-108" \
     -d "add_example_seats" \
     --compressed \
     -G
@@ -1102,7 +1025,6 @@ Parameter | Description
 --------- | -----------
 `add_user_commission` | Include to retrieve commission data. For most partners this will include user_commission only (the amount you earn per ticket). Some partners will also see gross_commission, which is the total commission available to be shared between Ingresso and our partner. By default you will see user_commission only - if you think you need to see gross_commission as well then please get in touch.
 
-(TODO does add_user_commission work with reserve?)
 
 ### Response
 

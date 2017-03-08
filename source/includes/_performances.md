@@ -59,7 +59,7 @@ Typical use cases:
 curl https://demo.ticketswitch.com/f13/performances.v1 \
     -u "demo:demopass" \
     -d "event_id=6IF" \
-    -d "page_len=10" \
+    -d "page_length=10" \
     --compressed \
     -G
 ```
@@ -74,8 +74,8 @@ performances = client.list_performances('6IF')
 Parameter | Description
 --------- | -----------
 `event_id` | Identifier of the event you want to see performances for.
-`page_len` | Length of a page, default 50.
-`page_no` | Page number, default 0, ignored if page_len is not present.
+`page_length` | Length of a page, default 50.
+`page_number` | Page number, default 0, ignored if page_len is not present.
 `date_range` | Date range in the form `yyyymmdd:yyyymmdd` (both are optional)
 
 These parameters can be passed in to request additional data for each 
@@ -98,129 +98,135 @@ Parameter | Description
 > **Example response**
 
 ```shell
-
 {
   "results": {
     "has_perf_names": true,
+    "paging_status": {
+      "page_length": 10,
+      "page_number": 0,
+      "pages_remaining": 10,
+      "results_remaining": 94,
+      "total_unpaged_results": 104
+    },
     "performance": [
       {
         "cached_max_seats": 6,
-        "date_desc": "Thu, 22nd December 2016",
+        "date_desc": "Thu, 9th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
         "is_ghost": false,
         "is_limited": false,
-        "iso8601_date_and_time": "2016-12-22T19:30:00Z",
-        "perf_id": "6IF-A6Z",
+        "iso8601_date_and_time": "2017-03-09T19:30:00Z",
+        "perf_id": "6IF-A94",
         "running_time": 120,
         "time_desc": "7.30 PM"
       },
       {
         "cached_max_seats": 6,
-        "date_desc": "Fri, 23rd December 2016",
+        "date_desc": "Fri, 10th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
         "is_ghost": false,
         "is_limited": false,
-        "iso8601_date_and_time": "2016-12-23T19:30:00Z",
-        "perf_id": "6IF-A70",
+        "iso8601_date_and_time": "2017-03-10T19:30:00Z",
+        "perf_id": "6IF-A95",
         "running_time": 120,
         "time_desc": "7.30 PM"
       },
       {
         "cached_max_seats": 6,
-        "date_desc": "Sun, 25th December 2016",
+        "date_desc": "Sun, 12th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
         "is_ghost": false,
         "is_limited": false,
-        "iso8601_date_and_time": "2016-12-25T19:30:00Z",
-        "perf_id": "6IF-A72",
+        "iso8601_date_and_time": "2017-03-12T19:30:00Z",
+        "perf_id": "6IF-A97",
         "running_time": 120,
         "time_desc": "7.30 PM"
       },
       {
         "cached_max_seats": 6,
-        "date_desc": "Mon, 26th December 2016",
+        "date_desc": "Mon, 13th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
         "is_ghost": false,
         "is_limited": false,
-        "iso8601_date_and_time": "2016-12-26T19:30:00Z",
-        "perf_id": "6IF-A73",
+        "iso8601_date_and_time": "2017-03-13T19:30:00Z",
+        "perf_id": "6IF-A98",
         "running_time": 120,
         "time_desc": "7.30 PM"
       },
       {
         "cached_max_seats": 6,
-        "date_desc": "Tue, 27th December 2016",
+        "date_desc": "Tue, 14th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
         "is_ghost": false,
         "is_limited": false,
-        "iso8601_date_and_time": "2016-12-27T19:30:00Z",
-        "perf_id": "6IF-A74",
+        "iso8601_date_and_time": "2017-03-14T19:30:00Z",
+        "perf_id": "6IF-A99",
         "perf_name": "Including back stage pass",
         "running_time": 120,
         "time_desc": "7.30 PM"
       },
       {
         "cached_max_seats": 6,
-        "date_desc": "Wed, 28th December 2016",
+        "date_desc": "Wed, 15th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
         "is_ghost": false,
         "is_limited": false,
-        "iso8601_date_and_time": "2016-12-28T19:30:00Z",
-        "perf_id": "6IF-A75",
+        "iso8601_date_and_time": "2017-03-15T19:30:00Z",
+        "perf_id": "6IF-A9A",
         "running_time": 120,
         "time_desc": "7.30 PM"
       },
       {
         "cached_max_seats": 6,
-        "date_desc": "Thu, 29th December 2016",
+        "date_desc": "Thu, 16th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
         "is_ghost": false,
         "is_limited": false,
-        "iso8601_date_and_time": "2016-12-29T19:30:00Z",
-        "perf_id": "6IF-A76",
+        "iso8601_date_and_time": "2017-03-16T19:30:00Z",
+        "perf_id": "6IF-A9B",
         "running_time": 120,
         "time_desc": "7.30 PM"
       },
       {
         "cached_max_seats": 6,
-        "date_desc": "Fri, 30th December 2016",
+        "date_desc": "Fri, 17th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
         "is_ghost": false,
         "is_limited": false,
-        "iso8601_date_and_time": "2016-12-30T19:30:00Z",
-        "perf_id": "6IF-A77",
+        "iso8601_date_and_time": "2017-03-17T19:30:00Z",
+        "perf_id": "6IF-A9C",
         "running_time": 120,
         "time_desc": "7.30 PM"
       },
       {
         "cached_max_seats": 6,
-        "date_desc": "Sun, 1st January 2017",
+        "date_desc": "Sun, 19th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
         "is_ghost": false,
         "is_limited": false,
-        "iso8601_date_and_time": "2017-01-01T19:30:00Z",
-        "perf_id": "6IF-A79",
+        "iso8601_date_and_time": "2017-03-19T19:30:00Z",
+        "perf_id": "6IF-A9E",
         "running_time": 120,
         "time_desc": "7.30 PM"
       },
       {
         "cached_max_seats": 6,
-        "date_desc": "Mon, 2nd January 2017",
+        "date_desc": "Mon, 20th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
         "is_ghost": false,
         "is_limited": false,
-        "iso8601_date_and_time": "2017-01-02T19:30:00Z",
-        "perf_id": "6IF-A7A",
+        "iso8601_date_and_time": "2017-03-20T19:30:00Z",
+        "perf_id": "6IF-A9F",
         "running_time": 120,
         "time_desc": "7.30 PM"
       }
@@ -318,25 +324,37 @@ Parameter | Description
 
 Attribute | Description
 --------- | -----------
-`events_by_id` | A list of events related to the performances returned. This is only present for meta events (events that are made up of multiple component events, for example a touring show).
 `has_perf_names` | Whether the performances returned have performance names (human readable descriptions of the performance). Performance names are not always present but must be displayed when they are. Performance names are typically used where performances of an event differ significantly in more than just date and time (sometimes the supplier system will not return the time to us in a structured format but it will instead be included as part of the performance name). An example performance with a performance name is 6IF-A5R.
+`paging_status` | Information regarding whether the data has been paged.
 `performance` | An array of performance objects, described below.
+
+
+**Paging Status**
+
+Attribute | Description
+--------- | -----------
+`page_length` | The page length used for the response. This will either be the value set with the `page_len` parameter
+`page_number` | The zero-based page number currently displayed.
+`pages_remaining` | The number of pages that you need to request after the current page to retrieve all results.
+`results_remaining` | The number of results in the remaining pages.
+`total_unpaged_results` | The total number of results.
+
 
 **Performance**
 
 Attribute | Description
 --------- | -----------
-`perf_id` | Unique identifier for the performance
-`perf_name` | A human readable description of the performance. Performance names are not always present but must be displayed when they are. Performance names are typically used where performances of an event differ significantly in more than just date and time (sometimes the supplier system will not return the time to us in a structured format but it will instead be included as part of the performance name). An example performance with a performance name is 6IF-A5R.
-`event_id` | Unique identifier for the event that this performance is an instance of
-`iso8601_date_and_time` | ISO 8601 date and time
-`date_desc` | human readable date description
-`time_desc` | human readable time description
-`is_limited` | Indicates whether the supply of tickets is known to be extremely limited. This is usually taken to be fewer than four remaining, though not all ticket sources provide this information. Where the information is not available the flag will always be set to `false`
-`has_pool_seats` | (TODO: Pete what does this mean exactly?)
-`is_ghost` | (TODO: Pete in what scenario would you return perfs with is_ghost = true?)
 `cached_max_seats` | This is the maximum number of contiguous seats that can be booked for this performance, based on Ingresso's cached data. Note that if the event supports seat selection you are not limited by the number of contiguous seats, so this value should be used in the context of best available only. (TODO is this optional?)
+`date_desc` | human readable date description
+`event_id` | Unique identifier for the event that this performance is an instance of
+`has_pool_seats` | Whether this performance has seats available from the general pool of tickets. This is ignored by most partners.
+`is_ghost` | `true` when this performance is no longer on sale. When you request performances for an event we will only return performances that are on sale (so `is_ghost` will always be `false`), however it is possible to request [performances by ID](#performances-by-id) for a ghost performance.
+`is_limited` | Indicates whether the supply of tickets is known to be extremely limited. This is usually taken to be fewer than four remaining, though not all ticket sources provide this information. Where the information is not available the flag will always be set to `false`
+`iso8601_date_and_time` | ISO 8601 date and time
+`perf_id` | Unique identifier for the performance
+`perf_name` | A human readable description of the performance. Performance names are not always present but must be displayed when they are. Performance names are typically used where performances of an event differ significantly in more than just date and time (sometimes the supplier system will not return the time to us in a structured format but it will instead be included as part of the performance name). Event ID 6IF includes some performances with names.
 `running_time` | The length / duration of the performance in minutes
+`time_desc` | human readable time description
 
 
 ## Performances by ID
@@ -364,7 +382,7 @@ this in most cases.
 ```shell
 curl https://demo.ticketswitch.com/f13/performances_by_id.v1 \
     -u "demo:demopass" \
-    -d "perf_id_list=6IF-A8J,6IF-A8K" \
+    -d "perf_id_list=6IF-B2E,6IF-B2F" \
     --compressed \
     -G
 ```
@@ -404,29 +422,27 @@ Parameter | Description
 ```shell
 {
   "performances_by_id": {
-    "6IF-A8J": {
-      "date_desc": "Thu, 16th February 2017",
+    "6IF-B2E": {
+      "date_desc": "Wed, 5th July 2017",
       "event_id": "6IF",
       "has_pool_seats": true,
       "is_ghost": false,
       "is_limited": false,
-      "iso8601_date_and_time": "2017-02-16T19:30:00Z",
-      "perf_id": "6IF-A8J",
+      "iso8601_date_and_time": "2017-07-05T19:30:00+01:00",
+      "perf_id": "6IF-B2E",
       "running_time": 120,
-      "time_desc": "7.30 PM",
-      "cached_max_seats": 123
+      "time_desc": "7.30 PM"
     },
-    "6IF-A8K": {
-      "date_desc": "Fri, 17th February 2017",
+    "6IF-B2F": {
+      "date_desc": "Thu, 6th July 2017",
       "event_id": "6IF",
       "has_pool_seats": true,
       "is_ghost": false,
-      "is_limited": true,
-      "iso8601_date_and_time": "2017-02-17T19:30:00Z",
-      "perf_id": "6IF-A8K",
+      "is_limited": false,
+      "iso8601_date_and_time": "2017-07-06T19:30:00+01:00",
+      "perf_id": "6IF-B2F",
       "running_time": 120,
-      "time_desc": "7.30 PM",
-      "cached_max_seats": 456
+      "time_desc": "7.30 PM"
     }
   }
 }
@@ -455,17 +471,16 @@ Parameter | Description
 
 Attribute | Description
 --------- | -----------
-`perf_id` | Unique identifier for the performance.
-`perf_name` | A human readable description of the performance. Performance names are not always present but must be displayed when they are. Performance names are typically used where performances of an event differ significantly in more than just date and time (sometimes the supplier system will not return the time to us in a structured format but it will instead be included as part of the performance name). An example performance with a performance name is 6IF-A5R.
-`event_id` | Unique identifier for the event that this performance is an instance of.
-`iso8601_date_and_time` | ISO 8601 date and time.
-`date_desc` | Human readable date description.
-`time_desc` | Human readable time description.
-`is_limited` | Indicates whether the supply of tickets is known to be extremely limited. This is usually taken to be fewer than four remaining, though not all ticket sources provide this information. Where the information is not available the flag will always be set to `false`.
-`has_pool_seats` | (TODO: Pete what does this mean exactly?)
-`is_ghost` | (TODO: Pete in what scenario would you return perfs with is_ghost = true?)
-`cached_max_seats` | This is the maximum number of contiguous seats that can be booked for this performance, based on Ingresso's cached data. Note that if the event supports seat selection you are not limited by the number of contiguous seats, so this value should be used in the context of best available only. (TODO is this optional?)
-`running_time` | The length / duration of the performance in minutes.
+`date_desc` | human readable date description
+`event_id` | Unique identifier for the event that this performance is an instance of
+`has_pool_seats` | Whether this performance has seats available from the general pool of tickets. This is ignored by most partners.
+`is_ghost` | `true` when this performance is no longer on sale. When you request performances for an event we will only return performances that are on sale (so `is_ghost` will always be `false`), however it is possible to request [performances by ID](#performances-by-id) for a ghost performance.
+`is_limited` | Indicates whether the supply of tickets is known to be extremely limited. This is usually taken to be fewer than four remaining, though not all ticket sources provide this information. Where the information is not available the flag will always be set to `false`
+`iso8601_date_and_time` | ISO 8601 date and time
+`perf_id` | Unique identifier for the performance
+`perf_name` | A human readable description of the performance. Performance names are not always present but must be displayed when they are. Performance names are typically used where performances of an event differ significantly in more than just date and time (sometimes the supplier system will not return the time to us in a structured format but it will instead be included as part of the performance name). Event ID 6IF includes some performances with names.
+`running_time` | The length / duration of the performance in minutes
+`time_desc` | human readable time description
 
 
 ## --- Extra parameters ---
@@ -554,6 +569,16 @@ Parameter | Description
 
 ```shell
 {
+  "currency_details": {
+    "usd": {
+      "currency_code": "usd",
+      "currency_factor": 100,
+      "currency_number": 840,
+      "currency_places": 2,
+      "currency_post_symbol": "",
+      "currency_pre_symbol": "$"
+    }
+  },
   "performances_by_id": {
     "6L9-M2R": {
       "cached_max_seats": 15,
@@ -615,14 +640,7 @@ Parameter | Description
           },
           "min_seatprice": 68,
           "min_surcharge": 3,
-          "range_currency": {
-            "currency_code": "usd",
-            "currency_factor": 100,
-            "currency_number": 840,
-            "currency_places": 2,
-            "currency_post_symbol": "",
-            "currency_pre_symbol": "$"
-          },
+          "range_currency_code": "usd",
           "top_price_offer": {
             "absolute_saving": 9,
             "full_seatprice": 75,
@@ -638,14 +656,7 @@ Parameter | Description
             4
           ]
         },
-        "range_currency": {
-          "currency_code": "usd",
-          "currency_factor": 100,
-          "currency_number": 840,
-          "currency_places": 2,
-          "currency_post_symbol": "",
-          "currency_pre_symbol": "$"
-        },
+        "range_currency_code": "usd",
         "top_price_offer": {
           "absolute_saving": 9,
           "full_seatprice": 75,
@@ -722,9 +733,9 @@ Attribute | Description
 `min_seatprice` | The per-ticket face value for the lowest price (seatprice + surcharge)
 `min_surcharge` | The per-ticket booking fee for the lowest price (seatprice + surcharge)
 `no_singles_cost_range` | This returns another cost range object that excludes availability with only one consecutive seat available. The prices in this cost range will therefore be the same as or higher than the outer cost range.
-`quantity_options` | The ticket quantities that have availability.
-`range_currency` | The currency for the cost range.
+`range_currency_code` | The currency code for the cost range - further detail for the currency can be found in the `currency_details` object, described below.
 `top_price_offer` | The offer with the highest cost. This is the least used offer cost range.
+`valid_quantities` | An array of ticket quantities with availability.
 
 The **offer** objects contain the following attributes:
 
@@ -736,6 +747,19 @@ Attribute | Description
 `offer_seatprice` | The offer per-ticket face value.
 `offer_surcharge` | The offer per-ticket booking fee.
 `percentage_saving` | Defined as `absolute_saving` / (`full_seatprice` + `full_surcharge`) * 100.
+
+The outer object includes a **currency_details** object containing one currency
+object (indexed on the currency code) for every currency referenced in the
+JSON response. Each currency has the following attributes:
+
+Attribute | Description
+--------- | -----------
+`currency_code` | [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) three letter code
+`currency_factor` | Multiply by this number to get values in the base unit (e.g. multiplying $47.11 by the currency_factor will give 4711 cents)
+`currency_number` | [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) numeric identifier
+`currency_places` | The number of decimal places to display (eg 45.5 usd should be displayed as 45.50)
+`currency_post_symbol` | A symbol to display at the end of the price
+`currency_pre_symbol` | A symbol to display in front of the price
 
 
 ## Availability detail
@@ -758,7 +782,7 @@ data up to date - please contact us instead to discuss options
 ```shell
 curl https://demo.ticketswitch.com/f13/performances_by_id.v1 \
     -u "demo:demopass" \
-    -d "perf_id_list=6IF-A8K" \
+    -d "perf_id_list=6L9-M2R" \
     -d "req_avail_details" \
     --compressed \
     -G
@@ -781,6 +805,16 @@ Parameter | Description
 
 ```shell
 {
+  "currency_details": {
+    "usd": {
+      "currency_code": "usd",
+      "currency_factor": 100,
+      "currency_number": 840,
+      "currency_places": 2,
+      "currency_post_symbol": "",
+      "currency_pre_symbol": "$"
+    }
+  },
   "performances_by_id": {
     "6L9-M2R": {
       "avail_details": {
@@ -791,14 +825,7 @@ Parameter | Description
                 "avail_detail": [
                   {
                     "absolute_saving": 9,
-                    "avail_currency": {
-                      "currency_code": "usd",
-                      "currency_factor": 100,
-                      "currency_number": 840,
-                      "currency_places": 2,
-                      "currency_post_symbol": "",
-                      "currency_pre_symbol": "$"
-                    },
+                    "avail_currency_code": "usd",
                     "cached_number_available": 4,
                     "full_seatprice": 75,
                     "full_surcharge": 5,
@@ -922,9 +949,9 @@ Parameter | Description
 
 Attribute | Description
 --------- | -----------
+`price_band` | A list of price bands, object described below.
 `ticket_type_code` | The identifier of the ticket type, this can be used later in the [trolley](#trolley) or [reserve](#reserve) resource.
 `ticket_type_desc` | A human readable description of the price band if applicable.
-`price_band` | A list of price bands.
 
 
 **Price bands** describe the different levels of pricing that are available within a
@@ -932,16 +959,33 @@ ticket type.
 
 Attribute | Description
 --------- | -----------
+`avail_details` | A list of the prices in this price band and when they are available.
 `price_band_code` | The identifier of the price band, this can be used later in the [trolley](#trolley) or [reserve](#reserve) resource.
 `price_band_desc` | A human readable description of the price band if applicable.
-`avail_details` | A list of the prices in this price band and when they are available.
 
-The **avail details** indicate what prices we have seen for this performance.
+The **avail detail** indicates what prices we have seen for this performance.
 
 Attribute | Description
 --------- | -----------
-`avail_currency` | The price [currency](#currency-object).
+`absolute_saving` | Defined as (`full_seatprice` + `full_surcharge`) - (`seatprice` + `surcharge`)
+`avail_currency_code` | The currency code for the price - further detail for the currency can be found in the `currency_details` object, described below.
 `cached_number_available` | The maximum number of consecutive tickets available.
-`valid_quantities` | An array of available quantities we have seen for this price band.
+`full_seatprice` | The per-ticket face value for the non-discounted ticket price.
+`full_surcharge` | The per-ticket booking fee for the non-discounted ticket price.
+`percentage_saving` | Defined as `absolute_saving` / (`full_seatprice` + `full_surcharge`) * 100
 `seatprice` | The per-ticket face value.
 `surcharge` | The per-ticket booking fee.
+`valid_quantities` | An array of available quantities we have seen for this price band.
+
+The outer object includes a **currency_details** object containing one currency
+object (indexed on the currency code) for every currency referenced in the
+JSON response. Each currency has the following attributes:
+
+Attribute | Description
+--------- | -----------
+`currency_code` | [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) three letter code
+`currency_factor` | Multiply by this number to get values in the base unit (e.g. multiplying $47.11 by the currency_factor will give 4711 cents)
+`currency_number` | [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) numeric identifier
+`currency_places` | The number of decimal places to display (eg 45.5 usd should be displayed as 45.50)
+`currency_post_symbol` | A symbol to display at the end of the price
+`currency_pre_symbol` | A symbol to display in front of the price

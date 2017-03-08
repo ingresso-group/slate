@@ -135,8 +135,7 @@ client = Client('demo', 'demopass')
 (TODO: finish)
 ```
 
-This section describes how to purchase on credit. This is for partner using this 
-option: **Option 1a (on credit): you take payment using a payment provider of your own choosing.** 
+This section describes how to purchase on credit. 
 
 Parameter | Description
 --------- | -----------
@@ -487,7 +486,7 @@ Attribute | Description
 `currency` | The currency of the costs.
 `desired_currency` | Your desired currency, if this has been requested.
 `order` | See below for object detail.
-`purchase_result.is_semi_credit` | **Legacy - can be ignored.** (TODO: Pete to remove)
+`purchase_result.is_semi_credit` | **Legacy - can be ignored.**
 `purchase_result.success` | `true` if the purchase succeeded for this bundle.
 
 

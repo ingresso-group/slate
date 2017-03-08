@@ -70,8 +70,8 @@ These parameters are used to control the output if more than one event is return
 
 Parameter | Description
 --------- | -----------
-`page_len` | Length of a page, default 50.
-`page_no` | Page number, default 0, ignored if page_len is not present.
+`page_length` | Length of a page, default 50.
+`page_number` | Page number, default 0, ignored if page_len is not present.
 `sort_order` | Valid values are `most_popular` (based on sales across all partners over the last 48 hours), `alphabetic`, `cost_ascending` (lowest price first, based on the minimum total price [seatprice + surcharge] for the event), `cost_descending` (highest price first, based on the *maximum* total price for the event), `critic_rating` (average critic rating, highest to lowest), `recent`, `last_sale`. When there is a tie alphabetic ordering is used to break the tie. **Note: there is a slight performance impact to using `cost_ascending` or `cost_descending` if you are not also using the `req_cost_range` parameter.**
 
 These parameters can be passed in to request additional data for each event, and 
@@ -111,12 +111,11 @@ Parameter | Description
   "results": {
     "event": [
       {
+        "city_code": "london-uk",
         "city_desc": "London",
-        "class": [
-          {
-            "class_desc": "Ballet & Dance"
-          }
-        ],
+        "classes": {
+          "dance": "Ballet & Dance"
+        },
         "country_code": "uk",
         "country_desc": "United Kingdom",
         "critic_review_percent": 100,
@@ -132,6 +131,7 @@ Parameter | Description
             "MH0"
           ]
         },
+        "event_uri_desc": "Matthew-Bourne%27s-Nutcracker-TEST",
         "geo_data": {
           "latitude": 51.52961137,
           "longitude": -0.10601562
@@ -148,18 +148,17 @@ Parameter | Description
         "source_code": "ext_test0",
         "source_desc": "External Test Backend 0",
         "user_review_percent": 100,
-        "venue_desc": "Sadler's Wells"
+        "venue_desc": "Sadler's Wells",
+        "venue_uri_desc": "Sadler%27s-Wells"
       },
       {
+        "city_code": "london-uk",
         "city_desc": "London",
-        "class": [
-          {
-            "class_desc": "Ballet & Dance"
-          }
-        ],
+        "classes": {
+          "dance": "Ballet & Dance"
+        },
         "country_code": "uk",
         "country_desc": "United Kingdom",
-        "critic_review_percent": 100,
         "custom_filter": [],
         "event_desc": "Matthew Bourne's Swan Lake test",
         "event_id": "6IE",
@@ -173,6 +172,7 @@ Parameter | Description
             "MH0"
           ]
         },
+        "event_uri_desc": "Matthew-Bourne%27s-Swan-Lake-test",
         "geo_data": {
           "latitude": 51.52961137,
           "longitude": -0.10601562
@@ -188,10 +188,17 @@ Parameter | Description
         "show_perf_time": true,
         "source_code": "ext_test0",
         "source_desc": "External Test Backend 0",
-        "user_review_percent": 100,
-        "venue_desc": "Sadler's Wells"
+        "venue_desc": "Sadler's Wells",
+        "venue_uri_desc": "Sadler%27s-Wells"
       }
-    ]
+    ],
+    "paging_status": {
+      "page_length": 50,
+      "page_number": 0,
+      "pages_remaining": 0,
+      "results_remaining": 0,
+      "total_unpaged_results": 2
+    }
   }
 }
 ```
@@ -263,14 +270,13 @@ Parameter | Description
 
 Attribute | Description
 --------- | -----------
+`city_code` | Code of the city where the event is taking place.
 `city_desc` | Name of the city where the event is taking place.
-`class` | Array of class or category objects.
+`classes` | A collection of categories (a.k.a. "classes") that this event belongs to. The index is the class code, the value is the class description.
 `country_code` | 2-digit country code (using [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2))
 `country_desc` | Name of the country where the event is taking place.
 `critic_review_percent` | The aggregate critic review score, e.g. `80` for 80%.
-`custom_filter` | Array of custom filter codes. (TODO can we remove this?).
-`date_range_start` | A [date/time object](#date-time-object) for the start of the run.
-`date_range_end` | A [date/time object](#date-time-object) for the end of the run.
+`custom_filter` | Array of custom filter codes. This can be ignored by partners.
 `event_desc` | Name of the show or event e.g. `The Lion King`.
 `event_id` | Unique identifier for the event.
 `event_path` | If you also use a white label website this can be used to navigate to the event page, e.g. `/2J5V-la-pedrera-skip-the-line/`.
@@ -282,16 +288,30 @@ Attribute | Description
 `geo_data.longitude` | Longitude of the event.
 `has_no_perfs` | `true` if the event has no performances. For example some attraction tickets are valid for any date, so we do not present a list of performances to select.
 `is_seated` | `true` for seated events.
-`min_running_time` | Minimum length / duration in minutes (not always present).
 `max_running_time` | Maximum length / duration in minutes (not always present).
-`need_departure_date` | Flag indicating whether the event needs a departure date specified. This is `false` for most events. (TODO more detail needed)
+`min_running_time` | Minimum length / duration in minutes (not always present).
+`need_departure_date` | Flag indicating whether the event needs a departure date specified. This is `false` for most events.
 `need_duration` | Flag indicating whether the event needs duration (specific to `hotel_room` events only).
 `need_performance` | Flag indicating if a performance must be selected in order to retrieve availability.
 `postcode` | Postcode of the event location.
 `show_perf_time` | `false` if the performance time is not relevant, for example some events use a performance description rather than specific times.
-`source_desc` | Despription of the source supplier e.g. `Nimax`.
+`source_code` | Source supplier code e.g. `nimax`.
+`source_desc` | Source supplier description e.g. `Nimax`.
 `user_review_percent` | The aggregate user review score, e.g. `80` for 80%.
 `venue_desc` | Name of the venue e.g. `Sadler's Wells`.
+`venue_uri_desc` | URI encoded name of the venue e.g. `Sadler%27s-Wells`.
+
+
+
+The outer object also contains a **paging_status** object:
+
+Attribute | Description
+--------- | -----------
+`page_length` | The page length used for the response. This will either be the value set with the `page_len` parameter
+`page_number` | The zero-based page number currently displayed.
+`pages_remaining` | The number of pages that you need to request after the current page to retrieve all results.
+`results_remaining` | The number of results in the remaining pages.
+`total_unpaged_results` | The total number of results.
 
 
 ## Events by ID
@@ -545,7 +565,7 @@ Attribute | Description
 `country_code` | 2-digit country code (using [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
 `country_desc` | Name of the country where the event is taking place.
 `critic_review_percent` | The aggregate critic review score, e.g. `80` for 80%.
-`custom_filter` | Array of custom filter codes. (TODO can we remove this?).
+`custom_filter` | Array of custom filter codes. This can be ignored by partners.
 `date_range_start` | A [date/time object](#date-time-object) for the start of the run.
 `date_range_end` | A [date/time object](#date-time-object) for the end of the run.
 `event_desc` | Name of the show or event e.g. `The Lion King`.
@@ -561,7 +581,7 @@ Attribute | Description
 `is_seated` | `true` for seated events.
 `min_running_time` | Minimum length / duration in minutes (not always present).
 `max_running_time` | Maximum length / duration in minutes (not always present).
-`need_departure_date` | Flag indicating whether the event needs a departure date specified. This is `false` for most events. (TODO more detail needed)
+`need_departure_date` | Flag indicating whether the event needs a departure date specified. This is `false` for most events.
 `need_duration` | Flag indicating whether the event needs duration (specific to `hotel_room` events only).
 `need_performance` | Flag indicating if a performance must be selected in order to retrieve availability.
 `postcode` | Postcode of the event location.
@@ -1320,7 +1340,7 @@ Attribute | Description
 `review_body` | The main review content - for critic reviews this is typically a quote from the review
 `review_date_desc` | Review date
 `review_iso8601_date_and_time` | review date and time in ISO 8601 format
-`review_lang` | Language code of the review (TODO what ISO etc is this?)
+`review_lang` | The ISO 639 language code of the review
 `review_original_url` | For critic reviews we sometimes record the original source of the review quote
 `review_time_desc` | Review time
 `review_title` | Review title, not always present
@@ -1403,6 +1423,16 @@ Parameter | Description
 
 ```shell
 {
+  "currency_details": {
+    "usd": {
+      "currency_code": "usd",
+      "currency_factor": 100,
+      "currency_number": 840,
+      "currency_places": 2,
+      "currency_post_symbol": "",
+      "currency_pre_symbol": "$"
+    }
+  },
   "events_by_id": {
     "6L9": {
       "event": {
@@ -1440,66 +1470,7 @@ Parameter | Description
           },
           "min_seatprice": 68,
           "min_surcharge": 3,
-          "no_singles_cost_range": {
-            "best_value_offer": {
-              "absolute_saving": 9,
-              "full_seatprice": 75,
-              "full_surcharge": 5,
-              "offer_seatprice": 68,
-              "offer_surcharge": 3,
-              "percentage_saving": 11
-            },
-            "max_saving_offer": {
-              "absolute_saving": 9,
-              "full_seatprice": 75,
-              "full_surcharge": 5,
-              "offer_seatprice": 68,
-              "offer_surcharge": 3,
-              "percentage_saving": 11
-            },
-            "max_seatprice": 68,
-            "max_surcharge": 3,
-            "min_cost_offer": {
-              "absolute_saving": 9,
-              "full_seatprice": 75,
-              "full_surcharge": 5,
-              "offer_seatprice": 68,
-              "offer_surcharge": 3,
-              "percentage_saving": 11
-            },
-            "min_seatprice": 68,
-            "min_surcharge": 3,
-            "range_currency": {
-              "currency_code": "usd",
-              "currency_factor": 100,
-              "currency_number": 840,
-              "currency_places": 2,
-              "currency_post_symbol": "",
-              "currency_pre_symbol": "$"
-            },
-            "top_price_offer": {
-              "absolute_saving": 9,
-              "full_seatprice": 75,
-              "full_surcharge": 5,
-              "offer_seatprice": 68,
-              "offer_surcharge": 3,
-              "percentage_saving": 11
-            },
-            "valid_quantities": [
-              1,
-              2,
-              3,
-              4
-            ]
-          },
-          "range_currency": {
-            "currency_code": "usd",
-            "currency_factor": 100,
-            "currency_number": 840,
-            "currency_places": 2,
-            "currency_post_symbol": "",
-            "currency_pre_symbol": "$"
-          },
+          "range_currency_code": "usd",
           "top_price_offer": {
             "absolute_saving": 9,
             "full_seatprice": 75,
@@ -1611,9 +1582,9 @@ Attribute | Description
 `min_seatprice` | The per-ticket face value for the lowest price (seatprice + surcharge)
 `min_surcharge` | The per-ticket booking fee for the lowest price (seatprice + surcharge)
 `no_singles_cost_range` | This returns another cost range object that excludes availability with only one consecutive seat available. The prices in this cost range will therefore be the same as or higher than the outer cost range.
-`quantity_options` | The ticket quantities that have availability.
-`range_currency` | The currency for the cost range.
+`range_currency_code` | The currency code for the cost range - further detail for the currency can be found in the `currency_details` object, described below.
 `top_price_offer` | The offer with the highest cost. This is the least used offer cost range.
+`valid_quantities` | An array of ticket quantities with availability.
 
 
 The **offer** objects contain the following attributes:
@@ -1628,6 +1599,20 @@ Attribute | Description
 `percentage_saving` | Defined as `absolute_saving` / (`full_seatprice` + `full_surcharge`) * 100.
 
 
+The outer object includes a **currency_details** object containing one currency
+object (indexed on the currency code) for every currency referenced in the
+JSON response. Each currency has the following attributes:
+
+Attribute | Description
+--------- | -----------
+`currency_code` | [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) three letter code
+`currency_factor` | Multiply by this number to get values in the base unit (e.g. multiplying $47.11 by the currency_factor will give 4711 cents)
+`currency_number` | [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) numeric identifier
+`currency_places` | The number of decimal places to display (eg 45.5 usd should be displayed as 45.50)
+`currency_post_symbol` | A symbol to display at the end of the price
+`currency_pre_symbol` | A symbol to display in front of the price
+
+
 ## Cost range details
 
 Cost range details presents a cost range for every available price band. They
@@ -1638,8 +1623,6 @@ A list of ticket types are returned; nested within each ticket type are the
 available price bands; nested within each price band is a 
 [cost range](#cost-range). Cost range details are only ever returned as part of 
 the parent event object.
-
-
 
 
 ### Request
@@ -1683,6 +1666,16 @@ Parameter | Description
 
 ```shell
 {
+  "currency_details": {
+    "gbp": {
+      "currency_code": "gbp",
+      "currency_factor": 100,
+      "currency_number": 826,
+      "currency_places": 2,
+      "currency_post_symbol": "",
+      "currency_pre_symbol": "£"
+    }
+  },
   "events_by_id": {
     "6IF": {
       "event": {
@@ -1698,17 +1691,10 @@ Parameter | Description
                 {
                   "cost_range": {
                     "max_seatprice": 47,
-                    "max_surcharge": 0,
+                    "max_surcharge": 5,
                     "min_seatprice": 47,
-                    "min_surcharge": 0,
-                    "range_currency": {
-                      "currency_code": "gbp",
-                      "currency_factor": 100,
-                      "currency_number": 826,
-                      "currency_places": 2,
-                      "currency_post_symbol": "",
-                      "currency_pre_symbol": "£"
-                    },
+                    "min_surcharge": 5,
+                    "range_currency_code": "gbp",
                     "valid_quantities": [
                       1,
                       2,
@@ -1730,17 +1716,10 @@ Parameter | Description
                 {
                   "cost_range": {
                     "max_seatprice": 35,
-                    "max_surcharge": 0,
+                    "max_surcharge": 4,
                     "min_seatprice": 35,
-                    "min_surcharge": 0,
-                    "range_currency": {
-                      "currency_code": "gbp",
-                      "currency_factor": 100,
-                      "currency_number": 826,
-                      "currency_places": 2,
-                      "currency_post_symbol": "",
-                      "currency_pre_symbol": "£"
-                    },
+                    "min_surcharge": 4,
+                    "range_currency_code": "gbp",
                     "valid_quantities": [
                       1,
                       2,
@@ -1756,17 +1735,10 @@ Parameter | Description
                 {
                   "cost_range": {
                     "max_seatprice": 30,
-                    "max_surcharge": 0,
+                    "max_surcharge": 4,
                     "min_seatprice": 30,
-                    "min_surcharge": 0,
-                    "range_currency": {
-                      "currency_code": "gbp",
-                      "currency_factor": 100,
-                      "currency_number": 826,
-                      "currency_places": 2,
-                      "currency_post_symbol": "",
-                      "currency_pre_symbol": "£"
-                    },
+                    "min_surcharge": 4,
+                    "range_currency_code": "gbp",
                     "valid_quantities": [
                       1,
                       2,
@@ -1782,17 +1754,10 @@ Parameter | Description
                 {
                   "cost_range": {
                     "max_seatprice": 25,
-                    "max_surcharge": 0,
+                    "max_surcharge": 4,
                     "min_seatprice": 25,
-                    "min_surcharge": 0,
-                    "range_currency": {
-                      "currency_code": "gbp",
-                      "currency_factor": 100,
-                      "currency_number": 826,
-                      "currency_places": 2,
-                      "currency_post_symbol": "",
-                      "currency_pre_symbol": "£"
-                    },
+                    "min_surcharge": 4,
+                    "range_currency_code": "gbp",
                     "valid_quantities": [
                       1,
                       2,
@@ -1814,17 +1779,10 @@ Parameter | Description
                 {
                   "cost_range": {
                     "max_seatprice": 21,
-                    "max_surcharge": 0,
+                    "max_surcharge": 3,
                     "min_seatprice": 21,
-                    "min_surcharge": 0,
-                    "range_currency": {
-                      "currency_code": "gbp",
-                      "currency_factor": 100,
-                      "currency_number": 826,
-                      "currency_places": 2,
-                      "currency_post_symbol": "",
-                      "currency_pre_symbol": "£"
-                    },
+                    "min_surcharge": 3,
+                    "range_currency_code": "gbp",
                     "valid_quantities": [
                       1,
                       2,
@@ -1840,17 +1798,10 @@ Parameter | Description
                 {
                   "cost_range": {
                     "max_seatprice": 18,
-                    "max_surcharge": 0,
+                    "max_surcharge": 3,
                     "min_seatprice": 18,
-                    "min_surcharge": 0,
-                    "range_currency": {
-                      "currency_code": "gbp",
-                      "currency_factor": 100,
-                      "currency_number": 826,
-                      "currency_places": 2,
-                      "currency_post_symbol": "",
-                      "currency_pre_symbol": "£"
-                    },
+                    "min_surcharge": 3,
+                    "range_currency_code": "gbp",
                     "valid_quantities": [
                       1,
                       2,
@@ -2178,7 +2129,7 @@ Attribute | Description
 `min_surcharge` | The per-ticket booking fee for the lowest price (seatprice + surcharge)
 `no_singles_cost_range` | This returns another cost range object that excludes availability with only one consecutive seat available. The prices in this cost range will therefore be the same as or higher than the outer cost range.
 `quantity_options` | The ticket quantities that have availability.
-`range_currency` | The [currency](#currency-object) for the cost range.
+`range_currency_code` |  The currency code for the cost range - further detail for the currency can be found in the `currency_details` object, described below.
 `top_price_offer` | The offer with the highest cost. This is the least used offer cost range.
 
 
@@ -2192,6 +2143,20 @@ Attribute | Description
 `offer_seatprice` | The offer per-ticket face value.
 `offer_surcharge` | The offer per-ticket booking fee.
 `percentage_saving` | Defined as `absolute_saving` / (`full_seatprice` + `full_surcharge`) * 100.
+
+
+The outer object includes a **currency_details** object containing one currency
+object (indexed on the currency code) for every currency referenced in the
+JSON response. Each currency has the following attributes:
+
+Attribute | Description
+--------- | -----------
+`currency_code` | [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) three letter code
+`currency_factor` | Multiply by this number to get values in the base unit (e.g. multiplying $47.11 by the currency_factor will give 4711 cents)
+`currency_number` | [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) numeric identifier
+`currency_places` | The number of decimal places to display (eg 45.5 usd should be displayed as 45.50)
+`currency_post_symbol` | A symbol to display at the end of the price
+`currency_pre_symbol` | A symbol to display in front of the price
 
 
 ## Availability details
@@ -2239,6 +2204,16 @@ Parameter | Description
 
 ```shell
 {
+  "currency_details": {
+    "gbp": {
+      "currency_code": "gbp",
+      "currency_factor": 100,
+      "currency_number": 826,
+      "currency_places": 2,
+      "currency_post_symbol": "",
+      "currency_pre_symbol": "£"
+    }
+  },
   "events_by_id": {
     "6IF": {
       "event": {
@@ -2249,28 +2224,21 @@ Parameter | Description
                 {
                   "avail_detail": [
                     {
-                      "avail_currency": {
-                        "currency_code": "gbp",
-                        "currency_factor": 100,
-                        "currency_number": 826,
-                        "currency_places": 2,
-                        "currency_post_symbol": "",
-                        "currency_pre_symbol": "£"
-                      },
+                      "avail_currency_code": "gbp",
                       "available_dates": {
-                        "first_yyyymmdd": "20170119",
-                        "last_yyyymmdd": "20170518",
+                        "first_yyyymmdd": "20170309",
+                        "last_yyyymmdd": "20170705",
                         "year_2017": {
                           "apr_bitmask": 803192702,
-                          "feb_bitmask": 251526135,
-                          "jan_bitmask": 2011955200,
-                          "mar_bitmask": 2130574327,
-                          "may_bitmask": 258015
+                          "jul_bitmask": 30,
+                          "jun_bitmask": 1065287163,
+                          "mar_bitmask": 2130574080,
+                          "may_bitmask": 2079846367
                         }
                       },
                       "available_weekdays_bitmask": 63,
                       "seatprice": 47,
-                      "surcharge": 0,
+                      "surcharge": 5,
                       "valid_quantities": [
                         1,
                         2,
@@ -2293,28 +2261,21 @@ Parameter | Description
                 {
                   "avail_detail": [
                     {
-                      "avail_currency": {
-                        "currency_code": "gbp",
-                        "currency_factor": 100,
-                        "currency_number": 826,
-                        "currency_places": 2,
-                        "currency_post_symbol": "",
-                        "currency_pre_symbol": "£"
-                      },
+                      "avail_currency_code": "gbp",
                       "available_dates": {
-                        "first_yyyymmdd": "20170119",
-                        "last_yyyymmdd": "20170518",
+                        "first_yyyymmdd": "20170309",
+                        "last_yyyymmdd": "20170705",
                         "year_2017": {
                           "apr_bitmask": 803192702,
-                          "feb_bitmask": 251526135,
-                          "jan_bitmask": 2011955200,
-                          "mar_bitmask": 2130574327,
-                          "may_bitmask": 258015
+                          "jul_bitmask": 30,
+                          "jun_bitmask": 1065287163,
+                          "mar_bitmask": 2130574080,
+                          "may_bitmask": 2079846367
                         }
                       },
                       "available_weekdays_bitmask": 63,
                       "seatprice": 35,
-                      "surcharge": 0,
+                      "surcharge": 4,
                       "valid_quantities": [
                         1,
                         2,
@@ -2331,28 +2292,21 @@ Parameter | Description
                 {
                   "avail_detail": [
                     {
-                      "avail_currency": {
-                        "currency_code": "gbp",
-                        "currency_factor": 100,
-                        "currency_number": 826,
-                        "currency_places": 2,
-                        "currency_post_symbol": "",
-                        "currency_pre_symbol": "£"
-                      },
+                      "avail_currency_code": "gbp",
                       "available_dates": {
-                        "first_yyyymmdd": "20170119",
-                        "last_yyyymmdd": "20170518",
+                        "first_yyyymmdd": "20170309",
+                        "last_yyyymmdd": "20170705",
                         "year_2017": {
                           "apr_bitmask": 803192702,
-                          "feb_bitmask": 251526135,
-                          "jan_bitmask": 2011955200,
-                          "mar_bitmask": 2130574327,
-                          "may_bitmask": 258015
+                          "jul_bitmask": 30,
+                          "jun_bitmask": 1065287163,
+                          "mar_bitmask": 2130574080,
+                          "may_bitmask": 2079846367
                         }
                       },
                       "available_weekdays_bitmask": 63,
                       "seatprice": 30,
-                      "surcharge": 0,
+                      "surcharge": 4,
                       "valid_quantities": [
                         1,
                         2,
@@ -2369,28 +2323,21 @@ Parameter | Description
                 {
                   "avail_detail": [
                     {
-                      "avail_currency": {
-                        "currency_code": "gbp",
-                        "currency_factor": 100,
-                        "currency_number": 826,
-                        "currency_places": 2,
-                        "currency_post_symbol": "",
-                        "currency_pre_symbol": "£"
-                      },
+                      "avail_currency_code": "gbp",
                       "available_dates": {
-                        "first_yyyymmdd": "20170119",
-                        "last_yyyymmdd": "20170518",
+                        "first_yyyymmdd": "20170309",
+                        "last_yyyymmdd": "20170705",
                         "year_2017": {
                           "apr_bitmask": 803192702,
-                          "feb_bitmask": 251526135,
-                          "jan_bitmask": 2011955200,
-                          "mar_bitmask": 2130574327,
-                          "may_bitmask": 258015
+                          "jul_bitmask": 30,
+                          "jun_bitmask": 1065287163,
+                          "mar_bitmask": 2130574080,
+                          "may_bitmask": 2079846367
                         }
                       },
                       "available_weekdays_bitmask": 63,
                       "seatprice": 25,
-                      "surcharge": 0,
+                      "surcharge": 4,
                       "valid_quantities": [
                         1,
                         2,
@@ -2413,28 +2360,21 @@ Parameter | Description
                 {
                   "avail_detail": [
                     {
-                      "avail_currency": {
-                        "currency_code": "gbp",
-                        "currency_factor": 100,
-                        "currency_number": 826,
-                        "currency_places": 2,
-                        "currency_post_symbol": "",
-                        "currency_pre_symbol": "£"
-                      },
+                      "avail_currency_code": "gbp",
                       "available_dates": {
-                        "first_yyyymmdd": "20170119",
-                        "last_yyyymmdd": "20170518",
+                        "first_yyyymmdd": "20170309",
+                        "last_yyyymmdd": "20170705",
                         "year_2017": {
                           "apr_bitmask": 803192702,
-                          "feb_bitmask": 251526135,
-                          "jan_bitmask": 2011955200,
-                          "mar_bitmask": 2130574327,
-                          "may_bitmask": 258015
+                          "jul_bitmask": 30,
+                          "jun_bitmask": 1065287163,
+                          "mar_bitmask": 2130574080,
+                          "may_bitmask": 2079846367
                         }
                       },
                       "available_weekdays_bitmask": 63,
                       "seatprice": 21,
-                      "surcharge": 0,
+                      "surcharge": 3,
                       "valid_quantities": [
                         1,
                         2,
@@ -2451,28 +2391,21 @@ Parameter | Description
                 {
                   "avail_detail": [
                     {
-                      "avail_currency": {
-                        "currency_code": "gbp",
-                        "currency_factor": 100,
-                        "currency_number": 826,
-                        "currency_places": 2,
-                        "currency_post_symbol": "",
-                        "currency_pre_symbol": "£"
-                      },
+                      "avail_currency_code": "gbp",
                       "available_dates": {
-                        "first_yyyymmdd": "20170119",
-                        "last_yyyymmdd": "20170518",
+                        "first_yyyymmdd": "20170309",
+                        "last_yyyymmdd": "20170705",
                         "year_2017": {
                           "apr_bitmask": 803192702,
-                          "feb_bitmask": 251526135,
-                          "jan_bitmask": 2011955200,
-                          "mar_bitmask": 2130574327,
-                          "may_bitmask": 258015
+                          "jul_bitmask": 30,
+                          "jun_bitmask": 1065287163,
+                          "mar_bitmask": 2130574080,
+                          "may_bitmask": 2079846367
                         }
                       },
                       "available_weekdays_bitmask": 63,
                       "seatprice": 18,
-                      "surcharge": 0,
+                      "surcharge": 3,
                       "valid_quantities": [
                         1,
                         2,
@@ -2725,9 +2658,23 @@ performances where available with that price.
 
 Attribute | Description
 --------- | -----------
-`avail_currency` | The price [currency](#currency-object).
+`avail_currency_code` | The currency code for the price - further detail for the currency can be found in the `currency_details` object, described below.
 `available_dates` | `first_yyyymmdd` and `last_yyyymmdd` for the range, and year_YYYY includes a bitmask for each month of the year (if, for example, the `jan_bitmask` is 1959 (i.e. "11110100111") this means there is availability on the following days of the month only: 1,2,3,6,8,9,10,11).
 `available_weekdays_bitmask` | The days of the week where we have seen availability - see the example in the [bitmask fields](#bitmask-fields) explanation.
 `seatprice` | The per-ticket face value.
 `surcharge` | The per-ticket booking fee.
 `valid_quantities` | An array of available quantities we have seen for this price band.
+
+
+The outer object includes a **currency_details** object containing one currency
+object (indexed on the currency code) for every currency referenced in the
+JSON response. Each currency has the following attributes:
+
+Attribute | Description
+--------- | -----------
+`currency_code` | [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) three letter code
+`currency_factor` | Multiply by this number to get values in the base unit (e.g. multiplying $47.11 by the currency_factor will give 4711 cents)
+`currency_number` | [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) numeric identifier
+`currency_places` | The number of decimal places to display (eg 45.5 usd should be displayed as 45.50)
+`currency_post_symbol` | A symbol to display at the end of the price
+`currency_pre_symbol` | A symbol to display in front of the price

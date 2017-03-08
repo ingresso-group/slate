@@ -15,8 +15,8 @@ includes:
   - performances
   - months
   - availability
-  - send_methods
   - discount
+  - send_methods
   - trolley
   - reserve
   - release

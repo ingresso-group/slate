@@ -149,5 +149,5 @@ Attribute | Description
 `month` | Three-character code for the month.
 `month_dates_bitmask` | Indicates which dates in the month have valid performances.
 `month_desc` | Full month name.
-`month_weekdays_bitmask` | Indicates which weekdays have valid performances for the month.
+`month_weekdays_bitmask` | Indicates which days of the week have valid performances for the month - see the example in the [bitmask fields](#bitmask-fields) explanation.
 `year` | The year.

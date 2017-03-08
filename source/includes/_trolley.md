@@ -30,7 +30,7 @@ used to identify your trolley as you add or remove orders.
 ```shell
 curl https://demo.ticketswitch.com/f13/trolley.v1 \
     -u "demo:demopass" \
-    -d "perf_id=6IF-A7N" \
+    -d "perf_id=6IF-B1S" \
     -d "ticket_type_code=CIRCLE" \
     -d "price_band_code=C/pool" \
     -d "no_of_seats=3" \
@@ -60,7 +60,7 @@ trolley = client.get_trolley(
 curl https://demo.ticketswitch.com/f13/trolley.v1 \
     -u "demo:demopass" \
     -d "trolley_token=U3--tgaXeGJ3jY8-7bxaEyEcKhrbmYsrFkLAQh2wn89J9IFevORBYwlCveIJxP51WpqbA0tih8NmBuDvAegm37cFhVZA7yIGKjbEIetqsk2z_MGFMfiY9f11oM3MOpxlcLLE7vehHd5qyL4ozVZNtTOtxrJHhntmDqb-SyNhtAD0xWakXhUPlGVqQvnqQ2feu0moVJ_Wn9ROLz8C6p65Epz6kxGYBaNg0zkAawIttK3IY1LbiRxEHS10-R-7f0FVbg9kq0X6S8oIiWwjCqYJ9OEktXo-bdasYe4wu0yfki9N4WmuDrpTBgOkS7618nMbTvpYzPPacne8hGRCmH6e3GjPRtvZAilpaol5rKX3zgjN30cpLpsXpFo7ZZkJXOr5YMj-rNTXs0xg3trhrePeOdFFjTuN06iHrX2W2ylETgQ4hS2uXZoBVNmg4R8IQqvq4xuMmvRMYz2kXkC5wJF7pAG9J0--Z" \
-    -d "perf_id=3CVB-22" \
+    -d "perf_id=3CVB-108" \
     -d "ticket_type_code=UPP" \
     -d "price_band_code=C/pool" \
     -d "no_of_seats=2" \
@@ -76,7 +76,7 @@ curl https://demo.ticketswitch.com/f13/trolley.v1 \
 ```shell
 curl https://demo.ticketswitch.com/f13/trolley.v1 \
     -u "demo:demopass" \
-    -d "trolley_token=M6--Th1yy_GMHYp_pxuZpgPYa43h-4JJKgwOsTKiSmME9f69ngTVVFnFtyBIDwWfhC59oV4RtGbj_t-hw_U75AHoSbNaxMHOWSzGFBZNceuo7AtApIckL-qbs3700lw2N9zTX12LLHVBSqhRpYEFc7twQ_k5BwieJeLLpHTM9LnB48-BbPT-0tBn9Ylq_a3Y3RHFXZChWiYmsdxsYRE-kgktxd_pdFyGTZNN_mazMGwQFxYQ99nUXVmRsRYeV29d9CKVI1fv6mR81iapKdYiEm1U0r8A5fmdCTFlLO8majLLI07ktEjXzgA63oOa5DoRHTOcD-U6gsOLied869nVXJQWkx6lvBr6InrLdEefg5sDK0WLVFNJ9WT9QsG4Y7opYcOdx6K6U0i7L9f88_d0iurc-FkpC2ils1M21OJY-8_eQvuw1SPqqvqcLqCpR6OnRRGA3vS1LIhtgavvtZ95MvQpBH3DgAwXJtiYdjsXmIlor2pqbfiaZfQXwuC1e8yoNUIBe_yBtsOQnweyoJfIyYOayiajXbOIblwwSiJEJCnDHAaE9jo9kQRu4NdDHNd-O5IoumIoxhj7NIjl6vIb_Klu1wzB7AjeNL4TNubgMMlThGO4TyNrXsww72M_fGQO2pXCkLwXGpLckCqTAUIrNKz7v6Rs-4X3TWaNIcaAbz-Zw5lIboJoPLRgBETn02GHx00gcI1-RT8zxI9-Z" \
+    -d "trolley_token=M6--DqjJkw4ODNVbiWWjrfknLN1CB0WLJRnejw5mj18G6PEjAROXSlnHS56jA9qccvRUxTRu01vrc_bqz7f9YsDE6JDQ9rU6OvUQm7nAEvF-bX97lky1zH_b3UVk4HTJorjXeaPgrQRiXnWI76OP2vQ5ZlWFh1pZE_5P1aIlrSGGZmDQr3MLIkcNNJOfiDIx9Rsz3RUoH20SPlf-YvEcOn06Fk5le08fUpLC5fVkm1wCv0OejpHZcsdscg4WHLl8KphDMh7OFNAZ6oie6bxuiwX8Ni6cNNB3fmrlq73Ps2XPa-19n8eaJdEP0H6X_alL7E-Tja9c1AtEkccb49ig2d-ht1zdd1-BayxLPgeOFNC4-1cRXjQPiWWINzQDjUnzFn492WHBPjOvnFYqmboMjUdg-4BZ1vPNGeZzynq-dCh8h83AGCnctxu2qLOBPUc2ZCnCx5RvyJEwRb7iMklM5MxeKb8lYH8EM4RfqmD8JfTZTneiaxhxWOuBOAGml0cg7Nw2WNx_nlG6IVZKOZWNDhTqhCODLcdWjEKRnEQrfLnVk1JbYpFJ8JeF47KNTXVjXQW-MMBZyLgmrJ0G2BPAvzTUx1mU_WmRfs6givmewFw-enWXdYOodreJ0eT2awhGm0UYcxWK70DH5w4yGa_xSf8vUZjHIlMIPK_V6I4pSplYwRAp1EwgFgcbBwOlM_NKZQepEuZVf4VAfK8-Z" \
     --compressed \
     -G
 ```
@@ -100,7 +100,7 @@ trolley = client.get_trolley(
 ```shell
 curl https://demo.ticketswitch.com/f13/trolley.v1 \
     -u "demo:demopass" \
-    -d "trolley_token=M6--Th1yy_GMHYp_pxuZpgPYa43h-4JJKgwOsTKiSmME9f69ngTVVFnFtyBIDwWfhC59oV4RtGbj_t-hw_U75AHoSbNaxMHOWSzGFBZNceuo7AtApIckL-qbs3700lw2N9zTX12LLHVBSqhRpYEFc7twQ_k5BwieJeLLpHTM9LnB48-BbPT-0tBn9Ylq_a3Y3RHFXZChWiYmsdxsYRE-kgktxd_pdFyGTZNN_mazMGwQFxYQ99nUXVmRsRYeV29d9CKVI1fv6mR81iapKdYiEm1U0r8A5fmdCTFlLO8majLLI07ktEjXzgA63oOa5DoRHTOcD-U6gsOLied869nVXJQWkx6lvBr6InrLdEefg5sDK0WLVFNJ9WT9QsG4Y7opYcOdx6K6U0i7L9f88_d0iurc-FkpC2ils1M21OJY-8_eQvuw1SPqqvqcLqCpR6OnRRGA3vS1LIhtgavvtZ95MvQpBH3DgAwXJtiYdjsXmIlor2pqbfiaZfQXwuC1e8yoNUIBe_yBtsOQnweyoJfIyYOayiajXbOIblwwSiJEJCnDHAaE9jo9kQRu4NdDHNd-O5IoumIoxhj7NIjl6vIb_Klu1wzB7AjeNL4TNubgMMlThGO4TyNrXsww72M_fGQO2pXCkLwXGpLckCqTAUIrNKz7v6Rs-4X3TWaNIcaAbz-Zw5lIboJoPLRgBETn02GHx00gcI1-RT8zxI9-Z" \
+    -d "trolley_token=M6--DqjJkw4ODNVbiWWjrfknLN1CB0WLJRnejw5mj18G6PEjAROXSlnHS56jA9qccvRUxTRu01vrc_bqz7f9YsDE6JDQ9rU6OvUQm7nAEvF-bX97lky1zH_b3UVk4HTJorjXeaPgrQRiXnWI76OP2vQ5ZlWFh1pZE_5P1aIlrSGGZmDQr3MLIkcNNJOfiDIx9Rsz3RUoH20SPlf-YvEcOn06Fk5le08fUpLC5fVkm1wCv0OejpHZcsdscg4WHLl8KphDMh7OFNAZ6oie6bxuiwX8Ni6cNNB3fmrlq73Ps2XPa-19n8eaJdEP0H6X_alL7E-Tja9c1AtEkccb49ig2d-ht1zdd1-BayxLPgeOFNC4-1cRXjQPiWWINzQDjUnzFn492WHBPjOvnFYqmboMjUdg-4BZ1vPNGeZzynq-dCh8h83AGCnctxu2qLOBPUc2ZCnCx5RvyJEwRb7iMklM5MxeKb8lYH8EM4RfqmD8JfTZTneiaxhxWOuBOAGml0cg7Nw2WNx_nlG6IVZKOZWNDhTqhCODLcdWjEKRnEQrfLnVk1JbYpFJ8JeF47KNTXVjXQW-MMBZyLgmrJ0G2BPAvzTUx1mU_WmRfs6givmewFw-enWXdYOodreJ0eT2awhGm0UYcxWK70DH5w4yGa_xSf8vUZjHIlMIPK_V6I4pSplYwRAp1EwgFgcbBwOlM_NKZQepEuZVf4VAfK8-Z" \
     -d "remove_items_list=1" \
     --compressed \
     -G
@@ -167,7 +167,6 @@ Parameter | Description
 `perf_id` | The performance identifier for the tickets that you want to add to your trolley.
 `price_band_code` | The price band identifier for the tickets that you want to add to your trolley.
 `remove_items_list` | A comma separated list of order `item_number`s that were previously added to the trolley and that you now want to remove.
-`req_currency_details` | Include full detail in the [currency object](#currency-object). Without this only the currency_code field is returned.
 `seatX` | Specify a specific seat for ticket number X, with zero-based numbering (so to specify seat A12 as the first ticket use `seat0=A12`). If seat numbers are not specified then when the trolley is later reserved you will receive best available seats.
 `X_send_code` | Specify a send / despatch method for supplier system X. If this is not present it will default to the first send method. For example, to specify the POST send method for the nimax supplier system, use `nimax_send_code=POST`.
 `ticket_type_code` | The ticket type identifier for the tickets that you want to add to your trolley.
@@ -217,8 +216,19 @@ Parameter | Description
 
 ```shell
 {
+  "currency_details": {
+    "gbp": {
+      "currency_code": "gbp",
+      "currency_factor": 100,
+      "currency_number": 826,
+      "currency_places": 2,
+      "currency_post_symbol": "",
+      "currency_pre_symbol": "£"
+    }
+  },
   "discarded_orders": [],
-  "trolley_contents": {
+  "trolley_token": "M6--DqjJkw4ODNVbiWWjrfknLN1CB0WLJRnejw5mj18G6PEjAROXSlnHS56jA9qccvRUxTRu01vrc_bqz7f9YsDE6JDQ9rU6OvUQm7nAEvF-bX97lky1zH_b3UVk4HTJorjXeaPgrQRiXnWI76OP2vQ5ZlWFh1pZE_5P1aIlrSGGZmDQr3MLIkcNNJOfiDIx9Rsz3RUoH20SPlf-YvEcOn06Fk5le08fUpLC5fVkm1wCv0OejpHZcsdscg4WHLl8KphDMh7OFNAZ6oie6bxuiwX8Ni6cNNB3fmrlq73Ps2XPa-19n8eaJdEP0H6X_alL7E-Tja9c1AtEkccb49ig2d-ht1zdd1-BayxLPgeOFNC4-1cRXjQPiWWINzQDjUnzFn492WHBPjOvnFYqmboMjUdg-4BZ1vPNGeZzynq-dCh8h83AGCnctxu2qLOBPUc2ZCnCx5RvyJEwRb7iMklM5MxeKb8lYH8EM4RfqmD8JfTZTneiaxhxWOuBOAGml0cg7Nw2WNx_nlG6IVZKOZWNDhTqhCODLcdWjEKRnEQrfLnVk1JbYpFJ8JeF47KNTXVjXQW-MMBZyLgmrJ0G2BPAvzTUx1mU_WmRfs6givmewFw-enWXdYOodreJ0eT2awhGm0UYcxWK70DH5w4yGa_xSf8vUZjHIlMIPK_V6I4pSplYwRAp1EwgFgcbBwOlM_NKZQepEuZVf4VAfK8-Z",
+  "trolley_token_contents": {
     "bundle": [
       {
         "bundle_order_count": 1,
@@ -228,18 +238,15 @@ Parameter | Description
         "bundle_total_seatprice": 51,
         "bundle_total_send_cost": 1.5,
         "bundle_total_surcharge": 0,
-        "currency": {
-          "currency_code": "gbp"
-        },
+        "currency_code": "gbp",
         "order": [
           {
             "event": {
+              "city_code": "london-uk",
               "city_desc": "London",
-              "class": [
-                {
-                  "class_desc": "Ballet & Dance"
-                }
-              ],
+              "classes": {
+                "dance": "Ballet & Dance"
+              },
               "country_code": "uk",
               "country_desc": "United Kingdom",
               "critic_review_percent": 100,
@@ -255,6 +262,7 @@ Parameter | Description
                   "MH0"
                 ]
               },
+              "event_uri_desc": "Matthew-Bourne%27s-Nutcracker-TEST",
               "geo_data": {
                 "latitude": 51.52961137,
                 "longitude": -0.10601562
@@ -271,22 +279,22 @@ Parameter | Description
               "source_code": "ext_test0",
               "source_desc": "External Test Backend 0",
               "user_review_percent": 100,
-              "venue_desc": "Sadler's Wells"
+              "venue_desc": "Sadler's Wells",
+              "venue_uri_desc": "Sadler%27s-Wells"
             },
+            "got_requested_seats": false,
             "item_number": 1,
             "performance": {
               "date_desc": "Sun, 15th January 2017",
               "event_id": "6IF",
-              "has_pool_seats": true,
-              "is_ghost": false,
+              "has_pool_seats": false,
+              "is_ghost": true,
               "is_limited": false,
               "iso8601_date_and_time": "2017-01-15T19:30:00Z",
               "perf_id": "6IF-A7N",
-              "running_time": 120,
               "time_desc": "7.30 PM"
             },
             "price_band_code": "C/pool",
-            "seat_request_status": "not_requested",
             "ticket_orders": {
               "ticket_order": [
                 {
@@ -325,17 +333,13 @@ Parameter | Description
         "bundle_total_seatprice": 40,
         "bundle_total_send_cost": 0,
         "bundle_total_surcharge": 0,
-        "currency": {
-          "currency_code": "gbp"
-        },
+        "currency_code": "gbp",
         "order": [
           {
             "event": {
-              "class": [
-                {
-                  "class_desc": "Theatre"
-                }
-              ],
+              "classes": {
+                "theatre": "Theatre"
+              },
               "country_code": "uk",
               "country_desc": "United Kingdom",
               "custom_filter": [],
@@ -344,6 +348,7 @@ Parameter | Description
               "event_path": "/3CVB-test-event-type-10-d/",
               "event_status": "live",
               "event_type": "simple_ticket",
+              "event_uri_desc": "Test-Event-Type-10-%28d%29",
               "geo_data": {
                 "latitude": 10,
                 "longitude": 20
@@ -357,43 +362,38 @@ Parameter | Description
               "show_perf_time": true,
               "source_code": "ingresso_one_test",
               "source_desc": "Ingresso",
-              "venue_desc": "Belfast Tours Ltd"
+              "venue_desc": "Belfast Tours Ltd",
+              "venue_uri_desc": "Belfast-Tours-Ltd"
             },
+            "got_requested_seats": false,
             "item_number": 2,
             "performance": {
-              "date_desc": "Fri, 10th February 2017",
+              "date_desc": "Fri, 1st December 2017",
               "event_id": "3CVB",
               "has_pool_seats": true,
               "is_ghost": false,
               "is_limited": false,
-              "iso8601_date_and_time": "2017-02-10T20:00:00Z",
-              "perf_id": "3CVB-22",
+              "iso8601_date_and_time": "2017-12-01T20:00:00Z",
+              "perf_id": "3CVB-108",
               "time_desc": "8.00 PM"
             },
             "price_band_code": "C/pool",
-            "requested_seats": {
-              "id_details": [
-                {
-                  "col_id": "7",
-                  "full_id": "C7",
-                  "is_restricted_view": false,
-                  "row_id": "C",
-                  "seat_subdata": "1/7",
-                  "seat_text_code": "",
-                  "separator": ""
-                },
-                {
-                  "col_id": "8",
-                  "full_id": "C8",
-                  "is_restricted_view": false,
-                  "row_id": "C",
-                  "seat_subdata": "1/8",
-                  "seat_text_code": "",
-                  "separator": ""
-                }
-              ]
-            },
-            "seat_request_status": "got_none",
+            "requested_seats": [
+              {
+                "col_id": "7",
+                "full_id": "C7",
+                "is_restricted_view": false,
+                "row_id": "C",
+                "seat_subdata": "1/7"
+              },
+              {
+                "col_id": "8",
+                "full_id": "C8",
+                "is_restricted_view": false,
+                "row_id": "C",
+                "seat_subdata": "1/8"
+              }
+            ],
             "ticket_orders": {
               "ticket_order": [
                 {
@@ -418,8 +418,7 @@ Parameter | Description
     ],
     "trolley_bundle_count": 2,
     "trolley_order_count": 2
-  },
-  "trolley_token": "M6--Th1yy_GMHYp_pxuZpgPYa43h-4JJKgwOsTKiSmME9f69ngTVVFnFtyBIDwWfhC59oV4RtGbj_t-hw_U75AHoSbNaxMHOWSzGFBZNceuo7AtApIckL-qbs3700lw2N9zTX12LLHVBSqhRpYEFc7twQ_k5BwieJeLLpHTM9LnB48-BbPT-0tBn9Ylq_a3Y3RHFXZChWiYmsdxsYRE-kgktxd_pdFyGTZNN_mazMGwQFxYQ99nUXVmRsRYeV29d9CKVI1fv6mR81iapKdYiEm1U0r8A5fmdCTFlLO8majLLI07ktEjXzgA63oOa5DoRHTOcD-U6gsOLied869nVXJQWkx6lvBr6InrLdEefg5sDK0WLVFNJ9WT9QsG4Y7opYcOdx6K6U0i7L9f88_d0iurc-FkpC2ils1M21OJY-8_eQvuw1SPqqvqcLqCpR6OnRRGA3vS1LIhtgavvtZ95MvQpBH3DgAwXJtiYdjsXmIlor2pqbfiaZfQXwuC1e8yoNUIBe_yBtsOQnweyoJfIyYOayiajXbOIblwwSiJEJCnDHAaE9jo9kQRu4NdDHNd-O5IoumIoxhj7NIjl6vIb_Klu1wzB7AjeNL4TNubgMMlThGO4TyNrXsww72M_fGQO2pXCkLwXGpLckCqTAUIrNKz7v6Rs-4X3TWaNIcaAbz-Zw5lIboJoPLRgBETn02GHx00gcI1-RT8zxI9-Z"
+  }
 }
 ```
 
@@ -472,7 +471,7 @@ Attribute | Description
 `bundle_total_seatprice` | The total face value for this bundle.
 `bundle_total_send_cost` | The despatch cost for this bundle (similar to a transaction fee). Orders within the same bundle will be sent together.
 `bundle_total_surcharge` | The total booking fee for this bundle.
-`currency` | The [currency](#currency-object) of the bundle, which by default just contains the currency_code. To include full currency detail add the parameter `req_currency_details`.
+`currency_code` | The currency code for the price - further detail for the currency can be found in the `currency_details` object, described below.
 `order` | See below for object detail.
 
 
@@ -504,3 +503,17 @@ Attribute | Description
 `sale_surcharge` | The booking fee per ticket in this ticket_order.
 `total_sale_seatprice` | The total face value of all tickets in this ticket_order.
 `total_sale_surcharge` | The total booking fee of all tickets in this ticket_order.
+
+
+The outer object includes a **`currency_details`** object containing one currency
+object (indexed on the currency code) for every currency referenced in the
+JSON response. Each currency has the following attributes:
+
+Attribute | Description
+--------- | -----------
+`currency_code` | [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) three letter code
+`currency_factor` | Multiply by this number to get values in the base unit (e.g. multiplying $47.11 by the currency_factor will give 4711 cents)
+`currency_number` | [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) numeric identifier
+`currency_places` | The number of decimal places to display (eg 45.5 usd should be displayed as 45.50)
+`currency_post_symbol` | A symbol to display at the end of the price
+`currency_pre_symbol` | A symbol to display in front of the price
