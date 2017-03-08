@@ -669,56 +669,15 @@ seats to consistently fail - it is therefore advisable to warn your customer of
 this to avoid them receiving errors consistently.
 </aside>
 
-Ingresso's partners split into the following categories based on how they take
-payment:
-
-* **On-credit**: those who purchase on-credit, and are regularly invoiced by 
-Ingresso.
-
-* **Stripe**: those who exclusively use Stripe to take payment, either
-into their own bank account (and are invoiced by Ingresso) or directly into
-Ingresso's bank account.
-
-* **Venue or other payment provider**: those who send payment direct to the
-venue or to the payment provider specified by Ingresso.
-
-Most partners are on-credit, some are Stripe-only, and very few are venue or
-other payment provider - this option is not typically offered to partners.
-
-
-Partners who wish to take payment via Stripe should note the following:
-
-* The simplest option is to use Ingresso's Stripe account, however it is
-possible to use your own. Once this has been agreed you can contact Stripe, and
-provide Ingresso with your Stripe keys.
-
-* We recommend that you use Stripe.js to collect card details on your own
-checkout page and pass them directly to Stripe in a secure, PCI-compliant
-manner. You should follow the [Stripe.js docs](https://stripe.com/docs/custom-form) 
-to implement this. When passing card details to Stripe you will need to
-include a publishable key - this will be returned by Ingresso via
-bundle.debitor.debitor_integration_data.publishable_key.
-
-* If there are no errors with the card details then Stripe will return a 
-single-use Stripe token. You should then pass that token to Ingresso and we 
-will ask Stripe to authorise payment. We will then purchase tickets from the 
-supplier, and if that is successful we will ask Stripe to capture the payment, 
-otherwise we refund the authorisation. This is taken care of by the Ingresso 
-API. 
-(TODO: Nic to help with more detail on what is passed where.)
-
-* You will likely wish to give customers the option of entering a separate 
-billing address if they are having tickets posted. 
-
 
 Attribute | Description
 --------- | -----------
-`accepted_payment_cards` | For the vast majority of partners this will not be present and can be ignored (it won't be present for partners who purchase on-credit or who use Stripe). For partners who send payment direct to the venue, this field presents a list of payment card types.
+`accepted_payment_cards` | This should not be present for partners and can be ignored.
 `allowed_countries` | A list of country codes and human-readable descriptions. The country codes are [ISO 3166-1 alpha-2 codes](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2). This list is relevant when selecting a despatch method that is restricted to certain countries, for example a local post despatch method may only be available in the supplier's country. These are typically presented to customers in a dropdown list on a checkout page. The customer's country code is a required parameter when [purchasing](#purchase) tickets.
 `can_edit_address` | Indicates whether it is possible to change the non-blank `prefilled_address` data. This is primarily for internal use and can be ignored for normal use cases (it only applies to partners who have asked to have a prefilled address held in the Ingresso system). In most cases this will be `true`. If it is `false` the non-blank `prefilled_address` fields will be used when tickets are purchased and we will ignore the values in these fields if they are passed to us. 
 `needs_agent_reference` | For the vast majority of partners this will be `false` and can be ignored. However some partners ask to require that they specify their own reference when purchasing tickets - if this is `true` then the reference must be passed in.
 `needs_email_address` | If `true` you must pass in an email address when purchasing tickets. We recommend that you always send us the customer's email address. We guarantee to only use this if our customer service team need to contact your customer in an emergency or if our supplier needs to directly email confirmation to your customer (this is not used for any events as at Jan 2017, but is possible in future). If you cannot send the customer's email address then we recommend that you don't send an email address if `needs_email_address` is `false`; if it is `true` then send an internal email address (for example your customer service email address) and it will be your responsibility to contact the customer or pass on booking confirmation.
-`needs_payment_card` | This will be `false` for almost all partners (it doesn't apply to partners who purchase on-credit or use Stripe). If this is `true` you need to collect card details from the customer and include them when purchasing.
+`needs_payment_card` | This will be `false` for all partners so can be ignored. If this is `true` you need to collect card details from the customer and include them when purchasing.
 `prefilled_address` | Some partners will have an address already held in the Ingresso system which should be prefilled for the user (by default this will not be enabled for partners - you will need to explicitly request it). The non-blank fields below should be prefilled. `can_edit_address` indicates whether the user can edit any of the prefilled fields.
 `prefilled_address.address_line_one` | The first line of the address - if this is non-blank it should be prefilled.
 `prefilled_address.address_line_two` | The second line of the address - if this is non-blank it should be prefilled.
@@ -729,7 +688,7 @@ Attribute | Description
 `prefilled_address.town` | The town - if this is non-blank it should be prefilled.
 `prefilled_address.work_phone` | The work phone - if this is non-blank it should be prefilled.
 `reserved_trolley` | See below for object detail.
-`supports_billing_address` | For the vast majority of partners this can be ignored (it isn't relevant to partners who purchase on-credit or who use Stripe). When it is `true` a separate address may be provided when purchasing tickets, and this will be used to validate the payment card address for venue systems that perform address verification checks.
+`supports_billing_address` | For the vast majority of partners this can be ignored (it isn't relevant to partners who purchase on-credit). When it is `true` a separate address may be provided when purchasing tickets, and this will be used to validate the payment card address for venue systems that perform address verification checks.
 `unreserved_orders` | A list of orders that could not be reserved.
 
 
@@ -776,8 +735,19 @@ Attribute | Description
 `bundle_total_surcharge` | The total booking fee for this bundle.
 `bundle_total_surcharge_in_desired` | The total booking fee for this bundle, converted to your `desired_currency`. This field will not be present for most partners.
 `currency` | The [currency](#currency-object) of the bundle, which by default just contains the currency_code. To include full currency detail add the parameter `req_currency_details`.
+`debitor_choices` | A list of debitors. See below for object detail. 
 `desired_currency` | Most partners will not see a `desired_currency`, but it is possible for a partner to request to always view prices in a specific currency. For example if a product is supplied in GBP, but your `desired_currency` is set to USD, we will return prices in GBP along with `_desired` prices in USD. If you are taking payment using Ingresso's Stripe connection, then payment will be taken in the default currency (GBP, in the example), and if you are being invoiced by Ingresso we will invoice you in the default currency (GBP, in the example). So the `_desired` prices are typically used to just display an indicative amount to the customer (in USD, in the example). Currency conversion rates are taken from a daily European Central Bank feed. To include the full currency object detail add the parameter `req_currency_details`.
 `order` | See below for object detail.
+
+
+**`debitor` attributes:**
+
+Attribute | Description
+--------- | -----------
+`debitor_desc` | TODO
+`debitor_integration_data` | TODO
+`debitor_name` | TODO
+`debitor_type` | TODO
 
 
 **`order` attributes:**

@@ -6,31 +6,57 @@ POST https://demo.ticketswitch.com/f13/purchase.v1
 ```
 
 To purchase tickets you must first [reserve](#reserve) them. You can then
-attempt to purchase the reserved tickets at any time within the reserve window.
-A successful result means that the order has been confirmed in the supplier
-ticketing system. If you have attempted to purchase multiple events from a
-single trolley it is possible for a purchase to partially succeed, with some
-events unable to be purchased from the corresponding supplier ticketing system.
+attempt to purchase the reserved tickets at any time within the reserve time
+(`minutes_left_on_reserve`). A successful result from `purchase` means that the
+order has been confirmed in the supplier ticketing system. Note that if you have
+attempted to purchase multiple events from a single trolley it is possible for a
+purchase to partially succeed, with some events unable to be purchased from the
+corresponding supplier ticketing system.
+
+If a purchase fails due to incomplete or incorrect customer data then you can
+reattempt the purchase call with corrected data. If a purchase fails due to the
+reservation having timed out, then it is necessary to [reserve](#reserve)
+tickets again. The output data is structured such that permanent failures are
+not reported as errors, but are reported as an actual result from a successful
+operation.
+
+For purchases where a despatch method with a type of `selfprint` was selected,
+the URL returned should be presented to the customer.
 
 
-The [payment option](#payment-options) you are using will determine how you use
-purchase. 
+Your [payment option](#payment-options) determines how you should call purchase.
+The two main options are:
 
-1. If you purchase on credit then you just need to provide customer data.
+### On credit purchasing
 
-2. If payment is taken using Stripe then you need to provide customer data and a
-redirect URL. 
+You take payment using a payment provider of your own choosing. When calling
+purchase you should just provide customer data, and the purchase call will
+return a success or failure.
 
-3. If the venue takes payment or you use other payment providers then you need 
-to support both passing card details directly and redirecting the customer to
-third-party payment pages. We do not typically offer this option to partners so
-this has not been documented below. If you wish to use this option then contact
-use at api@ingresso.co.uk.
+### Stripe 
 
-The first two options are outlined below.
+Stripe is a developer-friendly payment provider that is simple to integrate
+with. The Ingresso API provides integration support for Stripe - you pass us a
+Stripe token and we handle the rest. We support partners collecting payment via
+their own Stripe account or into Ingresso's Stripe account.
+
+In either case you need to collect a Stripe token after your customer enters
+their payment details, and pass that to Ingresso after making the purchase
+call.
+
+If you want to collect payment via your own Stripe account you will need to get
+agreement to sell tickets on credit, and you will need to provide Ingresso your 
+Stripe keys to allow us to process payment on your behalf. 
 
 
-*Notes on sending customer data*
+In the examples below we will describe how to purchase using the on-credit and
+Stripe options in more detail. We then describe how to handle generic redirects
+which are needed for other supported payment providers such as Global Collect.
+The vast majority of partners are either on-credit or Stripe, and so do not need
+to implement generic redirects.
+
+
+### Notes on sending customer data
 
 * You must pass in the customer name, phone number and address for the purchase
 to succeed, and in some cases the email address is also required. Some partners
@@ -63,18 +89,18 @@ The only use for these is for tickets that will be posted by Ingresso or the
 supplier, so it is possible to only pass the customer's address when the
 customer has selected a despatch method with `send_type` = `post`. In all other
 cases you can pass a default address such as your company headquarters (in case
-it turns out that tickets need to be unexpectedly posted).
+it turns out that tickets need to be unexpectedly posted). Note that if you are 
+purchasing with Stripe and are using 
+[AVS](https://support.stripe.com/questions/what-is-avs) (this is common) then 
+you may wish to allow your customer to enter separate post or zip codes - one to
+submit to Ingresso (postal address) and one to submit to Stripe (billing address).
 
+* If the `send_type` = `post` and you are purchasing with Stripe you may 
+wish to give customers the option of entering a separate billing address (if 
+the zip or postal code passed to Stripe is not where the customer wants the 
+tickets to be posted to). Note that you may not wish to support separate
+addresses to discourage fraud.
 
-If a purchase fails due to incomplete or incorrect customer data then you can
-reattempt the purchase call with corrected data. If a purchase fails due to the
-reservation having timed out, then it is necessary to [reserve](#reserve)
-tickets again. The output data is structured such that permanent failures are
-not reported as errors, but are reported as an actual result from a successful
-operation.
-
-For purchases where a despatch method with a type of `selfprint` was selected,
-the URL returned should be presented to the customer.
 
 
 ## Purchasing on credit
@@ -108,31 +134,31 @@ client = Client('demo', 'demopass')
 (TODO: finish)
 ```
 
-Most partners will manage payment themselves - this is how to purchase if you 
-use this option.
+This section describes how to purchase on credit. This is for partner using this 
+option: **Option 1a (on credit): you take payment using a payment provider of your own choosing.** 
 
 Parameter | Description
 --------- | -----------
 `address_line_one` | The first line of the customer's address - required. Either pass your customer's address or your head office address (see customer data note above). 
-`address_line_two` | The second line of the customer's address. **Optional if `address_line_one` is provided.**
-`agent_ref` | Partners can pass their own transaction reference to be stored in the Ingresso platform. **Optional.**
+`address_line_two` | The second line of the customer's address. *Optional if `address_line_one` is provided.*
+`agent_ref` | Partners can pass their own transaction reference to be stored in the Ingresso platform. *Optional.*
 `country_code` | The [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code of the customer's address - required. The country code must have been present in the `allowed_countries` list from [reserve](#reserve).
-`county` | The county of region of the customer's address. **Optional.**
-`dp_supplier` | (TODO: incorrect param name) Data protection question - set to `true` if the customer has opted in to receiving marketing emails from the ticket supplier. **Optional - it will default to false.**
-`dp_user` | (TODO: incorrect param name) Data protection question - set to `true` if the customer has opted in to receiving marketing emails from you. Most partners manage marketing opt-ins themselves so do not provide this. **Optional - it will default to false.**
-`dp_world` | (TODO: incorrect param name) Data protection question - set to `true` if the customer has opted in to receiving marketing emails communication from you and third-parties. **Optional - it will default to false.**
+`county` | The county of region of the customer's address. *Optional.*
+`dp_supplier` | (TODO: incorrect param name) Data protection question - set to `true` if the customer has opted in to receiving marketing emails from the ticket supplier. *Optional - it will default to false.*
+`dp_user` | (TODO: incorrect param name) Data protection question - set to `true` if the customer has opted in to receiving marketing emails from you. Most partners manage marketing opt-ins themselves so do not provide this. *Optional - it will default to false.*
+`dp_world` | (TODO: incorrect param name) Data protection question - set to `true` if the customer has opted in to receiving marketing emails communication from you and third-parties. *Optional - it will default to false.*
 `email_address` | The customer's email address. Required when `needs_email_address` was `true` from the [reserve](#reserve) response. We recommend this is provided - see customer data note above.
 `first_name` | The customer's first name - required. Used by venues as a security measure when admitting customers.
-`home_phone` | The customer's home phone number. **Optional if `phone` is provided.**
-`initials` | The customer's initials for their name. **Optional.**
+`home_phone` | The customer's home phone number. *Optional if `phone` is provided.*
+`initials` | The customer's initials for their name. *Optional.*
 `last_name` | The customer's last name - required. Used by venues as a security measure when admitting customers.
 `phone` | The customer's phone number - required. Used by venues and Ingresso as a means to contact customers (see customer data note above). It is optional if you specify the `work_phone` and `home_phone` separately instead.
-`postcode` | The ZIP or postal code of the customer's address. **Optional.**
-`suffix` | The suffix of the customer's name, for example "Jr." or "CPA" **Optional.**
-`title` | The title of the customer's name, for example "Mr." or "Dr." **Optional.**
-`town` | The city or town of the customer's address. **Optional.**
+`postcode` | The ZIP or postal code of the customer's address. *Optional.*
+`suffix` | The suffix of the customer's name, for example "Jr." or "CPA" *Optional.*
+`title` | The title of the customer's name, for example "Mr." or "Dr." *Optional.*
+`town` | The city or town of the customer's address. *Optional.*
 `transaction_uuid` | The unique reference for the reserved tickets, taken from the [reserve](#reserve) response.
-`work_phone` | The customer's work phone number. **Optional if `phone` is provided.**
+`work_phone` | The customer's work phone number. *Optional if `phone` is provided.*
 
 All of the parameters used to request [additional data for events](#additional-parameters) can also be added.
 
@@ -522,11 +548,383 @@ Attribute | Description
 `seat_text_code` | An identifier for the seat text (only unique within the current `bundle_source_code`). Not useful for most partners.
 
 
+## Purchasing with Stripe
+
+In order to purchase with Stripe you need the following steps:
+
+1. Retrieve a Stripe token (further detail below).
+2. Call `purchase` and ensure the response includes a `callout` element.
+3. Call `callback` passing in the Stripe token from step 1.
+
+Note that these three steps need to be implemented for each `bundle` that you
+reserve. If you only support the purchase of one item at a time, or you don't
+use the Ingresso API to help manage basketing then you can ignore this.
+
+The reason there are more steps than necessary is that Ingresso's Stripe 
+implementation is part of generic redirect functionality that does require the
+extra steps. We plan to simplify this in future.
+
+Stripe collects payment information on your behalf, and returns a single-use 
+token. The payment information can either be collected on your own checkout page
+in a PCI-compliant manner ("Elements"), with a mobile-friendly form 
+("Checkout"), or via their mobile SDKs. See [Stripe's Quickstart guide](https://stripe.com/docs/quickstart).
+
+You will need to provide Stripe with the appropriate publishable key -
+this is returned by Ingresso in the [reserve call](#reserve) as
+bundle.debitor.debitor_integration_data.publishable_key.
+
+Retrieving the Stripe token is the first half of the payment process - further
+server-side code is required to complete the second half. You don't need to 
+worry about this as Ingresso's Stripe integration takes care of it. Once you 
+have provided the Stripe token we will:
+
+* Authorise the payment with Stripe.
+
+* Purchase your reserved tickets with the supplier ticketing system. *If this 
+step fails we automatically refund the Stripe payment.*
+
+* Capture the payment with Stripe.
+
+
+### Purchase request
+
+> **Example purchase request - Stripe**
+
+```shell
+curl https://demo.ticketswitch.com/f13/purchase.v1 \
+    -u "demo-stripe:demopass" \
+    -d "transaction_uuid=116daeee-fffb-11e6-8dd3-002590326932" \
+    -d "first_name=Test" \
+    -d "last_name=Tester" \
+    -d "address_line_one=Metro Building" \
+    -d "address_line_two=1 Butterwick" \
+    -d "town=London" \
+    -d "county=London" \
+    -d "postcode=W6 8DL" \
+    -d "country_code=uk" \
+    -d "phone=0203 137 7420" \
+    -d "email_address=tester@gmail.com" \
+    -d "return_token=116daeee-fffb-11e6-8dd3-002590326932.1" \
+    -d "return_url=https://demo.ticketswitch.com/116daeee-fffb-11e6-8dd3-002590326932.1" \
+    -d "client_http_user_agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8" \
+    -d "client_http_accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" \
+    -X POST
+```
+
+All of the parameters mentioned above in the 
+[purchasing on credit](#purchasing-on-credit) section are used. In addition the 
+following parameters should be specified:
+
+Parameter | Description
+--------- | -----------
+`return_token` | A unique token (e.g. a UUID) is required by the Ingresso API, even though for Stripe it will not be used. This token must be alphanumeric with '-', '_' and '.' also allowed. In the Stripe example request we have used `[transaction_uuid].1` where `1` is the first bundle.
+`return_url` | The `return_token` also has to be present in the path for the return_url and no query string parameters are allowed in the return_url. For Stripe this can be hardcoded.
+`client_http_user_agent` | The user agent, taken from the headers of your customer's web browser. For Stripe this can be hardcoded, for example to the value used in the example request.
+`client_http_accept` | The accept content types, from the headers of your customer's web browser. For Stripe this can be hardcoded, for example to the value used in the example request.
+
+
+### Purchase response
+> **Example purchase response - Stripe**
+
+``` shell
+{
+  "callout": {
+    "callout_destination_url": "https://demo.ticketswitch.com/tickets/stripe_form.buy",
+    "callout_parameters": {
+      "crypto_block": "U1--qkE2UEVr656qYqxDv1zYf1Tcd0fwYyRHhSydziYqoyUMSa1tNAKeGPUDZBoU70AOmZ9iTeDSpUX7IGKjMGN7no54a-cI4JpmIIegNnsxXSznBUlRR3mtlM4lJxMGypa5sCm62MovYz5_YxtVkPYkbw3eNNnVgvWVIiMnQpkVOIUpL23S6ZXaiyV6onfJZv5ifLAFJ_0fOpfT3P6y5-fsJhKxLmhBtW-d1D_bQ1J2BDLVB8MWDuy9cfguf8mwxs_H8nBLQKSDw2hq7fi8lkJL8SROaC3_CzAeI85ziMUxe57-Z",
+      "user_id": "demo-stripe"
+    },
+    "callout_parameters_order": [],
+    "callout_type": "post",
+    "debitor_integration_data": {
+      "debit_amount": 62.5,
+      "debit_base_amount": 6250,
+      "debit_currency": "gbp",
+      "debitor_type": "stripe"
+    }
+  },
+  "currency_details": {
+    "gbp": {
+      "currency_code": "gbp",
+      "currency_factor": 100,
+      "currency_number": 826,
+      "currency_places": 2,
+      "currency_post_symbol": "",
+      "currency_pre_symbol": "£"
+    }
+  }
+}
+```
+
+Attribute | Description
+--------- | -----------
+`callout` | For Stripe you only need to check that callout data is returned - the contents can be ignored. The detail of the callout object is described in the [purchasing with redirect](#purchasing-with-redirect) section below.
+`currency_details` | Further details of the currencies found in the callout data.
+
+
+
+### Callback request
+
+> **Example callback request - Stripe**
+
+```shell
+curl https://demo.ticketswitch.com/f13/callback.v1/this.116daeee-fffb-11e6-8dd3-002590326932.1/next.116daeee-fffb-11e6-8dd3-002590326932.101 \
+    -u "demo-stripe:demopass" \
+    -d "stripeToken=tok_19sdLzHIklODsaxBTUuIs3xo" \
+    -X POST
+```
+
+`callback` is used to pass in the single-use token you have retrieved from 
+Stripe. 
+
+Note that the URL structure is `callback.v1/this.[original token used in purchase]/next.[a new token]`.
+In the Stripe example request we have used `[transaction_uuid].101` as the "next" token where `1` is the first bundle.
+
+During testing it is possible to retrieve test Stripe tokens using the Stripe 
+API or manually with the example in the [Stripe Elements documentation](https://stripe.com/docs/elements).
+
+Parameter | Description
+--------- | -----------
+`stripeToken` | The single-use token retrieved from Stripe.
+
+
+### Callback response
+
+> **Example callback response - Stripe**
+
+``` shell
+{
+  "currency_details": {
+    "gbp": {
+      "currency_code": "gbp",
+      "currency_factor": 100,
+      "currency_number": 826,
+      "currency_places": 2,
+      "currency_post_symbol": "",
+      "currency_pre_symbol": "£"
+    }
+  },
+  "customer": {
+    "addr_line_one": "Metro Building",
+    "addr_line_one_latin": "Metro Building",
+    "addr_line_two": "1 Butterwick",
+    "addr_line_two_latin": "1 Butterwick",
+    "agent_ref": "",
+    "country": "United Kingdom",
+    "country_code": "uk",
+    "country_latin": "United Kingdom",
+    "county": "",
+    "county_latin": "",
+    "dp_supplier": false,
+    "dp_user": false,
+    "dp_world": false,
+    "email_addr": "tester@gmail.com",
+    "first_name": "Test",
+    "first_name_latin": "Test",
+    "home_phone": "0203 137 7420",
+    "initials": "",
+    "initials_latin": "",
+    "last_name": "Tester",
+    "last_name_latin": "Tester",
+    "postcode": "W6 8DL",
+    "postcode_latin": "W6 8DL",
+    "suffix": "",
+    "suffix_latin": "",
+    "title": "",
+    "title_latin": "",
+    "town": "London",
+    "town_latin": "London",
+    "work_phone": "0203 137 7420"
+  },
+  "language_list": "en-gb,en,en-us,nl",
+  "purchase_iso8601_date_and_time": "2017-03-03T15:58:26Z",
+  "reserve_iso8601_date_and_time": "2017-03-03T15:58:01Z",
+  "transaction_status": "purchased",
+  "trolley_contents": {
+    "bundle": [
+      {
+        "bundle_order_count": 1,
+        "bundle_source_code": "ext_test0",
+        "bundle_source_desc": "External Test Backend 0",
+        "bundle_total_cost": 62.5,
+        "bundle_total_seatprice": 51,
+        "bundle_total_send_cost": 1.5,
+        "bundle_total_surcharge": 10,
+        "currency_code": "gbp",
+        "order": [
+          {
+            "backend_purchase_reference": "PURCHASE-17BB2-1",
+            "event": {
+              "city_code": "london-uk",
+              "city_desc": "London",
+              "classes": {
+                "dance": "Ballet & Dance"
+              },
+              "country_code": "uk",
+              "country_desc": "United Kingdom",
+              "critic_review_percent": 100,
+              "custom_filter": [],
+              "event_desc": "Matthew Bourne's Nutcracker TEST",
+              "event_id": "6IF",
+              "event_path": "/6IF-matthew-bourne-s-nutcracker-test/",
+              "event_status": "live",
+              "event_type": "simple_ticket",
+              "event_upsell_list": {
+                "event_id": [
+                  "6IE",
+                  "MH0"
+                ]
+              },
+              "event_uri_desc": "Matthew-Bourne%27s-Nutcracker-TEST",
+              "geo_data": {
+                "latitude": 51.52961137,
+                "longitude": -0.10601562
+              },
+              "has_no_perfs": false,
+              "is_seated": true,
+              "max_running_time": 120,
+              "min_running_time": 120,
+              "need_departure_date": false,
+              "need_duration": false,
+              "need_performance": true,
+              "postcode": "EC1R 4TN",
+              "show_perf_time": true,
+              "source_code": "ext_test0",
+              "source_desc": "External Test Backend 0",
+              "user_review_percent": 100,
+              "venue_desc": "Sadler's Wells",
+              "venue_uri_desc": "Sadler%27s-Wells"
+            },
+            "got_requested_seats": false,
+            "gross_commission": {
+              "amount_excluding_vat": 7.13,
+              "amount_including_vat": 8.55,
+              "commission_currency_code": "gbp"
+            },
+            "item_number": 1,
+            "performance": {
+              "date_desc": "Tue, 13th June 2017",
+              "event_id": "6IF",
+              "has_pool_seats": true,
+              "is_ghost": false,
+              "is_limited": false,
+              "iso8601_date_and_time": "2017-06-13T19:30:00+01:00",
+              "perf_id": "6IF-B1S",
+              "perf_name": "Including back stage pass",
+              "running_time": 120,
+              "time_desc": "7.30 PM"
+            },
+            "price_band_code": "C/pool",
+            "send_method": {
+              "send_code": "COBO",
+              "send_cost": 1.5,
+              "send_desc": "Collect from the venue",
+              "send_final_type": "collect",
+              "send_type": "collect"
+            },
+            "ticket_orders": {
+              "ticket_order": [
+                {
+                  "discount_code": "ADULT",
+                  "discount_desc": "Adult",
+                  "no_of_seats": 1,
+                  "sale_seatprice": 25,
+                  "sale_surcharge": 4,
+                  "seats": [
+                    {
+                      "col_id": "419",
+                      "full_id": "OR419",
+                      "is_restricted_view": false,
+                      "row_id": "OR"
+                    }
+                  ],
+                  "total_sale_seatprice": 25,
+                  "total_sale_surcharge": 4
+                },
+                {
+                  "discount_code": "CHILD",
+                  "discount_desc": "Child rate",
+                  "no_of_seats": 2,
+                  "sale_seatprice": 13,
+                  "sale_surcharge": 3,
+                  "seats": [
+                    {
+                      "col_id": "416",
+                      "full_id": "OR416",
+                      "is_restricted_view": false,
+                      "row_id": "OR"
+                    },
+                    {
+                      "col_id": "413",
+                      "full_id": "OR413",
+                      "is_restricted_view": false,
+                      "row_id": "OR"
+                    }
+                  ],
+                  "total_sale_seatprice": 26,
+                  "total_sale_surcharge": 6
+                }
+              ]
+            },
+            "ticket_type_code": "CIRCLE",
+            "ticket_type_desc": "Upper circle",
+            "total_no_of_seats": 3,
+            "total_sale_seatprice": 51,
+            "total_sale_surcharge": 10,
+            "user_commission": {
+              "amount_excluding_vat": 0,
+              "amount_including_vat": 0,
+              "commission_currency_code": "gbp"
+            }
+          }
+        ],
+        "purchase_result": {
+          "is_semi_credit": false,
+          "success": true
+        }
+      }
+    ],
+    "purchase_result": {
+      "is_partial": false,
+      "success": true
+    },
+    "transaction_id": "T000-0000-8N66-K30B",
+    "transaction_uuid": "2dac0d00-002a-11e7-975c-002590326962",
+    "trolley_bundle_count": 1,
+    "trolley_order_count": 1
+  }
+}
+```
+
+The response is identical to the `purchase` response described in [purchasing on credit](#purchasing-on-credit).
+
+
+
 ## Purchasing with redirect
 
-### Request
+This section describes how to handle generic redirects which are needed for
+other supported payment providers such as Global Collect. The vast majority of
+partners are either on-credit or Stripe, and so will not  need to read this
+section.
 
-> **Example request - purchasing with a redirecting debitor such as Stripe**
+Redirects are required when:
+
+- Payment is taken on a third party payment page such as PayPal (customers are redirected to that page)
+- 3D Secure is used (Verified by Visa or MasterCard SecureCode)
+
+To support generic redirects you should use the following sequence:
+
+1. Call the `purchase` endpoint
+2. The Ingresso platform will determine whether you need to redirect your customer. If so the response will include a `callout` section with the information you need to redirect your customer.
+3. Redirect your customer to `callout_destination_url`, including the `callout_parameters` in the query string (they must be URL encoded). 
+4. After the redirect your customer will arrive back at your `return_url`, and you may receive query string or post parameters.
+5. You should then call the `callback` endpoint, passing in verbatim all query string and post parameters you have received. These are needed by Ingresso to for example finalise the payment collection.
+6. If any further redirects are required, the `callback` response will include a `callout` section. You should continue to follow steps 3, 4 and 5 until the `callback` response no longer includes a `callout` section. At this point the purchase will be complete (it will have either succeeded or failed). 
+
+
+### Purchase request
+
+> **Example purchase request - generic redirects**
 
 ```shell
 curl https://demo.ticketswitch.com/f13/purchase.v1 \
@@ -542,69 +940,101 @@ curl https://demo.ticketswitch.com/f13/purchase.v1 \
     -d "country_code=uk" \
     -d "phone=0203 137 7420" \
     -d "email_address=tester@gmail.com" \
-    -d "return_token=ffa02aad-e936-11e6-8ea7-001d9263ab24" \
-    -d "return_url=https://www.yourticketingsite.com/token.ffa02aad-e936-11e6-8ea7-001d9263ab24/return.php" \
+    -d "return_token=FIRST_RANDOM_TOKEN" \
+    -d "return_url=https://www.yourticketingsite.com/token.FIRST_RANDOM_TOKEN/return.php" \
     -d "client_http_user_agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8" \
     -d "client_http_accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" \
     -X POST
 ```
 
-If you do not purchase on credit and want Ingresso's help to manage payment, then it is necessary to support redirects. 
-
-Redirects are necessary when:
-
-- Payment is taken with Stripe (we have internally set Stripe up as a redirecting payment provider, even though it doesn't necessarily need to redirect)
-- Payment is taken on a third party payment page such as PayPal (customers are redirected to that page)
-- 3D Secure is used (Verified by Visa or MasterCard SecureCode)
-
-To support redirects you should use the following sequence:
-
-1. You call purchase, passing in the parameters below
-2. The Ingresso platform will determine whether you need to redirect your customer. If so the response will assess 
-
-All of the parameters mentioned above in the [purchasing on credit](#purchasing-on-credit) section are used.
+All of the parameters mentioned above in the 
+[purchasing on credit](#purchasing-on-credit) section are used. In addition the 
+following parameters must be specified:
 
 Parameter | Description
 --------- | -----------
-`return_token` | This token must be alphanumeric with '-', '_' and '.' also allowed. We recommend that partners generate a UUID for this token.
-`return_url` | The `return_token` also has to be present in the path for the return_url and no query string parameters are allowed in the return_url.
+`return_token` | This token must be alphanumeric with `-`, `_` and `.` also allowed. We recommend that partners generate a UUID for this token.
+`return_url` | The URL that your customer should arrive back to after being redirected. The `return_token` also has to be present in the path for the return_url and no query string parameters are allowed in the return_url.
 `client_http_user_agent` | The user agent, taken from the headers of your customer's web browser. This and `client_http_accept` are required because the payment provider that generates the callout may need to know detail of the browser, for example to serve a mobile-optimised page.
 `client_http_accept` | The accept content types, from the headers of your customer's web browser.
 
 
-### Response
-> **Example response - purchasing on-credit**
+### Purchase response
+
+> **Example purchase response - generic redirects**
 
 ``` shell
 {
   "callout": {
+    "callout_destination_url": "https://demo.ticketswitch.com/tickets/dummy_redirect.buy/demo-redirect",
+    "callout_parameters": {
+      "return_url": "https://www.yourticketingsite.com/token.FIRST_RANDOM_TOKEN/return.php",
+      "title": "Dummy external card details page for debit on system 'ext_test0'"
+    },
+    "callout_parameters_order": [],
+    "callout_type": "get",
     "debitor_integration_data": {
-      "debit_amount": 76.5,
-      "debit_base_amount": 7650,
+      "debit_amount": 62.5,
+      "debit_base_amount": 6250,
       "debit_currency": "gbp",
       "debitor_specific_data": {
         "is_dummy_3d_secure": false
       },
       "debitor_type": "dummy"
-    },
-    "redirect_html_page_data": "<html><head>\n<script type=\"text/javascript\">\nwindow.location=\"https:\\/\\/api.ticketswitch.com\\/cgi-bin\\/dummy_redirect.buy\\/tswitch?return_url=https%3A%2F%2Fdemo.ticketswitch.com%2Ftoken.ffa02aad-e936-11e6-8ea7-001d9263ab24%2Freturn.php\\u0026title=Dummy%20external%20card%20details%20page%20for%20debit%20on%20system%20%27ext_test0%27\";\n</script></head>\n<body></body></html>"
+    }
+  },
+  "currency_details": {
+    "gbp": {
+      "currency_code": "gbp",
+      "currency_factor": 100,
+      "currency_number": 826,
+      "currency_places": 2,
+      "currency_post_symbol": "",
+      "currency_pre_symbol": "£"
+    }
   }
 }
 ```
 
 Attribute | Description
 --------- | -----------
-`customer` | See below for object detail.
-`language_list` | (TODO)
-`purchase_iso8601_date_and_time` | The purchase time in ISO 8601 format.
-`reserve_iso8601_date_and_time` | The reserve time in ISO 8601 format.
-`transaction_status` | `purchased`, `failed` or `attempting` (will only be seen if the customer is being redirected to a payment page - most partners will not see this).
-`trolley_contents` | See below for object detail.
+`callout` | See below for object detail.
+`currency_details` | Further details of the currencies found in the callout data.
 
-
-**`customer` attributes:**
+**`callout` attributes:**
 
 Attribute | Description
 --------- | -----------
-`addr_line_one` | The first line of the customer's address.
-`addr_line_one_latin` | The first line of the customer's address, (TODO finish).
+`callout_destination_url` | The URL you should redirect your customer to.
+`callout_parameters` | The parameters that should be passed. The `callout_type` will specify whether to use GET or POST.
+`callout_parameters_order` | In most cases this will be blank, and it can be ignored. In very rare cases, for `callout_type=get`, it will include all `callout_parameters` in a specific order - you should then specify the parameters in that order.
+`callout_type` | Whether you should make a GET or POST request.
+`debitor_integration_data` | This data is not needed when redirecting (so is not of use to most partners). It provides information needed to avoid redirecting.
+
+
+### Callback request
+
+> **Example callback request - generic redirects**
+
+```shell
+curl https://demo.ticketswitch.com/f13/callback.v1/this.FIRST_RANDOM_TOKEN/next.NEXT_RANDOM_TOKEN \
+    -u "demo-redirect:demopass" \
+    -d "param1=asdfasdfsdfasdff" \
+    -r "https://www.thepaymentpage.com/asdfsadfsdafasdf" \
+    -X POST
+```
+
+If the `purchase` response received includes `callout` data then you need to redirect your customer and afterwards use the `callback` endpoint.
+
+Note that the URL structure is `callback.v1/this.[previous token used]/next.[new token]`. If `purchase` was the last endpoint hit, then the "previous token used" is the `return_token` that was passed in to `purchase`. If the last endpoint hit was `callback` then "previous token used" is the "new token" you generated for the previous `callback`.
+
+You should pass the payment page URL you have been referred from as the Referrer in the headers.
+
+You should pass in verbatim all query string and post parameters you have received. These are needed by Ingresso to for example finalise the payment collection.
+
+The `callback` response will either:
+
+- include further `callout` data, as in the `purchase` response example above, in which case you should redirect your customer and call `callback` again; or 
+- include similar data to the `purchase` response described in [purchasing on credit](#purchasing-on-credit) - the purchase is complete and has either succeeded or failed. 
+
+You should continue to call `callback` until you no longer see `callout` data.

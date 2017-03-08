@@ -2,14 +2,12 @@
 # TODOs / Questions
 
 * Improve test events
-* Purchase
+* Redo docs for currencies
 * Explain why you sometimes get unreserved_orders
-* GET for Status?
 * Note re similarity of trolley object across calls
 * Matt to add docs for cities and categories
 * Need to document the disallowed discount codes - need a test event with this data
 * Matt to add a test meta event, and refer to this in the test intro section and wherever meta events are mentioned.
-* avail_details needs a link to the bitmask explanation (and needs the fields updated)
 * benchmark old vs new API
 * Error codes need to be added everywhere by Pete.
 
@@ -45,8 +43,8 @@ Possible V2 functionality:
 
 # IMPORTANT NOTE
 
-This API is currently a work in progress - until this message is removed v1 of
-the API is subject to change.
+This API is close to completion but is still a work in progress - until this 
+note is removed v1 of the API is subject to change.
 
 
 # Introduction
@@ -66,16 +64,16 @@ ticketing websites entirely on top of our API (for example
 
 The Ingresso API is a fully transactional API, loosely based on REST. You format
 GET or POST requests in [JSON](http://www.json.org/) and you will receive either
-a JSON-formatted response or an HTTP error. The API is known as F13, which
-is why you see /f13 in the endpoint.
+a JSON-formatted response or an HTTP error. The API is internally known as F13, 
+which is why you see /f13 in the endpoints.
 
 We describe objects in a consistent way across different resources (for example
 the output of [events](#events) and [performances](#performances) includes a
-cost_range object and this is described in the same format. The idea of this is
+cost_range object and this is described in the same format). The idea of this is
 that standard code can be used on the client side to read all parts of the
 output.
 
-This API replaces the [the Ingresso XML API](http://www.ingresso.co.uk/apidocs/). 
+This API replaces the [Ingresso XML API](http://www.ingresso.co.uk/apidocs/). 
 The XML API relies on temporary tokens from each call being passed in
 to the next call; these has been removed in favour of permanent IDs. One
 benefit of this change is that a call near the end of the booking process, such
@@ -211,20 +209,25 @@ If you use the checkout page of Ingresso's white label website, then Ingresso
 will take care of collecting payment from the customer. However if you wish to
 develop your own checkout page these are the options for taking payment:
 
-1. **On-credit**: you purchase tickets from Ingresso on-credit and take payment
-from the customer yourself. You will be invoiced regularly by Ingresso.
+1. **You take payment**: you purchase tickets from Ingresso on credit / on
+account and take payment from the customer yourself. You will be invoiced
+regularly by Ingresso. This option is typically only offered to partners with 
+the capability to sell a high volume of tickets.
+There are two ways for you to take payment:
 
-2. **Stripe**: you use [Stripe](https://stripe.com) to take payment for all
-Ingresso tickets, either into your own Stripe account (you will then be invoiced
-by Ingresso) or directly into Ingresso's Stripe account. Stripe is a developer-
-friendly payment provider that is simple to integrate with. Our API provides
-integration support for Stripe - this is explained in more detail in
-[reserve](#reserve).
+    a) Using a payment provider of your choosing.
 
-3. **Venue or other payment provider**: you either pass the customer's card
-details to the supplier or redirect the customer to a payment provider specified
-by Ingresso. This is not typically offered to partners - if you think this is
-required you need to contact us first: api@ingresso.co.uk.
+    b) Using your own Stripe account. Stripe is a developer-friendly payment 
+provider that is simple to integrate with. Our API provides integration support 
+for Stripe. You just need to collect a Stripe token after your customer enters 
+their payment details; Ingresso's Stripe integration will then ensure the 
+payment is captured and all edge cases are handled.
+
+2. **Ingresso takes payment**: for the majority of partners Ingresso will take 
+payment using Stripe, so you need to collect a Stripe token and pass that in 
+when purchasing tickets.
+
+These options are discussed in more detail in [purchase](#purchase).
 
 
 ## How to get access to the API

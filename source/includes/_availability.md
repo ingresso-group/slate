@@ -286,6 +286,8 @@ therefore only be used where necessary.
 
 ## Individual Seats
 
+<aside class="warning">NOTE: we are going to change the format of the seats to better support large seated venues. The change will not be dramatic, but if you integrate against the current version you will need to update your integration later.</aside>
+
 The Ingresso API can return a list of all available seats, allowing you to give
 your customers the choice rather than forcing them to take the best available
 seats. 
