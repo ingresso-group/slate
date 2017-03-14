@@ -125,7 +125,7 @@ Note that the request parameters and response attributes are similar to
 
 Parameter | Description
 --------- | -----------
-`discX` | Specify a discount code for ticket number X, with zero-based numbering (so to specify the CHILD discount code on the second ticket use `disc1=CHILD`). Note that illegal discount codes are replaced with legal ones.
+`discX` | Specify a discount code for ticket number X, with zero-based numbering (so to specify the CHILD discount code on the second ticket use `disc1=CHILD`). Note that illegal discount codes are replaced with legal ones. It is optional to specify discount codes, however note that if you choose to specify them you must specify all of them. If you do not specify discount codes you will receive the default discount code - this will match what you are shown when you request availability.
 `no_of_seats` | The number of tickets you want to reserve.
 `perf_id` | The performance identifier for the tickets that you want to reserve.
 `price_band_code` | The price band identifier for the tickets that you want to reserve.

@@ -163,7 +163,7 @@ contact us first api@ingresso.co.uk.
 Parameter | Description
 --------- | -----------
 `discX` | Specify a discount code for ticket number X, with zero-based numbering (so to specify the CHILD discount code on the second ticket use `disc1=CHILD`). Note that illegal discount codes are replaced with legal ones.
-`no_of_seats` | The number of tickets you want to add to the trolley.
+`no_of_seats` | The number of tickets you want to add to the trolley. It is optional to specify discount codes, however note that if you choose to specify them you must specify all of them. If you do not specify discount codes you will receive the default discount code - this will match what you are shown when you request availability.
 `perf_id` | The performance identifier for the tickets that you want to add to your trolley.
 `price_band_code` | The price band identifier for the tickets that you want to add to your trolley.
 `remove_items_list` | A comma separated list of order `item_number`s that were previously added to the trolley and that you now want to remove.

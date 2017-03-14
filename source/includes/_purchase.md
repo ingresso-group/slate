@@ -412,7 +412,7 @@ TODO
 Attribute | Description
 --------- | -----------
 `customer` | See below for object detail.
-`language_list` | (TODO)
+`language_list` | Not useful for most partners, can be ignored.
 `purchase_iso8601_date_and_time` | The purchase time in ISO 8601 format.
 `reserve_iso8601_date_and_time` | The reserve time in ISO 8601 format.
 `transaction_status` | `purchased`, `failed` or `attempting` (will only be seen if the customer is being redirected to a payment page - most partners will not see this).
@@ -424,34 +424,34 @@ Attribute | Description
 Attribute | Description
 --------- | -----------
 `addr_line_one` | The first line of the customer's address.
-`addr_line_one_latin` | The first line of the customer's address, (TODO finish).
+`addr_line_one_latin` | The first line of the customer's address, converted to Latin characters (this should allow a European latin alphabet language speaker to read an address containing only Japanese or Chinese characters, for example).
 `addr_line_two` | The second line of the customer's address, if provided.
-`addr_line_two_latin` | 
+`addr_line_two_latin` | The second line of the customer's address, if provided, converted to Latin characters.
 `agent_ref` | A partner transaction reference, if this was passed in as a parameter.
 `country` | The country from the customer's address.
 `country_code` | The [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code of the customer's address.
-`country_latin` | 
+`country_latin` | The country, converted to Latin characters.
 `county` | The county from the customer's address, if provided.
-`county_latin` | 
+`county_latin` | The county, converted to Latin characters.
 `dp_supplier` | Has the customer opted in to receiving marketing emails from the ticket supplier.
 `dp_user` | Has the customer opted in to receiving marketing emails from you.
 `dp_world` | Has the customer opted in to receiving marketing emails communication from you and third-parties.
 `email_addr` | The customer's email address, if provided.
 `first_name` | The customer's first name.
-`first_name_latin` | 
+`first_name_latin` | The customer's first name, converted to Latin characters.
 `home_phone` | The customer's home phone number.
 `initials` | The initials of the customer's name, if provided.
-`initials_latin` | 
+`initials_latin` | The customer's initials, converted to Latin characters.
 `last_name` | The customer's surname.
-`last_name_latin` | 
+`last_name_latin` | The customer's surname, converted to Latin characters.
 `postcode` | The customer's postcode, if provided.
-`postcode_latin` | 
+`postcode_latin` | The customer's postcode, converted to Latin characters.
 `suffix` | The suffix of the customer's name, if provided.
-`suffix_latin` | 
+`suffix_latin` | The customer's suffix, converted to Latin characters.
 `title` | The title of the customer's name, if provided.
-`title_latin` | 
+`title_latin` | The customer's title, converted to Latin characters.
 `town` | The customer's town or city, if provided.
-`town_latin` | 
+`town_latin` | The customer's town, converted to Latin characters.
 `work_phone` | The customer's work phone number.
 
 

@@ -749,10 +749,10 @@ Attribute | Description
 `id_details.full_id` | The unique identifier for the seat.
 `id_details.is_restricted_view` | `true` if the seat is marked as having a restricted view.
 `id_details.row_id` | The row identifier, normally a letter.
-`id_details.seat_subdata` | (TODO: what is this useful for?)
+`id_details.seat_subdata` | Ignore - this will be removed soon.
 `id_details.seat_text` | *(Optional)* A description of the seat that should be displayed to the customer. If the seat has a restricted view this text will normally be present to describe the restriction in more detail, but it should be displayed in all cases. 
-`id_details.seat_text_code` | (TODO shouldn't this only appear when seat_text appears and not useful externally anyway?)
-`id_details.separator` | (TODO when is this used, what is an example?)
+`id_details.seat_text_code` | Ignore - this will be removed soon.
+`id_details.separator` | Sometimes a seat ID can include a separator character such as `.`, e.g. `A.23`.
 
 
 
@@ -990,10 +990,10 @@ Attribute | Description
 `id_details.full_id` | The unique identifier for the seat.
 `id_details.is_restricted_view` | `true` if the seat is marked as having a restricted view.
 `id_details.row_id` | The row identifier, normally a letter.
-`id_details.seat_subdata` | (TODO: what is this useful for?)
+`id_details.seat_subdata` | Ignore - this will be removed soon.
 `id_details.seat_text` | *(Optional)* A description of the seat that should be displayed to the customer. If the seat has a restricted view this text will normally be present to describe the restriction in more detail, but it should be displayed in all cases. 
-`id_details.seat_text_code` | (TODO shouldn't this only appear when seat_text appears and not useful externally anyway?)
-`id_details.separator` | (TODO when is this used, what is an example?)
+`id_details.seat_text_code` | Ignore - this will be removed soon.
+`id_details.separator` | Sometimes a seat ID can include a separator character such as `.`, e.g. `A.23`.
 
 
 ## Commission

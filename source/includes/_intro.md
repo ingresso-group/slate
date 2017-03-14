@@ -2,7 +2,7 @@
 # TODOs / Questions
 
 * Improve test events
-* Redo docs for currencies
+* Mailing list for changes?
 * Explain why you sometimes get unreserved_orders
 * Note re similarity of trolley object across calls
 * Matt to add docs for cities and categories
@@ -43,8 +43,8 @@ Possible V2 functionality:
 
 # IMPORTANT NOTE
 
-This API is close to completion but is still a work in progress - until this 
-note is removed v1 of the API is subject to change.
+The API is fully functional but still in development - until this note is
+removed the API is subject to change.
 
 
 # Introduction

@@ -290,9 +290,9 @@ Attribute | Description
 `is_seated` | `true` for seated events.
 `max_running_time` | Maximum length / duration in minutes (not always present).
 `min_running_time` | Minimum length / duration in minutes (not always present).
-`need_departure_date` | Flag indicating whether the event needs a departure date specified. This is `false` for most events.
-`need_duration` | Flag indicating whether the event needs duration (specific to `hotel_room` events only).
-`need_performance` | Flag indicating if a performance must be selected in order to retrieve availability.
+`need_departure_date` | Flag indicating whether the event needs a departure date specified. This is `false` for most events. Most partners can ignore this.
+`need_duration` | Flag indicating whether the event needs duration (specific to `hotel_room` events only). Most partners can ignore this.
+`need_performance` | Flag indicating if a performance must be selected in order to retrieve availability. For the vast majority of events this will be `true`.
 `postcode` | Postcode of the event location.
 `show_perf_time` | `false` if the performance time is not relevant, for example some events use a performance description rather than specific times.
 `source_code` | Source supplier code e.g. `nimax`.
