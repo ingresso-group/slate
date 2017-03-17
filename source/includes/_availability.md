@@ -46,6 +46,7 @@ Attribute | Description
 --------- | -----------
 `perf_id` | The identifier of the performance that you wish to request availability for.
 `no_of_seats` | *Optional*. The number of seats the customer would like. If this is specified then availability will only be shown for price bands with at least that many contiguous seats available.
+`promo_code` | *Optional*. If the supplier supports a promo code this can be specified to unlock discounted pricing. This feature is not commonly used with partners.
 
 
 These parameters can be included to request additional data:

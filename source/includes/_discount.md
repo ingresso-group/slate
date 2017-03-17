@@ -46,6 +46,7 @@ Parameter | Description
 `price_band_code` | The price band code you want to view discounts for.
 `ticket_type_code` | The ticket type code you want to view discounts for.
 `no_of_seats` | *Optional*. The number of seats the customer would like. If this is specified then only discounts valid for the number of seats will be shown.
+`promo_code` | *Optional*. If the supplier supports a promo code this can be specified to unlock a discount. This feature is not commonly used with partners.
 
 
 ### Response
