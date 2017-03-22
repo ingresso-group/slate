@@ -5,6 +5,11 @@
 POST https://demo.ticketswitch.com/f13/reserve.v1
 ```
 
+<aside class="notice">
+The reserve, release and purchase calls change state so you must use POST. 
+GET can be used for all other calls.
+</aside>
+
 Before purchasing tickets, you must first `reserve` them. Reserving tickets will
 put them on hold for a period of time, ensuring they cannot be purchased by
 anyone else until you explicitly [release](#release) them or until the hold time
