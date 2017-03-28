@@ -444,18 +444,23 @@ should also be listed separately. A total price should be displayed in a
 highlighted font showing the price the customer will pay (by adding the prices
 together).
 
-### (Optional if implementing seat selection) Display special seat conditions to customer before purchase
+### Display special seat conditions to customer before purchase
 Some seats in venues may have restricted views of the stage, or other
 information associated with them. It's important that the customers are made
-aware of any special seat conditions that will apply before they purchase. If
-implementing [seat selection](#recommended-functionality) this functionality is
-optional as seat conditions must be displayed at selection time.
+aware of any special seat conditions that will apply before they purchase.
 
 **Representative Test:** User reserves any seats for a Thursday performance of
 *Swan Lake* (event 6IE)<br/>
 When the reservation is made<br/>
 Then the application should show that these seats have restricted views before
 taking payment.
+
+**For customers implementing seat selection functionality:**
+
+**Representative Test:** User selects seats C5 and C6 for event 7AB<br/>
+When the seats are selected <br/>
+Then the application should show that these seats have restricted views, and
+show the seat text for C6 ("Haunted seat").
 
 ### Release seats if customer does not proceed with the booking flow
 A customer may change their mind about the number or type of seats to be
@@ -535,19 +540,6 @@ Then the application should attempt the purchase through the Ingresso API. When
 it returns the failure, a notification should be displayed to the customer and
 a new reservation should be made, indicating the seats may have changed.
 
-### Display friendly error messages during purchase
-When purchasing on the Internet, it can be very disconcerting for customers
-when errors occur. Make sure any errors are shown to the customer, with a
-message that their card has not been charged.
-
-**Representative Test:** User makes a reservation for any ticket type on event
-6IF, and at purchase enters a postcode of `W5 4JJ`.<br/>
-When the customer enters a postcode of `W5 4JJ` in the address details of the
-purchase confirmation,<br/>
-Then the Ingresso API will generate a booking failure and return the
-result. The application should show the customer that an error occurred, the
-reservation was not successful and that their card has not been charged.
-
 ## Recommended Functionality
 In addition to basic best-available booking flow and error handling outlined
 above, Ingresso recommends supporting additional functionality that will
@@ -595,16 +587,6 @@ invalid.
 When the customer clicks B5<br/>
 Then the booking flow should proceed as usual, because this event allows
 discontiguous seat selection.
-
-### (Required) Display special seat conditions to customer before purchase
-Some seats in venues may have restricted views of the stage, or other
-information associated with them. It's important that the customers are made
-aware of any special seat conditions that will apply before they purchase.
-
-**Representative Test:** User selects seats C5 and C6 for event 7AB<br/>
-When the seats are selected <br/>
-Then the application should show that these seats have restricted views, and
-show the seat text for C6 ("Haunted seat").
 
 ### Display special offers to customers
 If a special offer is available for an event, it may help attract your
