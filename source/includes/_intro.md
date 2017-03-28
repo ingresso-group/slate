@@ -422,11 +422,11 @@ At a minimum, the customer must be able to specify the number of seats they
 want and for which ticket type and price band. The Ingresso backend will then
 reserve the best available seats that meet the requirements.
 
-**Representative Test:** User selects 3 tickets for event 7AB in the stalls band B<br/>
+**Representative Test:** User selects 3 tickets for event 6IF in the stalls band B<br/>
 When the reservation is made<br/>
-Then the application shows a reservation confirmation screen with 3 tickets from
-that price band (such as D2, D3 and D4), and allows the user to proceed with
-the booking and payment process
+Then the application shows a reservation confirmation screen with 3 tickets
+from that price band, and allows the user to proceed with the booking and
+payment process
 
 ### Display the full ticket price to the customer before purchase
 The customer must be shown the full price they will pay before the purchase is
@@ -444,16 +444,18 @@ should also be listed separately. A total price should be displayed in a
 highlighted font showing the price the customer will pay (by adding the prices
 together).
 
-### Display special seat conditions to customer before purchase
+### (Optional if implementing seat selection) Display special seat conditions to customer before purchase
 Some seats in venues may have restricted views of the stage, or other
 information associated with them. It's important that the customers are made
-aware of any special seat conditions that will apply before they purchase.
+aware of any special seat conditions that will apply before they purchase. If
+implementing [seat selection](#recommended-functionality) this functionality is
+optional as seat conditions must be displayed at selection time.
 
-**Representative Test:** User confirms reservation of 3 seats in CIRCLE-B for
-event 7AB including seats F1-F3<br/>
+**Representative Test:** User reserves any seats for a Thursday performance of
+*Swan Lake* (event 6IE)<br/>
 When the reservation is made<br/>
-Then the confirmation screen should show that these seats have restricted
-views, and the seat text for F2.
+Then the application should show that these seats have restricted views before
+taking payment.
 
 ### Release seats if customer does not proceed with the booking flow
 A customer may change their mind about the number or type of seats to be
@@ -461,48 +463,37 @@ reserved for a performance. If your customer selects and reserves seats, then
 goes back to select and reserve additional seats or removes the reserved seats
 from their basket, the initial seats should be [released](#release).
 
-Failure to release the initial reservation will mean the customer is unable to
-reserve seats (even though they are actually available). Ingresso will
-automatically release any reserve after 15 minutes of inactivity, but you must
-release seats as soon as possible. Ingresso reserves the right to disable the
-API account of any partner that does not release tickets when they should be.
+<aside class="warning">Failure to release the initial reservation will mean the
+customer is unable to reserve seats (even though they are actually available),
+and needlessly reduces inventory for everyone including your other customers.
+Ingresso will automatically release any reserve after 15 minutes of inactivity,
+but you must release seats as soon as possible. Ingresso reserves the right to
+disable the API account of any partner that does not release tickets when they
+should.</aside>
 
 **Representative Test:** User makes a reservation for any ticket then clicks
-"back" or otherwise moves away from the reservation confirmation screen<br/>
-When the customer moves away from the reservation screen<br/>
+"back" and makes another selection, or removes items from their basket<br/>
+When the customer selects a second reservation or empties their basket<br/>
 Then your application should call the `release` resource of the
 Ingresso API. This must be done before any further call to `reserve`.<br/>
 Optionally it should also display a message to the customer indicating the
 seat reservation has been released.
 
-### Display friendly error messages during purchase
-When purchasing on the Internet, it can be very disconcerting for customers
-when errors occur. Make sure any errors are shown to the customer, with a
-message that their card has not been charged.
-
-**Representative Test:** User makes a reservation for any ticket type on event 7AB, and
-at purchase enters a postcode of `W5 4JJ`.<br/>
-When the customer enters a postcode of `W5 4JJ` in the address details of the
-purchase confirmation,<br/>
-Then the Ingresso API will generate a booking failure and return the
-result. The application should show the customer that an error occurred, the
-reservation was not successful and that their card has not been charged.
-
 ### Display different send methods including eTickets
 Various venues support different methods of sending tickets (including post,
-pickup from box office, or printable eTickets). Some of these may carry an
+collect from box office, or printable eTickets). Some of these may carry an
 additional fee. Where available, different send methods should be offered to
 the customer, and your application should support eTickets (either provided by
 Ingresso or your own format with a barcode retrieved from the Ingresso API).
 
-**Representative Test:** User confirms reservation of tickets for Toy Story -- The Opera
-(7AA)<br/>
+**Representative Test:** User confirms reservation of tickets for Toy Story --
+The Opera (7AA)<br/>
 When the customer selects the Toy Story(7AA) event<br/>
 Then the available send methods of *Printable eTicket* and *Post worldwide* are
 shown.
 
-**Representative Test:** User selects user printable tickets and checks out<br/>
-When the customer has chosen the printable ticket (eTicket) option<br/>
+**Representative Test:** User selects *Printable eTicket* and checks out<br/>
+When the customer has purchased the tickets<br/>
 Then the ticket with the appropriate barcode will be sent to their email or
 otherwise permanently saved within your application after purchase has been
 confirmed
@@ -514,15 +505,15 @@ your application. In this case, the Ingresso system will return a failure or,
 in some cases, continue the reservation but with different seats than you may
 expect.
 
-**Representative Test:** User makes a reservation including seat H10 for event 7AA or
-7AB<br/>
+**Representative Test:** User makes a reservation including seat H10 for event
+7AA or 7AB<br/>
 When the customer reserves seat H10 (by itself or with other seats),<br/>
 Then the reservation will fail and your application should indicate that the
 reservation for that ticket type and price band could not be completed, and
 that their card has not been charged.
 
-**Representative Test:** User reserves a number of seats including seat D7 for event 7AA
-or 7AB<br/>
+**Representative Test:** User reserves a number of seats including seat D7 for
+event 7AA or 7AB<br/>
 When the customer reserves a number of seats including D7 on 7AB,<br/>
 Then the reservation process will proceed but the seat numbers will have been
 changed and your application should notify the customer that the seats have
@@ -537,12 +528,25 @@ application must notify the customer and show the confirmation again before
 attempting to repurchase.
 
 **Representative Test:** User attempts to purchase any number of seats for
-event 7AB and enters `fail part one` in address line two<br/>
+event 6IE and enters `fail part one` in address line two<br/>
 When the customer enters `fail part one` in the address line two and clicks to
 purchase<br/>
 Then the application should attempt the purchase through the Ingresso API. When
 it returns the failure, a notification should be displayed to the customer and
 a new reservation should be made, indicating the seats may have changed.
+
+### Display friendly error messages during purchase
+When purchasing on the Internet, it can be very disconcerting for customers
+when errors occur. Make sure any errors are shown to the customer, with a
+message that their card has not been charged.
+
+**Representative Test:** User makes a reservation for any ticket type on event
+6IF, and at purchase enters a postcode of `W5 4JJ`.<br/>
+When the customer enters a postcode of `W5 4JJ` in the address details of the
+purchase confirmation,<br/>
+Then the Ingresso API will generate a booking failure and return the
+result. The application should show the customer that an error occurred, the
+reservation was not successful and that their card has not been charged.
 
 ## Recommended Functionality
 In addition to basic best-available booking flow and error handling outlined
@@ -576,6 +580,31 @@ When the customer selects seats B3 and B4 (leaving B2 unselected)<br/>
 Then the application should display a warning to the customer (preferably on
 the seat selection screen, but definitely prior to making a reserve call to the
 API).
+
+### (Required) Seat selection respects contiguous seat selection policy
+Some events allow selection of discontiguous seats, and others don't. If the
+event allows contiguous seat selection only, you should display a warning if
+the customer selects seats that are not next to each other. 
+
+**Representative Test:** User opens event 7AA and selects seats B3 and B5<br/>
+When the customer clicks B5<br/>
+Then the application should display a notification that the seat selection is
+invalid.
+
+**Representative Test:** User opens event 7AB and selects seats B3 and B5<br/>
+When the customer clicks B5<br/>
+Then the booking flow should proceed as usual, because this event allows
+discontiguous seat selection.
+
+### (Required) Display special seat conditions to customer before purchase
+Some seats in venues may have restricted views of the stage, or other
+information associated with them. It's important that the customers are made
+aware of any special seat conditions that will apply before they purchase.
+
+**Representative Test:** User selects seats C5 and C6 for event 7AB<br/>
+When the seats are selected <br/>
+Then the application should show that these seats have restricted views, and
+show the seat text for C6 ("Haunted seat").
 
 ### Display special offers to customers
 If a special offer is available for an event, it may help attract your
