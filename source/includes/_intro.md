@@ -37,7 +37,7 @@
 Possible V2 functionality:
 * A test API server or some form of rate limiting for particular users would help. Would allow us to give open access without worrying about someone hammering our main API server.
 * A reporting API would be useful - our internal reporting apps should also use this
-* Can we be more restful eg /events/25DR to get detail by event ID?
+* Can we be more restful e.g. /events/25DR to get detail by event ID?
 * Should we have the concept of a venue with an ID? (when the venue is enforced)
 -->
 
@@ -77,7 +77,7 @@ This API replaces the [Ingresso XML API](http://www.ingresso.co.uk/apidocs/).
 The XML API relies on temporary tokens from each call being passed in
 to the next call; these has been removed in favour of permanent IDs. One
 benefit of this change is that a call near the end of the booking process, such
-as [reserve](#reserve), can be called without needing to remake the preceeding
+as [reserve](#reserve), can be called without needing to remake the preceding
 calls (such as [requesting availability](#availability)), opening up additional
 potential solutions.
 
@@ -173,7 +173,7 @@ and purchase multiple items at once by adding them to a [trolley](#trolley).*
 
 * Returned data is as simple as possible for the task in-hand
 * Transaction flow is as simple as possible for the task in hand
-* Default missing parameters sensibly instead of erroring
+* Default missing parameters sensibly instead of returning an error
 * Always try and complete a call in some way instead of erroring
 
 
@@ -315,7 +315,7 @@ Note that HTTP error codes are not returned as part of expected API usage - such
 things as no  availability are indicated by an empty list in a successful
 response, rather than a 404 which is, arguably, the correct REST response. Even
 when an HTTP error *is* returned, however, there will be a JSON block
-acocmpanying it which contains human readable error text so that the caller has
+accompanying it which contains human readable error text so that the caller has
 some idea of what they have done wrong.
 
 To check whether there is a problem with the Ingresso API or the supplier
@@ -327,7 +327,7 @@ page](https://status.ingresso.co.uk/).
 
 The output from a given resource may be augmented beyond the
 basic result in one of two ways. Firstly there are extra functions
-which may be availble for a given resource, which are specific to
+which may be available for a given resource, which are specific to
 that resource. These are triggered using variables with the prefix `add_` 
 such as `add_discount_codes` on the availability resource which
 is used to control whether or not discount codes are also retrieved and
@@ -336,7 +336,7 @@ returned.
 The second type of augmentation is specific to the returned objects themselves
 and is thus applicable to the output of any resource which returns one of these
 objects. The most obvious example is an event object, which can be described
-with many extra pieces of information about it. These varaibles are all prefixed
+with many extra pieces of information about it. These variables are all prefixed
 with `req_` as they are requests to the objects to output something extra or
 different about themselves, for example `req_cost_range`.
 
@@ -394,25 +394,267 @@ The first step in most situations will be to instantiate a client. (TODO these c
 </tbody>
 </table>
 
-(TODO also include how to install eg with pip install?)
+(TODO also include how to install e.g. with pip install?)
 
+
+## Required Minimum Functionality
+
+Before your application can go live, there are a number of minimum
+implementation requirements it must meet. The test data available can help make
+sure your implementation is working as expected and can handle various types of
+errors and edge cases. To validate the functionality of your application,
+Ingresso will use the following representative tests.
+
+### List performance dates or times
+A given event may have multiple performances on different days and times, and
+the customer must be able to choose the one they want to attend. This can be
+done by listing them, or in a calendar interface, or in any other way that is
+appropriate for your application.
+
+**Representative Test:** User selects *The Unremarkable Incident of the Cat at Lunchtime*
+(event ID 7AB)<br/>
+When the event is selected in the interface,<br/>
+Then it should display the two available performances, 1 January {this year + 1}
+and 1 January {this year + 2}, at 15:30:00 UTC.
+
+### Support best available booking flow
+At a minimum, the customer must be able to specify the number of seats they
+want and for which ticket type and price band. The Ingresso backend will then
+reserve the best available seats that meet the requirements.
+
+**Representative Test:** User selects 3 tickets for event 7AB in the stalls band B<br/>
+When the reservation is made<br/>
+Then the application shows a reservation confirmation screen with 3 tickets from
+that price band (such as D2, D3 and D4), and allows the user to proceed with
+the booking and payment process
+
+### Display the full ticket price to the customer before purchase
+The customer must be shown the full price they will pay before the purchase is
+confirmed and their payment taken.
+<aside class="notice">If selling in the UK market, the ticket seat price and
+the surcharge should be itemised separately. Make sure to follow all market
+regulations for the countries and regions you are selling in.</aside>
+
+**Representative Test:** User confirms reservation of 1 seat for event 7AB in the stalls
+band A (e.g. seat B4)<br/>
+When the confirmation and payment screen is displayed<br/>
+Then the full price should be displayed as £55.00, showing a £50.00 seat price
+and a £5.00 surcharge. Any dispatch methods that incur an additional cost
+should also be listed separately. A total price should be displayed in a
+highlighted font showing the price the customer will pay (by adding the prices
+together).
+
+### Display special seat conditions to customer before purchase
+Some seats in venues may have restricted views of the stage, or other
+information associated with them. It's important that the customers are made
+aware of any special seat conditions that will apply before they purchase.
+
+**Representative Test:** User confirms reservation of 3 seats in CIRCLE-B for
+event 7AB including seats F1-F3<br/>
+When the reservation is made<br/>
+Then the confirmation screen should show that these seats have restricted
+views, and the seat text for F2.
+
+### Release seats if customer does not proceed with the booking flow
+A customer may change their mind about the number or type of seats to be
+reserved for a performance. If your customer selects and reserves seats, then
+goes back to select and reserve additional seats or removes the reserved seats
+from their basket, the initial seats should be [released](#release).
+
+Failure to release the initial reservation will mean the customer is unable to
+reserve seats (even though they are actually available). Ingresso will
+automatically release any reserve after 15 minutes of inactivity, but you must
+release seats as soon as possible. Ingresso reserves the right to disable the
+API account of any partner that does not release tickets when they should be.
+
+**Representative Test:** User makes a reservation for any ticket then clicks
+"back" or otherwise moves away from the reservation confirmation screen<br/>
+When the customer moves away from the reservation screen<br/>
+Then your application should call the `release` resource of the
+Ingresso API. This must be done before any further call to `reserve`.<br/>
+Optionally it should also display a message to the customer indicating the
+seat reservation has been released.
+
+### Display friendly error messages during purchase
+When purchasing on the Internet, it can be very disconcerting for customers
+when errors occur. Make sure any errors are shown to the customer, with a
+message that their card has not been charged.
+
+**Representative Test:** User makes a reservation for any ticket type on event 7AB, and
+at purchase enters a postcode of `W5 4JJ`.<br/>
+When the customer enters a postcode of `W5 4JJ` in the address details of the
+purchase confirmation,<br/>
+Then the Ingresso API will generate a booking failure and return the
+result. The application should show the customer that an error occurred, the
+reservation was not successful and that their card has not been charged.
+
+### Display different send methods including eTickets
+Various venues support different methods of sending tickets (including post,
+pickup from box office, or printable eTickets). Some of these may carry an
+additional fee. Where available, different send methods should be offered to
+the customer, and your application should support eTickets (either provided by
+Ingresso or your own format with a barcode retrieved from the Ingresso API).
+
+**Representative Test:** User confirms reservation of tickets for Toy Story -- The Opera
+(7AA)<br/>
+When the customer selects the Toy Story(7AA) event<br/>
+Then the available send methods of *Printable eTicket* and *Post worldwide* are
+shown.
+
+**Representative Test:** User selects user printable tickets and checks out<br/>
+When the customer has chosen the printable ticket (eTicket) option<br/>
+Then the ticket with the appropriate barcode will be sent to their email or
+otherwise permanently saved within your application after purchase has been
+confirmed
+
+### Gracefully handle reservation failures and seat changes
+Especially for popular shows, it is quite common that seats that are requested
+are purchased by other customers before they can be purchased by the user of
+your application. In this case, the Ingresso system will return a failure or,
+in some cases, continue the reservation but with different seats than you may
+expect.
+
+**Representative Test:** User makes a reservation including seat H10 for event 7AA or
+7AB<br/>
+When the customer reserves seat H10 (by itself or with other seats),<br/>
+Then the reservation will fail and your application should indicate that the
+reservation for that ticket type and price band could not be completed, and
+that their card has not been charged.
+
+**Representative Test:** User reserves a number of seats including seat D7 for event 7AA
+or 7AB<br/>
+When the customer reserves a number of seats including D7 on 7AB,<br/>
+Then the reservation process will proceed but the seat numbers will have been
+changed and your application should notify the customer that the seats have
+changed.
+
+### Gracefully handle purchase failures
+The purchase process can fail for various reasons. The purchase call will
+usually return a reason for failure, if known, after which the reserve status
+will be set to "failed" and the seats automatically released by the backend.
+The reserve must be made again and the seat numbers can change, so your
+application must notify the customer and show the confirmation again before
+attempting to repurchase.
+
+**Representative Test:** User attempts to purchase any number of seats for
+event 7AB and enters `fail part one` in address line two<br/>
+When the customer enters `fail part one` in the address line two and clicks to
+purchase<br/>
+Then the application should attempt the purchase through the Ingresso API. When
+it returns the failure, a notification should be displayed to the customer and
+a new reservation should be made, indicating the seats may have changed.
+
+## Recommended Functionality
+In addition to basic best-available booking flow and error handling outlined
+above, Ingresso recommends supporting additional functionality that will
+benefit your customers and help improve your user experience. The following
+functionality can be validated with the representative tests:
+
+### Support seat selection booking flow
+For many events the backend system supports seat selection. When making a
+reserve for a performance, requested seats can also be passed to the API and
+where possible the request will be accommodated. Your application should supply
+an interface to allow customers to request specific seats.
+
+<aside class="notice">Seating chart data will be available soon through the
+Ingresso API, but for now you must supply your own seating chart.</aside>
+
+**Representative Test:** User selects any performance for event 7AB<br/>
+When the customer clicks on a performance for event 7AB<br/>
+Then the application shows which seats are available (either just listing them,
+or using an interactive seating chart).
+
+### (Required) Seat selection respects leaving singles policy
+If seat selection is supported, your interface must respect the
+`can_leave_singles` attribute set by a performance availability call. If the
+seat selection chosen by your customer would leave a single seat by itself in a
+block, and this is not allowed by the venue, your application must indicate to
+the customer that this reservation will fail.
+
+**Representative Test:** User opens event 7AA and selects seats B3 and B4<br/>
+When the customer selects seats B3 and B4 (leaving B2 unselected)<br/>
+Then the application should display a warning to the customer (preferably on
+the seat selection screen, but definitely prior to making a reserve call to the
+API).
+
+### Display special offers to customers
+If a special offer is available for an event, it may help attract your
+customers. Where available, Ingresso recommends that special offers be
+highlighted and displayed.
+
+**Representative Test:** User looks for special offers<br/>
+When the customer interacts with your application (either in the main view or
+for an event with a special offer, such as 7AB)<br/>
+Then a prominent notice is seen displaying details of the available special
+offers and the associated event (e.g. 7AB has 8% off CIRCLE-A seats, and no
+fees for STALLS-B seats).
+
+### Allow customers to select discount codes
+Some events have discounted ticket prices for children, students, etc.
+Your customers will appreciate being able to select these discount tickets
+where available.
+
+**Representative Test:** User requests a ticket for The Nutcracker (6IF)<br/>
+When the customer requests tickets for event 6IF in Stalls-A<br/>
+Then they should be able to choose between a normal ADULT ticket, and
+discounted CHILD, STUDENT and OAP tickets.
+
+### Display all event information to customers
+Most events include additional media information. Displaying this information
+to your customers will help build interest and credibility.
+
+**Representative Test:** User clicks on The Nutcracker (6IF)<br/>
+When the customer selects the main event page or information page<br/>
+Then the associated media (video, images, copy text, seating plan, etc.) will
+be displayed or linked.
 
 
 ## Testing
 
-We have a number of test events that you can use to view test availability and
-make test purchases.
+To help with implementation and to meet the minimum and recommended
+functionality requirements above, we have a number of test events that you can
+use to validate your application and make test purchases. Many of these events
+also have specific conditions that can be used to test edge cases in the
+reservation process - please see below for details.
 
 For testing best available events, use "Matthew Bourne's Nutcracker TEST" (event
 ID = 6IF) and "Matthew Bourne's Swan Lake test" (6IE).
 
-For testing events that allow you to select specific seats, use any of these
-events: 3CVA, 3CVB, 3CVC, 3CVD, 3CVE, 3CVF or 3CVG. 
-Note that we have a seat selection seating plan available for 3CVE - this will
-be helpful if you decide to implement seat selection on your front end (please
-email  api@ingresso.co.uk and we can talk you through this). The availability on
-these seat selection events is limited, so please limit test purchasing to manual
-purchases only, do not use automated purchasing for these events.
+- Swan Lake (6IE) has default discounts only
+- Swan Lake (6IE) reserves will fail for Tuesday performances
+- Swan Lake (6IE) has restricted view seats on ticket 2 and 3 on Thursdays
+- The Nutcracker (6IF) has a maximum of 3 mixed discounts
+- The Nutcracker (6IF) has no availability on Saturday nights
+- The Nutcracker (6IF) has no discounts in the stalls on the 1st of the month
+- The Nutcracker (6IF) has no OPA or STUDENT discounts in price band B
+- The Nutcracker (6IF) has "collect from the venue" and "post" dispatch methods
+  available
+
+For testing events that allow selection of specific seats, use either "The
+Unremarkable Incident of the Cat at Lunchtime" (event ID = 7AB) or "Toy Story
+- The Opera" (7AA).
+
+- Unremarkable Incident (7AB) allows discontiguous seat selection and leaving
+  singles
+- Unremarkable Incident (7AB) also has some discounts and special offers for
+  some seat bands
+- Toy Story (7AA) allows contiguous seat selection only and does not permit
+  leaving singles
+
+Additionally, both events have the following conditions in common:
+
+- A reservation including seat H10 will always fail
+- A reservation including seat D7 will return a different seat selection from
+  the same block of seats (as if that seat had become unavailable)
+- Seats A1, A2, A10 and C5 have restricted views
+- Seat A6 has seat text attached to the seat
+- Seat C6 has both seat text and a restricted view
+
+
+There is a seating plan available for 7AB and 7AA, which will be helpful if
+you decide to implement seat selection on your front end. Please email
+[api@ingresso.co.uk](mailto:api@ingresso.co.uk) and we can talk you through how
+to do this.
 
 It may be useful to use our [B2B website](https://b2b.ingresso.co.uk/b2b/) as a
 working example during your development.
@@ -422,25 +664,21 @@ password: `demopass`
 We have a number of other events for different types of events such as
 attractions and hotels - you will see these if you [list all events](#events).
 
-It can be useful to test different despatch methods:
+Some of these other test events have specific conditions that you can check:
 
-- The Nutcracker (6IF) has "collect from the venue" and "post"
-- Test Event - Type 1 (3CVA) has "self-print voucher" (also known as eticket)
-
-Some of the test events have specific conditions that you can check:
-
-- Swan Lake (6IE) has default discounts only
-- Swan Lake (6IE) reserves will fail for Tuesday performances
-- Swan Lake (6IE) has restricted view seats on ticket 2 and 3 on thursdays
-- The Nutcracker (6IF) has a maximum of 3 mixed discounts
-- The Nutcracker (6IF) has no availability on saturday nights
-- The Nutcracker (6IF) has no discounts in the stalls on the 1st of the month
-- The Nutcracker (6IF) has no OPA or STUDENT discounts in price band B
 - La Femme (6L9) has blanket discounts
 - La Femme (6L9) has a special offer
-- V&A memberships (6KF) only allow a single seat to be selected and have a type of use_last_perf
-- California Disney (9XY) is post only (can be used to generate 'no sends' if you select a performance date within the next few days)
+- V&A memberships (6KF) only allow a single seat to be selected and have a type
+  of `use_last_perf`
+- California Disney (9XY) is post only (can be used to generate 'no sends' if
+  you select a performance date within the next few days)
 - Flamingoland family passes (6KU) are not valid on Mondays
+
+It can be useful to test different dispatch methods:
+
+- The Unremarkable Incident (7AB) has "self-print voucher" (also known as an
+  eTicket) with a barcode data attached
+- Toy Story (7AA) has a "self-print voucher" option without the barcode
 
 
 ## Versioning
