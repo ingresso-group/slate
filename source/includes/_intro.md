@@ -43,8 +43,8 @@ Possible V2 functionality:
 
 # IMPORTANT NOTE
 
-The API is fully functional but still in development - until this note is
-removed the API is subject to change.
+<aside class="warning">The API is fully functional but still in development -
+until this note is removed the API is subject to change.</aside>
 
 
 # Introduction
