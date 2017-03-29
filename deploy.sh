@@ -154,6 +154,7 @@ commit+push() {
   #--quiet is important here to avoid outputting the repo URL, which may contain a secret token
   git push --quiet $repo $deploy_branch
   enable_expanded_output
+  curl -X POST --data "payload={\"text\": \"<http://ingresso-group.github.io/slate/|New API Docs> commited.\n$commit_message\"}" https://hooks.slack.com/services/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
 }
 
 #echo expanded commands as they are executed (for debugging)

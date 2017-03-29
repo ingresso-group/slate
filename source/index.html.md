@@ -29,5 +29,3 @@ includes:
 
 search: true
 ---
-
-hello world
