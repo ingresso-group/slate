@@ -100,6 +100,7 @@ Parameter | Description
 `req_media_landscape` | Small landscape banner suitable for search (jpg/png 220x115).
 `req_media_marquee` | Large landscape banner suitable for a page heading, if available (jpg/png 700x300).
 `req_media_supplier` | Logo of the supplier/producer, if available (jpg/png varying size).
+`req_meta_components` | Returns a list of meta component events. This will only add data if the event is a "meta event" such as a touring show that is comprised of individual component events.
 `req_reviews` | Returns [event reviews](#reviews) if available.
 `req_video_iframe` | Returns video iframe information if available.
 

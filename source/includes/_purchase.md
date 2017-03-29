@@ -144,9 +144,9 @@ Parameter | Description
 `agent_ref` | Partners can pass their own transaction reference to be stored in the Ingresso platform. *Optional.*
 `country_code` | The [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code of the customer's address - required. The country code must have been present in the `allowed_countries` list from [reserve](#reserve).
 `county` | The county of region of the customer's address. *Optional.*
-`dp_supplier` | (TODO: incorrect param name) Data protection question - set to `true` if the customer has opted in to receiving marketing emails from the ticket supplier. *Optional - it will default to false.*
-`dp_user` | (TODO: incorrect param name) Data protection question - set to `true` if the customer has opted in to receiving marketing emails from you. Most partners manage marketing opt-ins themselves so do not provide this. *Optional - it will default to false.*
-`dp_world` | (TODO: incorrect param name) Data protection question - set to `true` if the customer has opted in to receiving marketing emails communication from you and third-parties. *Optional - it will default to false.*
+`supplier_can_use_customer_data` | Data protection question - set this to `true` if the customer has opted in to receiving marketing emails from the ticket supplier. *Optional - it will default to false.*
+`user_can_use_customer_data` | Data protection question - set this to `true` if the customer has opted in to receiving marketing emails from you. Most partners manage marketing opt-ins themselves so do not provide this. *Optional - it will default to false.*
+`world_can_use_customer_data` | Data protection question - set this to `true` if the customer has opted in to receiving marketing emails communication from you and third-parties. *Optional - it will default to false.*
 `email_address` | The customer's email address. Required when `needs_email_address` was `true` from the [reserve](#reserve) response. We recommend this is provided - see customer data note above.
 `first_name` | The customer's first name - required. Used by venues as a security measure when admitting customers.
 `home_phone` | The customer's home phone number. *Optional if `phone` is provided.*
