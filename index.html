@@ -162,11 +162,6 @@ Possible V2 functionality:
 * Should we have the concept of a venue with an ID? (when the venue is enforced)
 -->
 
-<h1 id="important-note">IMPORTANT NOTE</h1>
-
-<aside class="warning">The API is fully functional but still in development -
-until this note is removed the API is subject to change.</aside>
-
 <h1 id="introduction">Introduction</h1>
 
 <p>The Ingresso API is designed to allow you to sell from Ingresso&rsquo;s inventory of
@@ -178,7 +173,7 @@ from a number of different venues. </p>
 <p>Example partners that have integrated with the Ingresso API are 
 <a href="https://tickets.amazon.co.uk/">Amazon</a> and 
 <a href="http://www.lastminute.com/theatre/">lastminute.com</a>. We also build our own 
-ticketing websites entirely on top of our API (for example 
+ticketing websites entirely on top of the API (for example 
 <a href="https://www.disneytickets.co.uk">Disney Tickets</a> and
 <a href="https://www.fromtheboxoffice.com">From The Box Office</a>). </p>
 
@@ -189,9 +184,9 @@ which is why you see /f13 in the endpoints.</p>
 
 <p>We describe objects in a consistent way across different resources (for example
 the output of <a href="#events">events</a> and <a href="#performances">performances</a> includes a
-cost_range object and this is described in the same format). The idea of this is
-that standard code can be used on the client side to read all parts of the
-output.</p>
+cost_range object and this is described in the same format). The idea behind
+this is that standard code can be used on the client side to read all parts of
+the output.</p>
 
 <p>This API replaces the <a href="http://www.ingresso.co.uk/apidocs/">Ingresso XML API</a>. 
 The XML API relies on temporary tokens from each call being passed in
@@ -199,7 +194,8 @@ to the next call; these has been removed in favour of permanent IDs. One
 benefit of this change is that a call near the end of the booking process, such
 as <a href="#reserve">reserve</a>, can be called without needing to remake the preceding
 calls (such as <a href="#availability">requesting availability</a>), opening up additional
-potential solutions.</p>
+potential solutions. The output is also more compact leading to faster response
+times in most cases.</p>
 
 <h2 id="postman-examples">Postman examples</h2>
 
@@ -7909,6 +7905,11 @@ orders in the trolley. Every time a change is made to the trolley the hash
 changes and so does the <code class="prettyprint">trolley_token</code>. An individual <code class="prettyprint">trolley_token</code> is
 therefore an identifier for the current state of your trolley, and can not be
 used to identify your trolley as you add or remove orders.</p>
+
+<aside class="warning">We plan to make a breaking change to the way send methods
+are handled for integrations that add multiple items to a trolley. If you plan to do this we
+can provide more detail if you contact us at api@ingresso.co.uk. If you only plan
+to reserve a single item at a time the change will not affect you.</aside>
 
 <h3 id="request">Request</h3>
 
