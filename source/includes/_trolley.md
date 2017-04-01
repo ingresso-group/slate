@@ -60,12 +60,12 @@ trolley = client.get_trolley(
 curl https://demo.ticketswitch.com/f13/trolley.v1 \
     -u "demo:demopass" \
     -d "trolley_token=U3--tgaXeGJ3jY8-7bxaEyEcKhrbmYsrFkLAQh2wn89J9IFevORBYwlCveIJxP51WpqbA0tih8NmBuDvAegm37cFhVZA7yIGKjbEIetqsk2z_MGFMfiY9f11oM3MOpxlcLLE7vehHd5qyL4ozVZNtTOtxrJHhntmDqb-SyNhtAD0xWakXhUPlGVqQvnqQ2feu0moVJ_Wn9ROLz8C6p65Epz6kxGYBaNg0zkAawIttK3IY1LbiRxEHS10-R-7f0FVbg9kq0X6S8oIiWwjCqYJ9OEktXo-bdasYe4wu0yfki9N4WmuDrpTBgOkS7618nMbTvpYzPPacne8hGRCmH6e3GjPRtvZAilpaol5rKX3zgjN30cpLpsXpFo7ZZkJXOr5YMj-rNTXs0xg3trhrePeOdFFjTuN06iHrX2W2ylETgQ4hS2uXZoBVNmg4R8IQqvq4xuMmvRMYz2kXkC5wJF7pAG9J0--Z" \
-    -d "perf_id=3CVB-108" \
-    -d "ticket_type_code=UPP" \
-    -d "price_band_code=C/pool" \
+    -d "perf_id=7AB-5" \
+    -d "ticket_type_code=STALLS" \
+    -d "price_band_code=A/pool" \
     -d "no_of_seats=2" \
-    -d "seat0=C7" \
-    -d "seat1=C8" \
+    -d "seat0=A1" \
+    -d "seat1=A2" \
     --compressed \
     -G
 ```
@@ -227,7 +227,7 @@ Parameter | Description
     }
   },
   "discarded_orders": [],
-  "trolley_token": "M6--DqjJkw4ODNVbiWWjrfknLN1CB0WLJRnejw5mj18G6PEjAROXSlnHS56jA9qccvRUxTRu01vrc_bqz7f9YsDE6JDQ9rU6OvUQm7nAEvF-bX97lky1zH_b3UVk4HTJorjXeaPgrQRiXnWI76OP2vQ5ZlWFh1pZE_5P1aIlrSGGZmDQr3MLIkcNNJOfiDIx9Rsz3RUoH20SPlf-YvEcOn06Fk5le08fUpLC5fVkm1wCv0OejpHZcsdscg4WHLl8KphDMh7OFNAZ6oie6bxuiwX8Ni6cNNB3fmrlq73Ps2XPa-19n8eaJdEP0H6X_alL7E-Tja9c1AtEkccb49ig2d-ht1zdd1-BayxLPgeOFNC4-1cRXjQPiWWINzQDjUnzFn492WHBPjOvnFYqmboMjUdg-4BZ1vPNGeZzynq-dCh8h83AGCnctxu2qLOBPUc2ZCnCx5RvyJEwRb7iMklM5MxeKb8lYH8EM4RfqmD8JfTZTneiaxhxWOuBOAGml0cg7Nw2WNx_nlG6IVZKOZWNDhTqhCODLcdWjEKRnEQrfLnVk1JbYpFJ8JeF47KNTXVjXQW-MMBZyLgmrJ0G2BPAvzTUx1mU_WmRfs6givmewFw-enWXdYOodreJ0eT2awhGm0UYcxWK70DH5w4yGa_xSf8vUZjHIlMIPK_V6I4pSplYwRAp1EwgFgcbBwOlM_NKZQepEuZVf4VAfK8-Z",
+  "trolley_token": "k5--2fvf6Qc19ceQa4b9Kx4zIhDezG2yPzN71dEUmA8r3qFFCJJAQ3M3kYft_h9rzMAEBYyT0yNdS31HOv2WuYMbAbC8i49reKFaUu3esJckOm4cDipyTgQy3iekje0zgEM0MBSx1XY6t5bgbQ170iNxU2CLjUmZAT9K5iyqI-PN3hmJEpj0s5NMb31-THH8ufud82Mh2TeBP_c_e3_sabim1ftOfrnS6qPQAo9DF-Z1gXIXKLIzqCozRUwKqSOyLKbwAgfJSMi_2fQ_MhWMNkldjrfbOPpM0qKReJm8wPVW_zZNL_px_Mmg8LEIMgd5soJAa1edNePTrvSLppbDkevea-9Lr9UWERYKoSVXCsLSaEw2dGqaNJggpU6S_ksyduog3ALwStTJ6dr8dyGY5mImdVNcZhRepdmvKbRYNzBTDSxxY2n2LefoJkxc8bg-FxPacE9DRRNY_ZPl7f3fpa4a0Oq8j2DfrGxVcw0McxLoQ1E8XUkAH99LztF0qZN9RYuFwpQhoomgNOROf2M03DigA59j5ipO4Mg8p3iLKVndHJXS1SJfItBt1h86VXXUg0pkeZGn1e6TQkwx9m6t5faz4zuzGEg8XpuOXBxBqHrvQOFaFY5tDYYGr4x-uM2VowFCpM2c3-Aal3EeyjChHTycW---Z",
   "trolley_token_contents": {
     "bundle": [
       {
@@ -327,91 +327,98 @@ Parameter | Description
       },
       {
         "bundle_order_count": 1,
-        "bundle_source_code": "ingresso_one_test",
-        "bundle_source_desc": "Ingresso",
-        "bundle_total_cost": 40,
-        "bundle_total_seatprice": 40,
+        "bundle_source_code": "ext_test1",
+        "bundle_source_desc": "External Test Backend 1",
+        "bundle_total_cost": 110,
+        "bundle_total_seatprice": 100,
         "bundle_total_send_cost": 0,
-        "bundle_total_surcharge": 0,
+        "bundle_total_surcharge": 10,
         "currency_code": "gbp",
         "order": [
           {
             "event": {
+              "city_code": "london-uk",
+              "city_desc": "London",
               "classes": {
                 "theatre": "Theatre"
               },
               "country_code": "uk",
               "country_desc": "United Kingdom",
               "custom_filter": [],
-              "event_desc": "Test Event - Type 10 (d)",
-              "event_id": "3CVB",
-              "event_path": "/3CVB-test-event-type-10-d/",
+              "event_desc": "The Unremarkable Incident of the Cat at Lunchtime",
+              "event_id": "7AB",
+              "event_path": "/7AB-the-unremarkable-incident-of-the-cat-at-lunchtime/",
               "event_status": "live",
               "event_type": "simple_ticket",
-              "event_uri_desc": "Test-Event-Type-10-%28d%29",
+              "event_uri_desc": "The-Unremarkable-Incident-of-the-Cat-at-Lunchtime",
               "geo_data": {
-                "latitude": 10,
-                "longitude": 20
+                "latitude": 51.49306,
+                "longitude": -0.22639
               },
               "has_no_perfs": false,
               "is_seated": true,
+              "max_running_time": 90,
+              "min_running_time": 90,
               "need_departure_date": false,
               "need_duration": false,
               "need_performance": true,
-              "postcode": "BT1 2BE",
+              "postcode": "W6 7ES",
               "show_perf_time": true,
-              "source_code": "ingresso_one_test",
-              "source_desc": "Ingresso",
-              "venue_desc": "Belfast Tours Ltd",
-              "venue_uri_desc": "Belfast-Tours-Ltd"
+              "source_code": "ext_test1",
+              "source_desc": "External Test Backend 1",
+              "venue_desc": "Lyric Apollo",
+              "venue_uri_desc": "Lyric-Apollo"
             },
-            "got_requested_seats": false,
+            "got_requested_seats": true,
             "item_number": 2,
             "performance": {
-              "date_desc": "Fri, 1st December 2017",
-              "event_id": "3CVB",
+              "date_desc": "Tue, 1st January 2019",
+              "event_id": "7AB",
               "has_pool_seats": true,
               "is_ghost": false,
               "is_limited": false,
-              "iso8601_date_and_time": "2017-12-01T20:00:00Z",
-              "perf_id": "3CVB-108",
-              "time_desc": "8.00 PM"
+              "iso8601_date_and_time": "2019-01-01T15:30:00Z",
+              "perf_id": "7AB-5",
+              "running_time": 90,
+              "time_desc": "3.30 PM"
             },
-            "price_band_code": "C/pool",
+            "price_band_code": "A/pool",
             "requested_seats": [
               {
-                "col_id": "7",
-                "full_id": "C7",
-                "is_restricted_view": false,
-                "row_id": "C",
-                "seat_subdata": "1/7"
+                "col_id": "1",
+                "full_id": "A1",
+                "is_restricted_view": true,
+                "row_id": "A",
+                "seat_text": "Restricted View",
+                "seat_text_code": "A.1"
               },
               {
-                "col_id": "8",
-                "full_id": "C8",
-                "is_restricted_view": false,
-                "row_id": "C",
-                "seat_subdata": "1/8"
+                "col_id": "2",
+                "full_id": "A2",
+                "is_restricted_view": true,
+                "row_id": "A",
+                "seat_text": "Restricted View",
+                "seat_text_code": "A.2"
               }
             ],
             "ticket_orders": {
               "ticket_order": [
                 {
-                  "discount_code": "RED/RED/1",
-                  "discount_desc": "FULL PRICE",
+                  "discount_code": "NORMAL",
+                  "discount_desc": "Regular Ticket",
                   "no_of_seats": 2,
-                  "sale_seatprice": 20,
-                  "sale_surcharge": 0,
-                  "total_sale_seatprice": 40,
-                  "total_sale_surcharge": 0
+                  "sale_seatprice": 50,
+                  "sale_surcharge": 5,
+                  "total_sale_seatprice": 100,
+                  "total_sale_surcharge": 10
                 }
               ]
             },
-            "ticket_type_code": "UPP",
-            "ticket_type_desc": "Upper Circle",
+            "ticket_type_code": "STALLS",
+            "ticket_type_desc": "Stalls",
             "total_no_of_seats": 2,
-            "total_sale_seatprice": 40,
-            "total_sale_surcharge": 0
+            "total_sale_seatprice": 100,
+            "total_sale_surcharge": 10
           }
         ]
       }

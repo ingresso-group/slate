@@ -22,6 +22,7 @@ includes:
   - release
   - purchase
   - status
+  - trans_id_status
   - cities
   - classes
   - bitmask_fields

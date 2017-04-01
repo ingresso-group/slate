@@ -60,11 +60,12 @@ Parameter | Description
 --------- | -----------
 `keywords` | Space separated list of search keywords, e.g. `lion king new york` or `paris tours`.
 `date_range` | Date range in the form `yyyymmdd:yyyymmdd` (both are optional) to filter events to those with performances within the date range.
-`country_code` | 2-digit country code (using [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-`city_code` | Return events in a particular city. The list of city codes can be retrieved using the [cities](#cities) resource.
-`circle` | Return events within in a circular geographical area. Three colon-separated values are needed for **latitude**, **longitude**, and **radius in kilometres**.  Example: `51.52961137:-0.10601562:10`.
 `airport_code` | Return events near an airport (specified using an [IATA airport code](https://en.wikipedia.org/wiki/International_Air_Transport_Association_airport_code))
+`circle` | Return events within in a circular geographical area. Three colon-separated values are needed for **latitude**, **longitude**, and **radius in kilometres**.  Example: `51.52961137:-0.10601562:10`.
+`city_code` | Return events in a particular city. The list of city codes can be retrieved using the [cities](#cities) resource.
+`country_code` | 2-digit country code (using [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
 `include_dead` | Include dead events in the results. This could be useful if you dynamically retrieve the list of events from Ingresso and want to continue to display an event page after an event dies, for example to help with search engine optimisation.
+`offers_only` | If set to `true` the response will only include events with a special offer. Note that we rely on cached data, so cannot guaranteed complete accuracy.
 
 These parameters are used to control the output if more than one event is returned:
 

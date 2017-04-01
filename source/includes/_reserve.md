@@ -83,12 +83,12 @@ reservation = client.make_reservation(
 ```shell
 curl https://demo.ticketswitch.com/f13/reserve.v1 \
     -u "demo:demopass" \
-    -d "perf_id=3CVB-108" \
-    -d "ticket_type_code=UPP" \
-    -d "price_band_code=C/pool" \
+    -d "perf_id=7AB-5" \
+    -d "ticket_type_code=STALLS" \
+    -d "price_band_code=A/pool" \
     -d "no_of_seats=2" \
-    -d "seat0=C7" \
-    -d "seat1=C8" \
+    -d "seat0=A1" \
+    -d "seat1=A2" \
     --compressed \
     -X POST
 ```
@@ -98,11 +98,11 @@ from pyticketswitch import Client
 
 client = Client('demo', 'demopass')
 reservation = client.make_reservation(
-    performance_id='3CVB-22',
-    ticket_type_code='UPP',
-    price_band_code='C/pool',
+    performance_id='7AB-5',
+    ticket_type_code='STALLS',
+    price_band_code='A/pool',
     number_of_seats=2,
-    seats=['C7', 'C8']
+    seats=['A1', 'A2']
 )
 ```
 

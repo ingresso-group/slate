@@ -504,7 +504,7 @@ Attribute | Description
 `performance` | The performance object, with the same format as for the [performances endpoint](#performances-by-id).
 `price_band_code` | The code for a price band, for example "C/pool". The price band code is generally made up of the code from the underlying supplier system, e.g. "C", followed by a "/" separator then "pool" or "alloc", indicating whether the price band is taken from the general pool of tickets or is from a ring-fenced allocation.
 `seat_request_status` | The status of your tickets after they have been reserved. Possible values are `not_requested` (specific seats not requested), `got_none` (you requested A13 and A14 but we gave you A15 and A16), `got_partial` (you requested A13 and A14 but we gave you A14 and A15), `got_all` (you requested A13 and A14 and you got A13 and A14 - by far the most common response when requesting specific seats).
-`send_method` | 
+`send_method` | See below for object detail.
 `ticket_orders` | An array of ticket_order objects, one for each discount code. See below for detail.
 `ticket_type_code` | The unique identifier for the ticket type. For seated events this refers to a part of house / seating area such as Grand Circle.
 `ticket_type_desc` | The description for the ticket type. This should be displayed to the customer
@@ -518,6 +518,22 @@ Attribute | Description
 `user_commission.amount_excluding_vat` | Your commission excluding sales tax.
 `user_commission.amount_including_vat` | Your commission including sales tax.
 `user_commission.commission_currency` | The commission currency (note that this can be different to the currency seen by the customer).
+
+
+**`send_method` attributes:**
+
+Attribute | Description
+--------- | -----------
+`can_generate_self_print` | `true` if you have been set up to produce your own self print vouchers (eTickets), `false` if you are using Ingresso-provided vouchers.
+`has_html_page` | `true` if an HTML voucher is returned.
+`self_print_voucher_url` | The voucher / eTicket URL. This should be displayed to your customer.
+`send_code` | The code for this send method.
+`send_cost` | The despatch cost for the chosen send method.
+`send_cost_in_desired` | The despatch cost for the chosen send method, converted to your desired currency if you have one (in most cases this won't be present).
+`send_desc` | The description for this send method.
+`send_final_comment` | . Will not always be present.
+`send_final_type` | The classification of send method: one of `selfprint`, `collect` or `post`. The final_type should be the same as the type.
+`send_type` | The classification of send method: one of `selfprint`, `collect` or `post`.
 
 
 **`ticket_order` attributes:**
@@ -540,6 +556,8 @@ Attribute | Description
 
 **`seats` attributes:**
 
+Attribute | Description
+--------- | -----------
 `col_id` | The column identifier of the seat.
 `full_id` | The ID of the seat - comprised of the `col_id` and the `row_id`, sometimes with a separator between them.
 `is_restricted_view` | `true` if the seat is classified as having a restricted view.

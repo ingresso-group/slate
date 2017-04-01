@@ -297,7 +297,7 @@ to determine whether you can offer seat selection to your customer.
 ```shell
 curl https://demo.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
-    -d "perf_id=3CVB-108" \
+    -d "perf_id=7AB-5" \
     -d "add_seat_blocks" \
     --compressed \
     -G
@@ -319,400 +319,211 @@ Parameter | Description
         "price_band": [
           {
             "absolute_saving": 0,
-            "discount_code": "RED/RED/1",
-            "discount_desc": "FULL PRICE",
+            "discount_code": "NORMAL",
+            "discount_desc": "Regular Ticket",
             "free_seat_blocks": {
-              "seat_block": [
-                {
-                  "block_length": 10,
-                  "id_details": [
-                    {
-                      "col_id": "1",
-                      "full_id": "D1",
-                      "is_restricted_view": false,
-                      "row_id": "D",
-                      "seat_subdata": "1/1"
-                    },
-                    {
-                      "col_id": "2",
-                      "full_id": "D2",
-                      "is_restricted_view": false,
-                      "row_id": "D",
-                      "seat_subdata": "1/2"
-                    },
-                    {
-                      "col_id": "3",
-                      "full_id": "D3",
-                      "is_restricted_view": false,
-                      "row_id": "D",
-                      "seat_subdata": "1/3"
-                    },
-                    {
-                      "col_id": "4",
-                      "full_id": "D4",
-                      "is_restricted_view": false,
-                      "row_id": "D",
-                      "seat_subdata": "1/4"
-                    },
-                    {
-                      "col_id": "5",
-                      "full_id": "D5",
-                      "is_restricted_view": false,
-                      "row_id": "D",
-                      "seat_subdata": "1/5"
-                    },
-                    {
-                      "col_id": "6",
-                      "full_id": "D6",
-                      "is_restricted_view": false,
-                      "row_id": "D",
-                      "seat_subdata": "1/6"
-                    },
-                    {
-                      "col_id": "7",
-                      "full_id": "D7",
-                      "is_restricted_view": false,
-                      "row_id": "D",
-                      "seat_subdata": "1/7"
-                    },
-                    {
-                      "col_id": "8",
-                      "full_id": "D8",
-                      "is_restricted_view": false,
-                      "row_id": "D",
-                      "seat_subdata": "1/8"
-                    },
-                    {
-                      "col_id": "9",
-                      "full_id": "D9",
-                      "is_restricted_view": false,
-                      "row_id": "D",
-                      "seat_subdata": "1/9"
-                    },
-                    {
-                      "col_id": "10",
-                      "full_id": "D10",
-                      "is_restricted_view": false,
-                      "row_id": "D",
-                      "seat_subdata": "1/10"
-                    }
+              "blocks_by_row": {
+                "A": [
+                  [
+                    "A1",
+                    "A2",
+                    "A3",
+                    "A4",
+                    "A5",
+                    "A6",
+                    "A7",
+                    "A8",
+                    "A9",
+                    "A10"
                   ]
-                }
-              ]
+                ],
+                "B": [
+                  [
+                    "B2",
+                    "B3",
+                    "B4",
+                    "B5",
+                    "B6",
+                    "B7",
+                    "B8",
+                    "B9"
+                  ]
+                ]
+              },
+              "restricted_view_seats": [
+                "A1",
+                "A2",
+                "A10"
+              ],
+              "seats_by_text_message": {
+                "Great seat": [
+                  "A6"
+                ]
+              },
+              "separators_by_row": {
+                "A": "",
+                "B": ""
+              }
             },
             "is_offer": false,
-            "non_offer_sale_seatprice": 10,
-            "non_offer_sale_surcharge": 0,
-            "number_available": 10,
+            "non_offer_sale_seatprice": 50,
+            "non_offer_sale_surcharge": 5,
+            "number_available": 4,
             "percentage_saving": 0,
-            "price_band_code": "D/pool",
-            "sale_seatprice": 10,
-            "sale_surcharge": 0
-          }
-        ],
-        "ticket_type_code": "BAL",
-        "ticket_type_desc": "Balcony"
-      },
-      {
-        "price_band": [
+            "price_band_code": "A/pool",
+            "sale_seatprice": 50,
+            "sale_surcharge": 5
+          },
           {
             "absolute_saving": 0,
-            "discount_code": "RED/RED/1",
-            "discount_desc": "FULL PRICE",
+            "discount_code": "NORMAL",
+            "discount_desc": "Regular Ticket",
             "free_seat_blocks": {
-              "seat_block": [
-                {
-                  "block_length": 10,
-                  "id_details": [
-                    {
-                      "col_id": "1",
-                      "full_id": "B1",
-                      "is_restricted_view": false,
-                      "row_id": "B",
-                      "seat_subdata": "1/1"
-                    },
-                    {
-                      "col_id": "2",
-                      "full_id": "B2",
-                      "is_restricted_view": false,
-                      "row_id": "B",
-                      "seat_subdata": "1/2"
-                    },
-                    {
-                      "col_id": "3",
-                      "full_id": "B3",
-                      "is_restricted_view": false,
-                      "row_id": "B",
-                      "seat_subdata": "1/3"
-                    },
-                    {
-                      "col_id": "4",
-                      "full_id": "B4",
-                      "is_restricted_view": false,
-                      "row_id": "B",
-                      "seat_subdata": "1/4"
-                    },
-                    {
-                      "col_id": "5",
-                      "full_id": "B5",
-                      "is_restricted_view": false,
-                      "row_id": "B",
-                      "seat_subdata": "1/5"
-                    },
-                    {
-                      "col_id": "6",
-                      "full_id": "B6",
-                      "is_restricted_view": false,
-                      "row_id": "B",
-                      "seat_subdata": "1/6"
-                    },
-                    {
-                      "col_id": "7",
-                      "full_id": "B7",
-                      "is_restricted_view": false,
-                      "row_id": "B",
-                      "seat_subdata": "1/7"
-                    },
-                    {
-                      "col_id": "8",
-                      "full_id": "B8",
-                      "is_restricted_view": false,
-                      "row_id": "B",
-                      "seat_subdata": "1/8"
-                    },
-                    {
-                      "col_id": "9",
-                      "full_id": "B9",
-                      "is_restricted_view": false,
-                      "row_id": "B",
-                      "seat_subdata": "1/9"
-                    },
-                    {
-                      "col_id": "10",
-                      "full_id": "B10",
-                      "is_restricted_view": false,
-                      "row_id": "B",
-                      "seat_subdata": "1/10"
-                    }
+              "blocks_by_row": {
+                "C": [
+                  [
+                    "C3",
+                    "C4",
+                    "C5",
+                    "C6"
                   ]
-                }
-              ]
+                ],
+                "D": [
+                  [
+                    "D2",
+                    "D3",
+                    "D4",
+                    "D5",
+                    "D6",
+                    "D7"
+                  ]
+                ]
+              },
+              "restricted_view_seats": [
+                "C5",
+                "C6"
+              ],
+              "seats_by_text_message": {
+                "Haunted seat": [
+                  "C6"
+                ]
+              },
+              "separators_by_row": {
+                "C": "",
+                "D": ""
+              }
             },
             "is_offer": false,
             "non_offer_sale_seatprice": 40,
-            "non_offer_sale_surcharge": 0,
-            "number_available": 10,
+            "non_offer_sale_surcharge": 5,
+            "number_available": 4,
             "percentage_saving": 0,
             "price_band_code": "B/pool",
             "sale_seatprice": 40,
-            "sale_surcharge": 0
+            "sale_surcharge": 5
           }
         ],
-        "ticket_type_code": "DC",
-        "ticket_type_desc": "Dress Circle"
-      },
-      {
-        "price_band": [
-          {
-            "absolute_saving": 0,
-            "discount_code": "RED/RED/1",
-            "discount_desc": "FULL PRICE",
-            "free_seat_blocks": {
-              "seat_block": [
-                {
-                  "block_length": 10,
-                  "id_details": [
-                    {
-                      "col_id": "1",
-                      "full_id": "A1",
-                      "is_restricted_view": false,
-                      "row_id": "A",
-                      "seat_subdata": "1/1"
-                    },
-                    {
-                      "col_id": "2",
-                      "full_id": "A2",
-                      "is_restricted_view": false,
-                      "row_id": "A",
-                      "seat_subdata": "1/2"
-                    },
-                    {
-                      "col_id": "3",
-                      "full_id": "A3",
-                      "is_restricted_view": false,
-                      "row_id": "A",
-                      "seat_subdata": "1/3"
-                    },
-                    {
-                      "col_id": "4",
-                      "full_id": "A4",
-                      "is_restricted_view": false,
-                      "row_id": "A",
-                      "seat_subdata": "1/4"
-                    },
-                    {
-                      "col_id": "5",
-                      "full_id": "A5",
-                      "is_restricted_view": false,
-                      "row_id": "A",
-                      "seat_subdata": "1/5"
-                    },
-                    {
-                      "col_id": "6",
-                      "full_id": "A6",
-                      "is_restricted_view": false,
-                      "row_id": "A",
-                      "seat_subdata": "1/6"
-                    },
-                    {
-                      "col_id": "7",
-                      "full_id": "A7",
-                      "is_restricted_view": false,
-                      "row_id": "A",
-                      "seat_subdata": "1/7"
-                    },
-                    {
-                      "col_id": "8",
-                      "full_id": "A8",
-                      "is_restricted_view": false,
-                      "row_id": "A",
-                      "seat_subdata": "1/8"
-                    },
-                    {
-                      "col_id": "9",
-                      "full_id": "A9",
-                      "is_restricted_view": false,
-                      "row_id": "A",
-                      "seat_subdata": "1/9"
-                    },
-                    {
-                      "col_id": "10",
-                      "full_id": "A10",
-                      "is_restricted_view": false,
-                      "row_id": "A",
-                      "seat_subdata": "1/10"
-                    }
-                  ]
-                }
-              ]
-            },
-            "is_offer": false,
-            "non_offer_sale_seatprice": 60,
-            "non_offer_sale_surcharge": 0,
-            "number_available": 10,
-            "percentage_saving": 0,
-            "price_band_code": "A/pool",
-            "sale_seatprice": 60,
-            "sale_surcharge": 0
-          }
-        ],
-        "ticket_type_code": "STA",
+        "ticket_type_code": "STALLS",
         "ticket_type_desc": "Stalls"
       },
       {
         "price_band": [
           {
             "absolute_saving": 0,
-            "discount_code": "RED/RED/1",
-            "discount_desc": "FULL PRICE",
+            "discount_code": "NORMAL",
+            "discount_desc": "Regular Ticket",
             "free_seat_blocks": {
-              "seat_block": [
-                {
-                  "block_length": 10,
-                  "id_details": [
-                    {
-                      "col_id": "1",
-                      "full_id": "C1",
-                      "is_restricted_view": false,
-                      "row_id": "C",
-                      "seat_subdata": "1/1"
-                    },
-                    {
-                      "col_id": "2",
-                      "full_id": "C2",
-                      "is_restricted_view": false,
-                      "row_id": "C",
-                      "seat_subdata": "1/2"
-                    },
-                    {
-                      "col_id": "3",
-                      "full_id": "C3",
-                      "is_restricted_view": false,
-                      "row_id": "C",
-                      "seat_subdata": "1/3"
-                    },
-                    {
-                      "col_id": "4",
-                      "full_id": "C4",
-                      "is_restricted_view": false,
-                      "row_id": "C",
-                      "seat_subdata": "1/4"
-                    },
-                    {
-                      "col_id": "5",
-                      "full_id": "C5",
-                      "is_restricted_view": false,
-                      "row_id": "C",
-                      "seat_subdata": "1/5"
-                    },
-                    {
-                      "col_id": "6",
-                      "full_id": "C6",
-                      "is_restricted_view": false,
-                      "row_id": "C",
-                      "seat_subdata": "1/6"
-                    },
-                    {
-                      "col_id": "7",
-                      "full_id": "C7",
-                      "is_restricted_view": false,
-                      "row_id": "C",
-                      "seat_subdata": "1/7"
-                    },
-                    {
-                      "col_id": "8",
-                      "full_id": "C8",
-                      "is_restricted_view": false,
-                      "row_id": "C",
-                      "seat_subdata": "1/8"
-                    },
-                    {
-                      "col_id": "9",
-                      "full_id": "C9",
-                      "is_restricted_view": false,
-                      "row_id": "C",
-                      "seat_subdata": "1/9"
-                    },
-                    {
-                      "col_id": "10",
-                      "full_id": "C10",
-                      "is_restricted_view": false,
-                      "row_id": "C",
-                      "seat_subdata": "1/10"
-                    }
+              "blocks_by_row": {
+                "E": [
+                  [
+                    "E4",
+                    "E5"
+                  ],
+                  [
+                    "E7",
+                    "E8",
+                    "E9"
                   ]
-                }
-              ]
+                ],
+                "F": [
+                  [
+                    "F1",
+                    "F2",
+                    "F3"
+                  ]
+                ]
+              },
+              "restricted_view_seats": [],
+              "seats_by_text_message": {},
+              "separators_by_row": {
+                "E": "",
+                "F": ""
+              }
             },
             "is_offer": false,
-            "non_offer_sale_seatprice": 20,
-            "non_offer_sale_surcharge": 0,
-            "number_available": 10,
+            "non_offer_sale_seatprice": 35,
+            "non_offer_sale_surcharge": 5,
+            "number_available": 4,
             "percentage_saving": 0,
-            "price_band_code": "C/pool",
-            "sale_seatprice": 20,
-            "sale_surcharge": 0
+            "price_band_code": "A/pool",
+            "sale_seatprice": 35,
+            "sale_surcharge": 5
+          },
+          {
+            "absolute_saving": 0,
+            "discount_code": "NORMAL",
+            "discount_desc": "Regular Ticket",
+            "free_seat_blocks": {
+              "blocks_by_row": {
+                "G": [
+                  [
+                    "G7",
+                    "G8",
+                    "G9",
+                    "G10"
+                  ]
+                ],
+                "H": [
+                  [
+                    "H1",
+                    "H2",
+                    "H3",
+                    "H4"
+                  ],
+                  [
+                    "H7",
+                    "H8",
+                    "H9",
+                    "H10"
+                  ]
+                ]
+              },
+              "restricted_view_seats": [],
+              "seats_by_text_message": {},
+              "separators_by_row": {
+                "G": "",
+                "H": ""
+              }
+            },
+            "is_offer": false,
+            "non_offer_sale_seatprice": 30,
+            "non_offer_sale_surcharge": 5,
+            "number_available": 4,
+            "percentage_saving": 0,
+            "price_band_code": "B/pool",
+            "sale_seatprice": 30,
+            "sale_surcharge": 5
           }
         ],
-        "ticket_type_code": "UPP",
-        "ticket_type_desc": "Upper Circle"
+        "ticket_type_code": "CIRCLE",
+        "ticket_type_desc": "Dress Circle"
       }
     ]
   },
   "backend_is_broken": false,
   "backend_is_down": false,
   "backend_throttle_failed": false,
-  "can_leave_singles": true,
+  "can_leave_singles": false,
   "contiguous_seat_selection_only": false,
   "currency_code": "gbp",
   "currency_details": {
@@ -729,32 +540,19 @@ Parameter | Description
     1,
     2,
     3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10
+    4
   ]
 }
 ```
 
-The response includes the following attributes in the `seat_block`:
+The response includes the following attributes in the `free_seat_blocks`:
 
 Attribute | Description
 --------- | -----------
-`block_length` | The number of seats in the block. Seats are included in the same seat block when they are contiguous. 
-`id_details` | An array of individual seats. The array order determines whether seats are contiguous, so when `contiguous_seat_selection_only` = `true` then you can only reserve seats that are in a continuous order in the array.
-`id_details.col_id` | The column identifier, normally a number.
-`id_details.full_id` | The unique identifier for the seat.
-`id_details.is_restricted_view` | `true` if the seat is marked as having a restricted view.
-`id_details.row_id` | The row identifier, normally a letter.
-`id_details.seat_subdata` | Ignore - this will be removed soon.
-`id_details.seat_text` | *(Optional)* A description of the seat that should be displayed to the customer. If the seat has a restricted view this text will normally be present to describe the restriction in more detail, but it should be displayed in all cases. 
-`id_details.seat_text_code` | Ignore - this will be removed soon.
-`id_details.separator` | Sometimes a seat ID can include a separator character such as `.`, e.g. `A.23`.
-
+`blocks_by_row` | A list of the rows that contain seats. The row identifier is the key and the value is an array of contiguous seat blocks within that row. Within each contiguous seat block there is an array of seat IDs. These seat IDs all begin with the row identifier, and include the column identifier.  The IDs should be displayed to the customer. Note that when `contiguous_seat_selection_only` = `true` then you can only reserve seats within a single seat block, and only in a consecutive order in the array. In most cases `contiguous_seat_selection_only` = `false` and you can select any seats from `free_seat_blocks`.
+`restricted_view_seats` | A list of seat IDs that are classified as having a restricted view. You must indicate this to your customer before they purchase tickets. Note that it is possible for seats to be included in this array but to not have a seat message. Your application should still display a message to the customer in this case.
+`seats_by_text_message` | A list of seat messages. The key is the seat message, and the value is an array of seat IDs that the message applies to. When you see a seat message you must display this to your customer. 
+`separators_by_row` | The row identifier is the key, the value is a separator. Separators are between the row ID and the column ID, for example seat ID `A.10` has a separator of `.`, a row ID of `A` and a column ID of `10`. In most cases there is no separator, which is represented by an empty string. 
 
 
 ## Example Seats
@@ -773,7 +571,8 @@ no need to also request example seats.
 ```shell
 curl https://demo.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
-    -d "perf_id=3CVB-108" \
+    -d "perf_id=7AB-5" \
+    -d "no_of_seats=3" \
     -d "add_example_seats" \
     --compressed \
     -G
@@ -795,187 +594,104 @@ Parameter | Description
         "price_band": [
           {
             "absolute_saving": 0,
-            "discount_code": "RED/RED/1",
-            "discount_desc": "FULL PRICE",
-            "example_seats": {
-              "id_details": [
-                {
-                  "col_id": "1",
-                  "full_id": "D1",
-                  "is_restricted_view": false,
-                  "row_id": "D",
-                  "seat_subdata": "1/1",
-                  "seat_text_code": "",
-                  "separator": ""
-                },
-                {
-                  "col_id": "2",
-                  "full_id": "D2",
-                  "is_restricted_view": false,
-                  "row_id": "D",
-                  "seat_subdata": "1/2",
-                  "seat_text_code": "",
-                  "separator": ""
-                }
-              ]
-            },
-            "example_seats_are_real": true,
+            "discount_code": "NORMAL",
+            "discount_desc": "Regular Ticket",
             "is_offer": false,
-            "non_offer_sale_seatprice": 10,
-            "non_offer_sale_surcharge": 0,
-            "number_available": 10,
+            "non_offer_sale_seatprice": 50,
+            "non_offer_sale_surcharge": 5,
+            "number_available": 4,
             "percentage_saving": 0,
-            "price_band_code": "D/pool",
-            "sale_seatprice": 10,
-            "sale_surcharge": 0
-          }
-        ],
-        "ticket_type_code": "BAL",
-        "ticket_type_desc": "Balcony"
-      },
-      {
-        "price_band": [
+            "price_band_code": "A/pool",
+            "sale_seatprice": 50,
+            "sale_surcharge": 5
+          },
           {
             "absolute_saving": 0,
-            "discount_code": "RED/RED/1",
-            "discount_desc": "FULL PRICE",
-            "example_seats": {
-              "id_details": [
-                {
-                  "col_id": "1",
-                  "full_id": "B1",
-                  "is_restricted_view": false,
-                  "row_id": "B",
-                  "seat_subdata": "1/1",
-                  "seat_text_code": "",
-                  "separator": ""
-                },
-                {
-                  "col_id": "2",
-                  "full_id": "B2",
-                  "is_restricted_view": false,
-                  "row_id": "B",
-                  "seat_subdata": "1/2",
-                  "seat_text_code": "",
-                  "separator": ""
-                }
-              ]
-            },
-            "example_seats_are_real": true,
+            "discount_code": "NORMAL",
+            "discount_desc": "Regular Ticket",
             "is_offer": false,
             "non_offer_sale_seatprice": 40,
-            "non_offer_sale_surcharge": 0,
-            "number_available": 10,
+            "non_offer_sale_surcharge": 5,
+            "number_available": 4,
             "percentage_saving": 0,
             "price_band_code": "B/pool",
             "sale_seatprice": 40,
-            "sale_surcharge": 0
+            "sale_surcharge": 5
           }
         ],
-        "ticket_type_code": "DC",
-        "ticket_type_desc": "Dress Circle"
-      },
-      {
-        "price_band": [
-          {
-            "absolute_saving": 0,
-            "discount_code": "RED/RED/1",
-            "discount_desc": "FULL PRICE",
-            "example_seats": {
-              "id_details": [
-                {
-                  "col_id": "1",
-                  "full_id": "A1",
-                  "is_restricted_view": false,
-                  "row_id": "A",
-                  "seat_subdata": "1/1",
-                  "seat_text_code": "",
-                  "separator": ""
-                },
-                {
-                  "col_id": "2",
-                  "full_id": "A2",
-                  "is_restricted_view": false,
-                  "row_id": "A",
-                  "seat_subdata": "1/2",
-                  "seat_text_code": "",
-                  "separator": ""
-                }
-              ]
-            },
-            "example_seats_are_real": true,
-            "is_offer": false,
-            "non_offer_sale_seatprice": 60,
-            "non_offer_sale_surcharge": 0,
-            "number_available": 10,
-            "percentage_saving": 0,
-            "price_band_code": "A/pool",
-            "sale_seatprice": 60,
-            "sale_surcharge": 0
-          }
-        ],
-        "ticket_type_code": "STA",
+        "ticket_type_code": "STALLS",
         "ticket_type_desc": "Stalls"
       },
       {
         "price_band": [
           {
             "absolute_saving": 0,
-            "discount_code": "RED/RED/1",
-            "discount_desc": "FULL PRICE",
-            "example_seats": {
-              "id_details": [
-                {
-                  "col_id": "1",
-                  "full_id": "C1",
-                  "is_restricted_view": false,
-                  "row_id": "C",
-                  "seat_subdata": "1/1",
-                  "seat_text_code": "",
-                  "separator": ""
-                },
-                {
-                  "col_id": "2",
-                  "full_id": "C2",
-                  "is_restricted_view": false,
-                  "row_id": "C",
-                  "seat_subdata": "1/2",
-                  "seat_text_code": "",
-                  "separator": ""
-                }
-              ]
-            },
-            "example_seats_are_real": true,
+            "discount_code": "NORMAL",
+            "discount_desc": "Regular Ticket",
+            "example_seats": [
+              {
+                "col_id": "1",
+                "full_id": "F1",
+                "is_restricted_view": false,
+                "row_id": "F"
+              },
+              {
+                "col_id": "2",
+                "full_id": "F2",
+                "is_restricted_view": false,
+                "row_id": "F"
+              }
+            ],
+            "example_seats_are_real": false,
             "is_offer": false,
-            "non_offer_sale_seatprice": 20,
-            "non_offer_sale_surcharge": 0,
-            "number_available": 10,
+            "non_offer_sale_seatprice": 35,
+            "non_offer_sale_surcharge": 5,
+            "number_available": 4,
             "percentage_saving": 0,
-            "price_band_code": "C/pool",
-            "sale_seatprice": 20,
-            "sale_surcharge": 0
+            "price_band_code": "A/pool",
+            "sale_seatprice": 35,
+            "sale_surcharge": 5
+          },
+          {
+            "absolute_saving": 0,
+            "discount_code": "NORMAL",
+            "discount_desc": "Regular Ticket",
+            "is_offer": false,
+            "non_offer_sale_seatprice": 30,
+            "non_offer_sale_surcharge": 5,
+            "number_available": 4,
+            "percentage_saving": 0,
+            "price_band_code": "B/pool",
+            "sale_seatprice": 30,
+            "sale_surcharge": 5
           }
         ],
-        "ticket_type_code": "UPP",
-        "ticket_type_desc": "Upper Circle"
+        "ticket_type_code": "CIRCLE",
+        "ticket_type_desc": "Dress Circle"
       }
     ]
   },
   "backend_is_broken": false,
   "backend_is_down": false,
   "backend_throttle_failed": false,
-  "can_leave_singles": true,
+  "can_leave_singles": false,
   "contiguous_seat_selection_only": false,
-  "currency": {
-    "currency_code": "gbp"
+  "currency_code": "gbp",
+  "currency_details": {
+    "gbp": {
+      "currency_code": "gbp",
+      "currency_factor": 100,
+      "currency_number": 826,
+      "currency_places": 2,
+      "currency_post_symbol": "",
+      "currency_pre_symbol": "£"
+    }
   },
   "valid_quantities": [
     1,
     2,
     3,
-    4,
-    5,
-    6
+    4
   ]
 }
 ```
