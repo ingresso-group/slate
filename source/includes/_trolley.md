@@ -23,6 +23,13 @@ therefore an identifier for the current state of your trolley, and can not be
 used to identify your trolley as you add or remove orders.
 
 
+<aside class="warning">We plan to make a breaking change to the way send methods
+are handled for integrations that add multiple items to a trolley. If you plan to do this we
+can provide more detail if you contact us at api@ingresso.co.uk. If you only plan
+to reserve a single item at a time the change will not affect you.</aside>
+
+
+
 ### Request
 
 > **Example request - adding best available tickets to a new trolley, specifying specific discount codes**

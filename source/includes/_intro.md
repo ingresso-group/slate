@@ -41,11 +41,6 @@ Possible V2 functionality:
 * Should we have the concept of a venue with an ID? (when the venue is enforced)
 -->
 
-# IMPORTANT NOTE
-
-<aside class="warning">The API is fully functional but still in development -
-until this note is removed the API is subject to change.</aside>
-
 
 # Introduction
 
@@ -58,7 +53,7 @@ from a number of different venues.
 Example partners that have integrated with the Ingresso API are 
 [Amazon](https://tickets.amazon.co.uk/) and 
 [lastminute.com](http://www.lastminute.com/theatre/). We also build our own 
-ticketing websites entirely on top of our API (for example 
+ticketing websites entirely on top of the API (for example 
 [Disney Tickets](https://www.disneytickets.co.uk) and
 [From The Box Office](https://www.fromtheboxoffice.com)). 
 
@@ -69,9 +64,9 @@ which is why you see /f13 in the endpoints.
 
 We describe objects in a consistent way across different resources (for example
 the output of [events](#events) and [performances](#performances) includes a
-cost_range object and this is described in the same format). The idea of this is
-that standard code can be used on the client side to read all parts of the
-output.
+cost_range object and this is described in the same format). The idea behind
+this is that standard code can be used on the client side to read all parts of
+the output.
 
 This API replaces the [Ingresso XML API](http://www.ingresso.co.uk/apidocs/). 
 The XML API relies on temporary tokens from each call being passed in
@@ -79,7 +74,8 @@ to the next call; these has been removed in favour of permanent IDs. One
 benefit of this change is that a call near the end of the booking process, such
 as [reserve](#reserve), can be called without needing to remake the preceding
 calls (such as [requesting availability](#availability)), opening up additional
-potential solutions.
+potential solutions. The output is also more compact leading to faster response
+times in most cases.
 
 
 ## Postman examples
