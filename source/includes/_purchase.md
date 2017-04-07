@@ -103,6 +103,20 @@ tickets to be posted to). Note that you may not wish to support separate
 addresses to discourage fraud.
 
 
+### Confirmation Emails
+
+After a successful purchase it is generally a good idea to send your customer a
+confirmation email reminding them of the items that they have purchased and
+including any relevant information such as directions or self print vouchers.
+
+Ingresso can do this for you via the `send_confirmation_email` flag on the
+purchase call, or alternatively you can implement your own confirmation emails
+using the results of the `status.v1` call.
+
+Ingresso can style these emails to conform with your businesses branding. For
+more information drop us an email at
+[commercial@ingresso.co.uk](mailto:commercial@ingresso.co.uk).
+
 
 ## Purchasing on credit
 
@@ -124,6 +138,7 @@ curl https://demo.ticketswitch.com/f13/purchase.v1 \
     -d "country_code=uk" \
     -d "phone=0203 137 7420" \
     -d "email_address=tester@gmail.com" \
+    -d "send_confirmation_email=yes" \
     --compressed \
     -X POST
 ```
@@ -160,6 +175,7 @@ Parameter | Description
 `town` | The city or town of the customer's address. *Optional.*
 `transaction_uuid` | The unique reference for the reserved tickets, taken from the [reserve](#reserve) response.
 `work_phone` | The customer's work phone number. *Optional if `phone` is provided.*
+`send_confirmation_email` | When specified Ingresso will send your customer a confirmation email with details of their purchase (including a link to self print voucher when applicable). If you would prefer to send your own confirmation emails then do not specify this flag. *Requries the `email` parameter to be provided.*
 
 All of the parameters used to request [additional data for events](#additional-parameters) can also be added.
 
@@ -619,6 +635,7 @@ curl https://demo.ticketswitch.com/f13/purchase.v1 \
     -d "phone=0203 137 7420" \
     -d "email_address=tester@gmail.com" \
     -d "ext_test0_callback/stripeToken=tok_1A5rfVHIklODsaxBzQYBklUA" \
+    -d "send_confirmation_email=yes" \
     --compressed \
     -X POST
 ```
@@ -896,6 +913,7 @@ curl https://demo.ticketswitch.com/f13/purchase.v1 \
     -d "return_url=https://www.yourticketingsite.com/token.FIRST_RANDOM_TOKEN/return.php" \
     -d "client_http_user_agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8" \
     -d "client_http_accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" \
+    -d "send_confirmation_email=yes" \
     -X POST
 ```
 
