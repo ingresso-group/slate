@@ -9859,6 +9859,20 @@ tickets to be posted to). Note that you may not wish to support separate
 addresses to discourage fraud.</p></li>
 </ul>
 
+<h3 id="confirmation-emails">Confirmation Emails</h3>
+
+<p>After a successful purchase it is generally a good idea to send your customer a
+confirmation email reminding them of the items that they have purchased and
+including any relevant information such as directions or self print vouchers.</p>
+
+<p>Ingresso can do this for you via the <code class="prettyprint">send_confirmation_email</code> flag on the
+purchase call, or alternatively you can implement your own confirmation emails
+using the results of the <code class="prettyprint">status.v1</code> call.</p>
+
+<p>Ingresso can style these emails to conform with your businesses branding. For
+more information drop us an email at
+<a href="mailto:commercial@ingresso.co.uk">commercial@ingresso.co.uk</a>.</p>
+
 <h2 id="purchasing-on-credit">Purchasing on credit</h2>
 
 <h3 id="request">Request</h3>
@@ -9879,6 +9893,7 @@ addresses to discourage fraud.</p></li>
     -d <span class="s2">"country_code=uk"</span> <span class="se">\</span>
     -d <span class="s2">"phone=0203 137 7420"</span> <span class="se">\</span>
     -d <span class="s2">"email_address=tester@gmail.com"</span> <span class="se">\</span>
+    -d <span class="s2">"send_confirmation_email=yes"</span> <span class="se">\</span>
     --compressed <span class="se">\</span>
     -X POST
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
@@ -9974,6 +9989,10 @@ addresses to discourage fraud.</p></li>
 <tr>
 <td><code class="prettyprint">work_phone</code></td>
 <td>The customer&rsquo;s work phone number. <em>Optional if <code class="prettyprint">phone</code> is provided.</em></td>
+</tr>
+<tr>
+<td><code class="prettyprint">send_confirmation_email</code></td>
+<td>When specified Ingresso will send your customer a confirmation email with details of their purchase (including a link to self print voucher when applicable). If you would prefer to send your own confirmation emails then do not specify this flag. <em>Requries the <code class="prettyprint">email</code> parameter to be provided.</em></td>
 </tr>
 </tbody></table>
 
@@ -10795,6 +10814,7 @@ step fails we automatically refund the Stripe payment.</em></p></li>
     -d <span class="s2">"phone=0203 137 7420"</span> <span class="se">\</span>
     -d <span class="s2">"email_address=tester@gmail.com"</span> <span class="se">\</span>
     -d <span class="s2">"ext_test0_callback/stripeToken=tok_1A5rfVHIklODsaxBzQYBklUA"</span> <span class="se">\</span>
+    -d <span class="s2">"send_confirmation_email=yes"</span> <span class="se">\</span>
     --compressed <span class="se">\</span>
     -X POST
 </code></pre>
@@ -11080,6 +11100,7 @@ section.</p>
     -d <span class="s2">"return_url=https://www.yourticketingsite.com/token.FIRST_RANDOM_TOKEN/return.php"</span> <span class="se">\</span>
     -d <span class="s2">"client_http_user_agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8"</span> <span class="se">\</span>
     -d <span class="s2">"client_http_accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"</span> <span class="se">\</span>
+    -d <span class="s2">"send_confirmation_email=yes"</span> <span class="se">\</span>
     -X POST
 </code></pre>
 <p>All of the parameters mentioned above in the 
