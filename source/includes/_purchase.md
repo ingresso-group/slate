@@ -624,6 +624,8 @@ curl https://demo.ticketswitch.com/f13/purchase.v1 \
 ```
 
 
+To complete a test Stripe purchase:
+
 1. Call [reserve](#reserve)
 2. Enter test card details into the [Stripe Elements example form](https://stripe.com/docs/elements) and copy the Stripe token returned.
 3. Call purchase, replacing the transaction_uuid and ext_test0_callback/stripeToken with the values from the 2 steps above.
@@ -636,6 +638,7 @@ following parameter should be specified:
 
 Parameter | Description
 --------- | -----------
+`X_callback/stripeToken` | The single-use token retrieved from Stripe. You should replace `X` with the `source_code` returned by `reserve`. So for `source_code=ext_test0` the parameter name used is `ext_test0_callback/stripeToken`. If you support basketing and your customer is attempting to purchase items across multiple bundles, you should provide one stripe token per bundle (each bundle has a unique `source_code`).
 
 
 ### Purchase response
