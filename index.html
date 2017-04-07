@@ -10798,6 +10798,8 @@ step fails we automatically refund the Stripe payment.</em></p></li>
     --compressed <span class="se">\</span>
     -X POST
 </code></pre>
+<p>To complete a test Stripe purchase:</p>
+
 <ol>
 <li>Call <a href="#reserve">reserve</a></li>
 <li>Enter test card details into the <a href="https://stripe.com/docs/elements">Stripe Elements example form</a> and copy the Stripe token returned.</li>
@@ -10816,6 +10818,10 @@ following parameter should be specified:</p>
 <th>Description</th>
 </tr>
 </thead><tbody>
+<tr>
+<td><code class="prettyprint">X_callback/stripeToken</code></td>
+<td>The single-use token retrieved from Stripe. You should replace <code class="prettyprint">X</code> with the <code class="prettyprint">source_code</code> returned by <code class="prettyprint">reserve</code>. So for <code class="prettyprint">source_code=ext_test0</code> the parameter name used is <code class="prettyprint">ext_test0_callback/stripeToken</code>. If you support basketing and your customer is attempting to purchase items across multiple bundles, you should provide one stripe token per bundle (each bundle has a unique <code class="prettyprint">source_code</code>).</td>
+</tr>
 </tbody></table>
 
 <h3 id="purchase-response">Purchase response</h3>
