@@ -52,8 +52,9 @@ Stripe keys to allow us to process payment on your behalf.
 In the examples below we will describe how to purchase using the on-credit and
 Stripe options in more detail. We then describe how to handle generic redirects
 which are needed for other supported payment providers such as Global Collect.
-The vast majority of partners are either on-credit or Stripe, and so do not need
-to implement generic redirects.
+We recommend that all partners that wish to use Stripe also implement generic
+redirects - this is a small amount of additional development work that ensures 
+you will be able to accept alternate payment methods both now and in future.
 
 
 ### Notes on sending customer data
@@ -571,16 +572,11 @@ Attribute | Description
 In order to purchase with Stripe you need the following steps:
 
 1. Retrieve a Stripe token (further detail below).
-2. Call `purchase` and ensure the response includes a `callout` element.
-3. Call `callback` passing in the Stripe token from step 1.
+2. Call `purchase` passing in the Stripe token from step 1.
 
-Note that these three steps need to be implemented for each `bundle` that you
-reserve. If you only support the purchase of one item at a time, or you don't
+Note that you need to retrieve and pass in one Stripe token for each `bundle` that you
+reserve. If you only support the purchase of one item at a time, or if you don't
 use the Ingresso API to help manage basketing then you can ignore this.
-
-The reason there are more steps than necessary is that Ingresso's Stripe 
-implementation is part of generic redirect functionality that does require the
-extra steps. We plan to simplify this in future.
 
 Stripe collects payment information on your behalf, and returns a single-use 
 token. The payment information can either be collected on your own checkout page
@@ -594,7 +590,7 @@ bundle.debitor.debitor_integration_data.publishable_key.
 Retrieving the Stripe token is the first half of the payment process - further
 server-side code is required to complete the second half. You don't need to 
 worry about this as Ingresso's Stripe integration takes care of it. Once you 
-have provided the Stripe token we will:
+have provided the Stripe token we will handle the following steps:
 
 * Authorise the payment with Stripe.
 
@@ -611,7 +607,7 @@ step fails we automatically refund the Stripe payment.*
 ```shell
 curl https://demo.ticketswitch.com/f13/purchase.v1 \
     -u "demo-stripe:demopass" \
-    -d "transaction_uuid=116daeee-fffb-11e6-8dd3-002590326932" \
+    -d "transaction_uuid=2e740db5-1b65-11e7-9e97-002590326932" \
     -d "first_name=Test" \
     -d "last_name=Tester" \
     -d "address_line_one=Metro Building" \
@@ -622,94 +618,28 @@ curl https://demo.ticketswitch.com/f13/purchase.v1 \
     -d "country_code=uk" \
     -d "phone=0203 137 7420" \
     -d "email_address=tester@gmail.com" \
-    -d "return_token=116daeee-fffb-11e6-8dd3-002590326932.1" \
-    -d "return_url=https://demo.ticketswitch.com/116daeee-fffb-11e6-8dd3-002590326932.1" \
-    -d "client_http_user_agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8" \
-    -d "client_http_accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" \
+    -d "ext_test0_callback/stripeToken=tok_1A5rfVHIklODsaxBzQYBklUA" \
     --compressed \
     -X POST
 ```
 
+
+1. Call [reserve](#reserve)
+2. Enter test card details into the [Stripe Elements example form](https://stripe.com/docs/elements) and copy the Stripe token returned.
+3. Call purchase, replacing the transaction_uuid and ext_test0_callback/stripeToken with the values from the 2 steps above.
+
+<aside class="notice">If you are using our Postman examples, the relevant calls are "reserve - best available - stripe user" and "purchase - best available - stripe user".</aside>
+
 All of the parameters mentioned above in the 
 [purchasing on credit](#purchasing-on-credit) section are used. In addition the 
-following parameters should be specified:
+following parameter should be specified:
 
 Parameter | Description
 --------- | -----------
-`return_token` | A unique token (e.g. a UUID) is required by the Ingresso API, even though for Stripe it will not be used. This token must be alphanumeric with '-', '_' and '.' also allowed. In the Stripe example request we have used `[transaction_uuid].1` where `1` is the first bundle.
-`return_url` | The `return_token` also has to be present in the path for the return_url and no query string parameters are allowed in the return_url. For Stripe this can be hardcoded.
-`client_http_user_agent` | The user agent, taken from the headers of your customer's web browser. For Stripe this can be hardcoded, for example to the value used in the example request.
-`client_http_accept` | The accept content types, from the headers of your customer's web browser. For Stripe this can be hardcoded, for example to the value used in the example request.
 
 
 ### Purchase response
 > **Example purchase response - Stripe**
-
-``` shell
-{
-  "callout": {
-    "callout_destination_url": "https://demo.ticketswitch.com/tickets/stripe_form.buy",
-    "callout_parameters": {
-      "crypto_block": "U1--qkE2UEVr656qYqxDv1zYf1Tcd0fwYyRHhSydziYqoyUMSa1tNAKeGPUDZBoU70AOmZ9iTeDSpUX7IGKjMGN7no54a-cI4JpmIIegNnsxXSznBUlRR3mtlM4lJxMGypa5sCm62MovYz5_YxtVkPYkbw3eNNnVgvWVIiMnQpkVOIUpL23S6ZXaiyV6onfJZv5ifLAFJ_0fOpfT3P6y5-fsJhKxLmhBtW-d1D_bQ1J2BDLVB8MWDuy9cfguf8mwxs_H8nBLQKSDw2hq7fi8lkJL8SROaC3_CzAeI85ziMUxe57-Z",
-      "user_id": "demo-stripe"
-    },
-    "callout_parameters_order": [],
-    "callout_type": "post",
-    "debitor_integration_data": {
-      "debit_amount": 62.5,
-      "debit_base_amount": 6250,
-      "debit_currency": "gbp",
-      "debitor_type": "stripe"
-    }
-  },
-  "currency_details": {
-    "gbp": {
-      "currency_code": "gbp",
-      "currency_factor": 100,
-      "currency_number": 826,
-      "currency_places": 2,
-      "currency_post_symbol": "",
-      "currency_pre_symbol": "£"
-    }
-  }
-}
-```
-
-Attribute | Description
---------- | -----------
-`callout` | For Stripe you only need to check that callout data is returned - the contents can be ignored. The detail of the callout object is described in the [purchasing with redirect](#purchasing-with-redirect) section below.
-`currency_details` | Further details of the currencies found in the callout data.
-
-
-
-### Callback request
-
-> **Example callback request - Stripe**
-
-```shell
-curl https://demo.ticketswitch.com/f13/callback.v1/this.116daeee-fffb-11e6-8dd3-002590326932.1/next.116daeee-fffb-11e6-8dd3-002590326932.101 \
-    -u "demo-stripe:demopass" \
-    -d "stripeToken=tok_19sdLzHIklODsaxBTUuIs3xo" \
-    -X POST
-```
-
-`callback` is used to pass in the single-use token you have retrieved from 
-Stripe. 
-
-Note that the URL structure is `callback.v1/this.[original token used in purchase]/next.[a new token]`.
-In the Stripe example request we have used `[transaction_uuid].101` as the "next" token where `1` is the first bundle.
-
-During testing it is possible to retrieve test Stripe tokens using the Stripe 
-API or manually with the example in the [Stripe Elements documentation](https://stripe.com/docs/elements).
-
-Parameter | Description
---------- | -----------
-`stripeToken` | The single-use token retrieved from Stripe.
-
-
-### Callback response
-
-> **Example callback response - Stripe**
 
 ``` shell
 {
