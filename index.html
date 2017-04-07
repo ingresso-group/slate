@@ -9813,8 +9813,9 @@ Stripe keys to allow us to process payment on your behalf. </p>
 <p>In the examples below we will describe how to purchase using the on-credit and
 Stripe options in more detail. We then describe how to handle generic redirects
 which are needed for other supported payment providers such as Global Collect.
-The vast majority of partners are either on-credit or Stripe, and so do not need
-to implement generic redirects.</p>
+We recommend that all partners that wish to use Stripe also implement generic
+redirects - this is a small amount of additional development work that ensures 
+you will be able to accept alternate payment methods both now and in future.</p>
 
 <h3 id="notes-on-sending-customer-data">Notes on sending customer data</h3>
 
@@ -10747,17 +10748,12 @@ addresses to discourage fraud.</p></li>
 
 <ol>
 <li>Retrieve a Stripe token (further detail below).</li>
-<li>Call <code class="prettyprint">purchase</code> and ensure the response includes a <code class="prettyprint">callout</code> element.</li>
-<li>Call <code class="prettyprint">callback</code> passing in the Stripe token from step 1.</li>
+<li>Call <code class="prettyprint">purchase</code> passing in the Stripe token from step 1.</li>
 </ol>
 
-<p>Note that these three steps need to be implemented for each <code class="prettyprint">bundle</code> that you
-reserve. If you only support the purchase of one item at a time, or you don&rsquo;t
+<p>Note that you need to retrieve and pass in one Stripe token for each <code class="prettyprint">bundle</code> that you
+reserve. If you only support the purchase of one item at a time, or if you don&rsquo;t
 use the Ingresso API to help manage basketing then you can ignore this.</p>
-
-<p>The reason there are more steps than necessary is that Ingresso&rsquo;s Stripe 
-implementation is part of generic redirect functionality that does require the
-extra steps. We plan to simplify this in future.</p>
 
 <p>Stripe collects payment information on your behalf, and returns a single-use 
 token. The payment information can either be collected on your own checkout page
@@ -10771,7 +10767,7 @@ bundle.debitor.debitor_integration_data.publishable_key.</p>
 <p>Retrieving the Stripe token is the first half of the payment process - further
 server-side code is required to complete the second half. You don&rsquo;t need to 
 worry about this as Ingresso&rsquo;s Stripe integration takes care of it. Once you 
-have provided the Stripe token we will:</p>
+have provided the Stripe token we will handle the following steps:</p>
 
 <ul>
 <li><p>Authorise the payment with Stripe.</p></li>
@@ -10787,7 +10783,7 @@ step fails we automatically refund the Stripe payment.</em></p></li>
 </blockquote>
 <pre class="highlight shell"><code>curl https://demo.ticketswitch.com/f13/purchase.v1 <span class="se">\</span>
     -u <span class="s2">"demo-stripe:demopass"</span> <span class="se">\</span>
-    -d <span class="s2">"transaction_uuid=116daeee-fffb-11e6-8dd3-002590326932"</span> <span class="se">\</span>
+    -d <span class="s2">"transaction_uuid=2e740db5-1b65-11e7-9e97-002590326932"</span> <span class="se">\</span>
     -d <span class="s2">"first_name=Test"</span> <span class="se">\</span>
     -d <span class="s2">"last_name=Tester"</span> <span class="se">\</span>
     -d <span class="s2">"address_line_one=Metro Building"</span> <span class="se">\</span>
@@ -10798,16 +10794,21 @@ step fails we automatically refund the Stripe payment.</em></p></li>
     -d <span class="s2">"country_code=uk"</span> <span class="se">\</span>
     -d <span class="s2">"phone=0203 137 7420"</span> <span class="se">\</span>
     -d <span class="s2">"email_address=tester@gmail.com"</span> <span class="se">\</span>
-    -d <span class="s2">"return_token=116daeee-fffb-11e6-8dd3-002590326932.1"</span> <span class="se">\</span>
-    -d <span class="s2">"return_url=https://demo.ticketswitch.com/116daeee-fffb-11e6-8dd3-002590326932.1"</span> <span class="se">\</span>
-    -d <span class="s2">"client_http_user_agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8"</span> <span class="se">\</span>
-    -d <span class="s2">"client_http_accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"</span> <span class="se">\</span>
+    -d <span class="s2">"ext_test0_callback/stripeToken=tok_1A5rfVHIklODsaxBzQYBklUA"</span> <span class="se">\</span>
     --compressed <span class="se">\</span>
     -X POST
 </code></pre>
+<ol>
+<li>Call <a href="#reserve">reserve</a></li>
+<li>Enter test card details into the <a href="https://stripe.com/docs/elements">Stripe Elements example form</a> and copy the Stripe token returned.</li>
+<li>Call purchase, replacing the transaction_uuid and ext_test0_callback/stripeToken with the values from the 2 steps above.</li>
+</ol>
+
+<aside class="notice">If you are using our Postman examples, the relevant calls are &ldquo;reserve - best available - stripe user&rdquo; and &ldquo;purchase - best available - stripe user&rdquo;.</aside>
+
 <p>All of the parameters mentioned above in the 
 <a href="#purchasing-on-credit">purchasing on credit</a> section are used. In addition the 
-following parameters should be specified:</p>
+following parameter should be specified:</p>
 
 <table><thead>
 <tr>
@@ -10815,108 +10816,12 @@ following parameters should be specified:</p>
 <th>Description</th>
 </tr>
 </thead><tbody>
-<tr>
-<td><code class="prettyprint">return_token</code></td>
-<td>A unique token (e.g. a UUID) is required by the Ingresso API, even though for Stripe it will not be used. This token must be alphanumeric with &rsquo;-&rsquo;, &rsquo;<em>&rsquo; and &rsquo;.&rsquo; also allowed. In the Stripe example request we have used `[transaction</em>uuid].1<code class="prettyprint">where</code>1` is the first bundle.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">return_url</code></td>
-<td>The <code class="prettyprint">return_token</code> also has to be present in the path for the return_url and no query string parameters are allowed in the return_url. For Stripe this can be hardcoded.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">client_http_user_agent</code></td>
-<td>The user agent, taken from the headers of your customer&rsquo;s web browser. For Stripe this can be hardcoded, for example to the value used in the example request.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">client_http_accept</code></td>
-<td>The accept content types, from the headers of your customer&rsquo;s web browser. For Stripe this can be hardcoded, for example to the value used in the example request.</td>
-</tr>
 </tbody></table>
 
 <h3 id="purchase-response">Purchase response</h3>
 
 <blockquote>
 <p><strong>Example purchase response - Stripe</strong></p>
-</blockquote>
-<pre class="highlight shell"><code><span class="o">{</span>
-  <span class="s2">"callout"</span>: <span class="o">{</span>
-    <span class="s2">"callout_destination_url"</span>: <span class="s2">"https://demo.ticketswitch.com/tickets/stripe_form.buy"</span>,
-    <span class="s2">"callout_parameters"</span>: <span class="o">{</span>
-      <span class="s2">"crypto_block"</span>: <span class="s2">"U1--qkE2UEVr656qYqxDv1zYf1Tcd0fwYyRHhSydziYqoyUMSa1tNAKeGPUDZBoU70AOmZ9iTeDSpUX7IGKjMGN7no54a-cI4JpmIIegNnsxXSznBUlRR3mtlM4lJxMGypa5sCm62MovYz5_YxtVkPYkbw3eNNnVgvWVIiMnQpkVOIUpL23S6ZXaiyV6onfJZv5ifLAFJ_0fOpfT3P6y5-fsJhKxLmhBtW-d1D_bQ1J2BDLVB8MWDuy9cfguf8mwxs_H8nBLQKSDw2hq7fi8lkJL8SROaC3_CzAeI85ziMUxe57-Z"</span>,
-      <span class="s2">"user_id"</span>: <span class="s2">"demo-stripe"</span>
-    <span class="o">}</span>,
-    <span class="s2">"callout_parameters_order"</span>: <span class="o">[]</span>,
-    <span class="s2">"callout_type"</span>: <span class="s2">"post"</span>,
-    <span class="s2">"debitor_integration_data"</span>: <span class="o">{</span>
-      <span class="s2">"debit_amount"</span>: 62.5,
-      <span class="s2">"debit_base_amount"</span>: 6250,
-      <span class="s2">"debit_currency"</span>: <span class="s2">"gbp"</span>,
-      <span class="s2">"debitor_type"</span>: <span class="s2">"stripe"</span>
-    <span class="o">}</span>
-  <span class="o">}</span>,
-  <span class="s2">"currency_details"</span>: <span class="o">{</span>
-    <span class="s2">"gbp"</span>: <span class="o">{</span>
-      <span class="s2">"currency_code"</span>: <span class="s2">"gbp"</span>,
-      <span class="s2">"currency_factor"</span>: 100,
-      <span class="s2">"currency_number"</span>: 826,
-      <span class="s2">"currency_places"</span>: 2,
-      <span class="s2">"currency_post_symbol"</span>: <span class="s2">""</span>,
-      <span class="s2">"currency_pre_symbol"</span>: <span class="s2">"£"</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-</code></pre>
-<table><thead>
-<tr>
-<th>Attribute</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td><code class="prettyprint">callout</code></td>
-<td>For Stripe you only need to check that callout data is returned - the contents can be ignored. The detail of the callout object is described in the <a href="#purchasing-with-redirect">purchasing with redirect</a> section below.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">currency_details</code></td>
-<td>Further details of the currencies found in the callout data.</td>
-</tr>
-</tbody></table>
-
-<h3 id="callback-request">Callback request</h3>
-
-<blockquote>
-<p><strong>Example callback request - Stripe</strong></p>
-</blockquote>
-<pre class="highlight shell"><code>curl https://demo.ticketswitch.com/f13/callback.v1/this.116daeee-fffb-11e6-8dd3-002590326932.1/next.116daeee-fffb-11e6-8dd3-002590326932.101 <span class="se">\</span>
-    -u <span class="s2">"demo-stripe:demopass"</span> <span class="se">\</span>
-    -d <span class="s2">"stripeToken=tok_19sdLzHIklODsaxBTUuIs3xo"</span> <span class="se">\</span>
-    -X POST
-</code></pre>
-<p><code class="prettyprint">callback</code> is used to pass in the single-use token you have retrieved from 
-Stripe. </p>
-
-<p>Note that the URL structure is <code class="prettyprint">callback.v1/this.[original token used in purchase]/next.[a new token]</code>.
-In the Stripe example request we have used <code class="prettyprint">[transaction_uuid].101</code> as the &ldquo;next&rdquo; token where <code class="prettyprint">1</code> is the first bundle.</p>
-
-<p>During testing it is possible to retrieve test Stripe tokens using the Stripe 
-API or manually with the example in the <a href="https://stripe.com/docs/elements">Stripe Elements documentation</a>.</p>
-
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td><code class="prettyprint">stripeToken</code></td>
-<td>The single-use token retrieved from Stripe.</td>
-</tr>
-</tbody></table>
-
-<h3 id="callback-response">Callback response</h3>
-
-<blockquote>
-<p><strong>Example callback response - Stripe</strong></p>
 </blockquote>
 <pre class="highlight shell"><code><span class="o">{</span>
   <span class="s2">"currency_details"</span>: <span class="o">{</span>
