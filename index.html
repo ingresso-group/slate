@@ -9871,7 +9871,7 @@ using the results of the <code class="prettyprint">status.v1</code> call.</p>
 
 <p>Ingresso can style these emails to conform with your businesses branding. For
 more information drop us an email at
-<a href="mailto:commercial@ingresso.co.uk">commercial@ingresso.co.uk</a>.</p>
+<a href="mailto:affiliate@ingresso.co.uk">affiliate@ingresso.co.uk</a>.</p>
 
 <h2 id="purchasing-on-credit">Purchasing on credit</h2>
 
@@ -9882,7 +9882,7 @@ more information drop us an email at
 </blockquote>
 <pre class="highlight shell"><code>curl https://demo.ticketswitch.com/f13/purchase.v1 <span class="se">\</span>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
-    -d <span class="s2">"transaction_uuid=a75a03c3-efc2-11e6-a96d-d0bf9c45f5c0"</span> <span class="se">\</span>
+    -d <span class="s2">"transaction_uuid=61cfd4eb-1f5b-11e7-b228-0025903268dc"</span> <span class="se">\</span>
     -d <span class="s2">"first_name=Test"</span> <span class="se">\</span>
     -d <span class="s2">"last_name=Tester"</span> <span class="se">\</span>
     -d <span class="s2">"address_line_one=Metro Building"</span> <span class="se">\</span>
@@ -9892,8 +9892,9 @@ more information drop us an email at
     -d <span class="s2">"postcode=W6 8DL"</span> <span class="se">\</span>
     -d <span class="s2">"country_code=uk"</span> <span class="se">\</span>
     -d <span class="s2">"phone=0203 137 7420"</span> <span class="se">\</span>
-    -d <span class="s2">"email_address=tester@gmail.com"</span> <span class="se">\</span>
-    -d <span class="s2">"send_confirmation_email=yes"</span> <span class="se">\</span>
+    -d <span class="s2">"user_can_use_customer_data=true"</span> <span class="se">\</span>
+    -d <span class="s2">"email_address=testing@gmail.com"</span> <span class="se">\</span>
+    -d <span class="s2">"send_confirmation_email=true"</span> <span class="se">\</span>
     --compressed <span class="se">\</span>
     -X POST
 </code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
@@ -9931,18 +9932,6 @@ more information drop us an email at
 <td>The county of region of the customer&rsquo;s address. <em>Optional.</em></td>
 </tr>
 <tr>
-<td><code class="prettyprint">supplier_can_use_customer_data</code></td>
-<td>Data protection question - set this to <code class="prettyprint">true</code> if the customer has opted in to receiving marketing emails from the ticket supplier. <em>Optional - it will default to false.</em></td>
-</tr>
-<tr>
-<td><code class="prettyprint">user_can_use_customer_data</code></td>
-<td>Data protection question - set this to <code class="prettyprint">true</code> if the customer has opted in to receiving marketing emails from you. Most partners manage marketing opt-ins themselves so do not provide this. <em>Optional - it will default to false.</em></td>
-</tr>
-<tr>
-<td><code class="prettyprint">world_can_use_customer_data</code></td>
-<td>Data protection question - set this to <code class="prettyprint">true</code> if the customer has opted in to receiving marketing emails communication from you and third-parties. <em>Optional - it will default to false.</em></td>
-</tr>
-<tr>
 <td><code class="prettyprint">email_address</code></td>
 <td>The customer&rsquo;s email address. Required when <code class="prettyprint">needs_email_address</code> was <code class="prettyprint">true</code> from the <a href="#reserve">reserve</a> response. We recommend this is provided - see customer data note above.</td>
 </tr>
@@ -9975,6 +9964,14 @@ more information drop us an email at
 <td>The suffix of the customer&rsquo;s name, for example &ldquo;Jr.&rdquo; or &ldquo;CPA&rdquo; <em>Optional.</em></td>
 </tr>
 <tr>
+<td><code class="prettyprint">send_confirmation_email</code></td>
+<td>When set to <code class="prettyprint">true</code> Ingresso will send your customer a confirmation email with details of their purchase (including a link to a self print voucher when applicable). If you would prefer to send your own confirmation emails then do not specify this flag. <em>Requries the <code class="prettyprint">email_address</code> parameter to be provided.</em></td>
+</tr>
+<tr>
+<td><code class="prettyprint">supplier_can_use_customer_data</code></td>
+<td>Data protection question - set this to <code class="prettyprint">true</code> if the customer has opted in to receiving marketing emails from the ticket supplier. <em>Optional - it will default to false.</em></td>
+</tr>
+<tr>
 <td><code class="prettyprint">title</code></td>
 <td>The title of the customer&rsquo;s name, for example &ldquo;Mr.&rdquo; or &ldquo;Dr.&rdquo; <em>Optional.</em></td>
 </tr>
@@ -9987,12 +9984,16 @@ more information drop us an email at
 <td>The unique reference for the reserved tickets, taken from the <a href="#reserve">reserve</a> response.</td>
 </tr>
 <tr>
+<td><code class="prettyprint">user_can_use_customer_data</code></td>
+<td>Data protection question - set this to <code class="prettyprint">true</code> if the customer has opted in to receiving marketing emails from you. Most partners manage marketing opt-ins themselves so do not provide this. Ingresso will never send marketing communications to your customers based on this parameter. <em>Optional - it will default to false.</em></td>
+</tr>
+<tr>
 <td><code class="prettyprint">work_phone</code></td>
 <td>The customer&rsquo;s work phone number. <em>Optional if <code class="prettyprint">phone</code> is provided.</em></td>
 </tr>
 <tr>
-<td><code class="prettyprint">send_confirmation_email</code></td>
-<td>When specified Ingresso will send your customer a confirmation email with details of their purchase (including a link to self print voucher when applicable). If you would prefer to send your own confirmation emails then do not specify this flag. <em>Requries the <code class="prettyprint">email</code> parameter to be provided.</em></td>
+<td><code class="prettyprint">world_can_use_customer_data</code></td>
+<td>Data protection question - set this to <code class="prettyprint">true</code> if the customer has opted in to receiving marketing emails communication from you and third-parties. <em>Optional - it will default to false.</em></td>
 </tr>
 </tbody></table>
 
@@ -10004,6 +10005,16 @@ more information drop us an email at
 <p><strong>Example response - purchasing on-credit</strong></p>
 </blockquote>
 <pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"currency_details"</span>: <span class="o">{</span>
+    <span class="s2">"gbp"</span>: <span class="o">{</span>
+      <span class="s2">"currency_code"</span>: <span class="s2">"gbp"</span>,
+      <span class="s2">"currency_factor"</span>: 100,
+      <span class="s2">"currency_number"</span>: 826,
+      <span class="s2">"currency_places"</span>: 2,
+      <span class="s2">"currency_post_symbol"</span>: <span class="s2">""</span>,
+      <span class="s2">"currency_pre_symbol"</span>: <span class="s2">"£"</span>
+    <span class="o">}</span>
+  <span class="o">}</span>,
   <span class="s2">"customer"</span>: <span class="o">{</span>
     <span class="s2">"addr_line_one"</span>: <span class="s2">"Metro Building"</span>,
     <span class="s2">"addr_line_one_latin"</span>: <span class="s2">"Metro Building"</span>,
@@ -10013,12 +10024,9 @@ more information drop us an email at
     <span class="s2">"country"</span>: <span class="s2">"United Kingdom"</span>,
     <span class="s2">"country_code"</span>: <span class="s2">"uk"</span>,
     <span class="s2">"country_latin"</span>: <span class="s2">"United Kingdom"</span>,
-    <span class="s2">"county"</span>: <span class="s2">"London"</span>,
-    <span class="s2">"county_latin"</span>: <span class="s2">"London"</span>,
-    <span class="s2">"dp_supplier"</span>: <span class="nb">false</span>,
-    <span class="s2">"dp_user"</span>: <span class="nb">false</span>,
-    <span class="s2">"dp_world"</span>: <span class="nb">false</span>,
-    <span class="s2">"email_addr"</span>: <span class="s2">"tester@gmail.com"</span>,
+    <span class="s2">"county"</span>: <span class="s2">""</span>,
+    <span class="s2">"county_latin"</span>: <span class="s2">""</span>,
+    <span class="s2">"email_addr"</span>: <span class="s2">"testing@gmail.com"</span>,
     <span class="s2">"first_name"</span>: <span class="s2">"Test"</span>,
     <span class="s2">"first_name_latin"</span>: <span class="s2">"Test"</span>,
     <span class="s2">"home_phone"</span>: <span class="s2">"0203 137 7420"</span>,
@@ -10030,74 +10038,63 @@ more information drop us an email at
     <span class="s2">"postcode_latin"</span>: <span class="s2">"W6 8DL"</span>,
     <span class="s2">"suffix"</span>: <span class="s2">""</span>,
     <span class="s2">"suffix_latin"</span>: <span class="s2">""</span>,
+    <span class="s2">"supplier_can_use_customer_data"</span>: <span class="nb">false</span>,
     <span class="s2">"title"</span>: <span class="s2">""</span>,
     <span class="s2">"title_latin"</span>: <span class="s2">""</span>,
     <span class="s2">"town"</span>: <span class="s2">"London"</span>,
     <span class="s2">"town_latin"</span>: <span class="s2">"London"</span>,
-    <span class="s2">"work_phone"</span>: <span class="s2">"0203 137 7420"</span>
+    <span class="s2">"user_can_use_customer_data"</span>: <span class="nb">true</span>,
+    <span class="s2">"work_phone"</span>: <span class="s2">"0203 137 7420"</span>,
+    <span class="s2">"world_can_use_customer_data"</span>: <span class="nb">false</span>
   <span class="o">}</span>,
-  <span class="s2">"language_list"</span>: <span class="s2">"en-gb,en,en-us,nl"</span>,
-  <span class="s2">"purchase_iso8601_date_and_time"</span>: <span class="s2">"2017-02-10T15:40:36Z"</span>,
-  <span class="s2">"reserve_iso8601_date_and_time"</span>: <span class="s2">"2017-02-10T15:40:12Z"</span>,
+  <span class="s2">"language_list"</span>: <span class="o">[</span>
+    <span class="s2">"en-gb"</span>,
+    <span class="s2">"en"</span>,
+    <span class="s2">"en-us"</span>,
+    <span class="s2">"nl"</span>
+  <span class="o">]</span>,
+  <span class="s2">"purchase_iso8601_date_and_time"</span>: <span class="s2">"2017-04-12T08:38:35Z"</span>,
+  <span class="s2">"reserve_iso8601_date_and_time"</span>: <span class="s2">"2017-04-12T08:38:20Z"</span>,
   <span class="s2">"transaction_status"</span>: <span class="s2">"purchased"</span>,
   <span class="s2">"trolley_contents"</span>: <span class="o">{</span>
     <span class="s2">"bundle"</span>: <span class="o">[</span>
       <span class="o">{</span>
         <span class="s2">"bundle_order_count"</span>: 1,
         <span class="s2">"bundle_source_code"</span>: <span class="s2">"ext_test0"</span>,
-        <span class="s2">"bundle_source_desc"</span>: <span class="s2">"Test SystemZero for on-credit backend group"</span>,
+        <span class="s2">"bundle_source_desc"</span>: <span class="s2">"External Test Backend 0"</span>,
         <span class="s2">"bundle_total_cost"</span>: 62.5,
-        <span class="s2">"bundle_total_cost_in_desired"</span>: 73.45,
         <span class="s2">"bundle_total_seatprice"</span>: 51,
-        <span class="s2">"bundle_total_seatprice_in_desired"</span>: 59.94,
         <span class="s2">"bundle_total_send_cost"</span>: 1.5,
-        <span class="s2">"bundle_total_send_cost_in_desired"</span>: 1.76,
         <span class="s2">"bundle_total_surcharge"</span>: 10,
-        <span class="s2">"bundle_total_surcharge_in_desired"</span>: 11.75,
-        <span class="s2">"currency"</span>: <span class="o">{</span>
-          <span class="s2">"currency_code"</span>: <span class="s2">"gbp"</span>,
-          <span class="s2">"currency_factor"</span>: 100,
-          <span class="s2">"currency_number"</span>: 826,
-          <span class="s2">"currency_places"</span>: 2,
-          <span class="s2">"currency_post_symbol"</span>: <span class="s2">""</span>,
-          <span class="s2">"currency_pre_symbol"</span>: <span class="s2">"£"</span>
-        <span class="o">}</span>,
-        <span class="s2">"desired_currency"</span>: <span class="o">{</span>
-          <span class="s2">"currency_code"</span>: <span class="s2">"eur"</span>,
-          <span class="s2">"currency_factor"</span>: 100,
-          <span class="s2">"currency_number"</span>: 978,
-          <span class="s2">"currency_places"</span>: 2,
-          <span class="s2">"currency_post_symbol"</span>: <span class="s2">""</span>,
-          <span class="s2">"currency_pre_symbol"</span>: <span class="s2">"€"</span>
-        <span class="o">}</span>,
+        <span class="s2">"currency_code"</span>: <span class="s2">"gbp"</span>,
         <span class="s2">"order"</span>: <span class="o">[</span>
           <span class="o">{</span>
-            <span class="s2">"backend_purchase_reference"</span>: <span class="s2">"PURCHASE-D65E-1"</span>,
+            <span class="s2">"backend_purchase_reference"</span>: <span class="s2">"PURCHASE-6710-1"</span>,
             <span class="s2">"event"</span>: <span class="o">{</span>
               <span class="s2">"city_code"</span>: <span class="s2">"london-uk"</span>,
               <span class="s2">"city_desc"</span>: <span class="s2">"London"</span>,
               <span class="s2">"classes"</span>: <span class="o">{</span>
-                <span class="s2">"theatre"</span>: <span class="s2">"Theatre"</span>
+                <span class="s2">"dance"</span>: <span class="s2">"Ballet &amp; Dance"</span>
               <span class="o">}</span>,
               <span class="s2">"country_code"</span>: <span class="s2">"uk"</span>,
               <span class="s2">"country_desc"</span>: <span class="s2">"United Kingdom"</span>,
               <span class="s2">"critic_review_percent"</span>: 100,
               <span class="s2">"custom_filter"</span>: <span class="o">[]</span>,
-              <span class="s2">"event_desc"</span>: <span class="s2">"Matthew Bourne's Nutcracker!"</span>,
+              <span class="s2">"event_desc"</span>: <span class="s2">"Matthew Bourne's Nutcracker TEST"</span>,
               <span class="s2">"event_id"</span>: <span class="s2">"6IF"</span>,
+              <span class="s2">"event_path"</span>: <span class="s2">"/6IF-matthew-bourne-s-nutcracker-test/"</span>,
               <span class="s2">"event_status"</span>: <span class="s2">"live"</span>,
               <span class="s2">"event_type"</span>: <span class="s2">"simple_ticket"</span>,
               <span class="s2">"event_upsell_list"</span>: <span class="o">{</span>
                 <span class="s2">"event_id"</span>: <span class="o">[</span>
                   <span class="s2">"6IE"</span>,
-                  <span class="s2">"6IF"</span>,
-                  <span class="s2">"6KU"</span>
+                  <span class="s2">"MH0"</span>
                 <span class="o">]</span>
               <span class="o">}</span>,
-              <span class="s2">"event_uri_desc"</span>: <span class="s2">"Matthew-Bourne%27s-Nutcracker%21"</span>,
+              <span class="s2">"event_uri_desc"</span>: <span class="s2">"Matthew-Bourne%27s-Nutcracker-TEST"</span>,
               <span class="s2">"geo_data"</span>: <span class="o">{</span>
-                <span class="s2">"latitude"</span>: 51.5,
-                <span class="s2">"longitude"</span>: -0.15
+                <span class="s2">"latitude"</span>: 51.52961137,
+                <span class="s2">"longitude"</span>: -0.10601562
               <span class="o">}</span>,
               <span class="s2">"has_no_perfs"</span>: <span class="nb">false</span>,
               <span class="s2">"is_seated"</span>: <span class="nb">true</span>,
@@ -10109,42 +10106,35 @@ more information drop us an email at
               <span class="s2">"postcode"</span>: <span class="s2">"EC1R 4TN"</span>,
               <span class="s2">"show_perf_time"</span>: <span class="nb">true</span>,
               <span class="s2">"source_code"</span>: <span class="s2">"ext_test0"</span>,
-              <span class="s2">"source_desc"</span>: <span class="s2">"Test SystemZero for on-credit backend group"</span>,
+              <span class="s2">"source_desc"</span>: <span class="s2">"External Test Backend 0"</span>,
+              <span class="s2">"user_review_percent"</span>: 100,
               <span class="s2">"venue_desc"</span>: <span class="s2">"Sadler's Wells"</span>,
               <span class="s2">"venue_uri_desc"</span>: <span class="s2">"Sadler%27s-Wells"</span>
             <span class="o">}</span>,
+            <span class="s2">"got_requested_seats"</span>: <span class="nb">false</span>,
             <span class="s2">"gross_commission"</span>: <span class="o">{</span>
-              <span class="s2">"amount_excluding_vat"</span>: 7.81,
-              <span class="s2">"amount_including_vat"</span>: 9.38,
-              <span class="s2">"commission_currency"</span>: <span class="o">{</span>
-                <span class="s2">"currency_code"</span>: <span class="s2">"gbp"</span>,
-                <span class="s2">"currency_factor"</span>: 100,
-                <span class="s2">"currency_number"</span>: 826,
-                <span class="s2">"currency_places"</span>: 2,
-                <span class="s2">"currency_post_symbol"</span>: <span class="s2">""</span>,
-                <span class="s2">"currency_pre_symbol"</span>: <span class="s2">"£"</span>
-              <span class="o">}</span>
+              <span class="s2">"amount_excluding_vat"</span>: 7.13,
+              <span class="s2">"amount_including_vat"</span>: 8.55,
+              <span class="s2">"commission_currency_code"</span>: <span class="s2">"gbp"</span>
             <span class="o">}</span>,
             <span class="s2">"item_number"</span>: 1,
             <span class="s2">"performance"</span>: <span class="o">{</span>
-              <span class="s2">"date_desc"</span>: <span class="s2">"Mon, 5th June 2017"</span>,
+              <span class="s2">"date_desc"</span>: <span class="s2">"Tue, 13th June 2017"</span>,
               <span class="s2">"event_id"</span>: <span class="s2">"6IF"</span>,
               <span class="s2">"has_pool_seats"</span>: <span class="nb">true</span>,
               <span class="s2">"is_ghost"</span>: <span class="nb">false</span>,
               <span class="s2">"is_limited"</span>: <span class="nb">false</span>,
-              <span class="s2">"iso8601_date_and_time"</span>: <span class="s2">"2017-06-05T19:30:00+01:00"</span>,
-              <span class="s2">"perf_id"</span>: <span class="s2">"6IF-C0J"</span>,
+              <span class="s2">"iso8601_date_and_time"</span>: <span class="s2">"2017-06-13T19:30:00+01:00"</span>,
+              <span class="s2">"perf_id"</span>: <span class="s2">"6IF-B1S"</span>,
+              <span class="s2">"perf_name"</span>: <span class="s2">"Including back stage pass"</span>,
               <span class="s2">"running_time"</span>: 120,
               <span class="s2">"time_desc"</span>: <span class="s2">"7.30 PM"</span>
             <span class="o">}</span>,
             <span class="s2">"price_band_code"</span>: <span class="s2">"C/pool"</span>,
-            <span class="s2">"seat_request_status"</span>: <span class="s2">"not_requested"</span>,
             <span class="s2">"send_method"</span>: <span class="o">{</span>
               <span class="s2">"send_code"</span>: <span class="s2">"COBO"</span>,
               <span class="s2">"send_cost"</span>: 1.5,
-              <span class="s2">"send_cost_in_desired"</span>: 1.76,
-              <span class="s2">"send_desc"</span>: <span class="s2">"Collect from venue"</span>,
-              <span class="s2">"send_final_comment"</span>: <span class="s2">"Instructions for collecting tickets at the venue box office:</span><span class="se">\n</span><span class="s2">- Tickets must be collected by the cardholder with valid photo identification and the payment card.</span><span class="se">\n</span><span class="s2">- The cardholder’s signature will be required on receipt of these tickets.</span><span class="se">\n</span><span class="s2">- Tickets are only available for collection on the day of the performance.</span><span class="se">\n</span><span class="s2">- Guests are advised to arrive at least 30 minutes before the performance time.</span><span class="se">\n</span><span class="s2">- If the cardholder is unable to collect these tickets please contact Guest Services on 0800 640 8101.</span><span class="se">\n\n</span><span class="s2">Can we help?</span><span class="se">\n</span><span class="s2">If you require further information please contact our Guest Services team:</span><span class="se">\n</span><span class="s2">Live chat or call 0800 640 8101 (Monday – Sunday, 9am – 9pm GMT/BST)"</span>,
+              <span class="s2">"send_desc"</span>: <span class="s2">"Collect from the venue"</span>,
               <span class="s2">"send_final_type"</span>: <span class="s2">"collect"</span>,
               <span class="s2">"send_type"</span>: <span class="s2">"collect"</span>
             <span class="o">}</span>,
@@ -10152,51 +10142,43 @@ more information drop us an email at
               <span class="s2">"ticket_order"</span>: <span class="o">[</span>
                 <span class="o">{</span>
                   <span class="s2">"discount_code"</span>: <span class="s2">"ADULT"</span>,
-                  <span class="s2">"discount_desc"</span>: <span class="s2">"Adult standard"</span>,
+                  <span class="s2">"discount_desc"</span>: <span class="s2">"Adult"</span>,
                   <span class="s2">"no_of_seats"</span>: 1,
                   <span class="s2">"sale_seatprice"</span>: 25,
-                  <span class="s2">"sale_seatprice_in_desired"</span>: 29.38,
                   <span class="s2">"sale_surcharge"</span>: 4,
-                  <span class="s2">"sale_surcharge_in_desired"</span>: 4.7,
                   <span class="s2">"seats"</span>: <span class="o">[</span>
                     <span class="o">{</span>
-                      <span class="s2">"col_id"</span>: <span class="s2">"472"</span>,
-                      <span class="s2">"full_id"</span>: <span class="s2">"PM472"</span>,
+                      <span class="s2">"col_id"</span>: <span class="s2">"386"</span>,
+                      <span class="s2">"full_id"</span>: <span class="s2">"NM386"</span>,
                       <span class="s2">"is_restricted_view"</span>: <span class="nb">false</span>,
-                      <span class="s2">"row_id"</span>: <span class="s2">"PM"</span>
+                      <span class="s2">"row_id"</span>: <span class="s2">"NM"</span>
                     <span class="o">}</span>
                   <span class="o">]</span>,
                   <span class="s2">"total_sale_seatprice"</span>: 25,
-                  <span class="s2">"total_sale_seatprice_in_desired"</span>: 29.38,
-                  <span class="s2">"total_sale_surcharge"</span>: 4,
-                  <span class="s2">"total_sale_surcharge_in_desired"</span>: 4.7
+                  <span class="s2">"total_sale_surcharge"</span>: 4
                 <span class="o">}</span>,
                 <span class="o">{</span>
                   <span class="s2">"discount_code"</span>: <span class="s2">"CHILD"</span>,
-                  <span class="s2">"discount_desc"</span>: <span class="s2">"Child ticket"</span>,
+                  <span class="s2">"discount_desc"</span>: <span class="s2">"Child rate"</span>,
                   <span class="s2">"no_of_seats"</span>: 2,
                   <span class="s2">"sale_seatprice"</span>: 13,
-                  <span class="s2">"sale_seatprice_in_desired"</span>: 15.28,
                   <span class="s2">"sale_surcharge"</span>: 3,
-                  <span class="s2">"sale_surcharge_in_desired"</span>: 3.53,
                   <span class="s2">"seats"</span>: <span class="o">[</span>
                     <span class="o">{</span>
-                      <span class="s2">"col_id"</span>: <span class="s2">"469"</span>,
-                      <span class="s2">"full_id"</span>: <span class="s2">"PM469"</span>,
+                      <span class="s2">"col_id"</span>: <span class="s2">"383"</span>,
+                      <span class="s2">"full_id"</span>: <span class="s2">"NM383"</span>,
                       <span class="s2">"is_restricted_view"</span>: <span class="nb">false</span>,
-                      <span class="s2">"row_id"</span>: <span class="s2">"PM"</span>
+                      <span class="s2">"row_id"</span>: <span class="s2">"NM"</span>
                     <span class="o">}</span>,
                     <span class="o">{</span>
-                      <span class="s2">"col_id"</span>: <span class="s2">"466"</span>,
-                      <span class="s2">"full_id"</span>: <span class="s2">"PM466"</span>,
+                      <span class="s2">"col_id"</span>: <span class="s2">"380"</span>,
+                      <span class="s2">"full_id"</span>: <span class="s2">"NM380"</span>,
                       <span class="s2">"is_restricted_view"</span>: <span class="nb">false</span>,
-                      <span class="s2">"row_id"</span>: <span class="s2">"PM"</span>
+                      <span class="s2">"row_id"</span>: <span class="s2">"NM"</span>
                     <span class="o">}</span>
                   <span class="o">]</span>,
                   <span class="s2">"total_sale_seatprice"</span>: 26,
-                  <span class="s2">"total_sale_seatprice_in_desired"</span>: 30.56,
-                  <span class="s2">"total_sale_surcharge"</span>: 6,
-                  <span class="s2">"total_sale_surcharge_in_desired"</span>: 7.05
+                  <span class="s2">"total_sale_surcharge"</span>: 6
                 <span class="o">}</span>
               <span class="o">]</span>
             <span class="o">}</span>,
@@ -10204,20 +10186,11 @@ more information drop us an email at
             <span class="s2">"ticket_type_desc"</span>: <span class="s2">"Upper circle"</span>,
             <span class="s2">"total_no_of_seats"</span>: 3,
             <span class="s2">"total_sale_seatprice"</span>: 51,
-            <span class="s2">"total_sale_seatprice_in_desired"</span>: 59.94,
             <span class="s2">"total_sale_surcharge"</span>: 10,
-            <span class="s2">"total_sale_surcharge_in_desired"</span>: 11.75,
             <span class="s2">"user_commission"</span>: <span class="o">{</span>
-              <span class="s2">"amount_excluding_vat"</span>: 6.56,
-              <span class="s2">"amount_including_vat"</span>: 7.88,
-              <span class="s2">"commission_currency"</span>: <span class="o">{</span>
-                <span class="s2">"currency_code"</span>: <span class="s2">"gbp"</span>,
-                <span class="s2">"currency_factor"</span>: 100,
-                <span class="s2">"currency_number"</span>: 826,
-                <span class="s2">"currency_places"</span>: 2,
-                <span class="s2">"currency_post_symbol"</span>: <span class="s2">""</span>,
-                <span class="s2">"currency_pre_symbol"</span>: <span class="s2">"£"</span>
-              <span class="o">}</span>
+              <span class="s2">"amount_excluding_vat"</span>: 3.21,
+              <span class="s2">"amount_including_vat"</span>: 3.85,
+              <span class="s2">"commission_currency_code"</span>: <span class="s2">"gbp"</span>
             <span class="o">}</span>
           <span class="o">}</span>
         <span class="o">]</span>,
@@ -10231,8 +10204,8 @@ more information drop us an email at
       <span class="s2">"is_partial"</span>: <span class="nb">false</span>,
       <span class="s2">"success"</span>: <span class="nb">true</span>
     <span class="o">}</span>,
-    <span class="s2">"transaction_id"</span>: <span class="s2">"Z000-0000-37QH-Z217"</span>,
-    <span class="s2">"transaction_uuid"</span>: <span class="s2">"363b641f-efa7-11e6-a96d-d0bf9c45f5c0"</span>,
+    <span class="s2">"transaction_id"</span>: <span class="s2">"T000-0000-8RGW-3619"</span>,
+    <span class="s2">"transaction_uuid"</span>: <span class="s2">"61cfd4eb-1f5b-11e7-b228-0025903268dc"</span>,
     <span class="s2">"trolley_bundle_count"</span>: 1,
     <span class="s2">"trolley_order_count"</span>: 1
   <span class="o">}</span>
@@ -10826,7 +10799,7 @@ step fails we automatically refund the Stripe payment.</em></p></li>
 <li>Call purchase, replacing the transaction_uuid and ext_test0_callback/stripeToken with the values from the 2 steps above.</li>
 </ol>
 
-<aside class="notice">If you are using our Postman examples, the relevant calls are &ldquo;reserve - best available - stripe user&rdquo; and &ldquo;purchase - best available - stripe user&rdquo;.</aside>
+<aside class="notice">If you are using our Postman examples, the relevant calls are &ldquo;reserve - best available - stripe user&rdquo; and &ldquo;purchase - stripe user&rdquo;.</aside>
 
 <p>All of the parameters mentioned above in the 
 <a href="#purchasing-on-credit">purchasing on credit</a> section are used. In addition the 
