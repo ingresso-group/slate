@@ -103,6 +103,20 @@ tickets to be posted to). Note that you may not wish to support separate
 addresses to discourage fraud.
 
 
+### Confirmation Emails
+
+After a successful purchase it is generally a good idea to send your customer a
+confirmation email reminding them of the items that they have purchased and
+including any relevant information such as directions or self print vouchers.
+
+Ingresso can do this for you via the `send_confirmation_email` flag on the
+purchase call, or alternatively you can implement your own confirmation emails
+using the results of the `status.v1` call.
+
+Ingresso can style these emails to conform with your businesses branding. For
+more information drop us an email at
+[affiliate@ingresso.co.uk](mailto:affiliate@ingresso.co.uk).
+
 
 ## Purchasing on credit
 
@@ -113,7 +127,7 @@ addresses to discourage fraud.
 ```shell
 curl https://demo.ticketswitch.com/f13/purchase.v1 \
     -u "demo:demopass" \
-    -d "transaction_uuid=a75a03c3-efc2-11e6-a96d-d0bf9c45f5c0" \
+    -d "transaction_uuid=61cfd4eb-1f5b-11e7-b228-0025903268dc" \
     -d "first_name=Test" \
     -d "last_name=Tester" \
     -d "address_line_one=Metro Building" \
@@ -123,8 +137,9 @@ curl https://demo.ticketswitch.com/f13/purchase.v1 \
     -d "postcode=W6 8DL" \
     -d "country_code=uk" \
     -d "phone=0203 137 7420" \
-    -d "email_address=tester@gmail.com" \
     -d "user_can_use_customer_data=true" \
+    -d "email_address=testing@gmail.com" \
+    -d "send_confirmation_email=true" \
     --compressed \
     -X POST
 ```
@@ -154,6 +169,7 @@ Parameter | Description
 `phone` | The customer's phone number - required. Used by venues and Ingresso as a means to contact customers (see customer data note above). It is optional if you specify the `work_phone` and `home_phone` separately instead.
 `postcode` | The ZIP or postal code of the customer's address. *Optional.*
 `suffix` | The suffix of the customer's name, for example "Jr." or "CPA" *Optional.*
+`send_confirmation_email` | When set to `true` Ingresso will send your customer a confirmation email with details of their purchase (including a link to a self print voucher when applicable). If you would prefer to send your own confirmation emails then do not specify this flag. *Requries the `email_address` parameter to be provided.*
 `supplier_can_use_customer_data` | Data protection question - set this to `true` if the customer has opted in to receiving marketing emails from the ticket supplier. *Optional - it will default to false.*
 `title` | The title of the customer's name, for example "Mr." or "Dr." *Optional.*
 `town` | The city or town of the customer's address. *Optional.*
@@ -171,6 +187,16 @@ All of the parameters used to request [additional data for events](#additional-p
 
 ``` shell
 {
+  "currency_details": {
+    "gbp": {
+      "currency_code": "gbp",
+      "currency_factor": 100,
+      "currency_number": 826,
+      "currency_places": 2,
+      "currency_post_symbol": "",
+      "currency_pre_symbol": "£"
+    }
+  },
   "customer": {
     "addr_line_one": "Metro Building",
     "addr_line_one_latin": "Metro Building",
@@ -180,12 +206,9 @@ All of the parameters used to request [additional data for events](#additional-p
     "country": "United Kingdom",
     "country_code": "uk",
     "country_latin": "United Kingdom",
-    "county": "London",
-    "county_latin": "London",
-    "dp_supplier": false,
-    "dp_user": false,
-    "dp_world": false,
-    "email_addr": "tester@gmail.com",
+    "county": "",
+    "county_latin": "",
+    "email_addr": "testing@gmail.com",
     "first_name": "Test",
     "first_name_latin": "Test",
     "home_phone": "0203 137 7420",
@@ -197,74 +220,63 @@ All of the parameters used to request [additional data for events](#additional-p
     "postcode_latin": "W6 8DL",
     "suffix": "",
     "suffix_latin": "",
+    "supplier_can_use_customer_data": false,
     "title": "",
     "title_latin": "",
     "town": "London",
     "town_latin": "London",
-    "work_phone": "0203 137 7420"
+    "user_can_use_customer_data": true,
+    "work_phone": "0203 137 7420",
+    "world_can_use_customer_data": false
   },
-  "language_list": "en-gb,en,en-us,nl",
-  "purchase_iso8601_date_and_time": "2017-02-10T15:40:36Z",
-  "reserve_iso8601_date_and_time": "2017-02-10T15:40:12Z",
+  "language_list": [
+    "en-gb",
+    "en",
+    "en-us",
+    "nl"
+  ],
+  "purchase_iso8601_date_and_time": "2017-04-12T08:38:35Z",
+  "reserve_iso8601_date_and_time": "2017-04-12T08:38:20Z",
   "transaction_status": "purchased",
   "trolley_contents": {
     "bundle": [
       {
         "bundle_order_count": 1,
         "bundle_source_code": "ext_test0",
-        "bundle_source_desc": "Test SystemZero for on-credit backend group",
+        "bundle_source_desc": "External Test Backend 0",
         "bundle_total_cost": 62.5,
-        "bundle_total_cost_in_desired": 73.45,
         "bundle_total_seatprice": 51,
-        "bundle_total_seatprice_in_desired": 59.94,
         "bundle_total_send_cost": 1.5,
-        "bundle_total_send_cost_in_desired": 1.76,
         "bundle_total_surcharge": 10,
-        "bundle_total_surcharge_in_desired": 11.75,
-        "currency": {
-          "currency_code": "gbp",
-          "currency_factor": 100,
-          "currency_number": 826,
-          "currency_places": 2,
-          "currency_post_symbol": "",
-          "currency_pre_symbol": "£"
-        },
-        "desired_currency": {
-          "currency_code": "eur",
-          "currency_factor": 100,
-          "currency_number": 978,
-          "currency_places": 2,
-          "currency_post_symbol": "",
-          "currency_pre_symbol": "€"
-        },
+        "currency_code": "gbp",
         "order": [
           {
-            "backend_purchase_reference": "PURCHASE-D65E-1",
+            "backend_purchase_reference": "PURCHASE-6710-1",
             "event": {
               "city_code": "london-uk",
               "city_desc": "London",
               "classes": {
-                "theatre": "Theatre"
+                "dance": "Ballet & Dance"
               },
               "country_code": "uk",
               "country_desc": "United Kingdom",
               "critic_review_percent": 100,
               "custom_filter": [],
-              "event_desc": "Matthew Bourne's Nutcracker!",
+              "event_desc": "Matthew Bourne's Nutcracker TEST",
               "event_id": "6IF",
+              "event_path": "/6IF-matthew-bourne-s-nutcracker-test/",
               "event_status": "live",
               "event_type": "simple_ticket",
               "event_upsell_list": {
                 "event_id": [
                   "6IE",
-                  "6IF",
-                  "6KU"
+                  "MH0"
                 ]
               },
-              "event_uri_desc": "Matthew-Bourne%27s-Nutcracker%21",
+              "event_uri_desc": "Matthew-Bourne%27s-Nutcracker-TEST",
               "geo_data": {
-                "latitude": 51.5,
-                "longitude": -0.15
+                "latitude": 51.52961137,
+                "longitude": -0.10601562
               },
               "has_no_perfs": false,
               "is_seated": true,
@@ -276,42 +288,35 @@ All of the parameters used to request [additional data for events](#additional-p
               "postcode": "EC1R 4TN",
               "show_perf_time": true,
               "source_code": "ext_test0",
-              "source_desc": "Test SystemZero for on-credit backend group",
+              "source_desc": "External Test Backend 0",
+              "user_review_percent": 100,
               "venue_desc": "Sadler's Wells",
               "venue_uri_desc": "Sadler%27s-Wells"
             },
+            "got_requested_seats": false,
             "gross_commission": {
-              "amount_excluding_vat": 7.81,
-              "amount_including_vat": 9.38,
-              "commission_currency": {
-                "currency_code": "gbp",
-                "currency_factor": 100,
-                "currency_number": 826,
-                "currency_places": 2,
-                "currency_post_symbol": "",
-                "currency_pre_symbol": "£"
-              }
+              "amount_excluding_vat": 7.13,
+              "amount_including_vat": 8.55,
+              "commission_currency_code": "gbp"
             },
             "item_number": 1,
             "performance": {
-              "date_desc": "Mon, 5th June 2017",
+              "date_desc": "Tue, 13th June 2017",
               "event_id": "6IF",
               "has_pool_seats": true,
               "is_ghost": false,
               "is_limited": false,
-              "iso8601_date_and_time": "2017-06-05T19:30:00+01:00",
-              "perf_id": "6IF-C0J",
+              "iso8601_date_and_time": "2017-06-13T19:30:00+01:00",
+              "perf_id": "6IF-B1S",
+              "perf_name": "Including back stage pass",
               "running_time": 120,
               "time_desc": "7.30 PM"
             },
             "price_band_code": "C/pool",
-            "seat_request_status": "not_requested",
             "send_method": {
               "send_code": "COBO",
               "send_cost": 1.5,
-              "send_cost_in_desired": 1.76,
-              "send_desc": "Collect from venue",
-              "send_final_comment": "Instructions for collecting tickets at the venue box office:\n- Tickets must be collected by the cardholder with valid photo identification and the payment card.\n- The cardholder’s signature will be required on receipt of these tickets.\n- Tickets are only available for collection on the day of the performance.\n- Guests are advised to arrive at least 30 minutes before the performance time.\n- If the cardholder is unable to collect these tickets please contact Guest Services on 0800 640 8101.\n\nCan we help?\nIf you require further information please contact our Guest Services team:\nLive chat or call 0800 640 8101 (Monday – Sunday, 9am – 9pm GMT/BST)",
+              "send_desc": "Collect from the venue",
               "send_final_type": "collect",
               "send_type": "collect"
             },
@@ -319,51 +324,43 @@ All of the parameters used to request [additional data for events](#additional-p
               "ticket_order": [
                 {
                   "discount_code": "ADULT",
-                  "discount_desc": "Adult standard",
+                  "discount_desc": "Adult",
                   "no_of_seats": 1,
                   "sale_seatprice": 25,
-                  "sale_seatprice_in_desired": 29.38,
                   "sale_surcharge": 4,
-                  "sale_surcharge_in_desired": 4.7,
                   "seats": [
                     {
-                      "col_id": "472",
-                      "full_id": "PM472",
+                      "col_id": "386",
+                      "full_id": "NM386",
                       "is_restricted_view": false,
-                      "row_id": "PM"
+                      "row_id": "NM"
                     }
                   ],
                   "total_sale_seatprice": 25,
-                  "total_sale_seatprice_in_desired": 29.38,
-                  "total_sale_surcharge": 4,
-                  "total_sale_surcharge_in_desired": 4.7
+                  "total_sale_surcharge": 4
                 },
                 {
                   "discount_code": "CHILD",
-                  "discount_desc": "Child ticket",
+                  "discount_desc": "Child rate",
                   "no_of_seats": 2,
                   "sale_seatprice": 13,
-                  "sale_seatprice_in_desired": 15.28,
                   "sale_surcharge": 3,
-                  "sale_surcharge_in_desired": 3.53,
                   "seats": [
                     {
-                      "col_id": "469",
-                      "full_id": "PM469",
+                      "col_id": "383",
+                      "full_id": "NM383",
                       "is_restricted_view": false,
-                      "row_id": "PM"
+                      "row_id": "NM"
                     },
                     {
-                      "col_id": "466",
-                      "full_id": "PM466",
+                      "col_id": "380",
+                      "full_id": "NM380",
                       "is_restricted_view": false,
-                      "row_id": "PM"
+                      "row_id": "NM"
                     }
                   ],
                   "total_sale_seatprice": 26,
-                  "total_sale_seatprice_in_desired": 30.56,
-                  "total_sale_surcharge": 6,
-                  "total_sale_surcharge_in_desired": 7.05
+                  "total_sale_surcharge": 6
                 }
               ]
             },
@@ -371,20 +368,11 @@ All of the parameters used to request [additional data for events](#additional-p
             "ticket_type_desc": "Upper circle",
             "total_no_of_seats": 3,
             "total_sale_seatprice": 51,
-            "total_sale_seatprice_in_desired": 59.94,
             "total_sale_surcharge": 10,
-            "total_sale_surcharge_in_desired": 11.75,
             "user_commission": {
-              "amount_excluding_vat": 6.56,
-              "amount_including_vat": 7.88,
-              "commission_currency": {
-                "currency_code": "gbp",
-                "currency_factor": 100,
-                "currency_number": 826,
-                "currency_places": 2,
-                "currency_post_symbol": "",
-                "currency_pre_symbol": "£"
-              }
+              "amount_excluding_vat": 3.21,
+              "amount_including_vat": 3.85,
+              "commission_currency_code": "gbp"
             }
           }
         ],
@@ -398,8 +386,8 @@ All of the parameters used to request [additional data for events](#additional-p
       "is_partial": false,
       "success": true
     },
-    "transaction_id": "Z000-0000-37QH-Z217",
-    "transaction_uuid": "363b641f-efa7-11e6-a96d-d0bf9c45f5c0",
+    "transaction_id": "T000-0000-8RGW-3619",
+    "transaction_uuid": "61cfd4eb-1f5b-11e7-b228-0025903268dc",
     "trolley_bundle_count": 1,
     "trolley_order_count": 1
   }
@@ -620,6 +608,7 @@ curl https://demo.ticketswitch.com/f13/purchase.v1 \
     -d "phone=0203 137 7420" \
     -d "email_address=tester@gmail.com" \
     -d "ext_test0_callback/stripeToken=tok_1A5rfVHIklODsaxBzQYBklUA" \
+    -d "send_confirmation_email=yes" \
     --compressed \
     -X POST
 ```
@@ -897,6 +886,7 @@ curl https://demo.ticketswitch.com/f13/purchase.v1 \
     -d "return_url=https://www.yourticketingsite.com/token.FIRST_RANDOM_TOKEN/return.php" \
     -d "client_http_user_agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8" \
     -d "client_http_accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" \
+    -d "send_confirmation_email=yes" \
     -X POST
 ```
 
