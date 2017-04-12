@@ -124,6 +124,7 @@ curl https://demo.ticketswitch.com/f13/purchase.v1 \
     -d "country_code=uk" \
     -d "phone=0203 137 7420" \
     -d "email_address=tester@gmail.com" \
+    -d "user_can_use_customer_data=true" \
     --compressed \
     -X POST
 ```
@@ -145,9 +146,6 @@ Parameter | Description
 `agent_ref` | Partners can pass their own transaction reference to be stored in the Ingresso platform. *Optional.*
 `country_code` | The [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code of the customer's address - required. The country code must have been present in the `allowed_countries` list from [reserve](#reserve).
 `county` | The county of region of the customer's address. *Optional.*
-`supplier_can_use_customer_data` | Data protection question - set this to `true` if the customer has opted in to receiving marketing emails from the ticket supplier. *Optional - it will default to false.*
-`user_can_use_customer_data` | Data protection question - set this to `true` if the customer has opted in to receiving marketing emails from you. Most partners manage marketing opt-ins themselves so do not provide this. *Optional - it will default to false.*
-`world_can_use_customer_data` | Data protection question - set this to `true` if the customer has opted in to receiving marketing emails communication from you and third-parties. *Optional - it will default to false.*
 `email_address` | The customer's email address. Required when `needs_email_address` was `true` from the [reserve](#reserve) response. We recommend this is provided - see customer data note above.
 `first_name` | The customer's first name - required. Used by venues as a security measure when admitting customers.
 `home_phone` | The customer's home phone number. *Optional if `phone` is provided.*
@@ -156,10 +154,13 @@ Parameter | Description
 `phone` | The customer's phone number - required. Used by venues and Ingresso as a means to contact customers (see customer data note above). It is optional if you specify the `work_phone` and `home_phone` separately instead.
 `postcode` | The ZIP or postal code of the customer's address. *Optional.*
 `suffix` | The suffix of the customer's name, for example "Jr." or "CPA" *Optional.*
+`supplier_can_use_customer_data` | Data protection question - set this to `true` if the customer has opted in to receiving marketing emails from the ticket supplier. *Optional - it will default to false.*
 `title` | The title of the customer's name, for example "Mr." or "Dr." *Optional.*
 `town` | The city or town of the customer's address. *Optional.*
 `transaction_uuid` | The unique reference for the reserved tickets, taken from the [reserve](#reserve) response.
+`user_can_use_customer_data` | Data protection question - set this to `true` if the customer has opted in to receiving marketing emails from you. Most partners manage marketing opt-ins themselves so do not provide this. Ingresso will never send marketing communications to your customers based on this parameter. *Optional - it will default to false.*
 `work_phone` | The customer's work phone number. *Optional if `phone` is provided.*
+`world_can_use_customer_data` | Data protection question - set this to `true` if the customer has opted in to receiving marketing emails communication from you and third-parties. *Optional - it will default to false.*
 
 All of the parameters used to request [additional data for events](#additional-parameters) can also be added.
 
@@ -630,7 +631,7 @@ To complete a test Stripe purchase:
 2. Enter test card details into the [Stripe Elements example form](https://stripe.com/docs/elements) and copy the Stripe token returned.
 3. Call purchase, replacing the transaction_uuid and ext_test0_callback/stripeToken with the values from the 2 steps above.
 
-<aside class="notice">If you are using our Postman examples, the relevant calls are "reserve - best available - stripe user" and "purchase - best available - stripe user".</aside>
+<aside class="notice">If you are using our Postman examples, the relevant calls are "reserve - best available - stripe user" and "purchase - stripe user".</aside>
 
 All of the parameters mentioned above in the 
 [purchasing on credit](#purchasing-on-credit) section are used. In addition the 
