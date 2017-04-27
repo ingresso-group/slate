@@ -558,10 +558,11 @@ or using an interactive seating chart).
 
 ### (Required) Seat selection respects leaving singles policy
 If seat selection is supported, your interface must respect the
-`can_leave_singles` attribute set by a performance availability call. If the
-seat selection chosen by your customer would leave a single seat by itself in a
-block, and this is not allowed by the venue, your application must indicate to
-the customer that this reservation will fail.
+`allow_leaving_single_seats` attribute set for each price band by a performance
+availability call. If the seat selection chosen by your customer would leave a
+single seat by itself in a block, and this is not allowed by the venue for the
+price band the seats are in, your application must indicate to the customer that
+this reservation will fail.
 
 **Representative Test:** User opens event 7AA and selects seats B3 and B4<br/>
 When the customer selects seats B3 and B4 (leaving B2 unselected)<br/>

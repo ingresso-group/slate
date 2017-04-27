@@ -71,6 +71,7 @@ Parameter | Description
         "price_band": [
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "",
             "discount_desc": "",
             "is_offer": false,
@@ -84,6 +85,7 @@ Parameter | Description
           },
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "",
             "discount_desc": "",
             "is_offer": false,
@@ -97,6 +99,7 @@ Parameter | Description
           },
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "",
             "discount_desc": "",
             "is_offer": false,
@@ -116,6 +119,7 @@ Parameter | Description
         "price_band": [
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "",
             "discount_desc": "",
             "is_offer": false,
@@ -129,6 +133,7 @@ Parameter | Description
           },
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "",
             "discount_desc": "",
             "is_offer": false,
@@ -148,6 +153,7 @@ Parameter | Description
         "price_band": [
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "",
             "discount_desc": "",
             "is_offer": false,
@@ -168,7 +174,6 @@ Parameter | Description
   "backend_is_broken": false,
   "backend_is_down": false,
   "backend_throttle_failed": false,
-  "can_leave_singles": true,
   "contiguous_seat_selection_only": true,
   "currency_code": "gbp",
   "currency_details": {
@@ -219,7 +224,6 @@ Attribute | Description
 `backend_is_broken` | If we see an unexpected error from the supplier system (for example a 500 error) we mark the system as "broken" for a period of time afterwards (the time can vary from nothing to 2 minutes). During this period of time this attribute will be `true` and we will return empty availability. This is an exceptional circumstance; to check if there is currently a supplier system issue you can check our [status page](https://status.ingresso.co.uk/).
 `backend_is_down` | When `true` the supplier system cannot be contacted for some reason, for example they are having technical problems or scheduled maintenance. The response will include empty availability in this case. This is an exceptional circumstance; to check if there is currently a supplier system issue you can check our [status page](https://status.ingresso.co.uk/).
 `backend_throttle_failed` | We allow a certain number of simultaneous requests to hit a supplier system and queue requests when the limit is reached. When this attribute is `true` your request has been sitting in our queue for a long time and we have timed out the request. This is an exceptional circumstance.
-`can_leave_singles` | In most cases this is `true`. When `false` the supplier ticketing system does not allow us to leave single seats (which are difficult to sell). If you attempt to reserve when leaving a single seat the reserve will fail, so you should prevent your customer from making a selection that leaves a single seat.
 `contiguous_seat_selection_only` | If you have requested individual seats a value of `true` indicates that you can only select consecutive seats. `false` indicates that you can select seats without restriction *within a single ticket type and price band*. In most cases this will be `false`. If you would like to allow your customers to select seats without restriction across price bands and ticket types, you need to add multiple orders to a [trolley](#trolley), one order for each price band. However there are currently some restrictions enforced so if you want to do this you will need to contact us first api@ingresso.co.uk
 `currency_code` | The currency code for the availability.
 `currency_details` | Further detail for the currency, object described below.
@@ -254,6 +258,7 @@ Attribute | Description
 Attribute | Description
 --------- | -----------
 `absolute_saving` | Defined as (`non_offer_sale_seatprice` + `non_offer_sale_surcharge`) - (`sale_seatprice` + `sale_surcharge`)
+`allows_leaving_single_seats` | In most cases this is `always`. When set to `never`, the supplier ticketing system does not allow us to leave single seats (which are difficult to sell). If you attempt to reserve when leaving a single seat the reserve will fail, so you should prevent your customer from making a selection that leaves a single seat. Some supplier ticketing systems will allow a reservation to succeed if there is no other possible seat selection with the number of desired tickets that would not also leave a single seat (e.g. two tickets are requested and all available seat blocks are of size 3 or smaller). In this case the flag may be set to `if_necessary`.
 `discount_code` | The unique identifier of the default [discount](#discount-object). Each price band has a default discount, but additional discounts can be requested for a price band with [list discounts](#list-discounts).
 `discount_desc` | The description of the default discount. We recommend to present this text to customers when `is_offer` is `true` to describe the offer.
 `is_offer` | `true` if the ticket price is discounted below the full price, i.e. if `absolute_saving` is greater than zero.
@@ -319,6 +324,7 @@ Parameter | Description
         "price_band": [
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "NORMAL",
             "discount_desc": "Regular Ticket",
             "free_seat_blocks": {
@@ -376,6 +382,7 @@ Parameter | Description
           },
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "NORMAL",
             "discount_desc": "Regular Ticket",
             "free_seat_blocks": {
@@ -430,6 +437,7 @@ Parameter | Description
         "price_band": [
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "NORMAL",
             "discount_desc": "Regular Ticket",
             "free_seat_blocks": {
@@ -471,6 +479,7 @@ Parameter | Description
           },
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "NORMAL",
             "discount_desc": "Regular Ticket",
             "free_seat_blocks": {
@@ -523,7 +532,6 @@ Parameter | Description
   "backend_is_broken": false,
   "backend_is_down": false,
   "backend_throttle_failed": false,
-  "can_leave_singles": false,
   "contiguous_seat_selection_only": false,
   "currency_code": "gbp",
   "currency_details": {
@@ -594,6 +602,7 @@ Parameter | Description
         "price_band": [
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "NORMAL",
             "discount_desc": "Regular Ticket",
             "is_offer": false,
@@ -607,6 +616,7 @@ Parameter | Description
           },
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "NORMAL",
             "discount_desc": "Regular Ticket",
             "is_offer": false,
@@ -626,6 +636,7 @@ Parameter | Description
         "price_band": [
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "NORMAL",
             "discount_desc": "Regular Ticket",
             "example_seats": [
@@ -654,6 +665,7 @@ Parameter | Description
           },
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "NORMAL",
             "discount_desc": "Regular Ticket",
             "is_offer": false,
@@ -674,7 +686,6 @@ Parameter | Description
   "backend_is_broken": false,
   "backend_is_down": false,
   "backend_throttle_failed": false,
-  "can_leave_singles": false,
   "contiguous_seat_selection_only": false,
   "currency_code": "gbp",
   "currency_details": {
@@ -755,6 +766,7 @@ Parameter | Description
         "price_band": [
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "",
             "discount_desc": "",
             "gross_commission": {
@@ -782,6 +794,7 @@ Parameter | Description
           },
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "",
             "discount_desc": "",
             "gross_commission": {
@@ -809,6 +822,7 @@ Parameter | Description
           },
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "",
             "discount_desc": "",
             "gross_commission": {
@@ -842,6 +856,7 @@ Parameter | Description
         "price_band": [
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "",
             "discount_desc": "",
             "gross_commission": {
@@ -869,6 +884,7 @@ Parameter | Description
           },
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "",
             "discount_desc": "",
             "gross_commission": {
@@ -902,6 +918,7 @@ Parameter | Description
         "price_band": [
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "",
             "discount_desc": "",
             "gross_commission": {
@@ -936,7 +953,6 @@ Parameter | Description
   "backend_is_broken": false,
   "backend_is_down": false,
   "backend_throttle_failed": false,
-  "can_leave_singles": true,
   "contiguous_seat_selection_only": true,
   "currency": {
     "currency_code": "gbp"
@@ -997,6 +1013,7 @@ Parameter | Description
         "price_band": [
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "",
             "discount_desc": "",
             "is_offer": false,
@@ -1066,6 +1083,7 @@ Parameter | Description
           },
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "",
             "discount_desc": "",
             "is_offer": false,
@@ -1109,6 +1127,7 @@ Parameter | Description
           },
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "",
             "discount_desc": "",
             "is_offer": false,
@@ -1184,6 +1203,7 @@ Parameter | Description
         "price_band": [
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "",
             "discount_desc": "",
             "is_offer": false,
@@ -1253,6 +1273,7 @@ Parameter | Description
           },
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "",
             "discount_desc": "",
             "is_offer": false,
@@ -1302,6 +1323,7 @@ Parameter | Description
         "price_band": [
           {
             "absolute_saving": 0,
+            "allows_leaving_single_seats": "always",
             "discount_code": "",
             "discount_desc": "",
             "is_offer": false,
@@ -1378,7 +1400,6 @@ Parameter | Description
   "backend_is_broken": false,
   "backend_is_down": false,
   "backend_throttle_failed": false,
-  "can_leave_singles": true,
   "contiguous_seat_selection_only": true,
   "currency": {
     "currency_code": "gbp"
