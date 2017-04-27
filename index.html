@@ -659,10 +659,11 @@ or using an interactive seating chart).</p>
 <h3 id="required-seat-selection-respects-leaving-singles-policy">(Required) Seat selection respects leaving singles policy</h3>
 
 <p>If seat selection is supported, your interface must respect the
-<code class="prettyprint">can_leave_singles</code> attribute set by a performance availability call. If the
-seat selection chosen by your customer would leave a single seat by itself in a
-block, and this is not allowed by the venue, your application must indicate to
-the customer that this reservation will fail.</p>
+<code class="prettyprint">allow_leaving_single_seats</code> attribute set for each price band by a performance
+availability call. If the seat selection chosen by your customer would leave a
+single seat by itself in a block, and this is not allowed by the venue for the
+price band the seats are in, your application must indicate to the customer that
+this reservation will fail.</p>
 
 <p><strong>Representative Test:</strong> User opens event 7AA and selects seats B3 and B4<br/>
 When the customer selects seats B3 and B4 (leaving B2 unselected)<br/>
@@ -5951,6 +5952,7 @@ by default. This resource is described first and is important to read. We then d
         <span class="s2">"price_band"</span>: <span class="o">[</span>
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">""</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">""</span>,
             <span class="s2">"is_offer"</span>: <span class="nb">false</span>,
@@ -5964,6 +5966,7 @@ by default. This resource is described first and is important to read. We then d
           <span class="o">}</span>,
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">""</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">""</span>,
             <span class="s2">"is_offer"</span>: <span class="nb">false</span>,
@@ -5977,6 +5980,7 @@ by default. This resource is described first and is important to read. We then d
           <span class="o">}</span>,
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">""</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">""</span>,
             <span class="s2">"is_offer"</span>: <span class="nb">false</span>,
@@ -5996,6 +6000,7 @@ by default. This resource is described first and is important to read. We then d
         <span class="s2">"price_band"</span>: <span class="o">[</span>
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">""</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">""</span>,
             <span class="s2">"is_offer"</span>: <span class="nb">false</span>,
@@ -6009,6 +6014,7 @@ by default. This resource is described first and is important to read. We then d
           <span class="o">}</span>,
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">""</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">""</span>,
             <span class="s2">"is_offer"</span>: <span class="nb">false</span>,
@@ -6028,6 +6034,7 @@ by default. This resource is described first and is important to read. We then d
         <span class="s2">"price_band"</span>: <span class="o">[</span>
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">""</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">""</span>,
             <span class="s2">"is_offer"</span>: <span class="nb">false</span>,
@@ -6048,7 +6055,6 @@ by default. This resource is described first and is important to read. We then d
   <span class="s2">"backend_is_broken"</span>: <span class="nb">false</span>,
   <span class="s2">"backend_is_down"</span>: <span class="nb">false</span>,
   <span class="s2">"backend_throttle_failed"</span>: <span class="nb">false</span>,
-  <span class="s2">"can_leave_singles"</span>: <span class="nb">true</span>,
   <span class="s2">"contiguous_seat_selection_only"</span>: <span class="nb">true</span>,
   <span class="s2">"currency_code"</span>: <span class="s2">"gbp"</span>,
   <span class="s2">"currency_details"</span>: <span class="o">{</span>
@@ -6113,10 +6119,6 @@ response that includes seats.</p>
 <tr>
 <td><code class="prettyprint">backend_throttle_failed</code></td>
 <td>We allow a certain number of simultaneous requests to hit a supplier system and queue requests when the limit is reached. When this attribute is <code class="prettyprint">true</code> your request has been sitting in our queue for a long time and we have timed out the request. This is an exceptional circumstance.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">can_leave_singles</code></td>
-<td>In most cases this is <code class="prettyprint">true</code>. When <code class="prettyprint">false</code> the supplier ticketing system does not allow us to leave single seats (which are difficult to sell). If you attempt to reserve when leaving a single seat the reserve will fail, so you should prevent your customer from making a selection that leaves a single seat.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">contiguous_seat_selection_only</code></td>
@@ -6205,6 +6207,10 @@ JSON response. Each currency has the following attributes:</p>
 <tr>
 <td><code class="prettyprint">absolute_saving</code></td>
 <td>Defined as (<code class="prettyprint">non_offer_sale_seatprice</code> + <code class="prettyprint">non_offer_sale_surcharge</code>) - (<code class="prettyprint">sale_seatprice</code> + <code class="prettyprint">sale_surcharge</code>)</td>
+</tr>
+<tr>
+<td><code class="prettyprint">allows_leaving_single_seats</code></td>
+<td>In most cases this is <code class="prettyprint">always</code>. When set to <code class="prettyprint">never</code>, the supplier ticketing system does not allow us to leave single seats (which are difficult to sell). If you attempt to reserve when leaving a single seat the reserve will fail, so you should prevent your customer from making a selection that leaves a single seat. Some supplier ticketing systems will allow a reservation to succeed if there is no other possible seat selection with the number of desired tickets that would not also leave a single seat (e.g. two tickets are requested and all available seat blocks are of size 3 or smaller). In this case the flag may be set to <code class="prettyprint">if_necessary</code>.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">discount_code</code></td>
@@ -6310,6 +6316,7 @@ to determine whether you can offer seat selection to your customer.</p>
         <span class="s2">"price_band"</span>: <span class="o">[</span>
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">"NORMAL"</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">"Regular Ticket"</span>,
             <span class="s2">"free_seat_blocks"</span>: <span class="o">{</span>
@@ -6367,6 +6374,7 @@ to determine whether you can offer seat selection to your customer.</p>
           <span class="o">}</span>,
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">"NORMAL"</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">"Regular Ticket"</span>,
             <span class="s2">"free_seat_blocks"</span>: <span class="o">{</span>
@@ -6421,6 +6429,7 @@ to determine whether you can offer seat selection to your customer.</p>
         <span class="s2">"price_band"</span>: <span class="o">[</span>
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">"NORMAL"</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">"Regular Ticket"</span>,
             <span class="s2">"free_seat_blocks"</span>: <span class="o">{</span>
@@ -6462,6 +6471,7 @@ to determine whether you can offer seat selection to your customer.</p>
           <span class="o">}</span>,
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">"NORMAL"</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">"Regular Ticket"</span>,
             <span class="s2">"free_seat_blocks"</span>: <span class="o">{</span>
@@ -6514,7 +6524,6 @@ to determine whether you can offer seat selection to your customer.</p>
   <span class="s2">"backend_is_broken"</span>: <span class="nb">false</span>,
   <span class="s2">"backend_is_down"</span>: <span class="nb">false</span>,
   <span class="s2">"backend_throttle_failed"</span>: <span class="nb">false</span>,
-  <span class="s2">"can_leave_singles"</span>: <span class="nb">false</span>,
   <span class="s2">"contiguous_seat_selection_only"</span>: <span class="nb">false</span>,
   <span class="s2">"currency_code"</span>: <span class="s2">"gbp"</span>,
   <span class="s2">"currency_details"</span>: <span class="o">{</span>
@@ -6607,6 +6616,7 @@ no need to also request example seats.</p>
         <span class="s2">"price_band"</span>: <span class="o">[</span>
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">"NORMAL"</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">"Regular Ticket"</span>,
             <span class="s2">"is_offer"</span>: <span class="nb">false</span>,
@@ -6620,6 +6630,7 @@ no need to also request example seats.</p>
           <span class="o">}</span>,
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">"NORMAL"</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">"Regular Ticket"</span>,
             <span class="s2">"is_offer"</span>: <span class="nb">false</span>,
@@ -6639,6 +6650,7 @@ no need to also request example seats.</p>
         <span class="s2">"price_band"</span>: <span class="o">[</span>
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">"NORMAL"</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">"Regular Ticket"</span>,
             <span class="s2">"example_seats"</span>: <span class="o">[</span>
@@ -6667,6 +6679,7 @@ no need to also request example seats.</p>
           <span class="o">}</span>,
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">"NORMAL"</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">"Regular Ticket"</span>,
             <span class="s2">"is_offer"</span>: <span class="nb">false</span>,
@@ -6687,7 +6700,6 @@ no need to also request example seats.</p>
   <span class="s2">"backend_is_broken"</span>: <span class="nb">false</span>,
   <span class="s2">"backend_is_down"</span>: <span class="nb">false</span>,
   <span class="s2">"backend_throttle_failed"</span>: <span class="nb">false</span>,
-  <span class="s2">"can_leave_singles"</span>: <span class="nb">false</span>,
   <span class="s2">"contiguous_seat_selection_only"</span>: <span class="nb">false</span>,
   <span class="s2">"currency_code"</span>: <span class="s2">"gbp"</span>,
   <span class="s2">"currency_details"</span>: <span class="o">{</span>
@@ -6807,6 +6819,7 @@ subtract commission from the total ticket price (<code class="prettyprint">sale_
         <span class="s2">"price_band"</span>: <span class="o">[</span>
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">""</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">""</span>,
             <span class="s2">"gross_commission"</span>: <span class="o">{</span>
@@ -6834,6 +6847,7 @@ subtract commission from the total ticket price (<code class="prettyprint">sale_
           <span class="o">}</span>,
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">""</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">""</span>,
             <span class="s2">"gross_commission"</span>: <span class="o">{</span>
@@ -6861,6 +6875,7 @@ subtract commission from the total ticket price (<code class="prettyprint">sale_
           <span class="o">}</span>,
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">""</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">""</span>,
             <span class="s2">"gross_commission"</span>: <span class="o">{</span>
@@ -6894,6 +6909,7 @@ subtract commission from the total ticket price (<code class="prettyprint">sale_
         <span class="s2">"price_band"</span>: <span class="o">[</span>
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">""</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">""</span>,
             <span class="s2">"gross_commission"</span>: <span class="o">{</span>
@@ -6921,6 +6937,7 @@ subtract commission from the total ticket price (<code class="prettyprint">sale_
           <span class="o">}</span>,
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">""</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">""</span>,
             <span class="s2">"gross_commission"</span>: <span class="o">{</span>
@@ -6954,6 +6971,7 @@ subtract commission from the total ticket price (<code class="prettyprint">sale_
         <span class="s2">"price_band"</span>: <span class="o">[</span>
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">""</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">""</span>,
             <span class="s2">"gross_commission"</span>: <span class="o">{</span>
@@ -6988,7 +7006,6 @@ subtract commission from the total ticket price (<code class="prettyprint">sale_
   <span class="s2">"backend_is_broken"</span>: <span class="nb">false</span>,
   <span class="s2">"backend_is_down"</span>: <span class="nb">false</span>,
   <span class="s2">"backend_throttle_failed"</span>: <span class="nb">false</span>,
-  <span class="s2">"can_leave_singles"</span>: <span class="nb">true</span>,
   <span class="s2">"contiguous_seat_selection_only"</span>: <span class="nb">true</span>,
   <span class="s2">"currency"</span>: <span class="o">{</span>
     <span class="s2">"currency_code"</span>: <span class="s2">"gbp"</span>
@@ -7066,6 +7083,7 @@ of available tickets.</p>
         <span class="s2">"price_band"</span>: <span class="o">[</span>
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">""</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">""</span>,
             <span class="s2">"is_offer"</span>: <span class="nb">false</span>,
@@ -7135,6 +7153,7 @@ of available tickets.</p>
           <span class="o">}</span>,
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">""</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">""</span>,
             <span class="s2">"is_offer"</span>: <span class="nb">false</span>,
@@ -7178,6 +7197,7 @@ of available tickets.</p>
           <span class="o">}</span>,
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">""</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">""</span>,
             <span class="s2">"is_offer"</span>: <span class="nb">false</span>,
@@ -7253,6 +7273,7 @@ of available tickets.</p>
         <span class="s2">"price_band"</span>: <span class="o">[</span>
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">""</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">""</span>,
             <span class="s2">"is_offer"</span>: <span class="nb">false</span>,
@@ -7322,6 +7343,7 @@ of available tickets.</p>
           <span class="o">}</span>,
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">""</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">""</span>,
             <span class="s2">"is_offer"</span>: <span class="nb">false</span>,
@@ -7371,6 +7393,7 @@ of available tickets.</p>
         <span class="s2">"price_band"</span>: <span class="o">[</span>
           <span class="o">{</span>
             <span class="s2">"absolute_saving"</span>: 0,
+            <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">""</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">""</span>,
             <span class="s2">"is_offer"</span>: <span class="nb">false</span>,
@@ -7447,7 +7470,6 @@ of available tickets.</p>
   <span class="s2">"backend_is_broken"</span>: <span class="nb">false</span>,
   <span class="s2">"backend_is_down"</span>: <span class="nb">false</span>,
   <span class="s2">"backend_throttle_failed"</span>: <span class="nb">false</span>,
-  <span class="s2">"can_leave_singles"</span>: <span class="nb">true</span>,
   <span class="s2">"contiguous_seat_selection_only"</span>: <span class="nb">true</span>,
   <span class="s2">"currency"</span>: <span class="o">{</span>
     <span class="s2">"currency_code"</span>: <span class="s2">"gbp"</span>
