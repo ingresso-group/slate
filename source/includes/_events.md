@@ -51,7 +51,7 @@ curl https://demo.ticketswitch.com/f13/events.v1 \
 from pyticketswitch import Client
 
 client = Client(user='demo', password='demopass')
-events = client.list_events(keywords=['matthew'], country_code='uk')
+events, meta = client.list_events(keywords=['matthew'], country_code='uk')
 ```
 
 These are the available search / filter parameters:
@@ -206,67 +206,73 @@ Parameter | Description
 ```
 
 ```python
+from pyticketswitch.event import Event
+
 [
-    pyticketswitch.Event(
+    Event(
         id='6IF',
         status='live',
-        description='Matthew Bourne\'s Nutcracker TEST',
+        description="Matthew Bourne's Nutcracker TEST",
         source='External Test Backend 0',
+        source_code='ext_test0',
         event_type='simple_ticket',
-        venue='Sadler\'s Wells',
-
-        classes=['Arts & Culture'],
-        filters=[],
-
+        venue="Sadler's Wells",
+        classes={
+            'dance': 'Ballet & Dance'
+        },
         postcode='EC1R 4TN',
         city='London',
+        city_code='london-uk',
         country='United Kingdom',
         country_code='uk',
         latitude=51.52961137,
-        longditude=-0.10601562,
-
+        longitude=-0.10601562,
         max_running_time=120,
         min_running_time=120,
-
         show_performance_time=True,
         has_performances=True,
         is_seated=True,
         needs_departure_date=False,
         needs_duration=False,
-        needs_performance=True,
-
-        upsell_list=['6IE', 'MH0'],
+        needs_performance=False,
+        upsell_list=[
+            '6IE',
+            'MH0'
+        ],
+        critic_review_percent=100,
     ),
-    pyticketswitch.Event(
+    Event(
         id='6IE',
         status='live',
-        description='Matthew Bourne\'s Swan Lake TEST',
+        description="Matthew Bourne's Swan Lake test",
         source='External Test Backend 0',
+        source_code='ext_test0',
         event_type='simple_ticket',
-        venue='Sadler\'s Wells',
-
-        classes=['Ballet & Dance'],
-        filters=[],
-
+        venue="Sadler's Wells",
+        classes={
+            'dance': 'Ballet & Dance'
+        },
         postcode='EC1R 4TN',
         city='London',
+        city_code='london-uk',
         country='United Kingdom',
         country_code='uk',
         latitude=51.52961137,
-        longditude=-0.10601562,
-
+        longitude=-0.10601562,
         max_running_time=120,
         min_running_time=90,
-
         show_performance_time=True,
         has_performances=True,
         is_seated=True,
         needs_departure_date=False,
         needs_duration=False,
-        needs_performance=True,
-
-        upsell_list=['6IF', '6KU' 'MH0'],
-    ),
+        needs_performance=False,
+        upsell_list=[
+            '6IF',
+            '6KU',
+            'MH0'
+        ],
+    )
 ]
 ```
 
@@ -342,7 +348,7 @@ from pyticketswitch import Client
 
 
 client = Client(user='demo', password='demopass')
-events = client.get_events(event_ids=['6IF'])
+events, meta = client.get_events(event_ids=['6IF'])
 ```
 ### Request
 
@@ -493,67 +499,42 @@ Parameter | Description
 ```
 
 ```python
+from pyticketswitch.event import Event
+
 {
-    '6IE': pyticketswitch.Event(
-        id='6IE',
-        status='live',
-        description='Matthew Bourne\'s Swan Lake TEST',
-        source='External Test Backend 0',
-        event_type='simple_ticket',
-        venue='Sadler\'s Wells',
-
-        classes=['Ballet & Dance'],
-        filters=[],
-
-        postcode='EC1R 4TN',
-        city='London',
-        country='United Kingdom',
-        country_code='uk',
-        latitude=51.52961137,
-        longditude=-0.10601562,
-
-        max_running_time=120,
-        min_running_time=90,
-
-        show_performance_time=True,
-        has_performances=True,
-        is_seated=True,
-        needs_departure_date=False,
-        needs_duration=False,
-        needs_performance=True,
-
-        upsell_list=['6IF', '6KU' 'MH0'],
-    ),
-    '6IF': pyticketswitch.Event(
+    '6IF': Event(
         id='6IF',
         status='live',
-        description='Matthew Bourne\'s Nutcracker TEST',
+        description="Matthew Bourne's Nutcracker TEST",
         source='External Test Backend 0',
+        source_code='ext_test0',
         event_type='simple_ticket',
-        venue='Sadler\'s Wells',
-
-        classes=['Arts & Culture'],
-        filters=[],
-
+        venue="Sadler's Wells",
+        classes={
+            'dance': 'Ballet & Dance'
+        },
         postcode='EC1R 4TN',
         city='London',
+        city_code='london-uk',
         country='United Kingdom',
         country_code='uk',
         latitude=51.52961137,
-        longditude=-0.10601562,
-
+        longitude=-0.10601562,
         max_running_time=120,
         min_running_time=120,
-
         show_performance_time=True,
         has_performances=True,
         is_seated=True,
         needs_departure_date=False,
         needs_duration=False,
-        needs_performance=True,
-
-        upsell_list=['6IE', 'MH0'],
-    ),
+        needs_performance=False,
+        upsell_list=[
+            '6IE',
+            'MH0'
+        ],
+        critic_review_percent=100,
+        valid_quantities=None,
+    )
 }
 
 ```
@@ -643,7 +624,7 @@ from pyticketswitch import Client
 
 
 client = Client('demo', 'demopass')
-events = client.get_events(['6IF'], media=True)
+events, meta = client.get_events(['6IF'], media=True)
 ```
 
 
@@ -840,81 +821,126 @@ Parameter | Description
 ```
 
 ```python
-pyticketswitch.Event(
-    id='6IF',
-    media = [
-        pyticketswitch.Media(
-            name='landscape',
-            caption='',
-            caption_html='',
-            url='https://d1wx4w35ubmdix.cloudfront.net/shared/event_media/cropper/93/93c04bf0d24ef3d05e8fef4ba7709df0434ea13c.jpg',
-            secure=True
-        ),
-        pyticketswitch.Media(
-            name='marquee',
-            caption='',
-            caption_html='',
-            url='https://d1wx4w35ubmdix.cloudfront.net/shared/event_media/cropper/7e/7e048c655f79d1ae01419c92420861df156b83fc.jpg',
-            secure=True
-        ),
-        pyticketswitch.Media(
-            name='seating_plan',
-            caption='',
-            caption_html='',
-            url='http://d1wx4w35ubmdix.cloudfront.net/shared/event_media/cropper_cloud/29/2974e58797af0d91752b73da390ae6f8fa6e4862.jpg',
-            secure=True
-        ),
-        pyticketswitch.Media(
-            name='square',
-            caption='',
-            caption_html='',
-            url='https://d1wx4w35ubmdix.cloudfront.net/shared/event_media/cropper/5e/5e004f25b5aab6f432cd7e6839b70942d8a5f17b.jpg',
-            secure=True
-        ),
-        pyticketswitch.Media(
-            name='supplier',
-            caption='',
-            caption_html='',
-            url='http://d1wx4w35ubmdix.cloudfront.net/shared/event_media/ext_test0/+system_ext_test0/supplier.jpg',
-            secure=True
-        ),
-        pyticketswitch.Media(
-            name='triplet_five',
-            caption='',
-            caption_html='',
-            url='https://d1wx4w35ubmdix.cloudfront.net/shared/event_media/cropper/f9/f9aaf4bc04477c303d78bc5107cc0754df846ac8.jpg',
-            secure=True
-        ),
-        pyticketswitch.Media(
-            name='triplet_four',
-            caption='',
-            caption_html='',
-            url='https://d1wx4w35ubmdix.cloudfront.net/shared/event_media/cropper/f9/f9aaf4bc04477c303d78bc5107cc0754df846ac8.jpg',
-            secure=True
-        ),
-        pyticketswitch.Media(
-            name='triplet_one',
-            caption='',
-            caption_html='',
-            url='http://d1wx4w35ubmdix.cloudfront.net/shared/event_media/cropper_cloud/0e/0e255d4f96bd02baa7bfd22fd2cab90c8f6ced34.jpg',
-            secure=True
-        ),
-        pyticketswitch.Media(
-            name='triplet_two',
-            caption='',
-            caption_html='',
-            url='http://d1wx4w35ubmdix.cloudfront.net/shared/event_media/cropper_cloud/ca/ca2d4589a89480514f0db6fcec8a982652280093.jpg',
-            secure=True
-        ),
-        pyticketswitch.Media(
-            name='video',
-            caption='',
-            caption_html='',
-            url='https://www.youtube.com/embed/G1JpEHGizk4',
-            secure=True
-        ),
-    ],
-)
+from pyticketswitch.media import Media
+from pyticketswitch.event import Event
+
+{
+    '6IF': Event(
+        id='6IF',
+        status='live',
+        description="Matthew Bourne's Nutcracker TEST",
+        source='External Test Backend 0',
+        source_code='ext_test0',
+        event_type='simple_ticket',
+        venue="Sadler's Wells",
+        classes={
+            'dance': 'Ballet & Dance'
+        },
+        postcode='EC1R 4TN',
+        city='London',
+        city_code='london-uk',
+        country='United Kingdom',
+        country_code='uk',
+        latitude=51.52961137,
+        longitude=-0.10601562,
+        max_running_time=120,
+        min_running_time=120,
+        show_performance_time=True,
+        has_performances=True,
+        is_seated=True,
+        needs_departure_date=False,
+        needs_duration=False,
+        needs_performance=False,
+        upsell_list=[
+            '6IE',
+            'MH0'
+        ],
+        media={
+            'landscape': Media(
+                caption='',
+                caption_html='',
+                name='landscape',
+                url='https://d1wx4w35ubmdix.cloudfront.net/media/event/6IF/matthew-bournes-nutcracker-test-landscape-M2kz.jpg?versionId=C3UX_j98L2FWDOof4BCY15QyKrBJ0ZRR',
+                secure=True,
+                width=None,
+                height=None,
+            ),
+            'marquee': Media(
+                caption='',
+                caption_html='',
+                name='marquee',
+                url='https://d1wx4w35ubmdix.cloudfront.net/media/event/6IF/matthew-bournes-nutcracker-test-marquee-bGIw.jpg?versionId=WwcyqyDnuxFwYgare_6Omy61AACpF8hG',
+                secure=True,
+                width=None,
+                height=None,
+            ),
+            'seating_plan': Media(
+                caption='',
+                caption_html='',
+                name='seating_plan',
+                url='https://d1wx4w35ubmdix.cloudfront.net/media/event/6IF/matthew-bournes-nutcracker-test-seating-plan-dzJ3.jpg',
+                secure=True,
+                width=None,
+                height=None,
+            ),
+            'square': Media(
+                caption='',
+                caption_html='',
+                name='square',
+                url='https://d1wx4w35ubmdix.cloudfront.net/media/event/6IF/matthew-bournes-nutcracker-test-square-Z0Jk.jpg?versionId=09daZJn.14RH7.84cRKXK2FfODDmFYpC',
+                secure=True,
+                width=None,
+                height=None,
+            ),
+            'triplet_four': Media(
+                caption='',
+                caption_html='',
+                name='triplet_four',
+                url='https://d1wx4w35ubmdix.cloudfront.net/media/event/6IF/matthew-bournes-nutcracker-test-triplet-four-bndw.jpg?versionId=kz.Y.qd379E_wm2ZNWnGRMtLFu4Teqpu',
+                secure=True,
+                width=None,
+                height=None,
+            ),
+            'triplet_one': Media(
+                caption='',
+                caption_html='',
+                name='triplet_one',
+                url='https://d1wx4w35ubmdix.cloudfront.net/media/event/6IF/matthew-bournes-nutcracker-test-triplet-one-eWVq.jpg?versionId=WewM3wJOwzhP.QOsJqDSBUDxBwimxNV_',
+                secure=True,
+                width=None,
+                height=None,
+            ),
+            'triplet_three': Media(
+                caption='',
+                caption_html='',
+                name='triplet_three',
+                url='https://d1wx4w35ubmdix.cloudfront.net/media/event/6IF/matthew-bournes-nutcracker-test-triplet-three-U2Yz.jpg?versionId=MPJgrknmvajkTolWT55cmh7McDrI4PCD',
+                secure=True,
+                width=None,
+                height=None,
+            ),
+            'triplet_two': Media(
+                caption='',
+                caption_html='',
+                name='triplet_two',
+                url='https://d1wx4w35ubmdix.cloudfront.net/media/event/6IF/matthew-bournes-nutcracker-test-triplet-two-d0xl.jpg?versionId=FpaMhCJw.gCmiOn598.m3OmtXJv5p0OM',
+                secure=True,
+                width=None,
+                height=None,
+            ),
+            'video': Media(
+                caption='',
+                caption_html='',
+                name='video',
+                url='https://www.youtube.com/embed/G1JpEHGizk4?rel=0',
+                secure=True,
+                width=420,
+                height=315,
+            )
+        },
+        critic_review_percent=100,
+    )
+}
 
 ```
 
@@ -982,7 +1008,7 @@ from pyticketswitch import Client
 
 
 client = Client('demo', 'demopass')
-events = client.get_events(['6IF'], extra_info=True)
+events, meta = client.get_events(['6IF'], extra_info=True)
 ```
 
 Parameter | Description
@@ -1110,62 +1136,100 @@ Parameter | Description
 ```
 
 ```python
+from pyticketswitch.content import Content
+from pyticketswitch.event import Event
+
 {
-    '6IF': pyticketswitch.Event(
+    '6IF': Event(
         id='6IF',
-        content = {
-            'address': pyticketswitch.Content(
+        status='live',
+        description="Matthew Bourne's Nutcracker TEST",
+        source='External Test Backend 0',
+        source_code='ext_test0',
+        event_type='simple_ticket',
+        venue="Sadler's Wells",
+        classes={
+            'dance': 'Ballet & Dance'
+        },
+        filters=[
+            
+        ],
+        postcode='EC1R 4TN',
+        city='London',
+        city_code='london-uk',
+        country='United Kingdom',
+        country_code='uk',
+        latitude=51.52961137,
+        longitude=-0.10601562,
+        max_running_time=120,
+        min_running_time=120,
+        show_performance_time=True,
+        has_performances=True,
+        is_seated=True,
+        needs_departure_date=False,
+        needs_duration=False,
+        needs_performance=False,
+        upsell_list=[
+            '6IE',
+            'MH0'
+        ],
+        content={
+            'address': Content(
                 name='Address',
-                value='Roseberry Avenue\r\nIslington\r\nLondon\r\nUK',
-                value_html='<p>Roseberry Avenue\r\nIslington\r\nLondon\r\nUK</p>'
+                value='Roseberry Avenue Islington London UK\n',
+                value_html='<p>Roseberry Avenue Islington London UK</p>',
             ),
-            'duration': pyticketswitch.Content(
+            'duration': Content(
                 name='Duration',
                 value='A Goldilocks duration - not too long, not too short, just the right amount of time.\n',
-                value_html='<p>A Goldilocks duration - not <em>too</em> long, not <em>too</em> short, just the right amount of time.</p>'
+                value_html='<p>A Goldilocks duration - not <em>too</em> long, not <em>too</em> short, just the right amount of time.</p>',
             ),
-            'good_to_know': pyticketswitch.Content(
+            'good_to_know': Content(
                 name='Good To Know',
                 value='Warning! Men in very tight tights.\n',
-                value_html='<p>Warning! Men in very tight tights.</p>'
+                value_html='<p>Warning! Men in very tight tights.</p>',
             ),
-            'overview': pyticketswitch.Content(
+            'offers': Content(
+                name='Offers Information',
+                value='This is some offers information\n',
+                value_html='<p>This is some offers information</p>',
+            ),
+            'overview': Content(
                 name='Overview',
-                value='Matthew Bourne\'s stunning production of Nutcracker! returns in 2008 to Sadler\'s Wells having broken all box office records during last year\'s sell-out season.\n\nThis festive treat is full of his trademark style of wit, pathos and theatrical magic. Nutcracker! follows Clara\'s journey from a bleak Christmas Eve at Dr.Dross\' Orphanage, through a shimmering ice-skating wonderland and to the spectacular candy folk of Sweetieland.\n\nOliver award-winning designer Anthony Ward and Tchaikovsky\'s much-loved score combined with sizzling choreography guarantee that Matthew Bourne\'s Nutcracker! is a fresh, lip-smacking, serving of traditional Christmas fare.\n\nMatthew Bourne has achieved both artistic and commercial success with his imaginative new versions of classical ballets. Last year his Play Without Words made for the Royal National Theatre, received two Olivier Awards and is shortly to be revived.\n',
-                value_html='<p>Matthew Bourne\'s stunning production of Nutcracker! returns in 2008 to Sadler\'s Wells having broken all box office records during last year\'s sell-out season.</p>\r\n<p>This festive treat is full of his trademark style of wit, pathos and theatrical magic. Nutcracker! follows Clara\'s journey from a bleak Christmas Eve at Dr.Dross\' Orphanage, through a shimmering ice-skating wonderland and to the spectacular candy folk of Sweetieland.</p>\r\n<p>Oliver award-winning designer Anthony Ward and Tchaikovsky\'s much-loved score combined with sizzling choreography guarantee that Matthew Bourne\'s Nutcracker! is a fresh, lip-smacking, serving of traditional Christmas fare.</p>\r\n<p>Matthew Bourne has achieved both artistic and commercial success with his imaginative new versions of classical ballets. Last year his Play Without Words made for the Royal National Theatre, received two Olivier Awards and is shortly to be revived.</p>'
+                value="Matthew Bourne's stunning production of Nutcracker! returns in 2008 to Sadler's Wells having broken all box office records during last year's sell-out season.\n\nThis festive treat is full of his trademark style of wit, pathos and theatrical magic. Nutcracker! follows Clara's journey from a bleak Christmas Eve at Dr.Dross' Orphanage, through a shimmering ice-skating wonderland and to the spectacular candy folk of Sweetieland.\n\nOliver award-winning designer Anthony Ward and Tchaikovsky's much-loved score combined with sizzling choreography guarantee that Matthew Bourne's Nutcracker! is a fresh, lip-smacking, serving of traditional Christmas fare.\n\nMatthew Bourne has achieved both artistic and commercial success with his imaginative new versions of classical ballets. Last year his Play Without Words made for the Royal National Theatre, received two Olivier Awards and is shortly to be revived.\n",
+                value_html="<p>Matthew Bourne's stunning production of Nutcracker! returns in 2008 to Sadler's Wells having broken all box office records during last year's sell-out season.</p>\r\n<p>This festive treat is full of his trademark style of wit, pathos and theatrical magic. Nutcracker! follows Clara's journey from a bleak Christmas Eve at Dr.Dross' Orphanage, through a shimmering ice-skating wonderland and to the spectacular candy folk of Sweetieland.</p>\r\n<p>Oliver award-winning designer Anthony Ward and Tchaikovsky's much-loved score combined with sizzling choreography guarantee that Matthew Bourne's Nutcracker! is a fresh, lip-smacking, serving of traditional Christmas fare.</p>\r\n<p>Matthew Bourne has achieved both artistic and commercial success with his imaginative new versions of classical ballets. Last year his Play Without Words made for the Royal National Theatre, received two Olivier Awards and is shortly to be revived.</p>",
             ),
-            'pricing_details_info': pyticketswitch.Content(
+            'pricing_details_info': Content(
                 name='Pricing details information',
                 value='Book by 30th April for performances from 10 July - 10 August and pay no booking fee on this show\n',
-                value_html='<p>Book by 30th April for performances from 10 July - 10 August and pay no booking fee on this show</p>'
+                value_html='<p>Book by 30th April for performances from 10 July - 10 August and pay no booking fee on this show</p>',
             ),
-            'suitable_for_children': pyticketswitch.Content(
+            'suitable_for_children': Content(
                 name='Suitable For Children',
                 value='Sure, just be aware of the aforementioned tights.\n',
-                value_html='<p>Sure, just be aware of the aforementioned tights.</p>'
+                value_html='<p>Sure, just be aware of the aforementioned tights.</p>',
             ),
-            'whats_included': pyticketswitch.Content(
-                name='What\'s Included',
+            'whats_included': Content(
+                name="What's Included",
                 value='Everything you need.\n',
-                value_html='<p>Everything you need.</p>'
+                value_html='<p>Everything you need.</p>',
             ),
-            'when_can_i_go': pyticketswitch.Content(
+            'when_can_i_go': Content(
                 name='Performance Times',
-                value='Anytime you like! As long as there\'s a show on...\n',
-                value_html='<p>Anytime you like! As long as there\'s a show on...</p>'
+                value="Anytime you like! As long as there's a show on...\n",
+                value_html="<p>Anytime you like! As long as there's a show on...</p>",
             ),
-            'where_do_i_go': pyticketswitch.Content(
+            'where_do_i_go': Content(
                 name='Where Do I Go',
-                value='To Sadler\'s Wells of course!\n',
-                value_html='<p>To Sadler\'s Wells of course!</p>'
-            ),
+                value="To Sadler's Wells of course!\n",
+                value_html="<p>To Sadler's Wells of course!</p>",
+            )
         },
-        event_info = 'Matthew Bourne\'s stunning production of Nutcracker! returns in 2008 to Sadler\'s Wells having broken all box office records during last year\'s sell-out season.\n\nThis festive treat is full of his trademark style of wit, pathos and theatrical magic. Nutcracker! follows Clara\'s journey from a bleak Christmas Eve at Dr.Dross\' Orphanage, through a shimmering ice-skating wonderland and to the spectacular candy folk of Sweetieland.\n\nOliver award-winning designer Anthony Ward and Tchaikovsky\'s much-loved score combined with sizzling choreography guarantee that Matthew Bourne\'s Nutcracker! is a fresh, lip-smacking, serving of traditional Christmas fare.\n\nMatthew Bourne has achieved both artistic and commercial success with his imaginative new versions of classical ballets. Last year his Play Without Words made for the Royal National Theatre, received two Olivier Awards and is shortly to be revived.\n\nDuration\n\nA Goldilocks duration - not too long, not too short, just the right amount of time.\n\n\nPerformance Times\n\nAnytime you like! As long as there\'s a show on...\n\n\nWhere Do I Go\n\nTo Sadler\'s Wells of course!\n\n\nWhat\'s Included\n\nEverything you need.\n\n\nGood To Know\n\nWarning! Men in very tight tights.\n\n\nSuitable For Children\n\nSure, just be aware of the aforementioned tights.\n\n',
-        event_info_html = '<div><p>Matthew Bourne\'s stunning production of Nutcracker! returns in 2008 to Sadler\'s Wells having broken all box office records during last year\'s sell-out season.</p>\r\n<p>This festive treat is full of his trademark style of wit, pathos and theatrical magic. Nutcracker! follows Clara\'s journey from a bleak Christmas Eve at Dr.Dross\' Orphanage, through a shimmering ice-skating wonderland and to the spectacular candy folk of Sweetieland.</p>\r\n<p>Oliver award-winning designer Anthony Ward and Tchaikovsky\'s much-loved score combined with sizzling choreography guarantee that Matthew Bourne\'s Nutcracker! is a fresh, lip-smacking, serving of traditional Christmas fare.</p>\r\n<p>Matthew Bourne has achieved both artistic and commercial success with his imaginative new versions of classical ballets. Last year his Play Without Words made for the Royal National Theatre, received two Olivier Awards and is shortly to be revived.</p></div>\n\n<h4>Duration</h4>\n<div><p>A Goldilocks duration - not <em>too</em> long, not <em>too</em> short, just the right amount of time.</p></div>\n\n<h4>Performance Times</h4>\n<div><p>Anytime you like! As long as there\'s a show on...</p></div>\n\n<h4>Where Do I Go</h4>\n<div><p>To Sadler\'s Wells of course!</p></div>\n\n<h4>What&#39;s Included</h4>\n<div><p>Everything you need.</p></div>\n\n<h4>Good To Know</h4>\n<div><p>Warning! Men in very tight tights.</p></div>\n\n<h4>Suitable For Children</h4>\n<div><p>Sure, just be aware of the aforementioned tights.</p></div>\n',
-        venue_addr = 'Roseberry Avenue\r\nIslington\r\nLondon\r\nUK',
-        venue_addr_html = '<div><p>Roseberry Avenue\r\nIslington\r\nLondon\r\nUK</p></div>\n',
-        venue_info = None,
-        venue_info_html = None,
+        event_info="Matthew Bourne's stunning production of Nutcracker! returns in 2008 to Sadler's Wells having broken all box office records during last year's sell-out season.\n\nThis festive treat is full of his trademark style of wit, pathos and theatrical magic. Nutcracker! follows Clara's journey from a bleak Christmas Eve at Dr.Dross' Orphanage, through a shimmering ice-skating wonderland and to the spectacular candy folk of Sweetieland.\n\nOliver award-winning designer Anthony Ward and Tchaikovsky's much-loved score combined with sizzling choreography guarantee that Matthew Bourne's Nutcracker! is a fresh, lip-smacking, serving of traditional Christmas fare.\n\nMatthew Bourne has achieved both artistic and commercial success with his imaginative new versions of classical ballets. Last year his Play Without Words made for the Royal National Theatre, received two Olivier Awards and is shortly to be revived.\n\nDuration\n\nA Goldilocks duration - not too long, not too short, just the right amount of time.\n\n\nPerformance Times\n\nAnytime you like! As long as there's a show on...\n\n\nWhere Do I Go\n\nTo Sadler's Wells of course!\n\n\nWhat's Included\n\nEverything you need.\n\n\nGood To Know\n\nWarning! Men in very tight tights.\n\n\nSuitable For Children\n\nSure, just be aware of the aforementioned tights.\n\n\nOffers Information\n\nThis is some offers information\n\n",
+        event_info_html="<div><p>Matthew Bourne's stunning production of Nutcracker! returns in 2008 to Sadler's Wells having broken all box office records during last year's sell-out season.</p>\r\n<p>This festive treat is full of his trademark style of wit, pathos and theatrical magic. Nutcracker! follows Clara's journey from a bleak Christmas Eve at Dr.Dross' Orphanage, through a shimmering ice-skating wonderland and to the spectacular candy folk of Sweetieland.</p>\r\n<p>Oliver award-winning designer Anthony Ward and Tchaikovsky's much-loved score combined with sizzling choreography guarantee that Matthew Bourne's Nutcracker! is a fresh, lip-smacking, serving of traditional Christmas fare.</p>\r\n<p>Matthew Bourne has achieved both artistic and commercial success with his imaginative new versions of classical ballets. Last year his Play Without Words made for the Royal National Theatre, received two Olivier Awards and is shortly to be revived.</p></div>\n\n<h4>Duration</h4>\n<div><p>A Goldilocks duration - not <em>too</em> long, not <em>too</em> short, just the right amount of time.</p></div>\n\n<h4>Performance Times</h4>\n<div><p>Anytime you like! As long as there's a show on...</p></div>\n\n<h4>Where Do I Go</h4>\n<div><p>To Sadler's Wells of course!</p></div>\n\n<h4>What&#39;s Included</h4>\n<div><p>Everything you need.</p></div>\n\n<h4>Good To Know</h4>\n<div><p>Warning! Men in very tight tights.</p></div>\n\n<h4>Suitable For Children</h4>\n<div><p>Sure, just be aware of the aforementioned tights.</p></div>\n\n<h4>Offers Information</h4>\n<div><p>This is some offers information</p></div>\n",
+        venue_addr='Roseberry Avenue Islington London UK\n',
+        venue_addr_html='<div><p>Roseberry Avenue Islington London UK</p></div>\n',
+        critic_review_percent=100,
     )
 }
 ```
@@ -1208,7 +1272,7 @@ from pyticketswitch import Client
 
 
 client = Client('demo', 'demopass')
-events = client.get_events(['6IF'], reviews=True)
+events, meta = client.get_events(['6IF'], reviews=True)
 ```
 
 Parameter | Description
@@ -1306,31 +1370,63 @@ Parameter | Description
 }
 ```
 ```python
+from pyticketswitch.review import Review
+from pyticketswitch.event import Event
+
 {
-    '6IF': pyticketswitch.Event(
+    '6IF': Event(
         id='6IF',
-        reviews = [
-            pyticketswitch.Review(
+        status='live',
+        description="Matthew Bourne's Nutcracker TEST",
+        source='External Test Backend 0',
+        source_code='ext_test0',
+        event_type='simple_ticket',
+        venue="Sadler's Wells",
+        classes={
+            'dance': 'Ballet & Dance'
+        },
+        postcode='EC1R 4TN',
+        city='London',
+        city_code='london-uk',
+        country='United Kingdom',
+        country_code='uk',
+        latitude=51.52961137,
+        longitude=-0.10601562,
+        max_running_time=120,
+        min_running_time=120,
+        show_performance_time=True,
+        has_performances=True,
+        is_seated=True,
+        needs_departure_date=False,
+        needs_duration=False,
+        needs_performance=False,
+        upsell_list=[
+            '6IE',
+            'MH0'
+        ],
+        reviews=[
+            Review(
                 body='Cannot recommend this show enough!',
-                date_and_time=datetime.datetime(2015, 11, 17, 10, 0, 0, 0),
-                rating=5
+                date_time=datetime.datetime(2015, 11, 17, 10, 0, tzinfo=tzutc()),
+                star_rating=5,
                 language='en',
                 title='Unmissable!',
                 is_user=False,
                 author='The Times',
-                url=None,
+                url='',
             ),
-            pyticketswitch.Review(
-                body='What a show! The mise-en-scène is magical, the choreography is wonderful, the story is magnificent and those tights... incredible. I\'ll be buying tickets for this show again and again',
-                date_and_time=datetime.datetime(2014, 8, 28, 10, 0, 0, 0),
-                rating=5
+            Review(
+                body="What a show! The mise-en-scène is magical, the choreography is wonderful, the story is magnificent and those tights... incredible. I'll be buying tickets for this show again and again",
+                date_time=datetime.datetime(2014, 8, 28, 10, 0, tzinfo=tzutc()),
+                star_rating=5,
                 language='en',
-                title='Can\'t get enough!',
-                is_user=False,
+                title="Can't get enough!",
+                is_user=True,
                 author='Matt Allpress',
-                url=None,
+                url='',
             )
         ],
+        critic_review_percent=100,
     )
 }
 ```
@@ -1392,7 +1488,7 @@ from pyticketswitch import Client
 
 
 client = Client('demo', 'demopass')
-events = client.get_events(
+events, meta = client.get_events(
     event_ids=['6IF'],
     cost_range=True,
     best_value_offer=True,
@@ -1528,39 +1624,73 @@ Parameter | Description
 ```
 
 ```python
-pyticketswitch.Event(
-    id='6IF',
-    cost_range=pyticketswitch.CostRange(
-        valid_quantities=[2, 3, 4, 5, 6, 7],
-        max_seatprice=47.0,
-        max_surcharge=0.0,
-        min_seatprice=18.0,
-        min_surcharge=0.0,
-        currency=pyticketswitch.Currency(
-            code='gbp',
-            number=826,
-            factor=100,
-            places=2,
-            pre_symbol="",
-            post_symbol="£",
-        )
-    ),
-    no_singles_cost_range = pyticketswitch.CostRange(
-        valid_quantities=[2, 3, 4, 5, 6, 7],
-        max_seatprice=47.0,
-        max_surcharge=0.0,
-        min_seatprice=18.0,
-        min_surcharge=0.0,
-        currency=pyticketswitch.Currency(
-            code='gbp',
-            number=826,
-            factor=100,
-            places=2,
-            pre_symbol="",
-            post_symbol="£",
-        )
-    ),
-)
+from pyticketswitch.cost_range import CostRange
+from pyticketswitch.event import Event
+
+{
+    '6IF': Event(
+        id='6IF',
+        status='live',
+        description="Matthew Bourne's Nutcracker TEST",
+        source='External Test Backend 0',
+        source_code='ext_test0',
+        event_type='simple_ticket',
+        venue="Sadler's Wells",
+        classes={
+            'dance': 'Ballet & Dance'
+        },
+        postcode='EC1R 4TN',
+        city='London',
+        city_code='london-uk',
+        country='United Kingdom',
+        country_code='uk',
+        latitude=51.52961137,
+        longitude=-0.10601562,
+        max_running_time=120,
+        min_running_time=120,
+        show_performance_time=True,
+        has_performances=True,
+        is_seated=True,
+        needs_departure_date=False,
+        needs_duration=False,
+        needs_performance=False,
+        upsell_list=[
+            '6IE',
+            'MH0'
+        ],
+        cost_range=CostRange(
+            valid_quantities=[
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+            ],
+            max_seatprice=47.0,
+            max_surcharge=5.0,
+            min_seatprice=18.0,
+            min_surcharge=3.0,
+            currency='gbp',
+        ),
+        no_singles_cost_range=CostRange(
+            valid_quantities=[
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+            ],
+            max_seatprice=47.0,
+            max_surcharge=5.0,
+            min_seatprice=18.0,
+            min_surcharge=3.0,
+            currency='gbp',
+        ),
+        critic_review_percent=100,
+    )
+}
 ```
 
 <aside class="notice">In the UK market, offers are typically classified as 
@@ -1644,7 +1774,7 @@ curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
 from pyticketickswitch import client
 
 client = Client('demo', 'demopass')
-client.get_events(['6IF'], cost_range_details=True)
+events, meta = client.get_events(['6IF'], cost_range_details=True)
 ```
 
 `req_cost_range_details` is the main parameter that switches on cost range details.
@@ -1869,228 +1999,187 @@ Parameter | Description
 ```
 
 ```python
-{
-    '6IF': pyticketswitch.Event(
-        id='6IF',
-        cost_range_details = [
-            pyticketswitch.CostRangeDetails(
-                ticket_type='BALCONY',
-                ticket_type_description='Balcony',
-                price_band='A',
-                price_band_description='',
-                cost_range=pyticketswitch.CostRange(
-                    valid_quantities=[2, 3, 4, 5, 6, 7],
-                    max_seatprice=47.0,
-                    max_surcharge=0.0,
-                    min_seatprice=47.0,
-                    min_surcharge=0.0,
-                    currency=pyticketswitch.Currency(
-                        code='gbp',
-                        number=826,
-                        factor=100,
-                        places=2,
-                        pre_symbol="",
-                        post_symbol="£",
-                    )
-                ),
-                cost_range_no_singles=pyticketswitch.CostRange(
-                    valid_quantities=[2, 3, 4, 5, 6, 7],
-                    max_seatprice=47.0,
-                    max_surcharge=0.0,
-                    min_seatprice=47.0,
-                    min_surcharge=0.0,
-                    currency=pyticketswitch.Currency(
-                        code='gbp',
-                        number=826,
-                        factor=100,
-                        places=2,
-                        pre_symbol="",
-                        post_symbol="£",
-                    )
-                )
+from pyticketswitch.event import Event
+from pyticketswitch.ticket_type import TicketType
+from pyticketswitch.discount import Discount
+from pyticketswitch.cost_range import CostRange
+from pyticketswitch.price_band import PriceBand
 
-            ),
-            pyticketswitch.CostRangeDetails(
-                ticket_type='CIRCLE',
-                ticket_type_description='Upper Circle',
-                price_band='A',
-                price_band_description='',
-                cost_range=pyticketswitch.CostRange(
-                    valid_quantities=[2, 3, 4, 5, 6, 7],
-                    max_seatprice=35.0,
-                    max_surcharge=0.0,
-                    min_seatprice=35.0,
-                    min_surcharge=0.0,
-                    currency=pyticketswitch.Currency(
-                        code='gbp',
-                        number=826,
-                        factor=100,
-                        places=2,
-                        pre_symbol="",
-                        post_symbol="£",
-                    )
-                ),
-                cost_range_no_singles=pyticketswitch.CostRange(
-                    valid_quantities=[2, 3, 4, 5, 6, 7],
-                    max_seatprice=35.0,
-                    max_surcharge=0.0,
-                    min_seatprice=35.0,
-                    min_surcharge=0.0,
-                    currency=pyticketswitch.Currency(
-                        code='gbp',
-                        number=826,
-                        factor=100,
-                        places=2,
-                        pre_symbol="",
-                        post_symbol="£",
-                    )
-                )
-            ),
-            pyticketswitch.CostRangeDetails(
-                ticket_type='CIRCLE',
-                ticket_type_description='Upper Circle',
-                price_band='B',
-                price_band_description='',
-                cost_range=pyticketswitch.CostRange(
-                    valid_quantities=[2, 3, 4, 5, 6, 7],
-                    max_seatprice=30.0,
-                    max_surcharge=0.0,
-                    min_seatprice=30.0,
-                    min_surcharge=0.0,
-                    currency=pyticketswitch.Currency(
-                        code='gbp',
-                        number=826,
-                        factor=100,
-                        places=2,
-                        pre_symbol="",
-                        post_symbol="£",
-                    )
-                ),
-                cost_range_no_singles=pyticketswitch.CostRange(
-                    valid_quantities=[2, 3, 4, 5, 6, 7],
-                    max_seatprice=30.0,
-                    max_surcharge=0.0,
-                    min_seatprice=30.0,
-                    min_surcharge=0.0,
-                    currency=pyticketswitch.Currency(
-                        code='gbp',
-                        number=826,
-                        factor=100,
-                        places=2,
-                        pre_symbol="",
-                        post_symbol="£",
-                    )
-                )
-            ),
-            pyticketswitch.CostRangeDetails(
-                ticket_type='CIRCLE',
-                ticket_type_description='Upper Circle',
-                price_band='C',
-                price_band_description='',
-                cost_range=pyticketswitch.CostRange(
-                    valid_quantities=[2, 3, 4, 5, 6, 7],
-                    max_seatprice=25.0,
-                    max_surcharge=0.0,
-                    min_seatprice=25.0,
-                    min_surcharge=0.0,
-                    currency=pyticketswitch.Currency(
-                        code='gbp',
-                        number=826,
-                        factor=100,
-                        places=2,
-                        pre_symbol="",
-                        post_symbol="£",
-                    )
-                ),
-                cost_range_no_singles=pyticketswitch.CostRange(
-                    valid_quantities=[2, 3, 4, 5, 6, 7],
-                    max_seatprice=25.0,
-                    max_surcharge=0.0,
-                    min_seatprice=25.0,
-                    min_surcharge=0.0,
-                    currency=pyticketswitch.Currency(
-                        code='gbp',
-                        number=826,
-                        factor=100,
-                        places=2,
-                        pre_symbol="",
-                        post_symbol="£",
-                    )
-                )
-            ),
-            pyticketswitch.CostRangeDetails(
-                ticket_type='STALLS',
-                ticket_type_description='Stalls',
-                price_band='A',
-                price_band_description='',
-                cost_range=pyticketswitch.CostRange(
-                    valid_quantities=[2, 3, 4, 5, 6, 7],
-                    max_seatprice=21.0,
-                    max_surcharge=0.0,
-                    min_seatprice=21.0,
-                    min_surcharge=0.0,
-                    currency=pyticketswitch.Currency(
-                        code='gbp',
-                        number=826,
-                        factor=100,
-                        places=2,
-                        pre_symbol="",
-                        post_symbol="£",
-                    )
-                ),
-                cost_range_no_singles=pyticketswitch.CostRange(
-                    valid_quantities=[2, 3, 4, 5, 6, 7],
-                    max_seatprice=21.0,
-                    max_surcharge=0.0,
-                    min_seatprice=21.0,
-                    min_surcharge=0.0,
-                    currency=pyticketswitch.Currency(
-                        code='gbp',
-                        number=826,
-                        factor=100,
-                        places=2,
-                        pre_symbol="",
-                        post_symbol="£",
-                    )
-                )
-            ),
-            pyticketswitch.CostRangeDetails(
-                ticket_type='STALLS',
-                ticket_type_description='Stalls',
-                price_band='B',
-                price_band_description='',
-                cost_range=pyticketswitch.CostRange(
-                    valid_quantities=[2, 3, 4, 5, 6, 7],
-                    max_seatprice=18.0,
-                    max_surcharge=0.0,
-                    min_seatprice=18.0,
-                    min_surcharge=0.0,
-                    currency=pyticketswitch.Currency(
-                        code='gbp',
-                        number=826,
-                        factor=100,
-                        places=2,
-                        pre_symbol="",
-                        post_symbol="£",
-                    )
-                ),
-                cost_range_no_singles=pyticketswitch.CostRange(
-                    valid_quantities=[2, 3, 4, 5, 6, 7],
-                    max_seatprice=18.0,
-                    max_surcharge=0.0,
-                    min_seatprice=18.0,
-                    min_surcharge=0.0,
-                    currency=pyticketswitch.Currency(
-                        code='gbp',
-                        number=826,
-                        factor=100,
-                        places=2,
-                        pre_symbol="",
-                        post_symbol="£",
-                    )
-                )
-            ),
+{
+    '6IF': Event(
+        id='6IF',
+        status='live',
+        description="Matthew Bourne's Nutcracker TEST",
+        source='External Test Backend 0',
+        source_code='ext_test0',
+        event_type='simple_ticket',
+        venue="Sadler's Wells",
+        classes={
+            'dance': 'Ballet & Dance'
+        },
+        postcode='EC1R 4TN',
+        city='London',
+        city_code='london-uk',
+        country='United Kingdom',
+        country_code='uk',
+        latitude=51.52961137,
+        longitude=-0.10601562,
+        max_running_time=120,
+        min_running_time=120,
+        show_performance_time=True,
+        has_performances=True,
+        is_seated=True,
+        needs_departure_date=False,
+        needs_duration=False,
+        needs_performance=False,
+        upsell_list=[
+            '6IE',
+            'MH0'
         ],
+        cost_range_details=[
+            TicketType(
+                code='BALCONY',
+                description='Balcony',
+                price_bands=[
+                    PriceBand(
+                        code='A',
+                        description='',
+                        cost_range=CostRange(
+                            valid_quantities=[
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6
+                            ],
+                            max_seatprice=47.0,
+                            max_surcharge=5.0,
+                            min_seatprice=47.0,
+                            min_surcharge=5.0,
+                            currency='gbp',
+                        ),
+                        allows_leaving_single_seats='always',
+                        example_seats_are_real=True,
+                    )
+                ],
+            ),
+            TicketType(
+                code='CIRCLE',
+                description='Upper circle',
+                price_bands=[
+                    PriceBand(
+                        code='A',
+                        description='',
+                        cost_range=CostRange(
+                            valid_quantities=[
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6
+                            ],
+                            max_seatprice=35.0,
+                            max_surcharge=4.0,
+                            min_seatprice=35.0,
+                            min_surcharge=4.0,
+                            currency='gbp',
+                        ),
+                        allows_leaving_single_seats='always',
+                        example_seats_are_real=True,
+                    ),
+                    PriceBand(
+                        code='B',
+                        description='',
+                        cost_range=CostRange(
+                            valid_quantities=[
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6
+                            ],
+                            max_seatprice=30.0,
+                            max_surcharge=4.0,
+                            min_seatprice=30.0,
+                            min_surcharge=4.0,
+                            currency='gbp',
+                        ),
+                        allows_leaving_single_seats='always',
+                        example_seats_are_real=True,
+                    ),
+                    PriceBand(
+                        code='C',
+                        description='',
+                        cost_range=CostRange(
+                            valid_quantities=[
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6
+                            ],
+                            max_seatprice=25.0,
+                            max_surcharge=4.0,
+                            min_seatprice=25.0,
+                            min_surcharge=4.0,
+                            currency='gbp',
+                        ),
+                        allows_leaving_single_seats='always',
+                        example_seats_are_real=True,
+                    )
+                ],
+            ),
+            TicketType(
+                code='STALLS',
+                description='Stalls',
+                price_bands=[
+                    PriceBand(
+                        code='A',
+                        description='',
+                        cost_range=CostRange(
+                            valid_quantities=[
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6
+                            ],
+                            max_seatprice=21.0,
+                            max_surcharge=3.0,
+                            min_seatprice=21.0,
+                            min_surcharge=3.0,
+                            currency='gbp',
+                        ),
+                        allows_leaving_single_seats='always',
+                        example_seats_are_real=True,
+                    ),
+                    PriceBand(
+                        code='B',
+                        description='',
+                        cost_range=CostRange(
+                            valid_quantities=[
+                                1,
+                                2,
+                                3
+                            ],
+                            max_seatprice=18.0,
+                            max_surcharge=3.0,
+                            min_seatprice=18.0,
+                            min_surcharge=3.0,
+                            currency='gbp',
+                        ),
+                        allows_leaving_single_seats='always',
+                        example_seats_are_real=True,
+                    )
+                ],
+            )
+        ],
+        critic_review_percent=100,
     )
 }
 ```
@@ -2192,7 +2281,7 @@ curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
 from pyticketickswitch import client
 
 client = Client('demo', 'demopass')
-client.get_events(['6IF'], availability=True, availability_with_performances=True)
+events, meta = client.get_events(['6IF'], availability=True, availability_with_performances=True)
 ```
 
 Parameter | Description
@@ -2479,156 +2568,134 @@ Parameter | Description
 ```
 
 ```python
-pyticketswitch.Event(
-    id='6IF',
+from pyticketswitch.availability import AvailabilityDetails
+from pyticketswitch.event import Event
 
-    availability_details = [
-        pyticketswitch.AvailabilityDetails(
-            ticket_type='BALCONY',
-            price_band='A',
-            ticket_type_description='Balcony',
-            price_band_description='',
-            seatprice=47.0,
-            surcharge=0.0,
-            currency=pyticketswitch.Currency(
-                code='gbp',
-                number=826,
-                factor=100,
-                places=2,
-                pre_symbol="",
-                post_symbol="£",
+{
+    '6IF': Event(
+        id='6IF',
+        status='live',
+        description="Matthew Bourne's Nutcracker TEST",
+        source='External Test Backend 0',
+        source_code='ext_test0',
+        event_type='simple_ticket',
+        venue="Sadler's Wells",
+        classes={
+            'dance': 'Ballet & Dance'
+        },
+        postcode='EC1R 4TN',
+        city='London',
+        city_code='london-uk',
+        country='United Kingdom',
+        country_code='uk',
+        latitude=51.52961137,
+        longitude=-0.10601562,
+        max_running_time=120,
+        min_running_time=120,
+        show_performance_time=True,
+        has_performances=True,
+        is_seated=True,
+        needs_departure_date=False,
+        needs_duration=False,
+        needs_performance=False,
+        upsell_list=[
+            '6IE',
+            'MH0'
+        ],
+        critic_review_percent=100,
+        availability_details=[
+            AvailabilityDetails(
+                ticket_type='BALCONY',
+                ticket_type_description='Balcony',
+                price_band='A',
+                price_band_description='',
+                seatprice=47.0,
+                surcharge=5.0,
+                full_seatprice=0.0,
+                full_surcharge=0.0,
+                percentage_saving=0.0,
+                absolute_saving=0.0,
+                currency='gbp',
+                first_date=datetime.date(2017, 5, 3),
+                last_date=datetime.date(2017, 8, 30),
             ),
-            first_date=datetime.date(2016, 11, 29),
-            last_date=datetime.data(2017, 3, 27),
-            calendar_masks={
-                2016: {11: 805306368, 12: 1065289163},
-                2017: {1: 2012209087, 2: 251526135, 3: 117308407},
-            },
-            weekday_mask=63,
-            valid_quanities=[2, 3, 4, 5, 6, 7]
-        ),
-        pyticketswitch.AvailabilityDetails(
-            ticket_type='CIRCLE',
-            price_band='A',
-            ticket_type_description='Upper circle',
-            price_band_description='',
-            seatprice=35.0,
-            surcharge=0.0,
-            currency=pyticketswitch.Currency(
-                code='gbp',
-                number=826,
-                factor=100,
-                places=2,
-                pre_symbol="",
-                post_symbol="£",
+            AvailabilityDetails(
+                ticket_type='STALLS',
+                ticket_type_description='Stalls',
+                price_band='B',
+                price_band_description='',
+                seatprice=18.0,
+                surcharge=3.0,
+                full_seatprice=0.0,
+                full_surcharge=0.0,
+                percentage_saving=0.0,
+                absolute_saving=0.0,
+                currency='gbp',
+                first_date=datetime.date(2017, 5, 3),
+                last_date=datetime.date(2017, 8, 30),
             ),
-            first_date=datetime.date(2016, 11, 29),
-            last_date=datetime.data(2017, 3, 27),
-            calendar_masks={
-                2016: {11: 805306368, 12: 1065289163},
-                2017: {1: 2012209087, 2: 251526135, 3: 117308407},
-            },
-            weekday_mask=63,
-            valid_quanities=[2, 3, 4, 5, 6, 7]
-        ),
-        pyticketswitch.AvailabilityDetails(
-            ticket_type='CIRCLE',
-            price_band='B',
-            ticket_type_description='Upper circle',
-            price_band_description='',
-            seatprice=30.0,
-            surcharge=0.0,
-            currency=pyticketswitch.Currency(
-                code='gbp',
-                number=826,
-                factor=100,
-                places=2,
-                pre_symbol="",
-                post_symbol="£",
+            AvailabilityDetails(
+                ticket_type='STALLS',
+                ticket_type_description='Stalls',
+                price_band='A',
+                price_band_description='',
+                seatprice=21.0,
+                surcharge=3.0,
+                full_seatprice=0.0,
+                full_surcharge=0.0,
+                percentage_saving=0.0,
+                absolute_saving=0.0,
+                currency='gbp',
+                first_date=datetime.date(2017, 5, 3),
+                last_date=datetime.date(2017, 8, 30),
             ),
-            first_date=datetime.date(2016, 11, 29),
-            last_date=datetime.data(2017, 3, 27),
-            calendar_masks={
-                2016: {11: 805306368, 12: 1065289163},
-                2017: {1: 2012209087, 2: 251526135, 3: 117308407},
-            },
-            weekday_mask=63,
-            valid_quanities=[2, 3, 4, 5, 6, 7]
-        ),
-        pyticketswitch.AvailabilityDetails(
-            ticket_type='CIRCLE',
-            price_band='C',
-            ticket_type_description='Upper circle',
-            price_band_description='',
-            seatprice=25.0,
-            surcharge=0.0,
-            currency=pyticketswitch.Currency(
-                code='gbp',
-                number=826,
-                factor=100,
-                places=2,
-                pre_symbol="",
-                post_symbol="£",
+            AvailabilityDetails(
+                ticket_type='CIRCLE',
+                ticket_type_description='Upper circle',
+                price_band='C',
+                price_band_description='',
+                seatprice=25.0,
+                surcharge=4.0,
+                full_seatprice=0.0,
+                full_surcharge=0.0,
+                percentage_saving=0.0,
+                absolute_saving=0.0,
+                currency='gbp',
+                first_date=datetime.date(2017, 5, 3),
+                last_date=datetime.date(2017, 8, 30),
             ),
-            first_date=datetime.date(2016, 11, 29),
-            last_date=datetime.data(2017, 3, 27),
-            calendar_masks={
-                2016: {11: 805306368, 12: 1065289163},
-                2017: {1: 2012209087, 2: 251526135, 3: 117308407},
-            },
-            weekday_mask=63,
-            valid_quanities=[2, 3, 4, 5, 6, 7]
-        ),
-        pyticketswitch.AvailabilityDetails(
-            ticket_type='STALLS',
-            price_band='A',
-            ticket_type_description='Stalls',
-            price_band_description='',
-            seatprice=21.0,
-            surcharge=0.0,
-            currency=pyticketswitch.Currency(
-                code='gbp',
-                number=826,
-                factor=100,
-                places=2,
-                pre_symbol="",
-                post_symbol="£",
+            AvailabilityDetails(
+                ticket_type='CIRCLE',
+                ticket_type_description='Upper circle',
+                price_band='B',
+                price_band_description='',
+                seatprice=30.0,
+                surcharge=4.0,
+                full_seatprice=0.0,
+                full_surcharge=0.0,
+                percentage_saving=0.0,
+                absolute_saving=0.0,
+                currency='gbp',
+                first_date=datetime.date(2017, 5, 3),
+                last_date=datetime.date(2017, 8, 30),
             ),
-            first_date=datetime.date(2016, 11, 29),
-            last_date=datetime.data(2017, 3, 27),
-            calendar_masks={
-                2016: {11: 805306368, 12: 1065289163},
-                2017: {1: 2012209087, 2: 251526135, 3: 117308407},
-            },
-            weekday_mask=63,
-            valid_quanities=[2, 3, 4, 5, 6, 7]
-        ),
-        pyticketswitch.AvailabilityDetails(
-            ticket_type='STALLS',
-            price_band='B',
-            ticket_type_description='Stalls',
-            price_band_description='',
-            seatprice=18.0,
-            surcharge=0.0,
-            currency=pyticketswitch.Currency(
-                code='gbp',
-                number=826,
-                factor=100,
-                places=2,
-                pre_symbol="",
-                post_symbol="£",
-            ),
-            first_date=datetime.date(2016, 11, 29),
-            last_date=datetime.data(2017, 3, 27),
-            calendar_masks={
-                2016: {11: 805306368, 12: 1065289163},
-                2017: {1: 2012209087, 2: 251526135, 3: 117308407},
-            },
-            weekday_mask=63,
-            valid_quanities=[2, 3, 4, 5, 6, 7]
-        ),
-    ],
-)
+            AvailabilityDetails(
+                ticket_type='CIRCLE',
+                ticket_type_description='Upper circle',
+                price_band='A',
+                price_band_description='',
+                seatprice=35.0,
+                surcharge=4.0,
+                full_seatprice=0.0,
+                full_surcharge=0.0,
+                percentage_saving=0.0,
+                absolute_saving=0.0,
+                currency='gbp',
+                first_date=datetime.date(2017, 5, 3),
+                last_date=datetime.date(2017, 8, 30),
+            )
+        ],
+    )
 
 ```
 

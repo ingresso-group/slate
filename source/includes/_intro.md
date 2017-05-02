@@ -344,54 +344,13 @@ sometimes substantially. They should therefore only be used where necessary.
 ## API libraries / SDKs
 
 Our API libraries implement a thin client over the API. Where the API 
-will return JSON, the API wrappers return language-specific objects. We 
-have developed a [Python API library](https://github.com/ingresso-group/pyticketswitch).
+will return JSON, the API wrappers return language-specific objects (at the
+moment we have only implemented a single language):
 
+* python: [Pyticketswitch](https://github.com/ingresso-group/pyticketswitch)
 
-<blockquote class="lang-specific python">
-<p>
-<strong>Definition</strong>
-</p>
-</blockquote>
-
-```python
-pyticketswitch.Core()
-```
-
-<blockquote class="lang-specific python">
-<p>
-<strong>Example</strong>
-</p>
-</blockquote>
-
-```python
-import pyticketswitch
-
-api = pyticketswitch.Core(
-        url='https://demo.ticketswitch.com/tickets/xml_core.exe',
-        username='demo',
-        password='demopass',
-)
-```
-
-
-<p class="lang-specific python">
-The first step in most situations will be to instantiate a client. (TODO these code examples refer to XML wrappers)
-<br/><br/>
-<strong>Required Parameters</strong>
-</p>
-
-<table class="lang-specific python">
-<thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
-<tbody>
-<tr><td><code>url</code></td><td>string</td><td>API end point that the client will communicate with</td></tr>
-<tr class="lang-specific python"><td><code>username</code></td><td>string</td><td>Ticketswitch <code>user_id</code></td></tr>
-<tr class="lang-specific python"><td><code>password</code></td><td>string</td><td>Ticketswitch <code>user_passwd</code></td></tr>
-</tbody>
-</table>
-
-(TODO also include how to install e.g. with pip install?)
-
+Examples will be included in this documentation, but if you require further
+detail you can refer to the appropriate documentation for the language wrapper.
 
 ## Required Minimum Functionality
 
