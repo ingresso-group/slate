@@ -191,7 +191,7 @@ website as a **partial integration**. Some examples of partial integrations:
 website for booking the tickets. In this case the Ingresso API can be used to 
 [list events](#events-list).
 
-* Ingresso have invested in a high-converting booking app (where the user
+* Ingresso have invested in a high-conversion booking app (where the customer
 selects their performance and seats). This page is often where most development
 time is spent. It is possible to link to our booking page and we will
 automatically redirect back to your checkout page once the customer has
@@ -234,7 +234,7 @@ These options are discussed in more detail in [purchase](#purchase).
 ## How to get access to the API
 
 All examples shown in this documentation are for the `demo` user. This user has
-access to test product only - you can make purchases with this  user without any
+access to test product only - you can make purchases with this user without any
 impact on live tickets, or any need to contact us first.
 
 If you would like your own API credentials in order to start selling please 
