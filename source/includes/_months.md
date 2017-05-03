@@ -97,42 +97,37 @@ Parameter | Description
 ```
 
 ```python
+from pyticketswitch.month import Month
+
 [
-    pyticketswitch.Month(
-        month=12,
-        year=2016,
-        description='December',
-        month_bitmask=1065254912,
-        weekdays_bitmask=63,
-    ),
-    pyticketswitch.Month(
-        month=1,
+    Month(
+        month=5,
         year=2017,
-        description='January',
-        month_bitmask=2012209087,
-        weekdays_bitmask=63,
+        description='May',
+        _dates_bitmask=2079846360,
+        _weekday_bitmask=63,
     ),
-    pyticketswitch.Month(
-        month=2,
+    Month(
+        month=6,
         year=2017,
-        description='Febuary',
-        month_bitmask=251526135,
-        weekdays_bitmask=63,
+        description='June',
+        _dates_bitmask=1065287163,
+        _weekday_bitmask=63,
     ),
-    pyticketswitch.Month(
-        month=3,
+    Month(
+        month=7,
         year=2017,
-        description='March',
-        month_bitmask=2130574327,
-        weekdays_bitmask=63,
+        description='July',
+        _dates_bitmask=1876934526,
+        _weekday_bitmask=63,
     ),
-    pyticketswitch.Month(
-        month=4,
+    Month(
+        month=8,
         year=2017,
-        description='April',
-        month_bitmask=16254,
-        weekdays_bitmask=63,
-   )
+        description='August',
+        _dates_bitmask=2113665007,
+        _weekday_bitmask=63,
+    )
 ]
 ```
 

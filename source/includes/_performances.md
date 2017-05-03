@@ -68,7 +68,7 @@ curl https://demo.ticketswitch.com/f13/performances.v1 \
 from pyticketswitch import Client
 
 client = Client('demo', 'demopass')
-performances = client.list_performances('6IF')
+performances, meta = client.list_performances('6IF')
 ```
 
 Parameter | Description
@@ -236,87 +236,142 @@ Parameter | Description
 ```
 
 ```python
+from pyticketswitch.performance import Performance
+
 [
-    pyticketswitch.Performance(
-        id='6IF-A6Z',
+    Performance(
+        id='6IF-B0O',
         event_id='6IF',
-        date_time=datetime.datetime(2016, 12, 22, 19, 30, 0, 0),
+        date_time=datetime.datetime(2017, 5, 4, 19, 30, tzinfo=tzoffset(None, 3600)),
+        date_description='Thu, 4th May 2017',
+        time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
         cached_max_seats=6,
+        no_singles_cost_range=None,
+        is_ghost=False,
+        running_time=120,
     ),
-    pyticketswitch.Performance(
-        id='6IF-A70',
+    Performance(
+        id='6IF-B0P',
         event_id='6IF',
-        date_time=datetime.datetime(2016, 12, 23, 19, 30, 0, 0),
+        date_time=datetime.datetime(2017, 5, 5, 19, 30, tzinfo=tzoffset(None, 3600)),
+        date_description='Fri, 5th May 2017',
+        time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
         cached_max_seats=6,
+        is_ghost=False,
+        running_time=120,
     ),
-    pyticketswitch.Performance(
-        id='6IF-A72',
+    Performance(
+        id='6IF-B0R',
         event_id='6IF',
-        date_time=datetime.datetime(2016, 12, 25, 19, 30, 0, 0),
+        date_time=datetime.datetime(2017, 5, 7, 19, 30, tzinfo=tzoffset(None, 3600)),
+        date_description='Sun, 7th May 2017',
+        time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
         cached_max_seats=6,
+        is_ghost=False,
+        running_time=120,
     ),
-    pyticketswitch.Performance(
-        id='6IF-A73',
+    Performance(
+        id='6IF-B0S',
         event_id='6IF',
-        date_time=datetime.datetime(2016, 12, 26, 19, 30, 0, 0),
+        date_time=datetime.datetime(2017, 5, 8, 19, 30, tzinfo=tzoffset(None, 3600)),
+        date_description='Mon, 8th May 2017',
+        time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
         cached_max_seats=6,
+        is_ghost=False,
+        running_time=120,
     ),
-    pyticketswitch.Performance(
-        id='6IF-A74',
+    Performance(
+        id='6IF-B0T',
         event_id='6IF',
-        date_time=datetime.datetime(2016, 12, 27, 19, 30, 0, 0),
+        date_time=datetime.datetime(2017, 5, 9, 19, 30, tzinfo=tzoffset(None, 3600)),
+        date_description='Tue, 9th May 2017',
+        time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
         cached_max_seats=6,
+        is_ghost=False,
+        running_time=120,
     ),
-    pyticketswitch.Performance(
-        id='6IF-A75',
+    Performance(
+        id='6IF-B0U',
         event_id='6IF',
-        date_time=datetime.datetime(2016, 12, 28, 19, 30, 0, 0),
+        date_time=datetime.datetime(2017, 5, 10, 19, 30, tzinfo=tzoffset(None, 3600)),
+        date_description='Wed, 10th May 2017',
+        time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
         cached_max_seats=6,
+        is_ghost=False,
+        running_time=120,
     ),
-    pyticketswitch.Performance(
-        id='6IF-A76',
+    Performance(
+        id='6IF-B0V',
         event_id='6IF',
-        date_time=datetime.datetime(2016, 12, 29, 19, 30, 0, 0),
+        date_time=datetime.datetime(2017, 5, 11, 19, 30, tzinfo=tzoffset(None, 3600)),
+        date_description='Thu, 11th May 2017',
+        time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
         cached_max_seats=6,
+        is_ghost=False,
+        running_time=120,
     ),
-    pyticketswitch.Performance(
-        id='6IF-A77',
+    Performance(
+        id='6IF-B0W',
         event_id='6IF',
-        date_time=datetime.datetime(2016, 12, 30, 19, 30, 0, 0),
+        date_time=datetime.datetime(2017, 5, 12, 19, 30, tzinfo=tzoffset(None, 3600)),
+        date_description='Fri, 12th May 2017',
+        time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
         cached_max_seats=6,
+        is_ghost=False,
+        running_time=120,
     ),
-    pyticketswitch.Performance(
-        id='6IF-A79',
+    Performance(
+        id='6IF-B0Y',
         event_id='6IF',
-        date_time=datetime.datetime(2017, 1, 1, 19, 30, 0, 0),
+        date_time=datetime.datetime(2017, 5, 14, 19, 30, tzinfo=tzoffset(None, 3600)),
+        date_description='Sun, 14th May 2017',
+        time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
         cached_max_seats=6,
+        is_ghost=False,
+        running_time=120,
     ),
-    pyticketswitch.Performance(
-        id='6IF-A7A',
+    Performance(
+        id='6IF-B0Z',
         event_id='6IF',
-        date_time=datetime.datetime(2017, 1, 2, 19, 30, 0, 0),
+        date_time=datetime.datetime(2017, 5, 15, 19, 30, tzinfo=tzoffset(None, 3600)),
+        date_description='Mon, 15th May 2017',
+        time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
         cached_max_seats=6,
+        is_ghost=False,
+        running_time=120,
     ),
+    Performance(
+        id='6IF-B10',
+        event_id='6IF',
+        date_time=datetime.datetime(2017, 5, 16, 19, 30, tzinfo=tzoffset(None, 3600)),
+        date_description='Tue, 16th May 2017',
+        time_description='7.30 PM',
+        has_pool_seats=True,
+        is_limited=False,
+        cached_max_seats=6,
+        is_ghost=False,
+        running_time=120,
+    )
 ]
 ```
 
@@ -392,7 +447,7 @@ from pyticketswitch import Client
 
 
 client = Client('demo', 'demopass')
-performances = client.get_performances(['6IF-A5R'])
+performances, meta = client.get_performances(['6IF-B2E', '6IF-B2F'])
 ```
 
 Parameter | Description
@@ -449,23 +504,31 @@ Parameter | Description
 ```
 
 ```python
+from pyticketswitch.performance import Performance
+
 {
-    '6IF-A8J': pyticketswitch.Performance(
-        id='6IF-A8J',
+    '6IF-B2E': Performance(
+        id='6IF-B2E',
         event_id='6IF',
-        date_time=datetime.datetime(2017, 2, 16, 19, 30, 0, 0),
+        date_time=datetime.datetime(2017, 7, 5, 19, 30, tzinfo=tzoffset(None, 3600)),
+        date_description='Wed, 5th July 2017',
+        time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
-        cached_max_seats=123,
+        is_ghost=False,
+        running_time=120,
     ),
-    '6IF-A8J': pyticketswitch.Performance(
-        id='6IF-A8K',
+    '6IF-B2F': Performance(
+        id='6IF-B2F',
         event_id='6IF',
-        date_time=datetime.datetime(2017, 2, 17, 19, 30, 0, 0),
+        date_time=datetime.datetime(2017, 7, 6, 19, 30, tzinfo=tzoffset(None, 3600)),
+        date_description='Thu, 6th July 2017',
+        time_description='7.30 PM',
         has_pool_seats=True,
-        is_limited=True,
-        cached_max_seats=456,
-    ),
+        is_limited=False,
+        is_ghost=False,
+        running_time=120,
+    )
 }
 ```
 
@@ -518,9 +581,9 @@ price.</aside>
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/performancess_by_id.v1 \
+curl https://demo.ticketswitch.com/f13/performances_by_id.v1 \
     -u "demo:demopass" \
-    -d "perf_id_list=6L9-M2R" \
+    -d "perf_id_list=6L9-M5P" \
     -d "req_cost_range" \
     -d "req_cost_range_best_value_offer" \
     -d "req_cost_range_max_saving_offer" \
@@ -536,8 +599,8 @@ from pyticketswitch import Client
 
 
 client = Client('demo', 'demopass')
-events = client.get_performances(
-    event_ids=['6IF-A8K'],
+performances, meta = client.get_performances(
+    performance_ids=['6L9-M4C'],
     cost_range=True,
     best_value_offer=True,
     max_saving_offer=True,
@@ -686,30 +749,30 @@ Parameter | Description
 }
 ```
 
+FIXME: no cost ranges on this performance
 ```python
-pyticketswitch.Performance(
-    id='6IF-A8K',
-    cost_range=pyticketswitch.CostRange(
-        valid_quantities=[2, 3, 4, 5, 6, 7],
-        max_seatprice=47.0,
-        max_surcharge=0.0,
-        min_seatprice=18.0,
-        min_surcharge=0.0,
-        currency=pyticketswitch.Currency(
-            code='gbp',
-        )
-    ),
-    no_singles_cost_range = pyticketswitch.CostRange(
-        valid_quantities=[2, 3, 4, 5, 6, 7],
-        max_seatprice=47.0,
-        max_surcharge=0.0,
-        min_seatprice=18.0,
-        min_surcharge=0.0,
-        currency=pyticketswitch.Currency(
-            code='gbp',
-        )
-    ),
-)
+from pyticketswitch.performance import Performance
+
+{
+    '6L9-M2R': Performance(
+        id='6L9-M2R',
+        event_id='6L9',
+        date_time=datetime.datetime(2017, 4, 5, 22, 30, tzinfo=tzoffset(None, -25200)),
+        date_description='Wed, 5th April 2017',
+        time_description='10.30 PM',
+        has_pool_seats=False,
+        is_limited=False,
+        cached_max_seats=None,
+        cost_range=None,
+        no_singles_cost_range=None,
+        is_ghost=True,
+        name=None,
+        running_time=None,
+        availability_details=[
+            
+        ],
+    )
+}
 ```
 
 <aside class="notice">In the UK market, offers are typically classified as
@@ -792,7 +855,7 @@ curl https://demo.ticketswitch.com/f13/performances_by_id.v1 \
 from pyticketickswitch import client
 
 client = Client('demo', 'demopass')
-client.get_events(['6IF'], availability=True, availability_with_performances=True)
+performances, meta = client.get_performances(['6L9-M2R'], availability=True)
 ```
 
 Parameter | Description

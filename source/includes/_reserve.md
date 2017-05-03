@@ -67,7 +67,7 @@ curl https://demo.ticketswitch.com/f13/reserve.v1 \
 from pyticketswitch import Client
 
 client = Client('demo', 'demopass')
-reservation = client.make_reservation(
+reservation, meta = client.make_reservation(
     performance_id='6IF-A7N',
     ticket_type_code='CIRCLE',
     price_band_code='C/pool',
@@ -75,8 +75,6 @@ reservation = client.make_reservation(
     discounts=['ADULT', 'CHILD', 'CHILD']
 )
 ```
-
-
 
 > **Example request - reserving specific seats**
 
@@ -97,7 +95,7 @@ curl https://demo.ticketswitch.com/f13/reserve.v1 \
 from pyticketswitch import Client
 
 client = Client('demo', 'demopass')
-reservation = client.make_reservation(
+reservation, meta = client.make_reservation(
     performance_id='7AB-5',
     ticket_type_code='STALLS',
     price_band_code='A/pool',
@@ -121,7 +119,9 @@ curl https://demo.ticketswitch.com/f13/reserve.v1 \
 from pyticketswitch import Client
 
 client = Client('demo', 'demopass')
-reservation = client.make_reservation(token='s2--pFMaAzbxn3wG3zY-OAuclGgU9zzsUFJOLXpOquDKNGpwGn205i4_XzD6O6i8ZCqo2qxmA5QdvETbr7DlqTsbLayzHrvvf9zrz2NdGZuggwXHdx3cgPdbJzFeexIylGsxo7d3T9FWUkViv76Rz7qUH8qXeb9nWjF7ahrNsuHA8w_R63XmOQVNDIvJFS1hC6vFO3sD3t0MqKKguqRWuP4mM2vRN6BimgWYqrNqQw5D_-bfumE1Xl2vXu3FgSEp_N9dpsQ1fXK3qfoOiH-Hsd0F2Zh84IyMcrJkGZH8dlhdEWbvaMlu1rQ8Kw6hJMUigc31jbfHjuquCpDgI-OKyV8LQuQGz8wZsxj3jwWmLClcl50W7p1dTVLEYIW52jWqALRYFAresEGqzct0xDCeaoAjZ5vagMS2KXVmZ')
+reservation, meta = client.make_reservation(
+    token='s2--pFMaAzbxn3wG3zY-OAuclGgU9zzsUFJOLXpOquDKNGpwGn205i4_XzD6O6i8ZCqo2qxmA5QdvETbr7DlqTsbLayzHrvvf9zrz2NdGZuggwXHdx3cgPdbJzFeexIylGsxo7d3T9FWUkViv76Rz7qUH8qXeb9nWjF7ahrNsuHA8w_R63XmOQVNDIvJFS1hC6vFO3sD3t0MqKKguqRWuP4mM2vRN6BimgWYqrNqQw5D_-bfumE1Xl2vXu3FgSEp_N9dpsQ1fXK3qfoOiH-Hsd0F2Zh84IyMcrJkGZH8dlhdEWbvaMlu1rQ8Kw6hJMUigc31jbfHjuquCpDgI-OKyV8LQuQGz8wZsxj3jwWmLClcl50W7p1dTVLEYIW52jWqALRYFAresEGqzct0xDCeaoAjZ5vagMS2KXVmZ'
+)
 ```
 
 Note that the request parameters and response attributes are similar to
@@ -338,194 +338,141 @@ Parameter | Description
 ```
 
 ```python
-from pyticketswitch.reservation import Reservation
+from pyticketswitch.send_method import SendMethod
 from pyticketswitch.country import Country
+from pyticketswitch.seat import Seat
 from pyticketswitch.address import Address
-from pyticketswitch.trolley import Trolley
-from pyticketswitch.bundle import Bundle
-from pyticketswitch.currency import Currency
-from pyticketswitch.order import TicketOrder, Order
 from pyticketswitch.event import Event
+from pyticketswitch.bundle import Bundle
+from pyticketswitch.performance import Performance
+from pyticketswitch.reservation import Reservation
+from pyticketswitch.order import TicketOrder
+from pyticketswitch.trolley import Trolley
+from pyticketswitch.order import Order
 
 Reservation(
-    needs_payment_card=False,
-    needs_email_address=False,
-    needs_agent_reference=False,
-    allowed_countries = [
-        Country(code='ad', description='Andorra'),
-        Country(code='ae', description='United Arab Emirates'),
-        Country(code='af', description='Afghanistan'),
-        Country(code='ag', description='Antigua and Barbuda'),
-        Country(code='uk', description='United Kingdom'),
-        Country(code='um', description='The United States Minor Outlying Islands'),
-        Country(code='us', description='United States of America'),
-        Country(code='uy', description='Uruguay'),
-    ],
-    prefilled_address=Address(
-        lines=[],
-        country_code='uk',
-        county='',
-        email_address='',
-        postcode='',
-        town='',
-        home_phone='',
-        work_phone='',
-    ),
+    status='reserved',
+    reserved_at=datetime.datetime(2017, 5, 3, 15, 1, 45, tzinfo=tzutc()),
     trolley=Trolley(
-        minutes_left=15,
-        transaction_uuid='0a50248e-cd0c-11e6-ae47-0025903268a2',
+        transaction_uuid='6d080a78-3011-11e7-b228-0025903268dc',
         bundles=[
             Bundle(
-                source_code='ext_test0',
-                description='External Test Backend 0',
-                total=52.5,
-                total_seatprice=51.0,
-                total_surcharge=0.0,
-                total_send_cost=1.5,
-                currency=Currency(code='gbp'),
+                source_code='ext_test1',
                 orders=[
                     Order(
                         item=1,
-                        price_band_code='C/pool',
-                        ticket_type_code='CIRCLE',
-                        ticket_type_description='Upper Circle',
-                        number_of_seats=3,
-                        total_seatprice=51.0,
-                        total_surcharge=0,
-                        seat_request_status='not_requested',
                         event=Event(
-                            id='6IF',
+                            id='7AB',
                             status='live',
-                            description='Matthew Bourne\'s Nutcracker TEST',
-                            source='External Test Backend 0',
+                            description='The Unremarkable Incident of the Cat at Lunchtime'
+,
+                            source='External Test Backend 1',
+                            source_code='ext_test1',
                             event_type='simple_ticket',
-                            venue='Sadler\'s Wells',
-
-                            classes=['Arts & Culture'],
-                            filters=[],
-
-                            postcode='EC1R 4TN',
+                            venue='Lyric Apollo',
+                            classes={
+                                'theatre': 'Theatre'
+                            },
+                            postcode='W6 7ES',
                             city='London',
+                            city_code='london-uk',
                             country='United Kingdom',
                             country_code='uk',
-                            latitude=51.52961137,
-                            longditude=-0.10601562,
-
-                            max_running_time=120,
-                            min_running_time=120,
-
+                            latitude=51.49306,
+                            longitude=-0.22639,
+                            max_running_time=90,
+                            min_running_time=90,
                             show_performance_time=True,
                             has_performances=True,
                             is_seated=True,
                             needs_departure_date=False,
                             needs_duration=False,
-                            needs_performance=True,
-
-                            upsell_list=['6IE', 'MH0'],
+                            needs_performance=False,
                         ),
                         performance=Performance(
-                            id='6IF-A7N',
-                            event_id='6IF',
-                            date_time=datetime.datetime(2017, 1, 15, 19, 30, 0),
+                            id='7AB-5',
+                            event_id='7AB',
+                            date_time=datetime.datetime(2019, 1, 1, 15, 30, tzinfo=tzutc()) ,
+                            date_description='Tue, 1st January 2019',
+                            time_description='3.30 PM',
                             has_pool_seats=True,
                             is_limited=False,
+                            is_ghost=False,
+                            running_time=90,
                         ),
+                        price_band_code='A/pool',
+                        ticket_type_code='STALLS',
+                        ticket_type_description='Stalls',
                         ticket_orders=[
                             TicketOrder(
-                                code='ADULT',
-                                description='Adult standard',
-                                number_of_seats=1,
-                                total_seatprice=25.0,
-                                total_surcharge=0.0,
-                                disallowed_mask=0,
+                                code='NORMAL',
                                 seats=[
-                                    Seat(id_='GQ361', column='361', row='GQ'),
-                                ]
-                            ),
-                            TicketOrder(
-                                code='CHILD',
-                                description='Child rate',
+                                    Seat(
+                                        id='A1',
+                                        column='1',
+                                        row='A',
+                                        separator='',
+                                        is_restricted=True,
+                                        seat_text='Restricted View',
+                                    ),
+                                    Seat(
+                                        id='A2',
+                                        column='2',
+                                        row='A',
+                                        separator='',
+                                        is_restricted=True,
+                                        seat_text='Restricted View',
+                                    )
+                                ],
+                                description='Regular Ticket',
                                 number_of_seats=2,
-                                total_seatprice=26.0,
-                                total_surcharge=0.0,
-                                disallowed_mask=0,
-                                seats=[
-                                    Seat(id_='GQ358', column='358', row='GQ'),
-                                    Seat(id_='GQ355', column='355', row='GQ'),
-                                ]
+                                seatprice=50.0,
+                                surcharge=5.0,
+                                total_seatprice=100.0,
+                                total_surcharge=10.0,
                             )
                         ],
-                    ),
-                ]
-            ),
-            Bundle(
-                source_code='ingresso_one_test',
-                description='Ingresso',
-                total=40.0,
-                total_seatprice=0.0,
-                total_surcharge=0.0,
-                total_send_cost=0.0,
-                currency=Currency(code='gbp'),
-                orders=[
-                    Order(
-                        item=2,
-                        price_band_code='C/pool',
-                        ticket_type_code='CIRCLE',
-                        ticket_type_description='Upper Circle',
-                        number_of_seats=3,
-                        total_seatprice=51.0,
-                        total_surcharge=0,
+                        number_of_seats=2,
+                        total_seatprice=100.0,
+                        total_surcharge=10.0,
                         seat_request_status='got_all',
-                        event=Event(
-                            id='3CVB',
-                            status='live',
-                            description='Test Event - Type 10 (d)',
-                            source='ingresso_one_test',
-                            event_type='simple_ticket',
-                            venue='Belfast Tours Ltd',
-                            classes=['Theater'],
-                            postcode='BT1 2BE',
-                            country='United Kingdom',
-                            country_code='uk',
-                            latitude=10,
-                            longditude=20,
-                            show_performance_time=True,
-                            has_performances=True,
-                            is_seated=True,
-                            needs_departure_date=False,
-                            needs_duration=False,
-                            needs_performance=True,
-                        ),
-                        performance=Performance(
-                            id='3CVB-22',
-                            event_id='3CVB',
-                            date_time=datetime.datetime(2017, 2, 10, 20, 0, 0),
-                            has_pool_seats=True,
-                            is_limited=False,
-                        ),
-                        requested_seats=[
-                            Seat(id_='C7', column='7', row='C'),
-                            Seat(id_='C8', column='8', row='C'),
+                        requested_seat_ids=[
+                            'A1',
+                            'A2'
                         ],
-                        ticket_orders=[
-                            TicketOrder(
-                                code='RED/RED/1',
-                                description='FULL PRICE',
-                                number_of_seats=2,
-                                total_seatprice=40.0,
-                                total_surcharge=0.0,
-                                disallowed_mask=0,
-                                seats=[
-                                    Seat(id_='C7', column='7', row='C'),
-                                    Seat(id_='C8', column='8', row='C'),
-                                ],
-                            ),
-                        ],
-                    ),
-                ]
+                        send_method=SendMethod(
+                            code='VOUCH',
+                            cost=0.0,
+                            description='Printable eTicket',
+                            type='selfprint',
+                            can_generate_self_print=False,
+                        ),
+                    )
+                ],
+                description='External Test Backend 1',
+                total_seatprice=100.0,
+                total_surcharge=10.0,
+                total_send_cost=0.0,
+                total=110.0,
+                currency_code='gbp',
             )
-        ]
-    )
+        ],
+        minutes_left=14.9833333333,
+    ),
+    languages=[
+        'en'
+    ],
+    needs_payment_card=False,
+    needs_email_address=False,
+    needs_agent_reference=False,
+    can_edit_address=True,
+    allowed_countries=[
+        Country(
+            code='uk',
+            description='United Kingdom',
+        )
+    ],
+    minutes_left=14.9833333333,
 )
 
 ```

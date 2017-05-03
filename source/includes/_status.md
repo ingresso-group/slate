@@ -27,7 +27,7 @@ curl https://demo.ticketswitch.com/f13/status.v1 \
 from pyticketswitch import Client
 
 client = Client('demo', 'demopass')
-TODO: FINISH ME NIC
+status, meta = client.get_status(transaction_uuid='6d080a78-3011-11e7-b228-0025903268dc')
 ```
 
 Parameter | Description
@@ -173,6 +173,151 @@ Parameter | Description
     "trolley_order_count": 1
   }
 }
+```
+
+```python
+from pyticketswitch.country import Country
+from pyticketswitch.trolley import Trolley
+from pyticketswitch.status import Status
+from pyticketswitch.seat import Seat
+from pyticketswitch.performance import Performance
+from pyticketswitch.order import TicketOrder
+from pyticketswitch.event import Event
+from pyticketswitch.send_method import SendMethod
+from pyticketswitch.order import Order
+from pyticketswitch.address import Address
+from pyticketswitch.bundle import Bundle
+
+Status(
+    status='reserved',
+    reserved_at=datetime.datetime(2017, 5, 3, 17, 2, 17, tzinfo=tzutc()),
+    trolley=Trolley(
+        transaction_uuid='43768b36-3022-11e7-979f-002590326962',
+        bundles=[
+            Bundle(
+                source_code='ext_test0',
+                orders=[
+                    Order(
+                        item=1,
+                        event=Event(
+                            id='6IF',
+                            status='live',
+                            description="Matthew Bourne's Nutcracker TEST",
+                            source='External Test Backend 0',
+                            source_code='ext_test0',
+                            event_type='simple_ticket',
+                            venue="Sadler's Wells",
+                            classes={
+                                'dance': 'Ballet & Dance'
+                            },
+                            filters=[
+                                
+                            ],
+                            postcode='EC1R 4TN',
+                            city='London',
+                            city_code='london-uk',
+                            country='United Kingdom',
+                            country_code='uk',
+                            latitude=51.52961137,
+                            longitude=-0.10601562,
+                            max_running_time=120,
+                            min_running_time=120,
+                            show_performance_time=True,
+                            has_performances=True,
+                            is_seated=True,
+                            needs_departure_date=False,
+                            needs_duration=False,
+                            needs_performance=False,
+                            upsell_list=[
+                                '6IE',
+                                'MH0'
+                            ],
+                            critic_review_percent=100,
+                        ),
+                        performance=Performance(
+                            id='6IF-B0O',
+                            event_id='6IF',
+                            date_time=datetime.datetime(2017, 5, 4, 19, 30, tzinfo=tzoffset(None, 3600)),
+                            date_description='Thu, 4th May 2017',
+                            time_description='7.30 PM',
+                            has_pool_seats=True,
+                            is_limited=False,
+                            is_ghost=False,
+                            running_time=120,
+                        ),
+                        price_band_code='A/pool',
+                        ticket_type_code='STALLS',
+                        ticket_type_description='Stalls',
+                        ticket_orders=[
+                            TicketOrder(
+                                code='',
+                                seats=[
+                                    Seat(
+                                        id='HJ401',
+                                        column='401',
+                                        row='HJ',
+                                        separator='',
+                                        is_restricted=False,
+                                    ),
+                                    Seat(
+                                        id='HJ402',
+                                        column='402',
+                                        row='HJ',
+                                        separator='',
+                                        is_restricted=False,
+                                    )
+                                ],
+                                description='',
+                                number_of_seats=2,
+                                seatprice=21.0,
+                                surcharge=3.0,
+                                total_seatprice=42.0,
+                                total_surcharge=6.0,
+                            )
+                        ],
+                        number_of_seats=2,
+                        total_seatprice=42.0,
+                        total_surcharge=6.0,
+                        seat_request_status='not_requested',
+                        requested_seat_ids=[
+                            
+                        ],
+                        send_method=SendMethod(
+                            code='COBO',
+                            cost=1.5,
+                            description='Collect from the venue',
+                            type='collect',
+                        ),
+                    )
+                ],
+                description='External Test Backend 0',
+                total_seatprice=42.0,
+                total_surcharge=6.0,
+                total_send_cost=1.5,
+                total=49.5,
+                currency_code='gbp',
+            )
+        ],
+        discarded_orders=[
+            
+        ],
+        minutes_left=14.5,
+    ),
+    languages=[
+        'en'
+    ],
+    needs_payment_card=False,
+    needs_email_address=False,
+    needs_agent_reference=False,
+    can_edit_address=True,
+    allowed_countries=[
+        Country(
+            code='uk',
+            description='United Kingdom',
+        )
+    ],
+    minutes_left=14.5,
+)
 ```
 
 The returned attributes are dependent on the status of the transaction. For

@@ -30,7 +30,8 @@ curl https://demo.ticketswitch.com/f13/trans_id_status.v1 \
 from pyticketswitch import Client
 
 client = Client('demo', 'demopass')
-TODO: FINISH ME NIC
+status, meta = client.get_status(transaction_id='T000-0000-8ZVV-2E78')
+
 ```
 
 Parameter | Description
@@ -197,6 +198,139 @@ Parameter | Description
     "trolley_order_count": 1
   }
 }
+
+```
+
+```python
+from pyticketswitch.trolley import Trolley
+from pyticketswitch.status import Status
+from pyticketswitch.seat import Seat
+from pyticketswitch.performance import Performance
+from pyticketswitch.order import TicketOrder
+from pyticketswitch.purchase_result import PurchaseResult
+from pyticketswitch.event import Event
+from pyticketswitch.send_method import SendMethod
+from pyticketswitch.order import Order
+from pyticketswitch.bundle import Bundle
+
+Status(
+    status='purchased',
+    reserved_at=datetime.datetime(2017, 5, 3, 15, 1, 45, tzinfo=tzutc()),
+    purchased_at=datetime.datetime(2017, 5, 3, 15, 14, 5, tzinfo=tzutc()),
+    trolley=Trolley(
+        transaction_uuid='6d080a78-3011-11e7-b228-0025903268dc',
+        transaction_id='T000-0000-8ZVV-2E78',
+        bundles=[
+            Bundle(
+                source_code='ext_test1',
+                orders=[
+                    Order(
+                        item=1,
+                        event=Event(
+                            id='7AB',
+                            status='live',
+                            description='The Unremarkable Incident of the Cat at Lunchtime',
+                            source='External Test Backend 1',
+                            source_code='ext_test1',
+                            event_type='simple_ticket',
+                            venue='Lyric Apollo',
+                            classes={
+                                'theatre': 'Theatre'
+                            },
+                            postcode='W6 7ES',
+                            city='London',
+                            city_code='london-uk',
+                            country='United Kingdom',
+                            country_code='uk',
+                            latitude=51.49306,
+                            longitude=-0.22639,
+                            max_running_time=90,
+                            min_running_time=90,
+                            show_performance_time=True,
+                            has_performances=True,
+                            is_seated=True,
+                            needs_departure_date=False,
+                            needs_duration=False,
+                            needs_performance=False,
+                        ),
+                        performance=Performance(
+                            id='7AB-5',
+                            event_id='7AB',
+                            date_time=datetime.datetime(2019, 1, 1, 15, 30, tzinfo=tzutc()),
+                            date_description='Tue, 1st January 2019',
+                            time_description='3.30 PM',
+                            has_pool_seats=True,
+                            is_limited=False,
+                            is_ghost=False,
+                            running_time=90,
+                        ),
+                        price_band_code='A/pool',
+                        ticket_type_code='STALLS',
+                        ticket_type_description='Stalls',
+                        ticket_orders=[
+                            TicketOrder(
+                                code='NORMAL',
+                                seats=[
+                                    Seat(
+                                        id='A1',
+                                        column='1',
+                                        row='A',
+                                        separator='',
+                                        is_restricted=True,
+                                        seat_text='Restricted View',
+                                    ),
+                                    Seat(
+                                        id='A2',
+                                        column='2',
+                                        row='A',
+                                        separator='',
+                                        is_restricted=True,
+                                        seat_text='Restricted View',
+                                    )
+                                ],
+                                description='Regular Ticket',
+                                number_of_seats=2,
+                                seatprice=50.0,
+                                surcharge=5.0,
+                                total_seatprice=100.0,
+                                total_surcharge=10.0,
+                            )
+                        ],
+                        number_of_seats=2,
+                        total_seatprice=100.0,
+                        total_surcharge=10.0,
+                        seat_request_status='got_all',
+                        requested_seat_ids=[
+                            'A1',
+                            'A2'
+                        ],
+                        backend_purchase_reference='PURCHASE-DA6E-0',
+                        send_method=SendMethod(
+                            code='VOUCH',
+                            cost=0.0,
+                            description='Printable eTicket',
+                            type='selfprint',
+                            can_generate_self_print=False,
+                            self_print_voucher_url='https://api.ticketswitch.com/tickets/web_self_print.buy/demo?crypto_block=U_--z_v1JesEuC-2FgKkj4LEhJdbZVhIdnBp3b0sP0uh1KqsYF_fumHhC_IFKIXh471k1Del_9Wi0W8_8Ay7xJNhbK299MEf-wLwbOmtNBdnzh8BZ9icsINHBS0w5gNCc7zbY',
+                        ),
+                    )
+                ],
+                description='External Test Backend 1',
+                total_seatprice=100.0,
+                total_surcharge=10.0,
+                total_send_cost=0.0,
+                total=110.0,
+                currency_code='gbp',
+            )
+        ],
+        purchase_result=PurchaseResult(
+            success=True,
+        ),
+    ),
+    languages=[
+        'en'
+    ],
+)
 ```
 
 The returned attributes are dependent on the status of the transaction. For

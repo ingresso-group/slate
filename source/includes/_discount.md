@@ -38,6 +38,14 @@ curl https://demo.ticketswitch.com/f13/discounts.v1 \
     -G
 ```
 
+```python
+from pyticketswitch import Client
+
+client = Client('demo', 'demopass')
+discounts, meta = client.get_discounts('6IF-B0O', 'STALLS', 'A/pool')
+```
+
+
 ### Request
 
 Parameter | Description
@@ -125,6 +133,64 @@ Parameter | Description
 }
 ```
 
+```python
+from pyticketswitch.discount import Discount
+
+[
+    Discount(
+        code='ADULT',
+        description='Adult',
+        price_band_code='A/pool',
+        is_offer=False,
+        seatprice=21.0,
+        surcharge=3.0,
+        non_offer_seatprice=21.0,
+        non_offer_surcharge=3.0,
+        availability=6,
+        percentage_saving=0,
+        absolute_saving=0.0,
+    ),
+    Discount(
+        code='CHILD',
+        description='Child rate',
+        price_band_code='A/pool',
+        is_offer=False,
+        seatprice=11.0,
+        surcharge=2.0,
+        non_offer_seatprice=11.0,
+        non_offer_surcharge=2.0,
+        availability=6,
+        percentage_saving=0,
+        absolute_saving=0.0,
+    ),
+    Discount(
+        code='STUDENT',
+        description='Student rate',
+        price_band_code='A/pool',
+        is_offer=False,
+        seatprice=16.0,
+        surcharge=2.0,
+        non_offer_seatprice=16.0,
+        non_offer_surcharge=2.0,
+        availability=6,
+        percentage_saving=0,
+        absolute_saving=0.0,
+    ),
+    Discount(
+        code='OAP',
+        description='Senior citizen rate',
+        price_band_code='A/pool',
+        is_offer=False,
+        seatprice=17.0,
+        surcharge=2.0,
+        non_offer_seatprice=17.0,
+        non_offer_surcharge=2.0,
+        availability=6,
+        percentage_saving=0,
+        absolute_saving=0.0,
+    )
+]
+```
 
 The following attributes are returned within the `discount` dictionary. These 
 are the same attributes returned in the [availability](#availability) price band

@@ -39,7 +39,7 @@ curl https://demo.ticketswitch.com/f13/availability.v1 \
 from pyticketswitch import Client
 
 client = Client('demo', 'demopass')
-availability, meta = client.get_availability('6IF-A8B')
+ticket_types, meta = client.get_availability('6IF-B29')
 ```
 
 Attribute | Description
@@ -197,6 +197,141 @@ Parameter | Description
 }
 ```
 
+```python
+from pyticketswitch.price_band import PriceBand
+from pyticketswitch.discount import Discount
+from pyticketswitch.ticket_type import TicketType
+
+[
+    TicketType(
+        code='CIRCLE',
+        description='Upper circle',
+        price_bands=[
+            PriceBand(
+                code='A/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='',
+                    description='',
+                    price_band_code='A/pool',
+                    is_offer=False,
+                    seatprice=35.0,
+                    surcharge=4.0,
+                    non_offer_seatprice=35.0,
+                    non_offer_surcharge=4.0,
+                    availability=6,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats_are_real=True,
+            ),
+            PriceBand(
+                code='B/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='',
+                    description='',
+                    price_band_code='B/pool',
+                    is_offer=False,
+                    seatprice=30.0,
+                    surcharge=4.0,
+                    non_offer_seatprice=30.0,
+                    non_offer_surcharge=4.0,
+                    availability=6,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats_are_real=True,
+            ),
+            PriceBand(
+                code='C/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='',
+                    description='',
+                    price_band_code='C/pool',
+                    is_offer=False,
+                    seatprice=25.0,
+                    surcharge=4.0,
+                    non_offer_seatprice=25.0,
+                    non_offer_surcharge=4.0,
+                    availability=6,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats_are_real=True,
+            )
+        ],
+    ),
+    TicketType(
+        code='STALLS',
+        description='Stalls',
+        price_bands=[
+            PriceBand(
+                code='A/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='',
+                    description='',
+                    price_band_code='A/pool',
+                    is_offer=False,
+                    seatprice=21.0,
+                    surcharge=3.0,
+                    non_offer_seatprice=21.0,
+                    non_offer_surcharge=3.0,
+                    availability=6,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats_are_real=True,
+            ),
+            PriceBand(
+                code='B/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='',
+                    description='',
+                    price_band_code='B/pool',
+                    is_offer=False,
+                    seatprice=18.0,
+                    surcharge=3.0,
+                    non_offer_seatprice=18.0,
+                    non_offer_surcharge=3.0,
+                    availability=3,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats_are_real=True,
+            )
+        ],
+    ),
+    TicketType(
+        code='BALCONY',
+        description='Balcony',
+        price_bands=[
+            PriceBand(
+                code='A/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='',
+                    description='',
+                    price_band_code='A/pool',
+                    is_offer=False,
+                    seatprice=47.0,
+                    surcharge=5.0,
+                    non_offer_seatprice=47.0,
+                    non_offer_surcharge=5.0,
+                    availability=6,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats_are_real=True,
+            )
+        ],
+    )
+]
+```
+
 Availability is divided into a set of ticket types, and each ticket type is
 subdivided into price bands. If you request individual seats for a seated event
 each price band includes seat blocks for the contiguous seats. The structure of
@@ -306,6 +441,13 @@ curl https://demo.ticketswitch.com/f13/availability.v1 \
     -d "add_seat_blocks" \
     --compressed \
     -G
+```
+
+```python
+from pyticketswitch import Client
+
+client = Client('demo', 'demopass')
+ticket_types, meta = client.get_availability('7AB-5', seat_blocks=True)
 ```
 
 Parameter | Description
@@ -553,6 +695,543 @@ Parameter | Description
 }
 ```
 
+```python
+from pyticketswitch.discount import Discount
+from pyticketswitch.ticket_type import TicketType
+from pyticketswitch.seat import Seat
+from pyticketswitch.seat import SeatBlock
+from pyticketswitch.price_band import PriceBand
+
+[
+    TicketType(
+        code='STALLS',
+        description='Stalls',
+        price_bands=[
+            PriceBand(
+                code='A/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='NORMAL',
+                    description='Regular Ticket',
+                    price_band_code='A/pool',
+                    is_offer=False,
+                    seatprice=50.0,
+                    surcharge=5.0,
+                    non_offer_seatprice=50.0,
+                    non_offer_surcharge=5.0,
+                    availability=4,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats_are_real=True,
+                seat_blocks=[
+                    SeatBlock(
+                        length=10,
+                        seats=[
+                            Seat(
+                                id='A1',
+                                column='1',
+                                row='A',
+                                separator='',
+                                is_restricted=True,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='A2',
+                                column='2',
+                                row='A',
+                                separator='',
+                                is_restricted=True,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='A3',
+                                column='3',
+                                row='A',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='A4',
+                                column='4',
+                                row='A',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='A5',
+                                column='5',
+                                row='A',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='A6',
+                                column='6',
+                                row='A',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='Great seat',
+                            ),
+                            Seat(
+                                id='A7',
+                                column='7',
+                                row='A',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='A8',
+                                column='8',
+                                row='A',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='A9',
+                                column='9',
+                                row='A',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='A10',
+                                column='10',
+                                row='A',
+                                separator='',
+                                is_restricted=True,
+                                seat_text='',
+                            )
+                        ],
+                    ),
+                    SeatBlock(
+                        length=8,
+                        seats=[
+                            Seat(
+                                id='B2',
+                                column='2',
+                                row='B',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='B3',
+                                column='3',
+                                row='B',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='B4',
+                                column='4',
+                                row='B',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='B5',
+                                column='5',
+                                row='B',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='B6',
+                                column='6',
+                                row='B',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='B7',
+                                column='7',
+                                row='B',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='B8',
+                                column='8',
+                                row='B',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='B9',
+                                column='9',
+                                row='B',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            )
+                        ],
+                    )
+                ],
+            ),
+            PriceBand(
+                code='B/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='NORMAL',
+                    description='Regular Ticket',
+                    price_band_code='B/pool',
+                    is_offer=False,
+                    seatprice=40.0,
+                    surcharge=5.0,
+                    non_offer_seatprice=40.0,
+                    non_offer_surcharge=5.0,
+                    availability=4,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats_are_real=True,
+                seat_blocks=[
+                    SeatBlock(
+                        length=4,
+                        seats=[
+                            Seat(
+                                id='C3',
+                                column='3',
+                                row='C',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='C4',
+                                column='4',
+                                row='C',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='C5',
+                                column='5',
+                                row='C',
+                                separator='',
+                                is_restricted=True,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='C6',
+                                column='6',
+                                row='C',
+                                separator='',
+                                is_restricted=True,
+                                seat_text='Haunted seat',
+                            )
+                        ],
+                    ),
+                    SeatBlock(
+                        length=6,
+                        seats=[
+                            Seat(
+                                id='D2',
+                                column='2',
+                                row='D',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='D3',
+                                column='3',
+                                row='D',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='D4',
+                                column='4',
+                                row='D',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='D5',
+                                column='5',
+                                row='D',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='D6',
+                                column='6',
+                                row='D',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='D7',
+                                column='7',
+                                row='D',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            )
+                        ],
+                    )
+                ],
+            )
+        ],
+    ),
+    TicketType(
+        code='CIRCLE',
+        description='Dress Circle',
+        price_bands=[
+            PriceBand(
+                code='A/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='NORMAL',
+                    description='Regular Ticket',
+                    price_band_code='A/pool',
+                    is_offer=False,
+                    seatprice=35.0,
+                    surcharge=5.0,
+                    non_offer_seatprice=35.0,
+                    non_offer_surcharge=5.0,
+                    availability=4,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats_are_real=True,
+                seat_blocks=[
+                    SeatBlock(
+                        length=2,
+                        seats=[
+                            Seat(
+                                id='E4',
+                                column='4',
+                                row='E',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='E5',
+                                column='5',
+                                row='E',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            )
+                        ],
+                    ),
+                    SeatBlock(
+                        length=3,
+                        seats=[
+                            Seat(
+                                id='E7',
+                                column='7',
+                                row='E',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='E8',
+                                column='8',
+                                row='E',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='E9',
+                                column='9',
+                                row='E',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            )
+                        ],
+                    ),
+                    SeatBlock(
+                        length=3,
+                        seats=[
+                            Seat(
+                                id='F1',
+                                column='1',
+                                row='F',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='F2',
+                                column='2',
+                                row='F',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='F3',
+                                column='3',
+                                row='F',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            )
+                        ],
+                    )
+                ],
+            ),
+            PriceBand(
+                code='B/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='NORMAL',
+                    description='Regular Ticket',
+                    price_band_code='B/pool',
+                    is_offer=False,
+                    seatprice=30.0,
+                    surcharge=5.0,
+                    non_offer_seatprice=30.0,
+                    non_offer_surcharge=5.0,
+                    availability=4,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats_are_real=True,
+                seat_blocks=[
+                    SeatBlock(
+                        length=4,
+                        seats=[
+                            Seat(
+                                id='G7',
+                                column='7',
+                                row='G',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='G8',
+                                column='8',
+                                row='G',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='G9',
+                                column='9',
+                                row='G',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='G10',
+                                column='10',
+                                row='G',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            )
+                        ],
+                    ),
+                    SeatBlock(
+                        length=4,
+                        seats=[
+                            Seat(
+                                id='H1',
+                                column='1',
+                                row='H',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='H2',
+                                column='2',
+                                row='H',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='H3',
+                                column='3',
+                                row='H',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='H4',
+                                column='4',
+                                row='H',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            )
+                        ],
+                    ),
+                    SeatBlock(
+                        length=4,
+                        seats=[
+                            Seat(
+                                id='H7',
+                                column='7',
+                                row='H',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='H8',
+                                column='8',
+                                row='H',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='H9',
+                                column='9',
+                                row='H',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            ),
+                            Seat(
+                                id='H10',
+                                column='10',
+                                row='H',
+                                separator='',
+                                is_restricted=False,
+                                seat_text='',
+                            )
+                        ],
+                    )
+                ],
+            )
+        ],
+    )
+]
+```
+
 The response includes the following attributes in the `free_seat_blocks`:
 
 Attribute | Description
@@ -584,6 +1263,13 @@ curl https://demo.ticketswitch.com/f13/availability.v1 \
     -d "add_example_seats" \
     --compressed \
     -G
+```
+
+```python
+from pyticketswitch import Client
+
+client = Client('demo', 'demopass')
+ticket_types, meta = client.get_availability('7AB-5', example_seats=True)
 ```
 
 Parameter | Description
@@ -707,6 +1393,116 @@ Parameter | Description
 }
 ```
 
+```python
+from pyticketswitch.price_band import PriceBand
+from pyticketswitch.discount import Discount
+from pyticketswitch.ticket_type import TicketType
+from pyticketswitch.seat import Seat
+
+[
+    TicketType(
+        code='STALLS',
+        description='Stalls',
+        price_bands=[
+            PriceBand(
+                code='A/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='NORMAL',
+                    description='Regular Ticket',
+                    price_band_code='A/pool',
+                    is_offer=False,
+                    seatprice=50.0,
+                    surcharge=5.0,
+                    non_offer_seatprice=50.0,
+                    non_offer_surcharge=5.0,
+                    availability=4,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats=[
+                    Seat(
+                        id='B2',
+                        column='2',
+                        row='B',
+                        separator='',
+                        is_restricted=False,
+                    ),
+                    Seat(
+                        id='B3',
+                        column='3',
+                        row='B',
+                        separator='',
+                        is_restricted=False,
+                    )
+                ],
+                example_seats_are_real=False,
+            ),
+            PriceBand(
+                code='B/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='NORMAL',
+                    description='Regular Ticket',
+                    price_band_code='B/pool',
+                    is_offer=False,
+                    seatprice=40.0,
+                    surcharge=5.0,
+                    non_offer_seatprice=40.0,
+                    non_offer_surcharge=5.0,
+                    availability=4,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats_are_real=True,
+            )
+        ],
+    ),
+    TicketType(
+        code='CIRCLE',
+        description='Dress Circle',
+        price_bands=[
+            PriceBand(
+                code='A/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='NORMAL',
+                    description='Regular Ticket',
+                    price_band_code='A/pool',
+                    is_offer=False,
+                    seatprice=35.0,
+                    surcharge=5.0,
+                    non_offer_seatprice=35.0,
+                    non_offer_surcharge=5.0,
+                    availability=4,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats_are_real=True,
+            ),
+            PriceBand(
+                code='B/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='NORMAL',
+                    description='Regular Ticket',
+                    price_band_code='B/pool',
+                    is_offer=False,
+                    seatprice=30.0,
+                    surcharge=5.0,
+                    non_offer_seatprice=30.0,
+                    non_offer_surcharge=5.0,
+                    availability=4,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats_are_real=True,
+            )
+        ],
+    )
+]
+```
+
 If the event supports example seats the response includes several attributes in
 `example_seats`.
 
@@ -743,10 +1539,17 @@ subtract commission from the total ticket price (`sale_seatprice` +
 ```shell
 curl https://demo.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
-    -d "perf_id=6IF-B0I" \
+    -d "perf_id=6IF-B0O" \
     -d "add_user_commission" \
     --compressed \
     -G
+```
+
+```python
+from pyticketswitch import Client
+
+client = Client('demo', 'demopass')
+ticket_types, meta = client.get_availability('6IF-B0O', user_commission=True)
 ```
 
 Parameter | Description
@@ -770,26 +1573,22 @@ Parameter | Description
             "discount_code": "",
             "discount_desc": "",
             "gross_commission": {
-              "amount_excluding_vat": 4.38,
-              "amount_including_vat": 5.25,
-              "commission_currency": {
-                "currency_code": "gbp"
-              }
+              "amount_excluding_vat": 4.88,
+              "amount_including_vat": 5.85,
+              "commission_currency_code": "gbp"
             },
             "is_offer": false,
             "non_offer_sale_seatprice": 35,
-            "non_offer_sale_surcharge": 0,
+            "non_offer_sale_surcharge": 4,
             "number_available": 6,
             "percentage_saving": 0,
             "price_band_code": "A/pool",
             "sale_seatprice": 35,
-            "sale_surcharge": 0,
+            "sale_surcharge": 4,
             "user_commission": {
-              "amount_excluding_vat": 1.97,
-              "amount_including_vat": 2.36,
-              "commission_currency": {
-                "currency_code": "gbp"
-              }
+              "amount_excluding_vat": 2.19,
+              "amount_including_vat": 2.63,
+              "commission_currency_code": "gbp"
             }
           },
           {
@@ -798,26 +1597,22 @@ Parameter | Description
             "discount_code": "",
             "discount_desc": "",
             "gross_commission": {
-              "amount_excluding_vat": 3.75,
-              "amount_including_vat": 4.5,
-              "commission_currency": {
-                "currency_code": "gbp"
-              }
+              "amount_excluding_vat": 4.25,
+              "amount_including_vat": 5.1,
+              "commission_currency_code": "gbp"
             },
             "is_offer": false,
             "non_offer_sale_seatprice": 30,
-            "non_offer_sale_surcharge": 0,
+            "non_offer_sale_surcharge": 4,
             "number_available": 6,
             "percentage_saving": 0,
             "price_band_code": "B/pool",
             "sale_seatprice": 30,
-            "sale_surcharge": 0,
+            "sale_surcharge": 4,
             "user_commission": {
-              "amount_excluding_vat": 1.69,
-              "amount_including_vat": 2.03,
-              "commission_currency": {
-                "currency_code": "gbp"
-              }
+              "amount_excluding_vat": 1.91,
+              "amount_including_vat": 2.3,
+              "commission_currency_code": "gbp"
             }
           },
           {
@@ -826,26 +1621,22 @@ Parameter | Description
             "discount_code": "",
             "discount_desc": "",
             "gross_commission": {
-              "amount_excluding_vat": 3.13,
-              "amount_including_vat": 3.75,
-              "commission_currency": {
-                "currency_code": "gbp"
-              }
+              "amount_excluding_vat": 3.63,
+              "amount_including_vat": 4.35,
+              "commission_currency_code": "gbp"
             },
             "is_offer": false,
             "non_offer_sale_seatprice": 25,
-            "non_offer_sale_surcharge": 0,
+            "non_offer_sale_surcharge": 4,
             "number_available": 6,
             "percentage_saving": 0,
             "price_band_code": "C/pool",
             "sale_seatprice": 25,
-            "sale_surcharge": 0,
+            "sale_surcharge": 4,
             "user_commission": {
-              "amount_excluding_vat": 1.41,
-              "amount_including_vat": 1.69,
-              "commission_currency": {
-                "currency_code": "gbp"
-              }
+              "amount_excluding_vat": 1.63,
+              "amount_including_vat": 1.96,
+              "commission_currency_code": "gbp"
             }
           }
         ],
@@ -860,26 +1651,22 @@ Parameter | Description
             "discount_code": "",
             "discount_desc": "",
             "gross_commission": {
-              "amount_excluding_vat": 2.63,
-              "amount_including_vat": 3.15,
-              "commission_currency": {
-                "currency_code": "gbp"
-              }
+              "amount_excluding_vat": 3,
+              "amount_including_vat": 3.6,
+              "commission_currency_code": "gbp"
             },
             "is_offer": false,
             "non_offer_sale_seatprice": 21,
-            "non_offer_sale_surcharge": 0,
+            "non_offer_sale_surcharge": 3,
             "number_available": 6,
             "percentage_saving": 0,
             "price_band_code": "A/pool",
             "sale_seatprice": 21,
-            "sale_surcharge": 0,
+            "sale_surcharge": 3,
             "user_commission": {
-              "amount_excluding_vat": 1.18,
-              "amount_including_vat": 1.42,
-              "commission_currency": {
-                "currency_code": "gbp"
-              }
+              "amount_excluding_vat": 1.35,
+              "amount_including_vat": 1.62,
+              "commission_currency_code": "gbp"
             }
           },
           {
@@ -888,26 +1675,22 @@ Parameter | Description
             "discount_code": "",
             "discount_desc": "",
             "gross_commission": {
-              "amount_excluding_vat": 2.25,
-              "amount_including_vat": 2.7,
-              "commission_currency": {
-                "currency_code": "gbp"
-              }
+              "amount_excluding_vat": 2.63,
+              "amount_including_vat": 3.15,
+              "commission_currency_code": "gbp"
             },
             "is_offer": false,
             "non_offer_sale_seatprice": 18,
-            "non_offer_sale_surcharge": 0,
+            "non_offer_sale_surcharge": 3,
             "number_available": 3,
             "percentage_saving": 0,
             "price_band_code": "B/pool",
             "sale_seatprice": 18,
-            "sale_surcharge": 0,
+            "sale_surcharge": 3,
             "user_commission": {
-              "amount_excluding_vat": 1.01,
-              "amount_including_vat": 1.22,
-              "commission_currency": {
-                "currency_code": "gbp"
-              }
+              "amount_excluding_vat": 1.18,
+              "amount_including_vat": 1.42,
+              "commission_currency_code": "gbp"
             }
           }
         ],
@@ -922,26 +1705,22 @@ Parameter | Description
             "discount_code": "",
             "discount_desc": "",
             "gross_commission": {
-              "amount_excluding_vat": 5.88,
-              "amount_including_vat": 7.05,
-              "commission_currency": {
-                "currency_code": "gbp"
-              }
+              "amount_excluding_vat": 6.5,
+              "amount_including_vat": 7.8,
+              "commission_currency_code": "gbp"
             },
             "is_offer": false,
             "non_offer_sale_seatprice": 47,
-            "non_offer_sale_surcharge": 0,
+            "non_offer_sale_surcharge": 5,
             "number_available": 6,
             "percentage_saving": 0,
             "price_band_code": "A/pool",
             "sale_seatprice": 47,
-            "sale_surcharge": 0,
+            "sale_surcharge": 5,
             "user_commission": {
-              "amount_excluding_vat": 2.64,
-              "amount_including_vat": 3.17,
-              "commission_currency": {
-                "currency_code": "gbp"
-              }
+              "amount_excluding_vat": 2.93,
+              "amount_including_vat": 3.51,
+              "commission_currency_code": "gbp"
             }
           }
         ],
@@ -954,8 +1733,16 @@ Parameter | Description
   "backend_is_down": false,
   "backend_throttle_failed": false,
   "contiguous_seat_selection_only": true,
-  "currency": {
-    "currency_code": "gbp"
+  "currency_code": "gbp",
+  "currency_details": {
+    "gbp": {
+      "currency_code": "gbp",
+      "currency_factor": 100,
+      "currency_number": 826,
+      "currency_places": 2,
+      "currency_post_symbol": "",
+      "currency_pre_symbol": "£"
+    }
   },
   "valid_quantities": [
     1,
@@ -968,14 +1755,182 @@ Parameter | Description
 }
 ```
 
+```python
+from pyticketswitch.commission import Commission
+from pyticketswitch.ticket_type import TicketType
+from pyticketswitch.discount import Discount
+from pyticketswitch.price_band import PriceBand
 
-The response includes several attributes within the `user_commission` dictionary. Some partners will also see `gross_commission` which includes the same attributes.
+[
+    TicketType(
+        code='CIRCLE',
+        description='Upper circle',
+        price_bands=[
+            PriceBand(
+                code='A/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='',
+                    description='',
+                    price_band_code='A/pool',
+                    is_offer=False,
+                    seatprice=35.0,
+                    surcharge=4.0,
+                    non_offer_seatprice=35.0,
+                    non_offer_surcharge=4.0,
+                    availability=6,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats_are_real=True,
+                user_commission=Commission(
+                    including_vat=2.63,
+                    excluding_vat=2.19,
+                    currency_code='gbp',
+                ),
+            ),
+            PriceBand(
+                code='B/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='',
+                    description='',
+                    price_band_code='B/pool',
+                    is_offer=False,
+                    seatprice=30.0,
+                    surcharge=4.0,
+                    non_offer_seatprice=30.0,
+                    non_offer_surcharge=4.0,
+                    availability=6,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats_are_real=True,
+                user_commission=Commission(
+                    including_vat=2.3,
+                    excluding_vat=1.91,
+                    currency_code='gbp',
+                ),
+            ),
+            PriceBand(
+                code='C/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='',
+                    description='',
+                    price_band_code='C/pool',
+                    is_offer=False,
+                    seatprice=25.0,
+                    surcharge=4.0,
+                    non_offer_seatprice=25.0,
+                    non_offer_surcharge=4.0,
+                    availability=6,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats_are_real=True,
+                user_commission=Commission(
+                    including_vat=1.96,
+                    excluding_vat=1.63,
+                    currency_code='gbp',
+                ),
+            )
+        ],
+    ),
+    TicketType(
+        code='STALLS',
+        description='Stalls',
+        price_bands=[
+            PriceBand(
+                code='A/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='',
+                    description='',
+                    price_band_code='A/pool',
+                    is_offer=False,
+                    seatprice=21.0,
+                    surcharge=3.0,
+                    non_offer_seatprice=21.0,
+                    non_offer_surcharge=3.0,
+                    availability=6,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats_are_real=True,
+                user_commission=Commission(
+                    including_vat=1.62,
+                    excluding_vat=1.35,
+                    currency_code='gbp',
+                ),
+            ),
+            PriceBand(
+                code='B/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='',
+                    description='',
+                    price_band_code='B/pool',
+                    is_offer=False,
+                    seatprice=18.0,
+                    surcharge=3.0,
+                    non_offer_seatprice=18.0,
+                    non_offer_surcharge=3.0,
+                    availability=3,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats_are_real=True,
+                user_commission=Commission(
+                    including_vat=1.42,
+                    excluding_vat=1.18,
+                    currency_code='gbp',
+                ),
+            )
+        ],
+    ),
+    TicketType(
+        code='BALCONY',
+        description='Balcony',
+        price_bands=[
+            PriceBand(
+                code='A/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='',
+                    description='',
+                    price_band_code='A/pool',
+                    is_offer=False,
+                    seatprice=47.0,
+                    surcharge=5.0,
+                    non_offer_seatprice=47.0,
+                    non_offer_surcharge=5.0,
+                    availability=6,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats_are_real=True,
+                user_commission=Commission(
+                    including_vat=3.51,
+                    excluding_vat=2.93,
+                    currency_code='gbp',
+                ),
+            )
+        ],
+    )
+]
+```
+
+
+The response includes several attributes within the `user_commission`
+dictionary. Some partners will also see `gross_commission` which includes the
+same attributes.
 
 Attribute | Description
 --------- | -----------
 `amount_excluding_vat` | The commission you will earn per ticket, excluding sales tax.
 `amount_including_vat` | The commission you will earn per ticket, including sales tax.
-`commission_currency` | The commission currency (note that this can be different to the currency of the price paid by the customer).
+`commission_currency_code` | The commission currency (note that this can be different to the currency of the price paid by the customer).
 
 
 ## Add Discounts
@@ -994,6 +1949,13 @@ curl https://demo.ticketswitch.com/f13/availability.v1 \
     -d "add_discounts" \
     --compressed \
     -G
+```
+
+```python
+from pyticketswitch import Client
+
+client = Client('demo', 'demopass')
+ticket_types, meta = client.get_availability('6IF-B0O', discounts=True)
 ```
 
 Parameter | Description
@@ -1413,6 +2375,413 @@ Parameter | Description
     6
   ]
 }
+```
+
+```python
+from pyticketswitch.price_band import PriceBand
+from pyticketswitch.ticket_type import TicketType
+from pyticketswitch.discount import Discount
+
+[
+    TicketType(
+        code='CIRCLE',
+        description='Upper circle',
+        price_bands=[
+            PriceBand(
+                code='A/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='',
+                    description='',
+                    price_band_code='A/pool',
+                    is_offer=False,
+                    seatprice=35.0,
+                    surcharge=4.0,
+                    non_offer_seatprice=35.0,
+                    non_offer_surcharge=4.0,
+                    availability=6,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats_are_real=True,
+                discounts=[
+                    Discount(
+                        code='ADULT',
+                        description='Adult',
+                        price_band_code='A/pool',
+                        is_offer=False,
+                        seatprice=35.0,
+                        surcharge=4.0,
+                        non_offer_seatprice=35.0,
+                        non_offer_surcharge=4.0,
+                        availability=6,
+                        percentage_saving=0,
+                        absolute_saving=0.0,
+                    ),
+                    Discount(
+                        code='CHILD',
+                        description='Child rate',
+                        price_band_code='A/pool',
+                        is_offer=False,
+                        seatprice=18.0,
+                        surcharge=3.0,
+                        non_offer_seatprice=18.0,
+                        non_offer_surcharge=3.0,
+                        availability=6,
+                        percentage_saving=0,
+                        absolute_saving=0.0,
+                    ),
+                    Discount(
+                        code='STUDENT',
+                        description='Student rate',
+                        price_band_code='A/pool',
+                        is_offer=False,
+                        seatprice=26.0,
+                        surcharge=3.0,
+                        non_offer_seatprice=26.0,
+                        non_offer_surcharge=3.0,
+                        availability=6,
+                        percentage_saving=0,
+                        absolute_saving=0.0,
+                    ),
+                    Discount(
+                        code='OAP',
+                        description='Senior citizen rate',
+                        price_band_code='A/pool',
+                        is_offer=False,
+                        seatprice=28.0,
+                        surcharge=3.0,
+                        non_offer_seatprice=28.0,
+                        non_offer_surcharge=3.0,
+                        availability=6,
+                        percentage_saving=0,
+                        absolute_saving=0.0,
+                    )
+                ],
+            ),
+            PriceBand(
+                code='B/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='',
+                    description='',
+                    price_band_code='B/pool',
+                    is_offer=False,
+                    seatprice=30.0,
+                    surcharge=4.0,
+                    non_offer_seatprice=30.0,
+                    non_offer_surcharge=4.0,
+                    availability=6,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats_are_real=True,
+                discounts=[
+                    Discount(
+                        code='ADULT',
+                        description='Adult',
+                        price_band_code='B/pool',
+                        is_offer=False,
+                        seatprice=30.0,
+                        surcharge=4.0,
+                        non_offer_seatprice=30.0,
+                        non_offer_surcharge=4.0,
+                        availability=6,
+                        percentage_saving=0,
+                        absolute_saving=0.0,
+                    ),
+                    Discount(
+                        code='CHILD',
+                        description='Child rate',
+                        price_band_code='B/pool',
+                        is_offer=False,
+                        seatprice=15.0,
+                        surcharge=3.0,
+                        non_offer_seatprice=15.0,
+                        non_offer_surcharge=3.0,
+                        availability=6,
+                        percentage_saving=0,
+                        absolute_saving=0.0,
+                    )
+                ],
+            ),
+            PriceBand(
+                code='C/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='',
+                    description='',
+                    price_band_code='C/pool',
+                    is_offer=False,
+                    seatprice=25.0,
+                    surcharge=4.0,
+                    non_offer_seatprice=25.0,
+                    non_offer_surcharge=4.0,
+                    availability=6,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats_are_real=True,
+                discounts=[
+                    Discount(
+                        code='ADULT',
+                        description='Adult',
+                        price_band_code='C/pool',
+                        is_offer=False,
+                        seatprice=25.0,
+                        surcharge=4.0,
+                        non_offer_seatprice=25.0,
+                        non_offer_surcharge=4.0,
+                        availability=6,
+                        percentage_saving=0,
+                        absolute_saving=0.0,
+                    ),
+                    Discount(
+                        code='CHILD',
+                        description='Child rate',
+                        price_band_code='C/pool',
+                        is_offer=False,
+                        seatprice=13.0,
+                        surcharge=3.0,
+                        non_offer_seatprice=13.0,
+                        non_offer_surcharge=3.0,
+                        availability=6,
+                        percentage_saving=0,
+                        absolute_saving=0.0,
+                    ),
+                    Discount(
+                        code='STUDENT',
+                        description='Student rate',
+                        price_band_code='C/pool',
+                        is_offer=False,
+                        seatprice=19.0,
+                        surcharge=3.0,
+                        non_offer_seatprice=19.0,
+                        non_offer_surcharge=3.0,
+                        availability=6,
+                        percentage_saving=0,
+                        absolute_saving=0.0,
+                    ),
+                    Discount(
+                        code='OAP',
+                        description='Senior citizen rate',
+                        price_band_code='C/pool',
+                        is_offer=False,
+                        seatprice=20.0,
+                        surcharge=3.0,
+                        non_offer_seatprice=20.0,
+                        non_offer_surcharge=3.0,
+                        availability=6,
+                        percentage_saving=0,
+                        absolute_saving=0.0,
+                    )
+                ],
+            )
+        ],
+    ),
+    TicketType(
+        code='STALLS',
+        description='Stalls',
+        price_bands=[
+            PriceBand(
+                code='A/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='',
+                    description='',
+                    price_band_code='A/pool',
+                    is_offer=False,
+                    seatprice=21.0,
+                    surcharge=3.0,
+                    non_offer_seatprice=21.0,
+                    non_offer_surcharge=3.0,
+                    availability=6,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats_are_real=True,
+                discounts=[
+                    Discount(
+                        code='ADULT',
+                        description='Adult',
+                        price_band_code='A/pool',
+                        is_offer=False,
+                        seatprice=21.0,
+                        surcharge=3.0,
+                        non_offer_seatprice=21.0,
+                        non_offer_surcharge=3.0,
+                        availability=6,
+                        percentage_saving=0,
+                        absolute_saving=0.0,
+                    ),
+                    Discount(
+                        code='CHILD',
+                        description='Child rate',
+                        price_band_code='A/pool',
+                        is_offer=False,
+                        seatprice=11.0,
+                        surcharge=2.0,
+                        non_offer_seatprice=11.0,
+                        non_offer_surcharge=2.0,
+                        availability=6,
+                        percentage_saving=0,
+                        absolute_saving=0.0,
+                    ),
+                    Discount(
+                        code='STUDENT',
+                        description='Student rate',
+                        price_band_code='A/pool',
+                        is_offer=False,
+                        seatprice=16.0,
+                        surcharge=2.0,
+                        non_offer_seatprice=16.0,
+                        non_offer_surcharge=2.0,
+                        availability=6,
+                        percentage_saving=0,
+                        absolute_saving=0.0,
+                    ),
+                    Discount(
+                        code='OAP',
+                        description='Senior citizen rate',
+                        price_band_code='A/pool',
+                        is_offer=False,
+                        seatprice=17.0,
+                        surcharge=2.0,
+                        non_offer_seatprice=17.0,
+                        non_offer_surcharge=2.0,
+                        availability=6,
+                        percentage_saving=0,
+                        absolute_saving=0.0,
+                    )
+                ],
+            ),
+            PriceBand(
+                code='B/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='',
+                    description='',
+                    price_band_code='B/pool',
+                    is_offer=False,
+                    seatprice=18.0,
+                    surcharge=3.0,
+                    non_offer_seatprice=18.0,
+                    non_offer_surcharge=3.0,
+                    availability=3,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats_are_real=True,
+                discounts=[
+                    Discount(
+                        code='ADULT',
+                        description='Adult',
+                        price_band_code='B/pool',
+                        is_offer=False,
+                        seatprice=18.0,
+                        surcharge=3.0,
+                        non_offer_seatprice=18.0,
+                        non_offer_surcharge=3.0,
+                        availability=3,
+                        percentage_saving=0,
+                        absolute_saving=0.0,
+                    ),
+                    Discount(
+                        code='CHILD',
+                        description='Child rate',
+                        price_band_code='B/pool',
+                        is_offer=False,
+                        seatprice=9.0,
+                        surcharge=2.0,
+                        non_offer_seatprice=9.0,
+                        non_offer_surcharge=2.0,
+                        availability=3,
+                        percentage_saving=0,
+                        absolute_saving=0.0,
+                    )
+                ],
+            )
+        ],
+    ),
+    TicketType(
+        code='BALCONY',
+        description='Balcony',
+        price_bands=[
+            PriceBand(
+                code='A/pool',
+                allows_leaving_single_seats='always',
+                default_discount=Discount(
+                    code='',
+                    description='',
+                    price_band_code='A/pool',
+                    is_offer=False,
+                    seatprice=47.0,
+                    surcharge=5.0,
+                    non_offer_seatprice=47.0,
+                    non_offer_surcharge=5.0,
+                    availability=6,
+                    percentage_saving=0,
+                    absolute_saving=0.0,
+                ),
+                example_seats_are_real=True,
+                discounts=[
+                    Discount(
+                        code='ADULT',
+                        description='Adult',
+                        price_band_code='A/pool',
+                        is_offer=False,
+                        seatprice=47.0,
+                        surcharge=5.0,
+                        non_offer_seatprice=47.0,
+                        non_offer_surcharge=5.0,
+                        availability=6,
+                        percentage_saving=0,
+                        absolute_saving=0.0,
+                    ),
+                    Discount(
+                        code='CHILD',
+                        description='Child rate',
+                        price_band_code='A/pool',
+                        is_offer=False,
+                        seatprice=24.0,
+                        surcharge=4.0,
+                        non_offer_seatprice=24.0,
+                        non_offer_surcharge=4.0,
+                        availability=6,
+                        percentage_saving=0,
+                        absolute_saving=0.0,
+                    ),
+                    Discount(
+                        code='STUDENT',
+                        description='Student rate',
+                        price_band_code='A/pool',
+                        is_offer=False,
+                        seatprice=35.0,
+                        surcharge=4.0,
+                        non_offer_seatprice=35.0,
+                        non_offer_surcharge=4.0,
+                        availability=6,
+                        percentage_saving=0,
+                        absolute_saving=0.0,
+                    ),
+                    Discount(
+                        code='OAP',
+                        description='Senior citizen rate',
+                        price_band_code='A/pool',
+                        is_offer=False,
+                        seatprice=38.0,
+                        surcharge=4.0,
+                        non_offer_seatprice=38.0,
+                        non_offer_surcharge=4.0,
+                        availability=6,
+                        percentage_saving=0,
+                        absolute_saving=0.0,
+                    )
+                ],
+            )
+        ],
+    )
+]
 ```
 
 The response includes a `possible_discounts` dictionary, that contains a list of

@@ -146,10 +146,29 @@ curl https://demo.ticketswitch.com/f13/purchase.v1 \
 
 ```python
 from pyticketswitch import Client
+from pyticketswitch.customer import Customer
+
 
 client = Client('demo', 'demopass')
 
-(TODO: finish)
+customer = Customer(
+    first_name='Test',
+    last_name='Tester',
+    address_lines=['Metro Building', '1 Butterwick'],
+    town='London',
+    county='London',
+    post_code='W6 8DL',
+    country_code='uk',
+    phone='0203 137 7420',
+    email='testing@gmail.com',
+    user_can_use_customer_data=True,
+)
+
+status, callout, meta = client.make_purchase(
+    '61cfd4eb-1f5b-11e7-b228-0025903268dc',
+    customer,
+    send_confirmation_email=True,
+)
 ```
 
 This section describes how to purchase on credit. 
@@ -395,7 +414,174 @@ All of the parameters used to request [additional data for events](#additional-p
 ```
 
 ```python
-TODO
+from pyticketswitch.send_method import SendMethod
+from pyticketswitch.purchase_result import PurchaseResult
+from pyticketswitch.seat import Seat
+from pyticketswitch.event import Event
+from pyticketswitch.status import Status
+from pyticketswitch.customer import Customer
+from pyticketswitch.bundle import Bundle
+from pyticketswitch.performance import Performance
+from pyticketswitch.order import TicketOrder
+from pyticketswitch.trolley import Trolley
+from pyticketswitch.order import Order
+
+# An on credit purchase should always return a status object and will never
+# return a callout.
+Status(
+    status='purchased',
+    reserved_at=datetime.datetime(2017, 5, 3, 15, 1, 45, tzinfo=tzutc()),
+    purchased_at=datetime.datetime(2017, 5, 3, 15, 14, 5, tzinfo=tzutc()),
+    trolley=Trolley(
+        transaction_uuid='6d080a78-3011-11e7-b228-0025903268dc',
+        transaction_id='T000-0000-8ZVV-2E78',
+        bundles=[
+            Bundle(
+                source_code='ext_test1',
+                orders=[
+                    Order(
+                        item=1,
+                        event=Event(
+                            id='7AB',
+                            status='live',
+                            description='The Unremarkable Incident of the Cat at Lunchtime',
+                            source='External Test Backend 1',
+                            source_code='ext_test1',
+                            event_type='simple_ticket',
+                            venue='Lyric Apollo',
+                            classes={
+                                'theatre': 'Theatre'
+                            },
+                            postcode='W6 7ES',
+                            city='London',
+                            city_code='london-uk',
+                            country='United Kingdom',
+                            country_code='uk',
+                            latitude=51.49306,
+                            longitude=-0.22639,
+                            max_running_time=90,
+                            min_running_time=90,
+                            show_performance_time=True,
+                            has_performances=True,
+                            is_seated=True,
+                            needs_departure_date=False,
+                            needs_duration=False,
+                            needs_performance=False,
+                        ),
+                        performance=Performance(
+                            id='7AB-5',
+                            event_id='7AB',
+                            date_time=datetime.datetime(2019, 1, 1, 15, 30, tzinfo=tzutc()) ,
+                            date_description='Tue, 1st January 2019',
+                            time_description='3.30 PM',
+                            has_pool_seats=True,
+                            is_limited=False,
+                            is_ghost=False,
+                            running_time=90,
+                        ),
+                        price_band_code='A/pool',
+                        ticket_type_code='STALLS',
+                        ticket_type_description='Stalls',
+                        ticket_orders=[
+                            TicketOrder(
+                                code='NORMAL',
+                                seats=[
+                                    Seat(
+                                        id='A1',
+                                        column='1',
+                                        row='A',
+                                        separator='',
+                                        is_restricted=True,
+                                        seat_text='Restricted View',
+                                    ),
+                                    Seat(
+                                        id='A2',
+                                        column='2',
+                                        row='A',
+                                        separator='',
+                                        is_restricted=True,
+                                        seat_text='Restricted View',
+                                    )
+                                ],
+                                description='Regular Ticket',
+                                number_of_seats=2,
+                                seatprice=50.0,
+                                surcharge=5.0,
+                                total_seatprice=100.0,
+                                total_surcharge=10.0,
+                            )
+                        ],
+                        number_of_seats=2,
+                        total_seatprice=100.0,
+                        total_surcharge=10.0,
+                        seat_request_status='got_all',
+                        requested_seat_ids=[
+                            'A1',
+                            'A2'
+                        ],
+                        backend_purchase_reference='PURCHASE-DA6E-0',
+                        send_method=SendMethod(
+                            code='VOUCH',
+                            cost=0.0,
+                            description='Printable eTicket',
+                            type='selfprint',
+                            can_generate_self_print=False,
+                            self_print_voucher_url='https://api.ticketswitch.com/tickets/web_self_print.buy/demo?crypto_block=M_--R-aJRIR74rjx8gM2szdo9BEJZ8oV6wfGukxyZGDA2_DU2K3w-Y8L_3LWvIgKO_QxwMN8WmasaUuL_WpzKS-q2roXIWxXqjTxyDYZdge-wjDI0RZ8NpBAS0--Y',
+                        ),
+                    )
+                ],
+                description='External Test Backend 1',
+                total_seatprice=100.0,
+                total_surcharge=10.0,
+                total_send_cost=0.0,
+                total=110.0,
+                currency_code='gbp',
+            )
+        ],
+        purchase_result=PurchaseResult(
+            success=True,
+        ),
+    ),
+    languages=[
+        'en'
+    ],
+    customer=Customer(
+        first_name='Test',
+        first_name_latin='Test',
+        last_name='Tester',
+        last_name_latin='Tester',
+        address_lines=[
+            'Metro Building',
+            '1 Butterwick'
+        ],
+        address_lines_latin=[
+            'Metro Building',
+            '1 Butterwick'
+        ],
+        title='',
+        title_latin='',
+        initials='',
+        initials_latin='',
+        suffix='',
+        suffix_latin='',
+        country_code='uk',
+        post_code='W6 8DL',
+        post_code_latin='W6 8DL',
+        town='London',
+        town_latin='London',
+        county='London',
+        county_latin='London',
+        country='United Kingdom',
+        country_latin='United Kingdom',
+        email='',
+        home_phone='0203 137 7420',
+        work_phone='0203 137 7420',
+        agent_reference='',
+        supplier_can_use_data=False,
+        user_can_use_data=True,
+        world_can_use_data=False,
+    ),
+)
 ```
 
 
@@ -613,6 +799,39 @@ curl https://demo.ticketswitch.com/f13/purchase.v1 \
     -X POST
 ```
 
+```python
+from pyticketswitch import Client
+from pyticketswitch.customer import Customer
+from pyticketswitch.payment_methods import StripeDetails
+
+
+client = Client('demo-stripe', 'demopass')
+
+customer = Customer(
+    first_name='Test',
+    last_name='Tester',
+    address_lines=['Metro Building', '1 Butterwick'],
+    town='London',
+    county='London',
+    post_code='W6 8DL',
+    country_code='uk',
+    phone='0203 137 7420',
+    email='testing@gmail.com',
+    user_can_use_customer_data=True,
+)
+
+stripe_details = StripeDetails({
+    'ext_test0': 'tok_1AFPJeHIklODsaxBJntq4YAm',
+})
+
+status, callout, meta = client.make_purchase(
+    '7150d25f-301b-11e7-bede-0025903268a0',
+    customer,
+    payment_method=stripe_details,
+    send_confirmation_email=True,
+)
+```
+
 
 To complete a test Stripe purchase:
 
@@ -634,7 +853,7 @@ Parameter | Description
 ### Purchase response
 > **Example purchase response - Stripe**
 
-``` shell
+```shell
 {
   "currency_details": {
     "gbp": {
@@ -838,6 +1057,189 @@ Parameter | Description
 }
 ```
 
+```python
+from pyticketswitch.customer import Customer
+from pyticketswitch.trolley import Trolley
+from pyticketswitch.debitor import Debitor
+from pyticketswitch.status import Status
+from pyticketswitch.seat import Seat
+from pyticketswitch.performance import Performance
+from pyticketswitch.order import TicketOrder
+from pyticketswitch.purchase_result import PurchaseResult
+from pyticketswitch.event import Event
+from pyticketswitch.send_method import SendMethod
+from pyticketswitch.order import Order
+from pyticketswitch.bundle import Bundle
+
+# stripe purchases should always return a status object, and no callout.
+Status(
+    status='purchased',
+    reserved_at=datetime.datetime(2017, 5, 3, 16, 13, 28, tzinfo=tzutc()),
+    purchased_at=datetime.datetime(2017, 5, 3, 16, 14, 19, tzinfo=tzutc()),
+    trolley=Trolley(
+        transaction_uuid='7150d25f-301b-11e7-bede-0025903268a0',
+        transaction_id='T000-0000-8ZW5-68A8',
+        bundles=[
+            Bundle(
+                source_code='ext_test0',
+                orders=[
+                    Order(
+                        item=1,
+                        event=Event(
+                            id='6IF',
+                            status='live',
+                            description="Matthew Bourne's Nutcracker TEST",
+                            source='External Test Backend 0',
+                            source_code='ext_test0',
+                            event_type='simple_ticket',
+                            venue="Sadler's Wells",
+                            classes={
+                                'dance': 'Ballet & Dance'
+                            },
+                            filters=[
+                                
+                            ],
+                            postcode='EC1R 4TN',
+                            city='London',
+                            city_code='london-uk',
+                            country='United Kingdom',
+                            country_code='uk',
+                            latitude=51.52961137,
+                            longitude=-0.10601562,
+                            max_running_time=120,
+                            min_running_time=120,
+                            show_performance_time=True,
+                            has_performances=True,
+                            is_seated=True,
+                            needs_departure_date=False,
+                            needs_duration=False,
+                            needs_performance=False,
+                            upsell_list=[
+                                '6IE',
+                                'MH0'
+                            ],
+                            critic_review_percent=100,
+                        ),
+                        performance=Performance(
+                            id='6IF-B0O',
+                            event_id='6IF',
+                            date_time=datetime.datetime(2017, 5, 4, 19, 30, tzinfo=tzoffset(None, 3600)),
+                            date_description='Thu, 4th May 2017',
+                            time_description='7.30 PM',
+                            has_pool_seats=True,
+                            is_limited=False,
+                            is_ghost=False,
+                            running_time=120,
+                        ),
+                        price_band_code='A/pool',
+                        ticket_type_code='STALLS',
+                        ticket_type_description='Stalls',
+                        ticket_orders=[
+                            TicketOrder(
+                                code='',
+                                seats=[
+                                    Seat(
+                                        id='JM189',
+                                        column='189',
+                                        row='JM',
+                                        separator='',
+                                        is_restricted=False,
+                                    ),
+                                    Seat(
+                                        id='JM190',
+                                        column='190',
+                                        row='JM',
+                                        separator='',
+                                        is_restricted=False,
+                                    )
+                                ],
+                                description='',
+                                number_of_seats=2,
+                                seatprice=21.0,
+                                surcharge=3.0,
+                                total_seatprice=42.0,
+                                total_surcharge=6.0,
+                            )
+                        ],
+                        number_of_seats=2,
+                        total_seatprice=42.0,
+                        total_surcharge=6.0,
+                        seat_request_status='not_requested',
+                        requested_seat_ids=[
+                            
+                        ],
+                        backend_purchase_reference='PURCHASE-11F22-1',
+                        send_method=SendMethod(
+                            code='COBO',
+                            cost=1.5,
+                            description='Collect from the venue',
+                            type='collect',
+                        ),
+                    )
+                ],
+                description='External Test Backend 0',
+                total_seatprice=42.0,
+                total_surcharge=6.0,
+                total_send_cost=1.5,
+                total=49.5,
+                currency_code='gbp',
+                debitor=Debitor(
+                    type='stripe',
+                    name='stripe',
+                    description='Stripe Debitor',
+                    integration_data={
+                        'publishable_key': 'pk_test_b7N9DOwbo4B9t6EqCf9jFzfa',
+                        'statement_descriptor': 'Test Stripe Account'
+                    },
+                ),
+            )
+        ],
+        discarded_orders=[
+            
+        ],
+        purchase_result=PurchaseResult(
+            success=True,
+        ),
+    ),
+    languages=[
+        'en'
+    ],
+    customer=Customer(
+        first_name='Test',
+        first_name_latin='Test',
+        last_name='Tester',
+        last_name_latin='Tester',
+        address_lines=[
+            'Metro Building',
+            '1 Butterwick'
+        ],
+        address_lines_latin=[
+            'Metro Building',
+            '1 Butterwick'
+        ],
+        title='',
+        title_latin='',
+        initials='',
+        initials_latin='',
+        suffix='',
+        suffix_latin='',
+        country_code='uk',
+        post_code='W6 8DL',
+        post_code_latin='W6 8DL',
+        town='London',
+        town_latin='London',
+        county='London',
+        county_latin='London',
+        country='United Kingdom',
+        country_latin='United Kingdom',
+        email='testing@gmail.com',
+        home_phone='0203 137 7420',
+        work_phone='0203 137 7420',
+        agent_reference='',
+    ),
+)
+```
+
 The response is identical to the `purchase` response described in [purchasing on credit](#purchasing-on-credit).
 
 
@@ -890,6 +1292,48 @@ curl https://demo.ticketswitch.com/f13/purchase.v1 \
     -X POST
 ```
 
+```python
+import uuid
+from pyticketswitch import Client
+from pyticketswitch.customer import Customer
+from pyticketswitch.payment_methods import RedirectionDetails
+
+
+client = Client('demo-redirect', 'demopass')
+
+customer = Customer(
+    first_name='Test',
+    last_name='Tester',
+    address_lines=['Metro Building', '1 Butterwick'],
+    town='London',
+    county='London',
+    post_code='W6 8DL',
+    country_code='uk',
+    phone='0203 137 7420',
+    email='testing@gmail.com',
+    user_can_use_customer_data=True,
+)
+
+token = uuid.uuid4()
+
+redirect_details = RedirectionDetails(
+    token=token,
+    url='https://www.fromtheboxoffice.com/callback/{}'.format(token),
+    user_agent='Mozilla/5.0 (X11; Linux x86_64; rv:51.0) Gecko/20100101 Firefox/51.0',
+    accept='text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    remote_site='www.fromtheboxoffice.com',
+)
+
+status, callout, meta = client.make_purchase(
+    '7150d25f-301b-11e7-bede-0025903268a0',
+    customer,
+    payment_method=redirect_details,
+    send_confirmation_email=True,
+)
+```
+
+
+
 All of the parameters mentioned above in the 
 [purchasing on credit](#purchasing-on-credit) section are used. In addition the 
 following parameters must be specified:
@@ -911,7 +1355,7 @@ Parameter | Description
   "callout": {
     "callout_destination_url": "https://demo.ticketswitch.com/tickets/dummy_redirect.buy/demo-redirect",
     "callout_parameters": {
-      "return_url": "https://www.yourticketingsite.com/token.FIRST_RANDOM_TOKEN/return.php",
+      "return_url": "https://www.yourticketingsite.com/token.FIRST_UNIQUE_TOKEN/return.php",
       "title": "Dummy external card details page for debit on system 'ext_test0'"
     },
     "callout_parameters_order": [],
@@ -939,6 +1383,37 @@ Parameter | Description
 }
 ```
 
+```python
+from pyticketswitch.debitor import Debitor
+from pyticketswitch.callout import Callout
+
+# redirect purchases may return either a status object or a callout object
+# when they requirement more information from the user.
+Callout(
+    code='ext_test0',
+    description='External Test Backend 0',
+    total=49.5,
+    type='get',
+    destination='https://www.fromtheboxoffice.com/tickets/dummy_redirect.buy/demo-redirect',
+    parameters={
+        'return_url': 'https://www.fromtheboxoffice.com/callback/64e8a0d8-ca3a-4a3b-8a39-597ee66acdd0',
+        'title': "Dummy external card details page for debit on system 'ext_test0'"
+    },
+    integration_data={
+        'is_dummy_3d_secure': False
+    },
+    debitor=Debitor(
+        type='dummy',
+        name='dummy',
+        description='The Dummy Card Debitor',
+        integration_data={},
+    ),
+    currency_code='gbp',
+    return_token='64e8a0d8-ca3a-4a3b-8a39-597ee66acdd0',
+)
+```
+
+
 Attribute | Description
 --------- | -----------
 `callout` | See below for object detail.
@@ -960,7 +1435,7 @@ Attribute | Description
 > **Example callback request - generic redirects**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/callback.v1/this.FIRST_RANDOM_TOKEN/next.NEXT_RANDOM_TOKEN \
+curl https://demo.ticketswitch.com/f13/callback.v1/this.FIRST_UNIQUE_TOKEN/next.NEXT_UNIQUE_TOKEN \
     -u "demo-redirect:demopass" \
     -d "param1=asdfasdfsdfasdff" \
     -r "https://www.thepaymentpage.com/asdfsadfsdafasdf" \
@@ -968,17 +1443,45 @@ curl https://demo.ticketswitch.com/f13/callback.v1/this.FIRST_RANDOM_TOKEN/next.
     -X POST
 ```
 
-If the `purchase` response received includes `callout` data then you need to redirect your customer and afterwards use the `callback` endpoint.
+```python
+import uuid
+from pyticketswitch import Client
 
-Note that the URL structure is `callback.v1/this.[previous token used]/next.[new token]`. If `purchase` was the last endpoint hit, then the "previous token used" is the `return_token` that was passed in to `purchase`. If the last endpoint hit was `callback` then "previous token used" is the "new token" you generated for the previous `callback`.
+client = Client('demo-redirect', 'demopass')
 
-You should pass the payment page URL you have been referred from as the Referrer in the headers.
+returned_data = {'success': 'yes'}
+next_token = uuid.uuid4()
+status, callout, meta = client.next_callout(
+    '64e8a0d8-ca3a-4a3b-8a39-597ee66acdd0',
+    next_token,
+    returned_data,
+)
+```
 
-You should pass in verbatim all query string and post parameters you have received. These are needed by Ingresso to for example finalise the payment collection.
+If the `purchase` response received includes `callout` data then you need to
+redirect your customer and afterwards use the `callback` endpoint.
+
+Note that the URL structure is 
+`callback.v1/this.[previous token used]/next.[new token]`.
+If `purchase` was the last endpoint hit, then the "previous token used" is
+the `return_token` that was passed in to `purchase`.  If the last endpoint hit
+was `callback` then "previous token used" is the "new token" you generated for
+the previous `callback`.
+
+You should pass the payment page URL you have been referred from as the
+Referrer in the headers.
+
+You should pass in verbatim all query string and post parameters you have
+received. These are needed by Ingresso to for example finalise the payment
+collection.
 
 The `callback` response will either:
 
-- include further `callout` data, as in the `purchase` response example above, in which case you should redirect your customer and call `callback` again; or 
-- include similar data to the `purchase` response described in [purchasing on credit](#purchasing-on-credit) - the purchase is complete and has either succeeded or failed. 
+- include further `callout` data, as in the `purchase` response example above,
+  in which case you should redirect your customer and call `callback` again;
+  or 
+- include similar data to the `purchase` response described in 
+  [purchasing on credit](#purchasing-on-credit) - the purchase is complete and
+  has either succeeded or failed. 
 
 You should continue to call `callback` until you no longer see `callout` data.

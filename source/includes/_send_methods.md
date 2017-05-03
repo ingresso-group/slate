@@ -29,7 +29,7 @@ curl https://demo.ticketswitch.com/f13/send_methods.v1 \
 from pyticketswith import Client
 
 client = Client('demo', 'demopass')
-client.get_send_methods('6IF-A8B')
+send_methods, meta = client.get_send_methods('6IF-B0O')
 ```
 
 ### Request
@@ -85,22 +85,31 @@ Parameter | Description
 ```
 
 ```python
+from pyticketswitch.country import Country
+from pyticketswitch.send_method import SendMethod
+
 [
-    pyticketswitch.SendMethod(
+    SendMethod(
         code='COBO',
-        description='Collect from the venue',
         cost=1.5,
-        typ='collect'
+        description='Collect from the venue',
+        type='collect',
     ),
-    pyticketswitch.SendMethod(
+    SendMethod(
         code='POST',
-        description='Post (UK & Ireland only)',
         cost=3.5,
+        description='Post (UK & Ireland only)',
         type='post',
         permitted_countries=[
-            pyticketswitch.Country(code='ie', description='Ireland'),
-            pyticketswitch.Country(code='uk', description='United Kingdom'),
-        ]
+            Country(
+                code='ie',
+                description='Ireland',
+            ),
+            Country(
+                code='uk',
+                description='United Kingdom',
+            )
+        ],
     )
 ]
 ```

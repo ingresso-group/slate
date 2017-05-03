@@ -47,19 +47,18 @@ curl https://demo.ticketswitch.com/f13/trolley.v1 \
     --compressed \
     -G
 ```
+
 ```python
 from pyticketswitch import Client
 
 client = Client('demo', 'demopass')
-trolley = client.get_trolley(
-    performance_id='6IF-A8N',
+trolley, meta = client.get_trolley(
+    performance_id='6IF-B0O',
     number_of_seats=2,
     price_band_code='A/pool',
     ticket_type_code='STALLS'
 )
 ```
-
-
 
 > **Example request - adding specific seats to an existing trolley**
 
@@ -77,6 +76,20 @@ curl https://demo.ticketswitch.com/f13/trolley.v1 \
     -G
 ```
 
+```python
+from pyticketswitch import Client
+
+client = Client('demo', 'demopass')
+trolley, meta = client.get_trolley(
+    trolley_token='E2--oMNQScXjk-RMutgBkigRHW70NMWzh6mFlEyGZ7AjUgdD3BeCgDem1JVsSOPEykxKN3heGSVE_IRvx63kEfhaTyi0EySnC_-Pqy9bcDpTtrBZEs-Durm_G94dvGoG64K2bAgTVCunIBmJk3fAwQYFFCSIEDKwx7tO4NeKdyg5Cd6_BS19n1BzeW5heK8UcmidlAwwVNA4LdDAImR9Uf_nUTUke35Fk44yOtWZti6HyZ4tmi5EnC4s-mLlnxkSP34tqBTqPdLlWwgWIbQBdcW2Umx4kl7lE0l02d7RmIiVK4zh9bfHpg5FrR2ravb8sQ-1vAQduh8GLzwbG-rt5y4qAfsCsKf5puh9Wx6FtL0sFz9-Z',
+    performance_id='7AB-5',
+    ticket_type_code='STALLS',
+    price_band_code='A/pool',
+    number_of_seats=2,
+    seats=['A1', 'A2'],
+)
+```
+
 
 > **Example request - view the current state of the trolley**
 
@@ -92,12 +105,8 @@ curl https://demo.ticketswitch.com/f13/trolley.v1 \
 from pyticketswitch import Client
 
 client = Client('demo', 'demopass')
-trolley = client.get_trolley(
+trolley, meta = client.get_trolley(
     token='E2--nPSMAQKI8kggWwF4N5qp4zPaO2VU_3armTREADiU6s4xgp3VjDmF7TXSnD0DN100souzOPZD8COW-jLhPSAsdOY-DhoK15T4meB5-xUrXpZ2cMrLIbVbongnwLqzJdI_-FFa6XqQTrF2ncjGLssB9nC7R79FHSN12AADiZ795WDj3vQ8GJ6DGvXjTf3-bULrCpjitgZLqMf_bAlqay7hSQxfCFaD1PiUtuU7gIhi7vnsr0CJT7vtJJmLd_HXfrwgQYTNey5dia6Tx9o4Ed3QAvwctSGBGVZ6g9qabWwRnTbBg8_TFuvY0vSvqPq31b30Dey_rLBKq4X1Ay2uNx3VJCs221wGGEvmlY5JoxhmKm5-Z',
-    performance_id='6IF-A8D',
-    number_of_seats=4,
-    price_band_code='C/pool',
-    ticket_type_code='CIRCLE',
 )
 ```
 
@@ -117,7 +126,7 @@ curl https://demo.ticketswitch.com/f13/trolley.v1 \
 from pyticketswitch import Client
 
 client = Client('demo', 'demopass')
-trolley = client.get_trolley(
+trolley, meta = client.get_trolley(
     token='E2--nPSMAQKI8kggWwF4N5qp4zPaO2VU_3armTREADiU6s4xgp3VjDmF7TXSnD0DN100souzOPZD8COW-jLhPSAsdOY-DhoK15T4meB5-xUrXpZ2cMrLIbVbongnwLqzJdI_-FFa6XqQTrF2ncjGLssB9nC7R79FHSN12AADiZ795WDj3vQ8GJ6DGvXjTf3-bULrCpjitgZLqMf_bAlqay7hSQxfCFaD1PiUtuU7gIhi7vnsr0CJT7vtJJmLd_HXfrwgQYTNey5dia6Tx9o4Ed3QAvwctSGBGVZ6g9qabWwRnTbBg8_TFuvY0vSvqPq31b30Dey_rLBKq4X1Ay2uNx3VJCs221wGGEvmlY5JoxhmKm5-Z',
     item_numbers_to_remove=[1, 2, 3],   
 )
@@ -142,7 +151,7 @@ common reasons why two orders cannot sit alongside each other are:
   specified "International Post" for one order, and "Collect From Box Office" for
   the next order, and they are both from the same supplier then these are
   incompatible and the first order will be removed from your trolley. This should
-  be an uncommon occurence.
+  be an uncommon occurrence.
 
 - Differing currencies - for example the first order added to the trolley uses
   the USD currency while the second order added uses the GBP currency. These are
@@ -434,6 +443,171 @@ Parameter | Description
     "trolley_order_count": 2
   }
 }
+```
+
+```python
+from pyticketswitch.event import Event
+from pyticketswitch.bundle import Bundle
+from pyticketswitch.performance import Performance
+from pyticketswitch.order import TicketOrder
+from pyticketswitch.trolley import Trolley
+from pyticketswitch.order import Order
+
+Trolley(
+    token='64--QVkNGtT6STKmvXGI1e3mnxGkt-myQ56VW_cMlAxai766x2C-ksxcll2pY7-AUFsdyzNivWoVuCVJUwUfaiSFUUPQN6ErqZeAM5hRX6KXIHy4eLuzeV6SX8PvZDsO0RScIwO54SNFcgIPHl9MEnl0F_amE0EPNPSqn7C9IZqBkERKUfoi-E9eysQlq-EiQUKZPxev24rAS9ASDZPkpQKY4-9zM-fF1DSLcic0uho5c3jFsajf8QTrD_Se9sUfy4OrATwTIVmRZXNyeTFZWTJji0HQg3HmATR5Xhe_BzuOwqvxLjyT65uEP3oStqo3RZ6o1HiMe3DxI9u5khAf3QrIrd0-3bS4JsAmm5JQiq_Vg2FqfJTf42Gipre9kcU8mnAVHjPvGgNyGpuG2fQHpTCd-Pd9jiDbC93ckOJ8DZN8FJZbbYWD82Ep_w90YlSug5uQ_vh2f54xgD2RQRyxpyTAeKegBI-YRtiolLgSnGfuVyFCWb0JHES4ZrQHBEuii5gnocURfBq9sL--Z',
+    bundles=[
+        Bundle(
+            source_code='ext_test0',
+            orders=[
+                Order(
+                    item=1,
+                    event=Event(
+                        id='6IF',
+                        status='live',
+                        description="Matthew Bourne's Nutcracker TEST",
+                        source='External Test Backend 0',
+                        source_code='ext_test0',
+                        event_type='simple_ticket',
+                        venue="Sadler's Wells",
+                        classes={
+                            'dance': 'Ballet & Dance'
+                        },
+                        postcode='EC1R 4TN',
+                        city='London',
+                        city_code='london-uk',
+                        country='United Kingdom',
+                        country_code='uk',
+                        latitude=51.52961137,
+                        longitude=-0.10601562,
+                        max_running_time=120,
+                        min_running_time=120,
+                        show_performance_time=True,
+                        has_performances=True,
+                        is_seated=True,
+                        needs_departure_date=False,
+                        needs_duration=False,
+                        needs_performance=False,
+                        upsell_list=[
+                            '6IE',
+                            'MH0'
+                        ],
+                        critic_review_percent=100,
+                    ),
+                    performance=Performance(
+                        id='6IF-B0O',
+                        event_id='6IF',
+                        date_time=datetime.datetime(2017, 5, 4, 19, 30, tzinfo=tzoffset(None, 3600)),
+                        date_description='Thu, 4th May 2017',
+                        time_description='7.30 PM',
+                        has_pool_seats=True,
+                        is_limited=False,
+                        is_ghost=False,
+                        running_time=120,
+                    ),
+                    price_band_code='A/pool',
+                    ticket_type_code='STALLS',
+                    ticket_type_description='Stalls',
+                    ticket_orders=[
+                        TicketOrder(
+                            code='',
+                            description='',
+                            number_of_seats=2,
+                            seatprice=21.0,
+                            surcharge=3.0,
+                            total_seatprice=42.0,
+                            total_surcharge=6.0,
+                        )
+                    ],
+                    number_of_seats=2,
+                    total_seatprice=42.0,
+                    total_surcharge=6.0,
+                    requested_seat_ids=[
+                        
+                    ],
+                )
+            ],
+            description='External Test Backend 0',
+            total_seatprice=42.0,
+            total_surcharge=6.0,
+            total_send_cost=1.5,
+            total=49.5,
+            currency_code='gbp',
+        ),
+        Bundle(
+            source_code='ext_test1',
+            orders=[
+                Order(
+                    item=2,
+                    event=Event(
+                        id='7AB',
+                        status='live',
+                        description='The Unremarkable Incident of the Cat at Lunchtime',
+                        source='External Test Backend 1',
+                        source_code='ext_test1',
+                        event_type='simple_ticket',
+                        venue='Lyric Apollo',
+                        classes={
+                            'theatre': 'Theatre'
+                        },
+                        postcode='W6 7ES',
+                        city='London',
+                        city_code='london-uk',
+                        country='United Kingdom',
+                        country_code='uk',
+                        latitude=51.49306,
+                        longitude=-0.22639,
+                        max_running_time=90,
+                        min_running_time=90,
+                        show_performance_time=True,
+                        has_performances=True,
+                        is_seated=True,
+                        needs_departure_date=False,
+                        needs_duration=False,
+                        needs_performance=False,
+                    ),
+                    performance=Performance(
+                        id='7AB-5',
+                        event_id='7AB',
+                        date_time=datetime.datetime(2019, 1, 1, 15, 30, tzinfo=tzutc()),
+                        date_description='Tue, 1st January 2019',
+                        time_description='3.30 PM',
+                        has_pool_seats=True,
+                        is_limited=False,
+                        is_ghost=False,
+                        running_time=90,
+                    ),
+                    price_band_code='A/pool',
+                    ticket_type_code='STALLS',
+                    ticket_type_description='Stalls',
+                    ticket_orders=[
+                        TicketOrder(
+                            code='NORMAL',
+                            description='Regular Ticket',
+                            number_of_seats=2,
+                            seatprice=50.0,
+                            surcharge=5.0,
+                            total_seatprice=100.0,
+                            total_surcharge=10.0,
+                        )
+                    ],
+                    number_of_seats=2,
+                    total_seatprice=100.0,
+                    total_surcharge=10.0,
+                    requested_seat_ids=[
+                        'A1',
+                        'A2'
+                    ],
+                )
+            ],
+            description='External Test Backend 1',
+            total_seatprice=100.0,
+            total_surcharge=10.0,
+            total_send_cost=0.0,
+            total=110.0,
+            currency_code='gbp',
+        )
+    ],
+)
 ```
 
 The trolley has three main structures:
