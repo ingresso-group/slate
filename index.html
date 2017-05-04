@@ -14151,11 +14151,11 @@ how to handle these situations.</p>
 </thead><tbody>
 <tr>
 <td><code class="prettyprint">200 - OK</code></td>
-<td>The call was successful and the response can be interpreted a documented.</td>
+<td>The call was successful and the response can be interpreted as documented.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">400 - Bad Request</code></td>
-<td>Your call was missing data required to satisfy the request. This response is generally occurs due to missing parameters.</td>
+<td>Your call was missing data required to satisfy the request. This response generally occurs due to missing parameters.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">401 - Unauthorised</code></td>
@@ -14167,11 +14167,11 @@ how to handle these situations.</p>
 </tr>
 <tr>
 <td><code class="prettyprint">404 - Not Found</code></td>
-<td>Then endpoint you were trying to reach does not exist.</td>
+<td>Then the endpoint you were trying to reach does not exist.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">405 - Method Not Allowed</code></td>
-<td>you have tried to use a POST request when the endpoint was expecting a GET request (or visa versa).</td>
+<td>You have tried to use a POST request when the endpoint was expecting a GET request (or vice versa).</td>
 </tr>
 <tr>
 <td><code class="prettyprint">410 - Gone</code></td>
@@ -14179,24 +14179,24 @@ how to handle these situations.</p>
 </tr>
 <tr>
 <td><code class="prettyprint">460 - Invalid Parameters</code></td>
-<td>The parameters passed to the API were technically valid, but where rejected due to their content. Refer to the error description and error code for further details.</td>
+<td>The parameters passed to the API were technically valid, but were rejected due to their content. Refer to the error description and error code for further details.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">5XX - Server Errors</code></td>
-<td>Something unexpectedly went wrong and the API was unable to do what you asked it to do. You should refer to the error code/description in the message body for further details.</td>
+<td>Something unexpectedly went wrong and the API was unable to do what you asked it to do. Refer to the error description and error code for further details.</td>
 </tr>
 </tbody></table>
 
 <p>One specific case that is worth mentioning in detail is when the API returns a
 502 HTTP status code. This indicates that your request required a connection to an
-upstream server (for example the target theatre, or a payment provider), but
-we were unable to establish the connection. A lot of the systems that our API
-connects to are very fragile; we do what we can to mitigate this, but
-sometimes those upstream servers simply won&rsquo;t be available to service your
-request. In these situations you could attempt to retry the request in case it
-was just momentary issue, failing that waiting a short time may help. Both
-scheduled and unscheduled major outages will be recorded on our <a href="https://ingresso.statuspage.io/">status
-page</a>.</p>
+upstream server (for example the supplier ticketing system, or a payment
+provider), but we were unable to establish the connection. A lot of the
+systems that our API connects to are very fragile; we do what we can to
+mitigate this, but sometimes those upstream servers simply won&rsquo;t be available
+to service your request. In these situations you could attempt to retry the
+request in case it was just momentary issue, failing that waiting a short time
+may help. Both scheduled and unscheduled major outages will be recorded on our
+<a href="https://ingresso.statuspage.io/">status page</a>.</p>
 
 <h2 id="error-codes">Error codes</h2>
 
