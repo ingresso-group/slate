@@ -41,7 +41,7 @@ Details of the general HTTP status codes can be found below:
 
 Status Code | Description
 ------------|------------
-`200 - OK` | The call was successful and the response can be interpreted as documented.
+`200 - OK` | The response can be interpreted as explained in the documentation.
 `400 - Bad Request` | Your call was missing data required to satisfy the request. This response generally occurs due to missing parameters.
 `401 - Unauthorised` | No authentication parameters were provided or the given parameters were invalid.
 `403 - Forbidden` | You are trying to access something your account doesn't have access to.
