@@ -25,6 +25,7 @@ includes:
   - trans_id_status
   - cities
   - classes
+  - errors
   - bitmask_fields
   - caching
 
