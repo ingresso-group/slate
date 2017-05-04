@@ -41,26 +41,26 @@ Details of the general HTTP status codes can be found below:
 
 Status Code | Description
 ------------|------------
-`200 - OK` | The call was successful and the response can be interpreted a documented.
-`400 - Bad Request` | Your call was missing data required to satisfy the request. This response is generally occurs due to missing parameters.
+`200 - OK` | The call was successful and the response can be interpreted as documented.
+`400 - Bad Request` | Your call was missing data required to satisfy the request. This response generally occurs due to missing parameters.
 `401 - Unauthorised` | No authentication parameters were provided or the given parameters were invalid.
 `403 - Forbidden` | You are trying to access something your account doesn't have access to.
-`404 - Not Found` | Then endpoint you were trying to reach does not exist.
-`405 - Method Not Allowed` | you have tried to use a POST request when the endpoint was expecting a GET request (or visa versa).
+`404 - Not Found` | Then the endpoint you were trying to reach does not exist.
+`405 - Method Not Allowed` | You have tried to use a POST request when the endpoint was expecting a GET request (or vice versa).
 `410 - Gone` | The resource you were trying to access no longer exists. This is primarily used around transactions when temporary resources (such as callouts) have expired.
-`460 - Invalid Parameters` |  The parameters passed to the API were technically valid, but where rejected due to their content. Refer to the error description and error code for further details.
-`5XX - Server Errors` | Something unexpectedly went wrong and the API was unable to do what you asked it to do. You should refer to the error code/description in the message body for further details.
+`460 - Invalid Parameters` |  The parameters passed to the API were technically valid, but were rejected due to their content. Refer to the error description and error code for further details.
+`5XX - Server Errors` | Something unexpectedly went wrong and the API was unable to do what you asked it to do. Refer to the error description and error code for further details.
 
 One specific case that is worth mentioning in detail is when the API returns a
 502 HTTP status code. This indicates that your request required a connection to an
-upstream server (for example the target theatre, or a payment provider), but
-we were unable to establish the connection. A lot of the systems that our API
-connects to are very fragile; we do what we can to mitigate this, but
-sometimes those upstream servers simply won't be available to service your
-request. In these situations you could attempt to retry the request in case it
-was just momentary issue, failing that waiting a short time may help. Both
-scheduled and unscheduled major outages will be recorded on our [status
-page](https://ingresso.statuspage.io/).
+upstream server (for example the supplier ticketing system, or a payment
+provider), but we were unable to establish the connection. A lot of the
+systems that our API connects to are very fragile; we do what we can to
+mitigate this, but sometimes those upstream servers simply won't be available
+to service your request. In these situations you could attempt to retry the
+request in case it was just momentary issue, failing that waiting a short time
+may help. Both scheduled and unscheduled major outages will be recorded on our
+[status page](https://ingresso.statuspage.io/).
 
 ## Error codes
 
