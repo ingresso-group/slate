@@ -67,14 +67,14 @@ Parameter | Description
 `city_code` | Return events in a particular city. The list of city codes can be retrieved using the [cities](#cities) resource.
 `country_code` | 2-digit country code (using [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
 `include_dead` | Include dead events in the results. This could be useful if you dynamically retrieve the list of events from Ingresso and want to continue to display an event page after an event dies, for example to help with search engine optimisation.
-`offers_only` | If set to `true` the response will only include events with a special offer. Note that we rely on cached data, so cannot guaranteed complete accuracy.
+`offers_only` | If set to `true` the response will only include events with a special offer. Note that we rely on cached data, so we cannot guarantee complete accuracy.
 
 These parameters are used to control the output if more than one event is returned:
 
 Parameter | Description
 --------- | -----------
 `page_length` | Length of a page, default 50.
-`page_number` | Page number, default 0, ignored if page_len is not present.
+`page_number` | Zero-indexed page number, default 0. Should be used in conjunction with the `page_length` parameter.
 `sort_order` | Valid values are `most_popular` (based on sales across all partners over the last 48 hours), `alphabetic`, `cost_ascending` (lowest price first, based on the minimum total price [seatprice + surcharge] for the event), `cost_descending` (highest price first, based on the *maximum* total price for the event), `critic_rating` (average critic rating, highest to lowest), `recent`, `last_sale`. When there is a tie alphabetic ordering is used to break the tie. **Note: there is a slight performance impact to using `cost_ascending` or `cost_descending` if you are not also using the `req_cost_range` parameter.**
 
 These parameters can be passed in to request additional data for each event, and 
@@ -317,7 +317,7 @@ The outer object also contains a **paging_status** object:
 
 Attribute | Description
 --------- | -----------
-`page_length` | The page length used for the response. This will either be the value set with the `page_len` parameter
+`page_length` | The number of results per page.
 `page_number` | The zero-based page number currently displayed.
 `pages_remaining` | The number of pages that you need to request after the current page to retrieve all results.
 `results_remaining` | The number of results in the remaining pages.
@@ -642,13 +642,14 @@ Parameter | Description
 `event_id_list` | A comma separated list of event IDs e.g. `25DR` for a single event; `1VLG,1YYO,25DR` for multiple events.
 `trolley_token` | A trolley token for a [trolley](#trolley) containing seats for a performance
 
-Please note that only one of the parameters is required. Addons will not be
-returned for an `event_id_list` call, as they can only be added to an existing
-trolley.
+Please note that only one of the parameters can be used in the request.
+Add-on events will not be returned for an `event_id_list` call, as they can
+only be added to an existing trolley.
 
 As with [`events_by_id`](#events-by-id), additional parameters can be passed in
-to request additional data for each event, as described in more detail in the
-[additional parameters](#additional-parameters) section below.
+to control paging of results, and to request additional data for each event, as
+described in more detail in the [additional parameters](#additional-parameters)
+section below.
 
 
 ### Response
