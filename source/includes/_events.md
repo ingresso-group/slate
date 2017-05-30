@@ -16,7 +16,9 @@ There are two event-related resources:
 2. [Events by ID](#events-by-id): return detail for one or more events by 
 their ID.
 
-These two resources are described below, followed by detail of the 
+3. [Related events](#related-events): list related and addon events.
+
+These three resources are described below, followed by detail of the 
 [additional parameters](#additional-parameters) that can be passed to each.
 
 
@@ -573,6 +575,490 @@ Attribute | Description
 `user_review_percent` | The aggregate user review score, e.g. `80` for 80%.
 `venue_desc` | Name of the venue e.g. `Sadler's Wells`.
 
+
+## Related Events
+
+Many events have related events that can be displayed to customers to increase
+sales. There are two classes of such events, upsell events and add-on events. 
+
+Upsell events are events that customers may be interested in purchasing due to
+their similarity with the primary event. For example, two ballet performances
+may be listed as being 'upsell' related events, as if the customer is interested
+in one ballet performance, they may be interested in others.
+
+Add-on events are events or miscellaneous items that cannot be purchased
+individually, but are only available to add to an existing trolley. This may
+include things like merchandise that is picked up at the performance, etc.
+
+> **Definition**
+
+```
+GET https://demo.ticketswitch.com/f13/related_events.v1
+```
+
+### Request
+
+> **Example request – getting related events by event ID list**
+
+```shell
+curl https://demo.ticketswitch.com/f13/related_events.v1 \
+    -u "demo:demopass" \
+    -d "event_id_list=7AB" \
+    --compressed \
+    -G
+```
+
+```python
+from pyticketswitch import Client
+
+client = Client(user='demo', password='demopass')
+(addon_events, addon_meta), (upsell_events, upsell_meta) = client.get_related_events(event_ids=[7AB])
+```
+
+> **Example request – getting related events by trolley token**
+
+```shell
+curl https://demo.ticketswitch.com/f13/related_events.v1 \
+    -u "demo:demopass" \
+    -d "trolley_token=M2--6TcZRZsfgZI0E8PmlGWqr5PQluhxE46Nqnno3Xa24lFuIKM_0IYJq40BDvisBRcXKsaGBdLfu8B5TfwI4s7jk7y7xRto_SwJL177u_vuvvq_Ynqnj64IfAHmItXxz_-xdTQGXh_G-BuPGxPXNY_Ycimiv1ZYlPFuPjsoVugnUnyu2F0TmpdztEtgI9PC1WhnTeHeRUDEBvVewOIf_PEJkPVR-UXFDg3gxbHYQBENW5XpkYnRhc22IqrB7eAoK0MbTLaPMk3uB1BKnz_B7fasSU_NU3nhXvmgHa4suvCT9oEaQSGvq4G0glOtyCiqL1FfVJ2R3KIgb2xC4NbAm4cNL5q22V_W0eYGmJ9DTBJ90UWvAWH7UeFLM1--Z" \
+    --compressed \
+    -G
+```
+
+```python
+from pyticketswitch import Client
+
+client = Client(user='demo', password='demopass')
+(addon_events, addon_meta), (upsell_events, upsell_meta) = client.get_related_events(token="M2--6TcZRZsfgZI0E8PmlGWqr5PQluhxE46Nqnno3Xa24lFuIKM_0IYJq40BDvisBRcXKsaGBdLfu8B5TfwI4s7jk7y7xRto_SwJL177u_vuvvq_Ynqnj64IfAHmItXxz_-xdTQGXh_G-BuPGxPXNY_Ycimiv1ZYlPFuPjsoVugnUnyu2F0TmpdztEtgI9PC1WhnTeHeRUDEBvVewOIf_PEJkPVR-UXFDg3gxbHYQBENW5XpkYnRhc22IqrB7eAoK0MbTLaPMk3uB1BKnz_B7fasSU_NU3nhXvmgHa4suvCT9oEaQSGvq4G0glOtyCiqL1FfVJ2R3KIgb2xC4NbAm4cNL5q22V_W0eYGmJ9DTBJ90UWvAWH7UeFLM1--Z")
+```
+
+### Request
+
+This endpoint can provide a list of add-on events and upsell events based
+on one of the following parameters:
+
+Parameter | Description
+--------- | -----------
+`event_id_list` | A comma separated list of event IDs e.g. `25DR` for a single event; `1VLG,1YYO,25DR` for multiple events.
+`trolley_token` | A trolley token for a [trolley](#trolley) containing seats for a performance
+
+Please note that only one of the parameters is required. Addons will not be
+returned for an `event_id_list` call, as they can only be added to an existing
+trolley.
+
+As with [`events_by_id`](#events-by-id), additional parameters can be passed in
+to request additional data for each event, as described in more detail in the
+[additional parameters](#additional-parameters) section below.
+
+
+### Response
+
+> **Example response – getting related events by trolley token**
+
+```shell
+{
+  "add_on_results": {
+    "event": [
+      {
+        "classes": {
+          "theatre": "Theatre"
+        },
+        "country_code": "uk",
+        "country_desc": "United Kingdom",
+        "custom_filter": [],
+        "event_desc": "Unremarkable Cat Lunchbox",
+        "event_id": "7AC",
+        "event_path": "/7AC-unremarkable-cat-lunchbox/",
+        "event_status": "live",
+        "event_type": "misc_item",
+        "event_uri_desc": "Unremarkable-Cat-Lunchbox",
+        "geo_data": {
+          "latitude": 51.49306,
+          "longitude": -0.22639
+        },
+        "has_no_perfs": false,
+        "is_add_on": true,
+        "is_seated": false,
+        "need_departure_date": false,
+        "need_duration": false,
+        "need_performance": false,
+        "postcode": "W6 7ES",
+        "show_perf_time": false,
+        "source_code": "ext_test1",
+        "source_desc": "External Test Backend 1",
+        "venue_desc": "Lyric Apollo",
+        "venue_uri_desc": "Lyric-Apollo"
+      }
+    ],
+    "paging_status": {
+      "page_length": 50,
+      "page_number": 0,
+      "pages_remaining": 0,
+      "results_remaining": 0,
+      "total_unpaged_results": 1
+    }
+  },
+  "upsell_results": {
+    "event": [
+      {
+        "city_code": "london-uk",
+        "city_desc": "London",
+        "classes": {
+          "dance": "Ballet & Dance"
+        },
+        "country_code": "uk",
+        "country_desc": "United Kingdom",
+        "critic_review_percent": 100,
+        "custom_filter": [],
+        "event_desc": "Matthew Bourne's Nutcracker TEST",
+        "event_id": "6IF",
+        "event_path": "/6IF-matthew-bourne-s-nutcracker-test/",
+        "event_status": "live",
+        "event_type": "simple_ticket",
+        "event_upsell_list": {
+          "event_id": [
+            "6IE",
+            "MH0"
+          ]
+        },
+        "event_uri_desc": "Matthew-Bourne%27s-Nutcracker-TEST",
+        "geo_data": {
+          "latitude": 51.52961137,
+          "longitude": -0.10601562
+        },
+        "has_no_perfs": false,
+        "is_add_on": false,
+        "is_seated": true,
+        "max_running_time": 120,
+        "min_running_time": 120,
+        "need_departure_date": false,
+        "need_duration": false,
+        "need_performance": true,
+        "postcode": "EC1R 4TN",
+        "show_perf_time": true,
+        "source_code": "ext_test0",
+        "source_desc": "External Test Backend 0",
+        "user_review_percent": 100,
+        "venue_desc": "Sadler's Wells",
+        "venue_uri_desc": "Sadler%27s-Wells"
+      },
+      {
+        "city_code": "london-uk",
+        "city_desc": "London",
+        "classes": {
+          "opera": "Opera"
+        },
+        "country_code": "uk",
+        "country_desc": "United Kingdom",
+        "custom_filter": [],
+        "event_desc": "Toy Story - The Opera",
+        "event_id": "7AA",
+        "event_path": "/7AA-toy-story-the-opera/",
+        "event_status": "live",
+        "event_type": "simple_ticket",
+        "event_uri_desc": "Toy-Story-The-Opera",
+        "geo_data": {
+          "latitude": 51.511556,
+          "longitude": -0.11975
+        },
+        "has_no_perfs": false,
+        "is_add_on": false,
+        "is_seated": true,
+        "max_running_time": 90,
+        "min_running_time": 90,
+        "need_departure_date": false,
+        "need_duration": false,
+        "need_performance": true,
+        "postcode": "WC2E 7RQ",
+        "show_perf_time": true,
+        "source_code": "ext_test0",
+        "source_desc": "External Test Backend 0",
+        "venue_desc": "Lyceum Theatre",
+        "venue_uri_desc": "Lyceum-Theatre"
+      }
+    ],
+    "paging_status": {
+      "page_length": 50,
+      "page_number": 0,
+      "pages_remaining": 0,
+      "results_remaining": 0,
+      "total_unpaged_results": 2
+    }
+  }
+}
+```
+
+```python
+from pyticketswitch import Event
+
+# addon_events
+[
+    Event(
+        min_running_time=None,
+        event_type=u'misc_item',
+        has_performances=True,
+        venue_info_html=None,
+        critic_review_percent=None,
+        needs_departure_date=False,
+        valid_quantities=None,
+        event_info_html=None,
+        raw={
+            u'event_type': u'misc_item',
+            u'custom_filter': [],
+            u'event_desc': u'Unremarkable Cat Lunchbox',
+            u'show_perf_time': False,
+            u'need_performance': False,
+            u'postcode': u'W6 7ES',
+            u'country_code': u'uk',
+            u'has_no_perfs': False,
+            u'event_status': u'live',
+            u'country_desc': u'United Kingdom',
+            u'venue_desc': u'Lyric Apollo',
+            u'need_duration': False,
+            u'event_id': u'7AC',
+            u'is_seated': False,
+            u'need_departure_date': False,
+            u'classes': {
+                u'theatre': u'Theatre'
+            },
+            u'is_add_on': True,
+            u'city_code': u'london-uk',
+            u'geo_data': {
+                u'latitude': 51.49306,
+                u'longitude': -0.22639
+            },
+            u'event_path': u'/7AC-unremarkable-cat-lunchbox/',
+            u'venue_uri_desc': u'Lyric-Apollo',
+            u'source_code': u'ext_test1',
+            u'city_desc': u'London',
+            u'source_desc': u'External Test Backend 1',
+            u'event_uri_desc': u'Unremarkable-Cat-Lunchbox'
+        },
+        availability_details=[],
+        postcode=u'W6 7ES',
+        country_code=u'uk',
+        id=u'7AC',
+        city=u'London',
+        filters=[],
+        media={},
+        is_seated=False,
+        cost_range_details=[],
+        event_info=None,
+        content={},
+        source=u'External Test Backend 1',
+        max_running_time=None,
+        needs_performance=False,
+        latitude=51.49306,
+        upsell_list=[],
+        city_code=u'london-uk',
+        venue_addr=None,
+        status=u'live',
+        description=u'Unremarkable Cat Lunchbox',
+        venue_addr_html=None,
+        cost_range=None,
+        source_code=u'ext_test1',
+        country=u'United Kingdom',
+        venue_info=None,
+        venue=u'Lyric Apollo',
+        longitude=-0.22639,
+        is_add_on=True,
+        reviews=[],
+        classes={
+            u'theatre': u'Theatre'
+        },
+        fields={},
+        needs_duration=False,
+        no_singles_cost_range=None,
+        component_events=[],
+        show_performance_time=False,
+    )
+]
+
+# upsell_events
+[
+    Event(
+        min_running_time=120,
+        event_type=u'simple_ticket',
+        has_performances=True,
+        venue_info_html=None,
+        critic_review_percent=100,
+        needs_departure_date=False,
+        valid_quantities=None,
+        event_info_html=None,
+        raw={
+            u'min_running_time': 120,
+            u'event_type': u'simple_ticket',
+            u'custom_filter': [],
+            u'critic_review_percent': 100,
+            u'event_desc': u"Matthew Bourne's Nutcracker TEST",
+            u'event_uri_desc': u'Matthew-Bourne%27s-Nutcracker-TEST',
+            u'postcode': u'EC1R 4TN',
+            u'country_code': u'uk',
+            u'has_no_perfs': False,
+            u'event_status': u'live',
+            u'need_performance': True,
+            u'country_desc': u'United Kingdom',
+            u'venue_desc': u"Sadler's Wells",
+            u'need_duration': False,
+            u'event_id': u'6IF',
+            u'is_seated': True,
+            u'need_departure_date': False,
+            u'user_review_percent': 100,
+            u'max_running_time': 120,
+            u'show_perf_time': True,
+            u'event_upsell_list': {
+                u'event_id': [
+                    u'6IE',
+                    u'MH0'
+                ]
+            },
+            u'is_add_on': False,
+            u'city_code': u'london-uk',
+            u'geo_data': {
+                u'latitude': 51.52961137,
+                u'longitude': -0.10601562
+            },
+            u'event_path': u'/6IF-matthew-bourne-s-nutcracker-test/',
+            u'venue_uri_desc': u'Sadler%27s-Wells',
+            u'source_code': u'ext_test0',
+            u'city_desc': u'London',
+            u'source_desc': u'External Test Backend 0',
+            u'classes': {
+                u'dance': u'Ballet & Dance'
+            }
+        },
+        availability_details=[],
+        postcode=u'EC1R 4TN',
+        country_code=u'uk',
+        id=u'6IF',
+        city=u'London',
+        filters=[],
+        media={},
+        is_seated=True,
+        cost_range_details=[],
+        event_info=None,
+        content={},
+        source=u'External Test Backend 0',
+        max_running_time=120,
+        needs_performance=False,
+        latitude=51.52961137,
+        upsell_list=[
+            u'6IE',
+            u'MH0'
+        ],
+        city_code=u'london-uk',
+        venue_addr=None,
+        status=u'live',
+        description=u"Matthew Bourne's Nutcracker TEST",
+        venue_addr_html=None,
+        cost_range=None,
+        source_code=u'ext_test0',
+        country=u'United Kingdom',
+        venue_info=None,
+        venue=u"Sadler's Wells",
+        longitude=-0.10601562,
+        is_add_on=False,
+        reviews=[],
+        classes={
+            u'dance': u'Ballet & Dance'
+        },
+        fields={},
+        needs_duration=False,
+        no_singles_cost_range=None,
+        component_events=[],
+        show_performance_time=True,
+    ),
+    Event(
+        min_running_time=90,
+        event_type=u'simple_ticket',
+        has_performances=True,
+        venue_info_html=None,
+        critic_review_percent=None,
+        needs_departure_date=False,
+        valid_quantities=None,
+        event_info_html=None,
+        raw={
+            u'min_running_time': 90,
+            u'event_type': u'simple_ticket',
+            u'custom_filter': [],
+            u'event_desc': u'Toy Story - The Opera',
+            u'show_perf_time': True,
+            u'need_performance': True,
+            u'postcode': u'WC2E 7RQ',
+            u'country_code': u'uk',
+            u'has_no_perfs': False,
+            u'event_status': u'live',
+            u'country_desc': u'United Kingdom',
+            u'venue_desc': u'Lyceum Theatre',
+            u'need_duration': False,
+            u'event_id': u'7AA',
+            u'is_seated': True,
+            u'need_departure_date': False,
+            u'max_running_time': 90,
+            u'classes': {
+                u'opera': u'Opera'
+            },
+            u'is_add_on': False,
+            u'city_code': u'london-uk',
+            u'geo_data': {
+                u'latitude': 51.511556,
+                u'longitude': -0.11975
+            },
+            u'event_path': u'/7AA-toy-story-the-opera/',
+            u'venue_uri_desc': u'Lyceum-Theatre',
+            u'source_code': u'ext_test0',
+            u'city_desc': u'London',
+            u'source_desc': u'External Test Backend 0',
+            u'event_uri_desc': u'Toy-Story-The-Opera'
+        },
+        availability_details=[],
+        postcode=u'WC2E 7RQ',
+        country_code=u'uk',
+        id=u'7AA',
+        city=u'London',
+        filters=[],
+        media={},
+        is_seated=True,
+        cost_range_details=[],
+        event_info=None,
+        content={},
+        source=u'External Test Backend 0',
+        max_running_time=90,
+        needs_performance=False,
+        latitude=51.511556,
+        upsell_list=[],
+        city_code=u'london-uk',
+        venue_addr=None,
+        status=u'live',
+        description=u'Toy Story - The Opera',
+        venue_addr_html=None,
+        cost_range=None,
+        source_code=u'ext_test0',
+        country=u'United Kingdom',
+        venue_info=None,
+        venue=u'Lyceum Theatre',
+        longitude=-0.11975,
+        is_add_on=False,
+        reviews=[],
+        classes={
+            u'opera': u'Opera'
+        },
+        fields={},
+        needs_duration=False,
+        no_singles_cost_range=None,
+        component_events=[],
+        show_performance_time=True,
+    )
+]
+
+```
+
+**Attributes**
+
+Attribute | Description
+--------- | -----------
+`add_on_results` | A list of events and metadata associated with add-on events, in the same format as [`events_by_id`](#events-by-id)
+`upsell_results` | A list of events and metadata associated with upsell events, in the same format
 
 ## --- Additional parameters ---
 
