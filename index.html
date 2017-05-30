@@ -1087,9 +1087,10 @@ the API.</p>
 <li><p><a href="#events-list">Events list</a>: list all events or search for events.</p></li>
 <li><p><a href="#events-by-id">Events by ID</a>: return detail for one or more events by 
 their ID.</p></li>
+<li><p><a href="#related-events">Related events</a>: list related and addon events.</p></li>
 </ol>
 
-<p>These two resources are described below, followed by detail of the 
+<p>These three resources are described below, followed by detail of the 
 <a href="#additional-parameters">additional parameters</a> that can be passed to each.</p>
 
 <h2 id="events-list">Events list</h2>
@@ -2021,6 +2022,498 @@ returns a dictionary of events keyed on the event&rsquo;s <code class="prettypri
 <tr>
 <td><code class="prettyprint">venue_desc</code></td>
 <td>Name of the venue e.g. <code class="prettyprint">Sadler&#39;s Wells</code>.</td>
+</tr>
+</tbody></table>
+
+<h2 id="related-events">Related Events</h2>
+
+<p>Many events have related events that can be displayed to customers to increase
+sales. There are two classes of such events, upsell events and add-on events. </p>
+
+<p>Upsell events are events that customers may be interested in purchasing due to
+their similarity with the primary event. For example, two ballet performances
+may be listed as being &lsquo;upsell&rsquo; related events, as if the customer is interested
+in one ballet performance, they may be interested in others.</p>
+
+<p>Add-on events are events or miscellaneous items that cannot be purchased
+individually, but are only available to add to an existing trolley. This may
+include things like merchandise that is picked up at the performance, etc.</p>
+
+<blockquote>
+<p><strong>Definition</strong></p>
+</blockquote>
+<pre class="highlight plaintext"><code>GET https://demo.ticketswitch.com/f13/related_events.v1
+</code></pre>
+<h3 id="request">Request</h3>
+
+<blockquote>
+<p><strong>Example request – getting related events by event ID list</strong></p>
+</blockquote>
+<pre class="highlight shell"><code>curl https://demo.ticketswitch.com/f13/related_events.v1 <span class="se">\</span>
+    -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
+    -d <span class="s2">"event_id_list=7AB"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
+    -G
+</code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="s">'demo'</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">'demopass'</span><span class="p">)</span>
+<span class="p">(</span><span class="n">addon_events</span><span class="p">,</span> <span class="n">addon_meta</span><span class="p">),</span> <span class="p">(</span><span class="n">upsell_events</span><span class="p">,</span> <span class="n">upsell_meta</span><span class="p">)</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_related_events</span><span class="p">(</span><span class="n">event_ids</span><span class="o">=</span><span class="p">[</span><span class="mi">7</span><span class="n">AB</span><span class="p">])</span>
+</code></pre>
+<blockquote>
+<p><strong>Example request – getting related events by trolley token</strong></p>
+</blockquote>
+<pre class="highlight shell"><code>curl https://demo.ticketswitch.com/f13/related_events.v1 <span class="se">\</span>
+    -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
+    -d <span class="s2">"trolley_token=M2--6TcZRZsfgZI0E8PmlGWqr5PQluhxE46Nqnno3Xa24lFuIKM_0IYJq40BDvisBRcXKsaGBdLfu8B5TfwI4s7jk7y7xRto_SwJL177u_vuvvq_Ynqnj64IfAHmItXxz_-xdTQGXh_G-BuPGxPXNY_Ycimiv1ZYlPFuPjsoVugnUnyu2F0TmpdztEtgI9PC1WhnTeHeRUDEBvVewOIf_PEJkPVR-UXFDg3gxbHYQBENW5XpkYnRhc22IqrB7eAoK0MbTLaPMk3uB1BKnz_B7fasSU_NU3nhXvmgHa4suvCT9oEaQSGvq4G0glOtyCiqL1FfVJ2R3KIgb2xC4NbAm4cNL5q22V_W0eYGmJ9DTBJ90UWvAWH7UeFLM1--Z"</span> <span class="se">\</span>
+    --compressed <span class="se">\</span>
+    -G
+</code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="s">'demo'</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">'demopass'</span><span class="p">)</span>
+<span class="p">(</span><span class="n">addon_events</span><span class="p">,</span> <span class="n">addon_meta</span><span class="p">),</span> <span class="p">(</span><span class="n">upsell_events</span><span class="p">,</span> <span class="n">upsell_meta</span><span class="p">)</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_related_events</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="s">"M2--6TcZRZsfgZI0E8PmlGWqr5PQluhxE46Nqnno3Xa24lFuIKM_0IYJq40BDvisBRcXKsaGBdLfu8B5TfwI4s7jk7y7xRto_SwJL177u_vuvvq_Ynqnj64IfAHmItXxz_-xdTQGXh_G-BuPGxPXNY_Ycimiv1ZYlPFuPjsoVugnUnyu2F0TmpdztEtgI9PC1WhnTeHeRUDEBvVewOIf_PEJkPVR-UXFDg3gxbHYQBENW5XpkYnRhc22IqrB7eAoK0MbTLaPMk3uB1BKnz_B7fasSU_NU3nhXvmgHa4suvCT9oEaQSGvq4G0glOtyCiqL1FfVJ2R3KIgb2xC4NbAm4cNL5q22V_W0eYGmJ9DTBJ90UWvAWH7UeFLM1--Z"</span><span class="p">)</span>
+</code></pre>
+<h3 id="request">Request</h3>
+
+<p>This endpoint can provide a list of add-on events and upsell events based
+on one of the following parameters:</p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">event_id_list</code></td>
+<td>A comma separated list of event IDs e.g. <code class="prettyprint">25DR</code> for a single event; <code class="prettyprint">1VLG,1YYO,25DR</code> for multiple events.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">trolley_token</code></td>
+<td>A trolley token for a <a href="#trolley">trolley</a> containing seats for a performance</td>
+</tr>
+</tbody></table>
+
+<p>Please note that only one of the parameters is required. Addons will not be
+returned for an <code class="prettyprint">event_id_list</code> call, as they can only be added to an existing
+trolley.</p>
+
+<p>As with <a href="#events-by-id"><code class="prettyprint">events_by_id</code></a>, additional parameters can be passed in
+to request additional data for each event, as described in more detail in the
+<a href="#additional-parameters">additional parameters</a> section below.</p>
+
+<h3 id="response">Response</h3>
+
+<blockquote>
+<p><strong>Example response – getting related events by trolley token</strong></p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"add_on_results"</span>: <span class="o">{</span>
+    <span class="s2">"event"</span>: <span class="o">[</span>
+      <span class="o">{</span>
+        <span class="s2">"classes"</span>: <span class="o">{</span>
+          <span class="s2">"theatre"</span>: <span class="s2">"Theatre"</span>
+        <span class="o">}</span>,
+        <span class="s2">"country_code"</span>: <span class="s2">"uk"</span>,
+        <span class="s2">"country_desc"</span>: <span class="s2">"United Kingdom"</span>,
+        <span class="s2">"custom_filter"</span>: <span class="o">[]</span>,
+        <span class="s2">"event_desc"</span>: <span class="s2">"Unremarkable Cat Lunchbox"</span>,
+        <span class="s2">"event_id"</span>: <span class="s2">"7AC"</span>,
+        <span class="s2">"event_path"</span>: <span class="s2">"/7AC-unremarkable-cat-lunchbox/"</span>,
+        <span class="s2">"event_status"</span>: <span class="s2">"live"</span>,
+        <span class="s2">"event_type"</span>: <span class="s2">"misc_item"</span>,
+        <span class="s2">"event_uri_desc"</span>: <span class="s2">"Unremarkable-Cat-Lunchbox"</span>,
+        <span class="s2">"geo_data"</span>: <span class="o">{</span>
+          <span class="s2">"latitude"</span>: 51.49306,
+          <span class="s2">"longitude"</span>: -0.22639
+        <span class="o">}</span>,
+        <span class="s2">"has_no_perfs"</span>: <span class="nb">false</span>,
+        <span class="s2">"is_add_on"</span>: <span class="nb">true</span>,
+        <span class="s2">"is_seated"</span>: <span class="nb">false</span>,
+        <span class="s2">"need_departure_date"</span>: <span class="nb">false</span>,
+        <span class="s2">"need_duration"</span>: <span class="nb">false</span>,
+        <span class="s2">"need_performance"</span>: <span class="nb">false</span>,
+        <span class="s2">"postcode"</span>: <span class="s2">"W6 7ES"</span>,
+        <span class="s2">"show_perf_time"</span>: <span class="nb">false</span>,
+        <span class="s2">"source_code"</span>: <span class="s2">"ext_test1"</span>,
+        <span class="s2">"source_desc"</span>: <span class="s2">"External Test Backend 1"</span>,
+        <span class="s2">"venue_desc"</span>: <span class="s2">"Lyric Apollo"</span>,
+        <span class="s2">"venue_uri_desc"</span>: <span class="s2">"Lyric-Apollo"</span>
+      <span class="o">}</span>
+    <span class="o">]</span>,
+    <span class="s2">"paging_status"</span>: <span class="o">{</span>
+      <span class="s2">"page_length"</span>: 50,
+      <span class="s2">"page_number"</span>: 0,
+      <span class="s2">"pages_remaining"</span>: 0,
+      <span class="s2">"results_remaining"</span>: 0,
+      <span class="s2">"total_unpaged_results"</span>: 1
+    <span class="o">}</span>
+  <span class="o">}</span>,
+  <span class="s2">"upsell_results"</span>: <span class="o">{</span>
+    <span class="s2">"event"</span>: <span class="o">[</span>
+      <span class="o">{</span>
+        <span class="s2">"city_code"</span>: <span class="s2">"london-uk"</span>,
+        <span class="s2">"city_desc"</span>: <span class="s2">"London"</span>,
+        <span class="s2">"classes"</span>: <span class="o">{</span>
+          <span class="s2">"dance"</span>: <span class="s2">"Ballet &amp; Dance"</span>
+        <span class="o">}</span>,
+        <span class="s2">"country_code"</span>: <span class="s2">"uk"</span>,
+        <span class="s2">"country_desc"</span>: <span class="s2">"United Kingdom"</span>,
+        <span class="s2">"critic_review_percent"</span>: 100,
+        <span class="s2">"custom_filter"</span>: <span class="o">[]</span>,
+        <span class="s2">"event_desc"</span>: <span class="s2">"Matthew Bourne's Nutcracker TEST"</span>,
+        <span class="s2">"event_id"</span>: <span class="s2">"6IF"</span>,
+        <span class="s2">"event_path"</span>: <span class="s2">"/6IF-matthew-bourne-s-nutcracker-test/"</span>,
+        <span class="s2">"event_status"</span>: <span class="s2">"live"</span>,
+        <span class="s2">"event_type"</span>: <span class="s2">"simple_ticket"</span>,
+        <span class="s2">"event_upsell_list"</span>: <span class="o">{</span>
+          <span class="s2">"event_id"</span>: <span class="o">[</span>
+            <span class="s2">"6IE"</span>,
+            <span class="s2">"MH0"</span>
+          <span class="o">]</span>
+        <span class="o">}</span>,
+        <span class="s2">"event_uri_desc"</span>: <span class="s2">"Matthew-Bourne%27s-Nutcracker-TEST"</span>,
+        <span class="s2">"geo_data"</span>: <span class="o">{</span>
+          <span class="s2">"latitude"</span>: 51.52961137,
+          <span class="s2">"longitude"</span>: -0.10601562
+        <span class="o">}</span>,
+        <span class="s2">"has_no_perfs"</span>: <span class="nb">false</span>,
+        <span class="s2">"is_add_on"</span>: <span class="nb">false</span>,
+        <span class="s2">"is_seated"</span>: <span class="nb">true</span>,
+        <span class="s2">"max_running_time"</span>: 120,
+        <span class="s2">"min_running_time"</span>: 120,
+        <span class="s2">"need_departure_date"</span>: <span class="nb">false</span>,
+        <span class="s2">"need_duration"</span>: <span class="nb">false</span>,
+        <span class="s2">"need_performance"</span>: <span class="nb">true</span>,
+        <span class="s2">"postcode"</span>: <span class="s2">"EC1R 4TN"</span>,
+        <span class="s2">"show_perf_time"</span>: <span class="nb">true</span>,
+        <span class="s2">"source_code"</span>: <span class="s2">"ext_test0"</span>,
+        <span class="s2">"source_desc"</span>: <span class="s2">"External Test Backend 0"</span>,
+        <span class="s2">"user_review_percent"</span>: 100,
+        <span class="s2">"venue_desc"</span>: <span class="s2">"Sadler's Wells"</span>,
+        <span class="s2">"venue_uri_desc"</span>: <span class="s2">"Sadler%27s-Wells"</span>
+      <span class="o">}</span>,
+      <span class="o">{</span>
+        <span class="s2">"city_code"</span>: <span class="s2">"london-uk"</span>,
+        <span class="s2">"city_desc"</span>: <span class="s2">"London"</span>,
+        <span class="s2">"classes"</span>: <span class="o">{</span>
+          <span class="s2">"opera"</span>: <span class="s2">"Opera"</span>
+        <span class="o">}</span>,
+        <span class="s2">"country_code"</span>: <span class="s2">"uk"</span>,
+        <span class="s2">"country_desc"</span>: <span class="s2">"United Kingdom"</span>,
+        <span class="s2">"custom_filter"</span>: <span class="o">[]</span>,
+        <span class="s2">"event_desc"</span>: <span class="s2">"Toy Story - The Opera"</span>,
+        <span class="s2">"event_id"</span>: <span class="s2">"7AA"</span>,
+        <span class="s2">"event_path"</span>: <span class="s2">"/7AA-toy-story-the-opera/"</span>,
+        <span class="s2">"event_status"</span>: <span class="s2">"live"</span>,
+        <span class="s2">"event_type"</span>: <span class="s2">"simple_ticket"</span>,
+        <span class="s2">"event_uri_desc"</span>: <span class="s2">"Toy-Story-The-Opera"</span>,
+        <span class="s2">"geo_data"</span>: <span class="o">{</span>
+          <span class="s2">"latitude"</span>: 51.511556,
+          <span class="s2">"longitude"</span>: -0.11975
+        <span class="o">}</span>,
+        <span class="s2">"has_no_perfs"</span>: <span class="nb">false</span>,
+        <span class="s2">"is_add_on"</span>: <span class="nb">false</span>,
+        <span class="s2">"is_seated"</span>: <span class="nb">true</span>,
+        <span class="s2">"max_running_time"</span>: 90,
+        <span class="s2">"min_running_time"</span>: 90,
+        <span class="s2">"need_departure_date"</span>: <span class="nb">false</span>,
+        <span class="s2">"need_duration"</span>: <span class="nb">false</span>,
+        <span class="s2">"need_performance"</span>: <span class="nb">true</span>,
+        <span class="s2">"postcode"</span>: <span class="s2">"WC2E 7RQ"</span>,
+        <span class="s2">"show_perf_time"</span>: <span class="nb">true</span>,
+        <span class="s2">"source_code"</span>: <span class="s2">"ext_test0"</span>,
+        <span class="s2">"source_desc"</span>: <span class="s2">"External Test Backend 0"</span>,
+        <span class="s2">"venue_desc"</span>: <span class="s2">"Lyceum Theatre"</span>,
+        <span class="s2">"venue_uri_desc"</span>: <span class="s2">"Lyceum-Theatre"</span>
+      <span class="o">}</span>
+    <span class="o">]</span>,
+    <span class="s2">"paging_status"</span>: <span class="o">{</span>
+      <span class="s2">"page_length"</span>: 50,
+      <span class="s2">"page_number"</span>: 0,
+      <span class="s2">"pages_remaining"</span>: 0,
+      <span class="s2">"results_remaining"</span>: 0,
+      <span class="s2">"total_unpaged_results"</span>: 2
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre><pre class="highlight python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Event</span>
+
+<span class="c"># addon_events</span>
+<span class="p">[</span>
+    <span class="n">Event</span><span class="p">(</span>
+        <span class="n">min_running_time</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">event_type</span><span class="o">=</span><span class="s">u'misc_item'</span><span class="p">,</span>
+        <span class="n">has_performances</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">venue_info_html</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">critic_review_percent</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">needs_departure_date</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">valid_quantities</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">event_info_html</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">raw</span><span class="o">=</span><span class="p">{</span>
+            <span class="s">u'event_type'</span><span class="p">:</span> <span class="s">u'misc_item'</span><span class="p">,</span>
+            <span class="s">u'custom_filter'</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s">u'event_desc'</span><span class="p">:</span> <span class="s">u'Unremarkable Cat Lunchbox'</span><span class="p">,</span>
+            <span class="s">u'show_perf_time'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+            <span class="s">u'need_performance'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+            <span class="s">u'postcode'</span><span class="p">:</span> <span class="s">u'W6 7ES'</span><span class="p">,</span>
+            <span class="s">u'country_code'</span><span class="p">:</span> <span class="s">u'uk'</span><span class="p">,</span>
+            <span class="s">u'has_no_perfs'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+            <span class="s">u'event_status'</span><span class="p">:</span> <span class="s">u'live'</span><span class="p">,</span>
+            <span class="s">u'country_desc'</span><span class="p">:</span> <span class="s">u'United Kingdom'</span><span class="p">,</span>
+            <span class="s">u'venue_desc'</span><span class="p">:</span> <span class="s">u'Lyric Apollo'</span><span class="p">,</span>
+            <span class="s">u'need_duration'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+            <span class="s">u'event_id'</span><span class="p">:</span> <span class="s">u'7AC'</span><span class="p">,</span>
+            <span class="s">u'is_seated'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+            <span class="s">u'need_departure_date'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+            <span class="s">u'classes'</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">u'theatre'</span><span class="p">:</span> <span class="s">u'Theatre'</span>
+            <span class="p">},</span>
+            <span class="s">u'is_add_on'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="s">u'city_code'</span><span class="p">:</span> <span class="s">u'london-uk'</span><span class="p">,</span>
+            <span class="s">u'geo_data'</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">u'latitude'</span><span class="p">:</span> <span class="mf">51.49306</span><span class="p">,</span>
+                <span class="s">u'longitude'</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.22639</span>
+            <span class="p">},</span>
+            <span class="s">u'event_path'</span><span class="p">:</span> <span class="s">u'/7AC-unremarkable-cat-lunchbox/'</span><span class="p">,</span>
+            <span class="s">u'venue_uri_desc'</span><span class="p">:</span> <span class="s">u'Lyric-Apollo'</span><span class="p">,</span>
+            <span class="s">u'source_code'</span><span class="p">:</span> <span class="s">u'ext_test1'</span><span class="p">,</span>
+            <span class="s">u'city_desc'</span><span class="p">:</span> <span class="s">u'London'</span><span class="p">,</span>
+            <span class="s">u'source_desc'</span><span class="p">:</span> <span class="s">u'External Test Backend 1'</span><span class="p">,</span>
+            <span class="s">u'event_uri_desc'</span><span class="p">:</span> <span class="s">u'Unremarkable-Cat-Lunchbox'</span>
+        <span class="p">},</span>
+        <span class="n">availability_details</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">postcode</span><span class="o">=</span><span class="s">u'W6 7ES'</span><span class="p">,</span>
+        <span class="n">country_code</span><span class="o">=</span><span class="s">u'uk'</span><span class="p">,</span>
+        <span class="nb">id</span><span class="o">=</span><span class="s">u'7AC'</span><span class="p">,</span>
+        <span class="n">city</span><span class="o">=</span><span class="s">u'London'</span><span class="p">,</span>
+        <span class="n">filters</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">media</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">is_seated</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">cost_range_details</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">event_info</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">content</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">source</span><span class="o">=</span><span class="s">u'External Test Backend 1'</span><span class="p">,</span>
+        <span class="n">max_running_time</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">needs_performance</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">latitude</span><span class="o">=</span><span class="mf">51.49306</span><span class="p">,</span>
+        <span class="n">upsell_list</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">city_code</span><span class="o">=</span><span class="s">u'london-uk'</span><span class="p">,</span>
+        <span class="n">venue_addr</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">status</span><span class="o">=</span><span class="s">u'live'</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s">u'Unremarkable Cat Lunchbox'</span><span class="p">,</span>
+        <span class="n">venue_addr_html</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">cost_range</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">source_code</span><span class="o">=</span><span class="s">u'ext_test1'</span><span class="p">,</span>
+        <span class="n">country</span><span class="o">=</span><span class="s">u'United Kingdom'</span><span class="p">,</span>
+        <span class="n">venue_info</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">venue</span><span class="o">=</span><span class="s">u'Lyric Apollo'</span><span class="p">,</span>
+        <span class="n">longitude</span><span class="o">=-</span><span class="mf">0.22639</span><span class="p">,</span>
+        <span class="n">is_add_on</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">reviews</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">classes</span><span class="o">=</span><span class="p">{</span>
+            <span class="s">u'theatre'</span><span class="p">:</span> <span class="s">u'Theatre'</span>
+        <span class="p">},</span>
+        <span class="n">fields</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">needs_duration</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">no_singles_cost_range</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">component_events</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">show_performance_time</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="p">]</span>
+
+<span class="c"># upsell_events</span>
+<span class="p">[</span>
+    <span class="n">Event</span><span class="p">(</span>
+        <span class="n">min_running_time</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span>
+        <span class="n">event_type</span><span class="o">=</span><span class="s">u'simple_ticket'</span><span class="p">,</span>
+        <span class="n">has_performances</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">venue_info_html</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">critic_review_percent</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">needs_departure_date</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">valid_quantities</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">event_info_html</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">raw</span><span class="o">=</span><span class="p">{</span>
+            <span class="s">u'min_running_time'</span><span class="p">:</span> <span class="mi">120</span><span class="p">,</span>
+            <span class="s">u'event_type'</span><span class="p">:</span> <span class="s">u'simple_ticket'</span><span class="p">,</span>
+            <span class="s">u'custom_filter'</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s">u'critic_review_percent'</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+            <span class="s">u'event_desc'</span><span class="p">:</span> <span class="s">u"Matthew Bourne's Nutcracker TEST"</span><span class="p">,</span>
+            <span class="s">u'event_uri_desc'</span><span class="p">:</span> <span class="s">u'Matthew-Bourne</span><span class="si">%27</span><span class="s">s-Nutcracker-TEST'</span><span class="p">,</span>
+            <span class="s">u'postcode'</span><span class="p">:</span> <span class="s">u'EC1R 4TN'</span><span class="p">,</span>
+            <span class="s">u'country_code'</span><span class="p">:</span> <span class="s">u'uk'</span><span class="p">,</span>
+            <span class="s">u'has_no_perfs'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+            <span class="s">u'event_status'</span><span class="p">:</span> <span class="s">u'live'</span><span class="p">,</span>
+            <span class="s">u'need_performance'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="s">u'country_desc'</span><span class="p">:</span> <span class="s">u'United Kingdom'</span><span class="p">,</span>
+            <span class="s">u'venue_desc'</span><span class="p">:</span> <span class="s">u"Sadler's Wells"</span><span class="p">,</span>
+            <span class="s">u'need_duration'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+            <span class="s">u'event_id'</span><span class="p">:</span> <span class="s">u'6IF'</span><span class="p">,</span>
+            <span class="s">u'is_seated'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="s">u'need_departure_date'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+            <span class="s">u'user_review_percent'</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+            <span class="s">u'max_running_time'</span><span class="p">:</span> <span class="mi">120</span><span class="p">,</span>
+            <span class="s">u'show_perf_time'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="s">u'event_upsell_list'</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">u'event_id'</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s">u'6IE'</span><span class="p">,</span>
+                    <span class="s">u'MH0'</span>
+                <span class="p">]</span>
+            <span class="p">},</span>
+            <span class="s">u'is_add_on'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+            <span class="s">u'city_code'</span><span class="p">:</span> <span class="s">u'london-uk'</span><span class="p">,</span>
+            <span class="s">u'geo_data'</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">u'latitude'</span><span class="p">:</span> <span class="mf">51.52961137</span><span class="p">,</span>
+                <span class="s">u'longitude'</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.10601562</span>
+            <span class="p">},</span>
+            <span class="s">u'event_path'</span><span class="p">:</span> <span class="s">u'/6IF-matthew-bourne-s-nutcracker-test/'</span><span class="p">,</span>
+            <span class="s">u'venue_uri_desc'</span><span class="p">:</span> <span class="s">u'Sadler</span><span class="si">%27</span><span class="s">s-Wells'</span><span class="p">,</span>
+            <span class="s">u'source_code'</span><span class="p">:</span> <span class="s">u'ext_test0'</span><span class="p">,</span>
+            <span class="s">u'city_desc'</span><span class="p">:</span> <span class="s">u'London'</span><span class="p">,</span>
+            <span class="s">u'source_desc'</span><span class="p">:</span> <span class="s">u'External Test Backend 0'</span><span class="p">,</span>
+            <span class="s">u'classes'</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">u'dance'</span><span class="p">:</span> <span class="s">u'Ballet &amp; Dance'</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="n">availability_details</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">postcode</span><span class="o">=</span><span class="s">u'EC1R 4TN'</span><span class="p">,</span>
+        <span class="n">country_code</span><span class="o">=</span><span class="s">u'uk'</span><span class="p">,</span>
+        <span class="nb">id</span><span class="o">=</span><span class="s">u'6IF'</span><span class="p">,</span>
+        <span class="n">city</span><span class="o">=</span><span class="s">u'London'</span><span class="p">,</span>
+        <span class="n">filters</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">media</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">is_seated</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">cost_range_details</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">event_info</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">content</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">source</span><span class="o">=</span><span class="s">u'External Test Backend 0'</span><span class="p">,</span>
+        <span class="n">max_running_time</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span>
+        <span class="n">needs_performance</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">latitude</span><span class="o">=</span><span class="mf">51.52961137</span><span class="p">,</span>
+        <span class="n">upsell_list</span><span class="o">=</span><span class="p">[</span>
+            <span class="s">u'6IE'</span><span class="p">,</span>
+            <span class="s">u'MH0'</span>
+        <span class="p">],</span>
+        <span class="n">city_code</span><span class="o">=</span><span class="s">u'london-uk'</span><span class="p">,</span>
+        <span class="n">venue_addr</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">status</span><span class="o">=</span><span class="s">u'live'</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s">u"Matthew Bourne's Nutcracker TEST"</span><span class="p">,</span>
+        <span class="n">venue_addr_html</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">cost_range</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">source_code</span><span class="o">=</span><span class="s">u'ext_test0'</span><span class="p">,</span>
+        <span class="n">country</span><span class="o">=</span><span class="s">u'United Kingdom'</span><span class="p">,</span>
+        <span class="n">venue_info</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">venue</span><span class="o">=</span><span class="s">u"Sadler's Wells"</span><span class="p">,</span>
+        <span class="n">longitude</span><span class="o">=-</span><span class="mf">0.10601562</span><span class="p">,</span>
+        <span class="n">is_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">reviews</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">classes</span><span class="o">=</span><span class="p">{</span>
+            <span class="s">u'dance'</span><span class="p">:</span> <span class="s">u'Ballet &amp; Dance'</span>
+        <span class="p">},</span>
+        <span class="n">fields</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">needs_duration</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">no_singles_cost_range</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">component_events</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">show_performance_time</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">Event</span><span class="p">(</span>
+        <span class="n">min_running_time</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
+        <span class="n">event_type</span><span class="o">=</span><span class="s">u'simple_ticket'</span><span class="p">,</span>
+        <span class="n">has_performances</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">venue_info_html</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">critic_review_percent</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">needs_departure_date</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">valid_quantities</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">event_info_html</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">raw</span><span class="o">=</span><span class="p">{</span>
+            <span class="s">u'min_running_time'</span><span class="p">:</span> <span class="mi">90</span><span class="p">,</span>
+            <span class="s">u'event_type'</span><span class="p">:</span> <span class="s">u'simple_ticket'</span><span class="p">,</span>
+            <span class="s">u'custom_filter'</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s">u'event_desc'</span><span class="p">:</span> <span class="s">u'Toy Story - The Opera'</span><span class="p">,</span>
+            <span class="s">u'show_perf_time'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="s">u'need_performance'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="s">u'postcode'</span><span class="p">:</span> <span class="s">u'WC2E 7RQ'</span><span class="p">,</span>
+            <span class="s">u'country_code'</span><span class="p">:</span> <span class="s">u'uk'</span><span class="p">,</span>
+            <span class="s">u'has_no_perfs'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+            <span class="s">u'event_status'</span><span class="p">:</span> <span class="s">u'live'</span><span class="p">,</span>
+            <span class="s">u'country_desc'</span><span class="p">:</span> <span class="s">u'United Kingdom'</span><span class="p">,</span>
+            <span class="s">u'venue_desc'</span><span class="p">:</span> <span class="s">u'Lyceum Theatre'</span><span class="p">,</span>
+            <span class="s">u'need_duration'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+            <span class="s">u'event_id'</span><span class="p">:</span> <span class="s">u'7AA'</span><span class="p">,</span>
+            <span class="s">u'is_seated'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="s">u'need_departure_date'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+            <span class="s">u'max_running_time'</span><span class="p">:</span> <span class="mi">90</span><span class="p">,</span>
+            <span class="s">u'classes'</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">u'opera'</span><span class="p">:</span> <span class="s">u'Opera'</span>
+            <span class="p">},</span>
+            <span class="s">u'is_add_on'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+            <span class="s">u'city_code'</span><span class="p">:</span> <span class="s">u'london-uk'</span><span class="p">,</span>
+            <span class="s">u'geo_data'</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">u'latitude'</span><span class="p">:</span> <span class="mf">51.511556</span><span class="p">,</span>
+                <span class="s">u'longitude'</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.11975</span>
+            <span class="p">},</span>
+            <span class="s">u'event_path'</span><span class="p">:</span> <span class="s">u'/7AA-toy-story-the-opera/'</span><span class="p">,</span>
+            <span class="s">u'venue_uri_desc'</span><span class="p">:</span> <span class="s">u'Lyceum-Theatre'</span><span class="p">,</span>
+            <span class="s">u'source_code'</span><span class="p">:</span> <span class="s">u'ext_test0'</span><span class="p">,</span>
+            <span class="s">u'city_desc'</span><span class="p">:</span> <span class="s">u'London'</span><span class="p">,</span>
+            <span class="s">u'source_desc'</span><span class="p">:</span> <span class="s">u'External Test Backend 0'</span><span class="p">,</span>
+            <span class="s">u'event_uri_desc'</span><span class="p">:</span> <span class="s">u'Toy-Story-The-Opera'</span>
+        <span class="p">},</span>
+        <span class="n">availability_details</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">postcode</span><span class="o">=</span><span class="s">u'WC2E 7RQ'</span><span class="p">,</span>
+        <span class="n">country_code</span><span class="o">=</span><span class="s">u'uk'</span><span class="p">,</span>
+        <span class="nb">id</span><span class="o">=</span><span class="s">u'7AA'</span><span class="p">,</span>
+        <span class="n">city</span><span class="o">=</span><span class="s">u'London'</span><span class="p">,</span>
+        <span class="n">filters</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">media</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">is_seated</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">cost_range_details</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">event_info</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">content</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">source</span><span class="o">=</span><span class="s">u'External Test Backend 0'</span><span class="p">,</span>
+        <span class="n">max_running_time</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
+        <span class="n">needs_performance</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">latitude</span><span class="o">=</span><span class="mf">51.511556</span><span class="p">,</span>
+        <span class="n">upsell_list</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">city_code</span><span class="o">=</span><span class="s">u'london-uk'</span><span class="p">,</span>
+        <span class="n">venue_addr</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">status</span><span class="o">=</span><span class="s">u'live'</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s">u'Toy Story - The Opera'</span><span class="p">,</span>
+        <span class="n">venue_addr_html</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">cost_range</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">source_code</span><span class="o">=</span><span class="s">u'ext_test0'</span><span class="p">,</span>
+        <span class="n">country</span><span class="o">=</span><span class="s">u'United Kingdom'</span><span class="p">,</span>
+        <span class="n">venue_info</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">venue</span><span class="o">=</span><span class="s">u'Lyceum Theatre'</span><span class="p">,</span>
+        <span class="n">longitude</span><span class="o">=-</span><span class="mf">0.11975</span><span class="p">,</span>
+        <span class="n">is_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">reviews</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">classes</span><span class="o">=</span><span class="p">{</span>
+            <span class="s">u'opera'</span><span class="p">:</span> <span class="s">u'Opera'</span>
+        <span class="p">},</span>
+        <span class="n">fields</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">needs_duration</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">no_singles_cost_range</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">component_events</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">show_performance_time</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="p">]</span>
+
+</code></pre>
+<p><strong>Attributes</strong></p>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">add_on_results</code></td>
+<td>A list of events and metadata associated with add-on events, in the same format as <a href="#events-by-id"><code class="prettyprint">events_by_id</code></a></td>
+</tr>
+<tr>
+<td><code class="prettyprint">upsell_results</code></td>
+<td>A list of events and metadata associated with upsell events, in the same format</td>
 </tr>
 </tbody></table>
 
