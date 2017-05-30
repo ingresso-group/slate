@@ -1160,7 +1160,7 @@ accidentally returned.</p>
 </tr>
 <tr>
 <td><code class="prettyprint">offers_only</code></td>
-<td>If set to <code class="prettyprint">true</code> the response will only include events with a special offer. Note that we rely on cached data, so cannot guaranteed complete accuracy.</td>
+<td>If set to <code class="prettyprint">true</code> the response will only include events with a special offer. Note that we rely on cached data, so we cannot guarantee complete accuracy.</td>
 </tr>
 </tbody></table>
 
@@ -1178,7 +1178,7 @@ accidentally returned.</p>
 </tr>
 <tr>
 <td><code class="prettyprint">page_number</code></td>
-<td>Page number, default 0, ignored if page_len is not present.</td>
+<td>Zero-indexed page number, default 0. Should be used in conjunction with the <code class="prettyprint">page_length</code> parameter.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">sort_order</code></td>
@@ -1592,7 +1592,7 @@ are described in more detail in the
 </thead><tbody>
 <tr>
 <td><code class="prettyprint">page_length</code></td>
-<td>The page length used for the response. This will either be the value set with the <code class="prettyprint">page_len</code> parameter</td>
+<td>The number of results per page.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">page_number</code></td>
@@ -2093,13 +2093,14 @@ on one of the following parameters:</p>
 </tr>
 </tbody></table>
 
-<p>Please note that only one of the parameters is required. Addons will not be
-returned for an <code class="prettyprint">event_id_list</code> call, as they can only be added to an existing
-trolley.</p>
+<p>Please note that only one of the parameters can be used in the request.
+Add-on events will not be returned for an <code class="prettyprint">event_id_list</code> call, as they can
+only be added to an existing trolley.</p>
 
 <p>As with <a href="#events-by-id"><code class="prettyprint">events_by_id</code></a>, additional parameters can be passed in
-to request additional data for each event, as described in more detail in the
-<a href="#additional-parameters">additional parameters</a> section below.</p>
+to control paging of results, and to request additional data for each event, as
+described in more detail in the <a href="#additional-parameters">additional parameters</a>
+section below.</p>
 
 <h3 id="response">Response</h3>
 
