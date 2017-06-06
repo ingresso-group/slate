@@ -65,7 +65,6 @@ can also be included and will add the details to the response.
 
 > **Example response**
 
-```
 ```shell
 {
   "results": {
