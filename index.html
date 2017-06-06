@@ -11284,52 +11284,51 @@ can also be included and will add the details to the response.</p>
 <blockquote>
 <p><strong>Example response</strong></p>
 </blockquote>
-<pre class="highlight plaintext"><code>```shell
-{
-  "results": {
-    "event": [
-      {
-        "city_code": "london-uk",
-        "city_desc": "London",
-        "classes": {
-          "theatre": "Theatre"
-        },
-        "country_code": "uk",
-        "country_desc": "United Kingdom",
-        "custom_filter": [],
-        "event_desc": "Unremarkable Cat Lunchbox",
-        "event_id": "7AC",
-        "event_path": "/7AC-unremarkable-cat-lunchbox/",
-        "event_status": "live",
-        "event_type": "misc_item",
-        "event_uri_desc": "Unremarkable-Cat-Lunchbox",
-        "geo_data": {
-          "latitude": 51.49306,
-          "longitude": -0.22639
-        },
-        "has_no_perfs": false,
-        "is_add_on": true,
-        "is_seated": false,
-        "need_departure_date": false,
-        "need_duration": false,
-        "need_performance": false,
-        "postcode": "W6 7ES",
-        "show_perf_time": false,
-        "source_code": "ext_test1",
-        "source_desc": "External Test Backend 1",
-        "venue_desc": "Lyric Apollo",
-        "venue_uri_desc": "Lyric-Apollo"
-      }
-    ],
-    "paging_status": {
-      "page_length": 50,
-      "page_number": 0,
-      "pages_remaining": 0,
-      "results_remaining": 0,
-      "total_unpaged_results": 1
-    }
-  }
-}
+<pre class="highlight shell tab-shell"><code><span class="o">{</span>
+  <span class="s2">"results"</span>: <span class="o">{</span>
+    <span class="s2">"event"</span>: <span class="o">[</span>
+      <span class="o">{</span>
+        <span class="s2">"city_code"</span>: <span class="s2">"london-uk"</span>,
+        <span class="s2">"city_desc"</span>: <span class="s2">"London"</span>,
+        <span class="s2">"classes"</span>: <span class="o">{</span>
+          <span class="s2">"theatre"</span>: <span class="s2">"Theatre"</span>
+        <span class="o">}</span>,
+        <span class="s2">"country_code"</span>: <span class="s2">"uk"</span>,
+        <span class="s2">"country_desc"</span>: <span class="s2">"United Kingdom"</span>,
+        <span class="s2">"custom_filter"</span>: <span class="o">[]</span>,
+        <span class="s2">"event_desc"</span>: <span class="s2">"Unremarkable Cat Lunchbox"</span>,
+        <span class="s2">"event_id"</span>: <span class="s2">"7AC"</span>,
+        <span class="s2">"event_path"</span>: <span class="s2">"/7AC-unremarkable-cat-lunchbox/"</span>,
+        <span class="s2">"event_status"</span>: <span class="s2">"live"</span>,
+        <span class="s2">"event_type"</span>: <span class="s2">"misc_item"</span>,
+        <span class="s2">"event_uri_desc"</span>: <span class="s2">"Unremarkable-Cat-Lunchbox"</span>,
+        <span class="s2">"geo_data"</span>: <span class="o">{</span>
+          <span class="s2">"latitude"</span>: 51.49306,
+          <span class="s2">"longitude"</span>: -0.22639
+        <span class="o">}</span>,
+        <span class="s2">"has_no_perfs"</span>: <span class="nb">false</span>,
+        <span class="s2">"is_add_on"</span>: <span class="nb">true</span>,
+        <span class="s2">"is_seated"</span>: <span class="nb">false</span>,
+        <span class="s2">"need_departure_date"</span>: <span class="nb">false</span>,
+        <span class="s2">"need_duration"</span>: <span class="nb">false</span>,
+        <span class="s2">"need_performance"</span>: <span class="nb">false</span>,
+        <span class="s2">"postcode"</span>: <span class="s2">"W6 7ES"</span>,
+        <span class="s2">"show_perf_time"</span>: <span class="nb">false</span>,
+        <span class="s2">"source_code"</span>: <span class="s2">"ext_test1"</span>,
+        <span class="s2">"source_desc"</span>: <span class="s2">"External Test Backend 1"</span>,
+        <span class="s2">"venue_desc"</span>: <span class="s2">"Lyric Apollo"</span>,
+        <span class="s2">"venue_uri_desc"</span>: <span class="s2">"Lyric-Apollo"</span>
+      <span class="o">}</span>
+    <span class="o">]</span>,
+    <span class="s2">"paging_status"</span>: <span class="o">{</span>
+      <span class="s2">"page_length"</span>: 50,
+      <span class="s2">"page_number"</span>: 0,
+      <span class="s2">"pages_remaining"</span>: 0,
+      <span class="s2">"results_remaining"</span>: 0,
+      <span class="s2">"total_unpaged_results"</span>: 1
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </code></pre><pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">pyticketswitch.event</span> <span class="kn">import</span> <span class="n">Event</span>
 
 <span class="p">[</span>
