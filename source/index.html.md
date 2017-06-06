@@ -18,6 +18,7 @@ includes:
   - discount
   - send_methods
   - trolley
+  - upsell
   - reserve
   - release
   - purchase
