@@ -9825,6 +9825,10 @@ even when there are multiple <code class="prettyprint">discounts</code>, but tha
 <td>The ticket type code you want to view discounts for.</td>
 </tr>
 <tr>
+<td><code class="prettyprint">add_user_commission</code></td>
+<td><em>Optional</em>. Include to retrieve <a href="#commission">commission</a> data. For most partners this will include user_commission only (the amount you earn per ticket). Some partners will also see gross_commission, which is the total commission available to be shared between Ingresso and our partner. By default you will see user_commission only - if you think you need to see gross_commission as well then please get in touch.</td>
+</tr>
+<tr>
 <td><code class="prettyprint">no_of_seats</code></td>
 <td><em>Optional</em>. The number of seats the customer would like. If this is specified then only discounts valid for the number of seats will be shown.</td>
 </tr>
@@ -10139,7 +10143,8 @@ called as needed to ensure the user isn&rsquo;t seeing options that are out of d
         <span class="s2">"send_code"</span>: <span class="s2">"POST"</span>,
         <span class="s2">"send_cost"</span>: 3.5,
         <span class="s2">"send_desc"</span>: <span class="s2">"Post (UK &amp; Ireland only)"</span>,
-        <span class="s2">"send_type"</span>: <span class="s2">"post"</span>
+        <span class="s2">"send_type"</span>: <span class="s2">"post"</span>,
+        <span class="s2">"send_final_comment"</span>: <span class="s2">"Please allow 3 working days to recieve your tickets."</span>
       <span class="o">}</span>
     <span class="o">]</span>
   <span class="o">}</span>
@@ -10159,6 +10164,7 @@ called as needed to ensure the user isn&rsquo;t seeing options that are out of d
         <span class="n">cost</span><span class="o">=</span><span class="mf">3.5</span><span class="p">,</span>
         <span class="n">description</span><span class="o">=</span><span class="s">'Post (UK &amp; Ireland only)'</span><span class="p">,</span>
         <span class="nb">type</span><span class="o">=</span><span class="s">'post'</span><span class="p">,</span>
+        <span class="n">final_comment</span><span class="o">=</span><span class="s">'Please allow 3 working days to receive your tickets.'</span>
         <span class="n">permitted_countries</span><span class="o">=</span><span class="p">[</span>
             <span class="n">Country</span><span class="p">(</span>
                 <span class="n">code</span><span class="o">=</span><span class="s">'ie'</span><span class="p">,</span>
@@ -10195,6 +10201,10 @@ called as needed to ensure the user isn&rsquo;t seeing options that are out of d
 <tr>
 <td><code class="prettyprint">send_type</code></td>
 <td>Can be <code class="prettyprint">collect</code> which indicates that the ticket will have to be collected in person, either at the venue or from a confirmation email. A type of <code class="prettyprint">post</code> indicates that a physical ticket will be posted to the delivery address given at purchase time.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">final_coment</code></td>
+<td>A human readable string containing information about posting times.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">permitted_countries</code></td>
