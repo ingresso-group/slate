@@ -6815,13 +6815,13 @@ by default. This resource is described first and is important to read. We then d
 </blockquote>
 <pre class="highlight shell tab-shell"><code>curl https://demo.ticketswitch.com/f13/availability.v1 <span class="se">\</span>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
-    -d <span class="s2">"perf_id=6IF-B0I"</span> <span class="se">\</span>
+    -d <span class="s2">"perf_id=6IF-B5P"</span> <span class="se">\</span>
     --compressed <span class="se">\</span>
     -G
 </code></pre><pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 
 <span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="s">'demo'</span><span class="p">,</span> <span class="s">'demopass'</span><span class="p">)</span>
-<span class="n">ticket_types</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_availability</span><span class="p">(</span><span class="s">'6IF-B29'</span><span class="p">)</span>
+<span class="n">ticket_types</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_availability</span><span class="p">(</span><span class="s">'6IF-B5P'</span><span class="p">)</span>
 </code></pre>
 <table><thead>
 <tr>
@@ -6864,8 +6864,8 @@ by default. This resource is described first and is important to read. We then d
 <td>Include to retrieve <a href="#individual-seats">individual seats</a> (if, for example, you wish to offer seat selection to your customer). The inclusion of this parameter does not guarantee that individual seat data will be returned - this also depends on (a) whether the event is seated and (b) whether the supplier system supports seat selection.</td>
 </tr>
 <tr>
-<td><code class="prettyprint">add_user_commission</code></td>
-<td>Include to retrieve <a href="#commission">commission</a> data. For most partners this will include user_commission only (the amount you earn per ticket). Some partners will also see gross_commission, which is the total commission available to be shared between Ingresso and our partner. By default you will see user_commission only - if you think you need to see gross_commission as well then please get in touch.</td>
+<td><code class="prettyprint">req_predicted_commission</code></td>
+<td>Include to retrieve <a href="#commission">commission</a> data. For most partners this will include <code class="prettyprint">predicted_user_commission</code> only (the predicted amount you earn per ticket). Some partners will also see <code class="prettyprint">predicted_gross_commission</code>, which is the total commission available to be shared between Ingresso and our partner. By default you will see <code class="prettyprint">predicted_user_commission</code> only - if you think you need to see <code class="prettyprint">predicted_gross_commission</code> as well then please get in touch.</td>
 </tr>
 </tbody></table>
 
@@ -8483,13 +8483,13 @@ no need to also request example seats.</p>
 
 <h2 id="commission">Commission</h2>
 
-<p>Some partners wish to view the commission they will earn on each ticket up
+<p>Some partners wish to view the predicted commission they will earn on each ticket up
 front, before the sale is made. This could be to support agents that want to
 know what they will earn, or to support custom repricing.</p>
 
 <aside class="notice">Ingresso has a pricing dashboard, so there is no need for you to develop your own repricing functionality.</aside>
 
-<p>Availability will return the per ticket commission you will earn. If you
+<p>Availability will return the predicted per ticket commission you will earn. If you
 subtract commission from the total ticket price (<code class="prettyprint">sale_seatprice</code> +
 <code class="prettyprint">sale_surcharge</code>) you have the net price of the ticket.</p>
 
@@ -8500,14 +8500,14 @@ subtract commission from the total ticket price (<code class="prettyprint">sale_
 </blockquote>
 <pre class="highlight shell tab-shell"><code>curl https://demo.ticketswitch.com/f13/availability.v1 <span class="se">\</span>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
-    -d <span class="s2">"perf_id=6IF-B0O"</span> <span class="se">\</span>
-    -d <span class="s2">"add_user_commission"</span> <span class="se">\</span>
+    -d <span class="s2">"perf_id=6IF-B5P"</span> <span class="se">\</span>
+    -d <span class="s2">"req_predicted_commission"</span> <span class="se">\</span>
     --compressed <span class="se">\</span>
     -G
 </code></pre><pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 
 <span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="s">'demo'</span><span class="p">,</span> <span class="s">'demopass'</span><span class="p">)</span>
-<span class="n">ticket_types</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_availability</span><span class="p">(</span><span class="s">'6IF-B0O'</span><span class="p">,</span> <span class="n">user_commission</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">ticket_types</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_availability</span><span class="p">(</span><span class="s">'6IF-B5P'</span><span class="p">,</span> <span class="n">user_commission</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </code></pre>
 <table><thead>
 <tr>
@@ -8516,8 +8516,8 @@ subtract commission from the total ticket price (<code class="prettyprint">sale_
 </tr>
 </thead><tbody>
 <tr>
-<td><code class="prettyprint">add_user_commission</code></td>
-<td>Include to retrieve commission data. For most partners this will include user_commission only (the amount you earn per ticket). Some partners will also see gross_commission, which is the total commission available to be shared between Ingresso and our partner. By default you will see user_commission only - if you think you need to see gross_commission as well then please get in touch.</td>
+<td><code class="prettyprint">req_predicted_commission</code></td>
+<td>Include to retrieve commission data. For most partners this will include <code class="prettyprint">predicted_user_commission</code> only (the predicted amount you earn per ticket). Some partners will also see <code class="prettyprint">predicted_gross_commission</code>, which is the total commission available to be shared between Ingresso and our partner. By default you will see <code class="prettyprint">predicted_user_commission</code> only - if you think you need to see <code class="prettyprint">predicted_gross_commission</code> as well then please get in touch.</td>
 </tr>
 </tbody></table>
 
@@ -8536,7 +8536,7 @@ subtract commission from the total ticket price (<code class="prettyprint">sale_
             <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">""</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">""</span>,
-            <span class="s2">"gross_commission"</span>: <span class="o">{</span>
+            <span class="s2">"predicted_gross_commission"</span>: <span class="o">{</span>
               <span class="s2">"amount_excluding_vat"</span>: 4.88,
               <span class="s2">"amount_including_vat"</span>: 5.85,
               <span class="s2">"commission_currency_code"</span>: <span class="s2">"gbp"</span>
@@ -8549,7 +8549,7 @@ subtract commission from the total ticket price (<code class="prettyprint">sale_
             <span class="s2">"price_band_code"</span>: <span class="s2">"A/pool"</span>,
             <span class="s2">"sale_seatprice"</span>: 35,
             <span class="s2">"sale_surcharge"</span>: 4,
-            <span class="s2">"user_commission"</span>: <span class="o">{</span>
+            <span class="s2">"predicted_user_commission"</span>: <span class="o">{</span>
               <span class="s2">"amount_excluding_vat"</span>: 2.19,
               <span class="s2">"amount_including_vat"</span>: 2.63,
               <span class="s2">"commission_currency_code"</span>: <span class="s2">"gbp"</span>
@@ -8560,7 +8560,7 @@ subtract commission from the total ticket price (<code class="prettyprint">sale_
             <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">""</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">""</span>,
-            <span class="s2">"gross_commission"</span>: <span class="o">{</span>
+            <span class="s2">"predicted_gross_commission"</span>: <span class="o">{</span>
               <span class="s2">"amount_excluding_vat"</span>: 4.25,
               <span class="s2">"amount_including_vat"</span>: 5.1,
               <span class="s2">"commission_currency_code"</span>: <span class="s2">"gbp"</span>
@@ -8573,7 +8573,7 @@ subtract commission from the total ticket price (<code class="prettyprint">sale_
             <span class="s2">"price_band_code"</span>: <span class="s2">"B/pool"</span>,
             <span class="s2">"sale_seatprice"</span>: 30,
             <span class="s2">"sale_surcharge"</span>: 4,
-            <span class="s2">"user_commission"</span>: <span class="o">{</span>
+            <span class="s2">"predicted_user_commission"</span>: <span class="o">{</span>
               <span class="s2">"amount_excluding_vat"</span>: 1.91,
               <span class="s2">"amount_including_vat"</span>: 2.3,
               <span class="s2">"commission_currency_code"</span>: <span class="s2">"gbp"</span>
@@ -8584,7 +8584,7 @@ subtract commission from the total ticket price (<code class="prettyprint">sale_
             <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">""</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">""</span>,
-            <span class="s2">"gross_commission"</span>: <span class="o">{</span>
+            <span class="s2">"predicted_gross_commission"</span>: <span class="o">{</span>
               <span class="s2">"amount_excluding_vat"</span>: 3.63,
               <span class="s2">"amount_including_vat"</span>: 4.35,
               <span class="s2">"commission_currency_code"</span>: <span class="s2">"gbp"</span>
@@ -8597,7 +8597,7 @@ subtract commission from the total ticket price (<code class="prettyprint">sale_
             <span class="s2">"price_band_code"</span>: <span class="s2">"C/pool"</span>,
             <span class="s2">"sale_seatprice"</span>: 25,
             <span class="s2">"sale_surcharge"</span>: 4,
-            <span class="s2">"user_commission"</span>: <span class="o">{</span>
+            <span class="s2">"predicted_user_commission"</span>: <span class="o">{</span>
               <span class="s2">"amount_excluding_vat"</span>: 1.63,
               <span class="s2">"amount_including_vat"</span>: 1.96,
               <span class="s2">"commission_currency_code"</span>: <span class="s2">"gbp"</span>
@@ -8614,7 +8614,7 @@ subtract commission from the total ticket price (<code class="prettyprint">sale_
             <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">""</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">""</span>,
-            <span class="s2">"gross_commission"</span>: <span class="o">{</span>
+            <span class="s2">"predicted_gross_commission"</span>: <span class="o">{</span>
               <span class="s2">"amount_excluding_vat"</span>: 3,
               <span class="s2">"amount_including_vat"</span>: 3.6,
               <span class="s2">"commission_currency_code"</span>: <span class="s2">"gbp"</span>
@@ -8627,7 +8627,7 @@ subtract commission from the total ticket price (<code class="prettyprint">sale_
             <span class="s2">"price_band_code"</span>: <span class="s2">"A/pool"</span>,
             <span class="s2">"sale_seatprice"</span>: 21,
             <span class="s2">"sale_surcharge"</span>: 3,
-            <span class="s2">"user_commission"</span>: <span class="o">{</span>
+            <span class="s2">"predicted_user_commission"</span>: <span class="o">{</span>
               <span class="s2">"amount_excluding_vat"</span>: 1.35,
               <span class="s2">"amount_including_vat"</span>: 1.62,
               <span class="s2">"commission_currency_code"</span>: <span class="s2">"gbp"</span>
@@ -8638,7 +8638,7 @@ subtract commission from the total ticket price (<code class="prettyprint">sale_
             <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">""</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">""</span>,
-            <span class="s2">"gross_commission"</span>: <span class="o">{</span>
+            <span class="s2">"predicted_gross_commission"</span>: <span class="o">{</span>
               <span class="s2">"amount_excluding_vat"</span>: 2.63,
               <span class="s2">"amount_including_vat"</span>: 3.15,
               <span class="s2">"commission_currency_code"</span>: <span class="s2">"gbp"</span>
@@ -8651,7 +8651,7 @@ subtract commission from the total ticket price (<code class="prettyprint">sale_
             <span class="s2">"price_band_code"</span>: <span class="s2">"B/pool"</span>,
             <span class="s2">"sale_seatprice"</span>: 18,
             <span class="s2">"sale_surcharge"</span>: 3,
-            <span class="s2">"user_commission"</span>: <span class="o">{</span>
+            <span class="s2">"predicted_user_commission"</span>: <span class="o">{</span>
               <span class="s2">"amount_excluding_vat"</span>: 1.18,
               <span class="s2">"amount_including_vat"</span>: 1.42,
               <span class="s2">"commission_currency_code"</span>: <span class="s2">"gbp"</span>
@@ -8668,7 +8668,7 @@ subtract commission from the total ticket price (<code class="prettyprint">sale_
             <span class="s2">"allows_leaving_single_seats"</span>: <span class="s2">"always"</span>,
             <span class="s2">"discount_code"</span>: <span class="s2">""</span>,
             <span class="s2">"discount_desc"</span>: <span class="s2">""</span>,
-            <span class="s2">"gross_commission"</span>: <span class="o">{</span>
+            <span class="s2">"predicted_gross_commission"</span>: <span class="o">{</span>
               <span class="s2">"amount_excluding_vat"</span>: 6.5,
               <span class="s2">"amount_including_vat"</span>: 7.8,
               <span class="s2">"commission_currency_code"</span>: <span class="s2">"gbp"</span>
@@ -8681,7 +8681,7 @@ subtract commission from the total ticket price (<code class="prettyprint">sale_
             <span class="s2">"price_band_code"</span>: <span class="s2">"A/pool"</span>,
             <span class="s2">"sale_seatprice"</span>: 47,
             <span class="s2">"sale_surcharge"</span>: 5,
-            <span class="s2">"user_commission"</span>: <span class="o">{</span>
+            <span class="s2">"predicted_user_commission"</span>: <span class="o">{</span>
               <span class="s2">"amount_excluding_vat"</span>: 2.93,
               <span class="s2">"amount_including_vat"</span>: 3.51,
               <span class="s2">"commission_currency_code"</span>: <span class="s2">"gbp"</span>
@@ -8881,8 +8881,8 @@ subtract commission from the total ticket price (<code class="prettyprint">sale_
     <span class="p">)</span>
 <span class="p">]</span>
 </code></pre>
-<p>The response includes several attributes within the <code class="prettyprint">user_commission</code>
-dictionary. Some partners will also see <code class="prettyprint">gross_commission</code> which includes the
+<p>The response includes several attributes within the <code class="prettyprint">predicted_user_commission</code>
+dictionary. Some partners will also see <code class="prettyprint">predicted_gross_commission</code> which includes the
 same attributes.</p>
 
 <table><thead>
@@ -8893,11 +8893,11 @@ same attributes.</p>
 </thead><tbody>
 <tr>
 <td><code class="prettyprint">amount_excluding_vat</code></td>
-<td>The commission you will earn per ticket, excluding sales tax.</td>
+<td>The predicted commission you will earn per ticket, excluding sales tax.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">amount_including_vat</code></td>
-<td>The commission you will earn per ticket, including sales tax.</td>
+<td>The predicted commission you will earn per ticket, including sales tax.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">commission_currency_code</code></td>
@@ -8917,14 +8917,14 @@ of available tickets.</p>
 </blockquote>
 <pre class="highlight shell tab-shell"><code>curl https://demo.ticketswitch.com/f13/availability.v1 <span class="se">\</span>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
-    -d <span class="s2">"perf_id=6IF-B0I"</span> <span class="se">\</span>
+    -d <span class="s2">"perf_id=6IF-B5P"</span> <span class="se">\</span>
     -d <span class="s2">"add_discounts"</span> <span class="se">\</span>
     --compressed <span class="se">\</span>
     -G
 </code></pre><pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 
 <span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="s">'demo'</span><span class="p">,</span> <span class="s">'demopass'</span><span class="p">)</span>
-<span class="n">ticket_types</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_availability</span><span class="p">(</span><span class="s">'6IF-B0O'</span><span class="p">,</span> <span class="n">discounts</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">ticket_types</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_availability</span><span class="p">(</span><span class="s">'6IF-B5P'</span><span class="p">,</span> <span class="n">discounts</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </code></pre>
 <table><thead>
 <tr>
@@ -9825,8 +9825,8 @@ even when there are multiple <code class="prettyprint">discounts</code>, but tha
 <td>The ticket type code you want to view discounts for.</td>
 </tr>
 <tr>
-<td><code class="prettyprint">add_user_commission</code></td>
-<td><em>Optional</em>. Include to retrieve <a href="#commission">commission</a> data. For most partners this will include user_commission only (the amount you earn per ticket). Some partners will also see gross_commission, which is the total commission available to be shared between Ingresso and our partner. By default you will see user_commission only - if you think you need to see gross_commission as well then please get in touch.</td>
+<td><code class="prettyprint">req_predicted_commission</code></td>
+<td><em>Optional</em>. Include to retrieve <a href="#commission">commission</a> data. For most partners this will include <code class="prettyprint">predicted_user_commission</code> only (the predicted amount you earn per ticket). Some partners will also see <code class="prettyprint">predicted_gross_commission</code>, which is the total commission available to be shared between Ingresso and our partner. By default you will see <code class="prettyprint">predicted_user_commission</code> only - if you think you need to see <code class="prettyprint">predicted_gross_commission</code> as well then please get in touch.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">no_of_seats</code></td>
@@ -10454,6 +10454,10 @@ contact us first api@ingresso.co.uk.</p>
 <tr>
 <td><code class="prettyprint">trolley_token</code></td>
 <td>The identifier for the trolley. This is used to add additional orders to a trolley, or to remove orders in a trolley.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">req_predicted_commission</code></td>
+<td><em>Optional</em>. Include to retrieve <a href="#commission">commission</a> data. For most partners this will include <code class="prettyprint">predicted_user_commission</code> only (the predicted amount you earn per ticket). Some partners will also see <code class="prettyprint">predicted_gross_commission</code>, which is the total commission available to be shared between Ingresso and our partner. By default you will see <code class="prettyprint">predicted_user_commission</code> only - if you think you need to see <code class="prettyprint">predicted_gross_commission</code> as well then please get in touch.</td>
 </tr>
 </tbody></table>
 
@@ -12163,6 +12167,10 @@ to contact us first api@ingresso.co.uk.</p>
 <tr>
 <td><code class="prettyprint">trolley_token</code></td>
 <td>The identifier for a trolley. This is used to reserve multiple items at once.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">req_predicted_commission</code></td>
+<td><em>Optional</em>. Include to retrieve <a href="#commission">commission</a> data. For most partners this will include <code class="prettyprint">predicted_user_commission</code> only (the predicted amount you earn per ticket). Some partners will also see <code class="prettyprint">predicted_gross_commission</code>, which is the total commission available to be shared between Ingresso and our partner. By default you will see <code class="prettyprint">predicted_user_commission</code> only - if you think you need to see <code class="prettyprint">predicted_gross_commission</code> as well then please get in touch.</td>
 </tr>
 </tbody></table>
 
