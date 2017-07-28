@@ -187,6 +187,7 @@ Parameter | Description
 `X_send_code` | Specify a send / despatch method for supplier system X. If this is not present it will default to the first send method. For example, to specify the POST send method for the nimax supplier system, use `nimax_send_code=POST`.
 `ticket_type_code` | The ticket type identifier for the tickets that you want to add to your trolley.
 `trolley_token` | The identifier for the trolley. This is used to add additional orders to a trolley, or to remove orders in a trolley.
+`req_predicted_commission`| *Optional*. Include to retrieve [commission](#commission) data. For most partners this will include `predicted_user_commission` only (the predicted amount you earn per ticket). Some partners will also see `predicted_gross_commission`, which is the total commission available to be shared between Ingresso and our partner. By default you will see `predicted_user_commission` only - if you think you need to see `predicted_gross_commission` as well then please get in touch.
 
 
 Additional parameters, primarily for internal use:

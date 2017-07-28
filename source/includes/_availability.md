@@ -30,7 +30,7 @@ by default. This resource is described first and is important to read. We then d
 ```shell
 curl https://demo.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
-    -d "perf_id=6IF-B0I" \
+    -d "perf_id=6IF-B5P" \
     --compressed \
     -G
 ```
@@ -39,7 +39,7 @@ curl https://demo.ticketswitch.com/f13/availability.v1 \
 from pyticketswitch import Client
 
 client = Client('demo', 'demopass')
-ticket_types, meta = client.get_availability('6IF-B29')
+ticket_types, meta = client.get_availability('6IF-B5P')
 ```
 
 Attribute | Description
@@ -56,7 +56,7 @@ Parameter | Description
 `add_discounts` | [discounts](#discounts)
 `add_example_seats` | Include to retrieve [example seats](#example-seats). These can be displayed alongside the ticket options when presenting availability to customers. The inclusion of this parameter does not guarantee that example seats data will be returned - this also depends on (a) whether the event is seated and (b) whether the supplier system returns seats at availability time.
 `add_seat_blocks` | Include to retrieve [individual seats](#individual-seats) (if, for example, you wish to offer seat selection to your customer). The inclusion of this parameter does not guarantee that individual seat data will be returned - this also depends on (a) whether the event is seated and (b) whether the supplier system supports seat selection.
-`add_user_commission` | Include to retrieve [commission](#commission) data. For most partners this will include user_commission only (the amount you earn per ticket). Some partners will also see gross_commission, which is the total commission available to be shared between Ingresso and our partner. By default you will see user_commission only - if you think you need to see gross_commission as well then please get in touch. 
+`req_predicted_commission` | Include to retrieve [commission](#commission) data. For most partners this will include `predicted_user_commission` only (the predicted amount you earn per ticket). Some partners will also see `predicted_gross_commission`, which is the total commission available to be shared between Ingresso and our partner. By default you will see `predicted_user_commission` only - if you think you need to see `predicted_gross_commission` as well then please get in touch. 
 
 
 ### Response
@@ -1522,13 +1522,13 @@ Attribute | Description
 
 ## Commission
 
-Some partners wish to view the commission they will earn on each ticket up
+Some partners wish to view the predicted commission they will earn on each ticket up
 front, before the sale is made. This could be to support agents that want to
 know what they will earn, or to support custom repricing.
 
 <aside class="notice">Ingresso has a pricing dashboard, so there is no need for you to develop your own repricing functionality.</aside>
 
-Availability will return the per ticket commission you will earn. If you
+Availability will return the predicted per ticket commission you will earn. If you
 subtract commission from the total ticket price (`sale_seatprice` +
 `sale_surcharge`) you have the net price of the ticket.
 
@@ -1539,8 +1539,8 @@ subtract commission from the total ticket price (`sale_seatprice` +
 ```shell
 curl https://demo.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
-    -d "perf_id=6IF-B0O" \
-    -d "add_user_commission" \
+    -d "perf_id=6IF-B5P" \
+    -d "req_predicted_commission" \
     --compressed \
     -G
 ```
@@ -1549,12 +1549,12 @@ curl https://demo.ticketswitch.com/f13/availability.v1 \
 from pyticketswitch import Client
 
 client = Client('demo', 'demopass')
-ticket_types, meta = client.get_availability('6IF-B0O', user_commission=True)
+ticket_types, meta = client.get_availability('6IF-B5P', user_commission=True)
 ```
 
 Parameter | Description
 --------- | -----------
-`add_user_commission` | Include to retrieve commission data. For most partners this will include user_commission only (the amount you earn per ticket). Some partners will also see gross_commission, which is the total commission available to be shared between Ingresso and our partner. By default you will see user_commission only - if you think you need to see gross_commission as well then please get in touch.
+`req_predicted_commission` | Include to retrieve commission data. For most partners this will include `predicted_user_commission` only (the predicted amount you earn per ticket). Some partners will also see `predicted_gross_commission`, which is the total commission available to be shared between Ingresso and our partner. By default you will see `predicted_user_commission` only - if you think you need to see `predicted_gross_commission` as well then please get in touch.
 
 
 ### Response
@@ -1572,7 +1572,7 @@ Parameter | Description
             "allows_leaving_single_seats": "always",
             "discount_code": "",
             "discount_desc": "",
-            "gross_commission": {
+            "predicted_gross_commission": {
               "amount_excluding_vat": 4.88,
               "amount_including_vat": 5.85,
               "commission_currency_code": "gbp"
@@ -1585,7 +1585,7 @@ Parameter | Description
             "price_band_code": "A/pool",
             "sale_seatprice": 35,
             "sale_surcharge": 4,
-            "user_commission": {
+            "predicted_user_commission": {
               "amount_excluding_vat": 2.19,
               "amount_including_vat": 2.63,
               "commission_currency_code": "gbp"
@@ -1596,7 +1596,7 @@ Parameter | Description
             "allows_leaving_single_seats": "always",
             "discount_code": "",
             "discount_desc": "",
-            "gross_commission": {
+            "predicted_gross_commission": {
               "amount_excluding_vat": 4.25,
               "amount_including_vat": 5.1,
               "commission_currency_code": "gbp"
@@ -1609,7 +1609,7 @@ Parameter | Description
             "price_band_code": "B/pool",
             "sale_seatprice": 30,
             "sale_surcharge": 4,
-            "user_commission": {
+            "predicted_user_commission": {
               "amount_excluding_vat": 1.91,
               "amount_including_vat": 2.3,
               "commission_currency_code": "gbp"
@@ -1620,7 +1620,7 @@ Parameter | Description
             "allows_leaving_single_seats": "always",
             "discount_code": "",
             "discount_desc": "",
-            "gross_commission": {
+            "predicted_gross_commission": {
               "amount_excluding_vat": 3.63,
               "amount_including_vat": 4.35,
               "commission_currency_code": "gbp"
@@ -1633,7 +1633,7 @@ Parameter | Description
             "price_band_code": "C/pool",
             "sale_seatprice": 25,
             "sale_surcharge": 4,
-            "user_commission": {
+            "predicted_user_commission": {
               "amount_excluding_vat": 1.63,
               "amount_including_vat": 1.96,
               "commission_currency_code": "gbp"
@@ -1650,7 +1650,7 @@ Parameter | Description
             "allows_leaving_single_seats": "always",
             "discount_code": "",
             "discount_desc": "",
-            "gross_commission": {
+            "predicted_gross_commission": {
               "amount_excluding_vat": 3,
               "amount_including_vat": 3.6,
               "commission_currency_code": "gbp"
@@ -1663,7 +1663,7 @@ Parameter | Description
             "price_band_code": "A/pool",
             "sale_seatprice": 21,
             "sale_surcharge": 3,
-            "user_commission": {
+            "predicted_user_commission": {
               "amount_excluding_vat": 1.35,
               "amount_including_vat": 1.62,
               "commission_currency_code": "gbp"
@@ -1674,7 +1674,7 @@ Parameter | Description
             "allows_leaving_single_seats": "always",
             "discount_code": "",
             "discount_desc": "",
-            "gross_commission": {
+            "predicted_gross_commission": {
               "amount_excluding_vat": 2.63,
               "amount_including_vat": 3.15,
               "commission_currency_code": "gbp"
@@ -1687,7 +1687,7 @@ Parameter | Description
             "price_band_code": "B/pool",
             "sale_seatprice": 18,
             "sale_surcharge": 3,
-            "user_commission": {
+            "predicted_user_commission": {
               "amount_excluding_vat": 1.18,
               "amount_including_vat": 1.42,
               "commission_currency_code": "gbp"
@@ -1704,7 +1704,7 @@ Parameter | Description
             "allows_leaving_single_seats": "always",
             "discount_code": "",
             "discount_desc": "",
-            "gross_commission": {
+            "predicted_gross_commission": {
               "amount_excluding_vat": 6.5,
               "amount_including_vat": 7.8,
               "commission_currency_code": "gbp"
@@ -1717,7 +1717,7 @@ Parameter | Description
             "price_band_code": "A/pool",
             "sale_seatprice": 47,
             "sale_surcharge": 5,
-            "user_commission": {
+            "predicted_user_commission": {
               "amount_excluding_vat": 2.93,
               "amount_including_vat": 3.51,
               "commission_currency_code": "gbp"
@@ -1922,14 +1922,14 @@ from pyticketswitch.price_band import PriceBand
 ```
 
 
-The response includes several attributes within the `user_commission`
-dictionary. Some partners will also see `gross_commission` which includes the
+The response includes several attributes within the `predicted_user_commission`
+dictionary. Some partners will also see `predicted_gross_commission` which includes the
 same attributes.
 
 Attribute | Description
 --------- | -----------
-`amount_excluding_vat` | The commission you will earn per ticket, excluding sales tax.
-`amount_including_vat` | The commission you will earn per ticket, including sales tax.
+`amount_excluding_vat` | The predicted commission you will earn per ticket, excluding sales tax.
+`amount_including_vat` | The predicted commission you will earn per ticket, including sales tax.
 `commission_currency_code` | The commission currency (note that this can be different to the currency of the price paid by the customer).
 
 
@@ -1945,7 +1945,7 @@ of available tickets.
 ```shell
 curl https://demo.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
-    -d "perf_id=6IF-B0I" \
+    -d "perf_id=6IF-B5P" \
     -d "add_discounts" \
     --compressed \
     -G
@@ -1955,7 +1955,7 @@ curl https://demo.ticketswitch.com/f13/availability.v1 \
 from pyticketswitch import Client
 
 client = Client('demo', 'demopass')
-ticket_types, meta = client.get_availability('6IF-B0O', discounts=True)
+ticket_types, meta = client.get_availability('6IF-B5P', discounts=True)
 ```
 
 Parameter | Description
