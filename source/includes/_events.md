@@ -19,10 +19,6 @@ their ID.
 These resources are described below, followed by detail of the 
 [additional parameters](#additional-parameters) that can be passed to each.
 
-We also support upsell functionality. You can list upsells either by
-adding `add_add_ons` and `add_upsells` to [Events by ID](#events-by-id), or
-by requesting [upsells for the items in your trolley](#upsell).
-
 
 ## Events list
 
@@ -294,7 +290,6 @@ Attribute | Description
 `event_path` | If you also use a white label website this can be used to navigate to the event page, e.g. `/2J5V-la-pedrera-skip-the-line/`.
 `event_status` | Will be `live` for a normal event search. Other values are `dead` and `pending` but these will only be displayed when using the `include_dead` or `include_non_live` parameters.
 `event_type` | Currently all events are of type `simple_ticket`. In future we may add `hotel_room` and `misc_item`.
-`event_upsell_list` | A list of event IDs that can be presented as an upsell option to customers (not always present).
 `geo_data` | A block containing the following geo co-ordinates:
 `geo_data.latitude` | Latitude of the event.
 `geo_data.longitude` | Longitude of the event.
@@ -384,8 +379,8 @@ events, meta = client.get_events(
 Parameter | Description
 --------- | -----------
 `event_id_list` | A comma separated list of event IDs e.g. `25DR` for a single event; `1VLG,1YYO,25DR` for multiple events.
-`add_add_ons` | (Optional) Include a list of add-on events per event (these are events or merchandise related to the event searched for that can be included in a trolley for up-sell)
-`add_upsells` | (Optional) Include a list of up-sell events per event (these are related events that the customer may be interested in as well as the base event)
+`add_add_ons` | (Optional) Include a list of add-on events per event (these are events or merchandise related to the event searched for that can be included in a trolley for upsell). It is more common to request these with [add-ons](#add-ons)
+`add_upsells` | (Optional) Include a list of upsell events per event (these are related events that the customer may be interested in as well as the base event)
 
 These parameters can be passed in to request additional data for each event, and are described in more detail in the [additional parameters](#additional-parameters) section below:
 
@@ -969,7 +964,6 @@ Attribute | Description
 `event_path` | If you also use a white label website this can be used to navigate to the event page, e.g. `/2J5V-la-pedrera-skip-the-line/`.
 `event_status` | Will be `live` for a normal event search. Other values are `dead` and `pending` but these will only be displayed when using the `include_dead` or `include_non_live` parameters.
 `event_type` | Currently all events are of type `simple_ticket`. In future we may add `hotel_room` and `misc_item`.
-`event_upsell_list` | A list of event IDs that can be presented as an upsell option to customers (not always present).
 `geo_data` | A block containing the following geo co-ordinates:
 `geo_data.latitude` | Latitude of the event.
 `geo_data.longitude` | Longitude of the event.
