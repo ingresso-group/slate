@@ -1196,11 +1196,14 @@ the API.</p>
 <li><p><a href="#events-list">Events list</a>: list all events or search for events.</p></li>
 <li><p><a href="#events-by-id">Events by ID</a>: return detail for one or more events by 
 their ID.</p></li>
-<li><p><a href="#related-events">Related events</a>: list related and addon events.</p></li>
 </ol>
 
-<p>These three resources are described below, followed by detail of the 
+<p>These resources are described below, followed by detail of the 
 <a href="#additional-parameters">additional parameters</a> that can be passed to each.</p>
+
+<p>We also support upsell functionality. You can list upsells either by
+adding <code class="prettyprint">add_add_ons</code> and <code class="prettyprint">add_upsells</code> to <a href="#events-by-id">Events by ID</a>, or
+by requesting <a href="#upsell">upsells for the items in your trolley</a>.</p>
 
 <h2 id="events-list">Events list</h2>
 
@@ -11203,7 +11206,7 @@ JSON response. Each currency has the following attributes:</p>
 
           <h1 id="upsell">Upsell</h1>
 
-<p>Some events have other events or items associated with them for the puroposes of
+<p>Some events have other events or items associated with them for the purposes of
 increasing profitability. These items can be retrieved from the
 <a href="#events-by-id">Events by ID</a> call by using optional flags, but add-on items can
 only be added to a trolley already containing seats for an event that lists
@@ -11582,7 +11585,7 @@ This call is nullipotent and does not change the state of any existing trolley.<
 <blockquote>
 <p><strong>Example request</strong></p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code>curl https://demo.ticketswitch.com/f13/add_ons.v1 <span class="se">\</span>
+<pre class="highlight shell tab-shell"><code>curl https://demo.ticketswitch.com/f13/upsells.v1 <span class="se">\</span>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -d <span class="s2">"trolley_token=M2--6TcZRZsfgZI0E8PmlGWqr5PQluhxE46Nqnno3Xa24lFuIKM_0IYJq40BDvisBRcXKsaGBdLfu8B5TfwI4s7jk7y7xRto_SwJL177u_vuvvq_Ynqnj64IfAHmItXxz_-xdTQGXh_G-BuPGxPXNY_Ycimiv1ZYlPFuPjsoVugnUnyu2F0TmpdztEtgI9PC1WhnTeHeRUDEBvVewOIf_PEJkPVR-UXFDg3gxbHYQBENW5XpkYnRhc22IqrB7eAoK0MbTLaPMk3uB1BKnz_B7fasSU_NU3nhXvmgHa4suvCT9oEaQSGvq4G0glOtyCiqL1FfVJ2R3KIgb2xC4NbAm4cNL5q22V_W0eYGmJ9DTBJ90UWvAWH7UeFLM1--Z"</span> <span class="se">\</span>
     --compressed <span class="se">\</span>
@@ -11590,7 +11593,7 @@ This call is nullipotent and does not change the state of any existing trolley.<
 </code></pre><pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 
 <span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="s">'demo'</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">'demopass'</span><span class="p">)</span>
-<span class="n">addon_events</span><span class="p">,</span> <span class="n">addon_meta</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_upsells</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="s">"M2--6TcZRZsfgZI0E8PmlGWqr5PQluhxE46Nqnno3Xa24lFuIKM_0IYJq40BDvisBRcXKsaGBdLfu8B5TfwI4s7jk7y7xRto_SwJL177u_vuvvq_Ynqnj64IfAHmItXxz_-xdTQGXh_G-BuPGxPXNY_Ycimiv1ZYlPFuPjsoVugnUnyu2F0TmpdztEtgI9PC1WhnTeHeRUDEBvVewOIf_PEJkPVR-UXFDg3gxbHYQBENW5XpkYnRhc22IqrB7eAoK0MbTLaPMk3uB1BKnz_B7fasSU_NU3nhXvmgHa4suvCT9oEaQSGvq4G0glOtyCiqL1FfVJ2R3KIgb2xC4NbAm4cNL5q22V_W0eYGmJ9DTBJ90UWvAWH7UeFLM1--Z"</span><span class="p">)</span>
+<span class="n">upsell_events</span><span class="p">,</span> <span class="n">upsell_meta</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_upsells</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="s">"M2--6TcZRZsfgZI0E8PmlGWqr5PQluhxE46Nqnno3Xa24lFuIKM_0IYJq40BDvisBRcXKsaGBdLfu8B5TfwI4s7jk7y7xRto_SwJL177u_vuvvq_Ynqnj64IfAHmItXxz_-xdTQGXh_G-BuPGxPXNY_Ycimiv1ZYlPFuPjsoVugnUnyu2F0TmpdztEtgI9PC1WhnTeHeRUDEBvVewOIf_PEJkPVR-UXFDg3gxbHYQBENW5XpkYnRhc22IqrB7eAoK0MbTLaPMk3uB1BKnz_B7fasSU_NU3nhXvmgHa4suvCT9oEaQSGvq4G0glOtyCiqL1FfVJ2R3KIgb2xC4NbAm4cNL5q22V_W0eYGmJ9DTBJ90UWvAWH7UeFLM1--Z"</span><span class="p">)</span>
 </code></pre>
 <p>Either the <code class="prettyprint">trolley_token</code> parameter, and/or a valid set of parameters for a
 <a href="#trolley">trolley</a> call must be supplied.</p>
