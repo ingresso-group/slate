@@ -119,14 +119,13 @@ from pyticketswitch.send_method import SendMethod
 
 ### Response
 
-
 Attribute | Description
 --------- | -----------
 `send_code` | The identifier of this send method.
-`send_desc` | A human readable description of the send method.
 `send_cost` | Any additional cost that the customer will have to pay if they chose this send method.
+`send_desc` | A human readable description of the send method.
+`send_final_comment` | A human readable string containing information about posting times.
 `send_type` | Can be `collect` which indicates that the ticket will have to be collected in person, either at the venue or from a confirmation email. A type of `post` indicates that a physical ticket will be posted to the delivery address given at purchase time.
-`final_coment` | A human readable string containing information about posting times.
 `permitted_countries` | If this is returned it indicates that the send method is only available to addresses in the listed countries.
 `permitted_countries.country_code` | 2-digit country code (using [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
 `permitted_countries.country_description` | Human readable description of the country.
