@@ -16,10 +16,12 @@ There are two event-related resources:
 2. [Events by ID](#events-by-id): return detail for one or more events by 
 their ID.
 
-3. [Related events](#related-events): list related and addon events.
-
-These three resources are described below, followed by detail of the 
+These resources are described below, followed by detail of the 
 [additional parameters](#additional-parameters) that can be passed to each.
+
+We also support upsell functionality. You can list upsells either by
+adding `add_add_ons` and `add_upsells` to [Events by ID](#events-by-id), or
+by requesting [upsells for the items in your trolley](#upsell).
 
 
 ## Events list

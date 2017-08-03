@@ -1,6 +1,6 @@
 # Upsell
 
-Some events have other events or items associated with them for the puroposes of
+Some events have other events or items associated with them for the purposes of
 increasing profitability. These items can be retrieved from the
 [Events by ID](#events-by-id) call by using optional flags, but add-on items can
 only be added to a trolley already containing seats for an event that lists
@@ -219,6 +219,7 @@ Attribute | Description
 
 
 ## Related Events
+
 This resource returns detail for related events that can be added to a given
 trolley. Unlike add-ons, upsell events do not require a parent event to be in
 a trolley before being added, and are supplied as a way of offering other
@@ -239,7 +240,7 @@ This call is nullipotent and does not change the state of any existing trolley.
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/add_ons.v1 \
+curl https://demo.ticketswitch.com/f13/upsells.v1 \
     -u "demo:demopass" \
     -d "trolley_token=M2--6TcZRZsfgZI0E8PmlGWqr5PQluhxE46Nqnno3Xa24lFuIKM_0IYJq40BDvisBRcXKsaGBdLfu8B5TfwI4s7jk7y7xRto_SwJL177u_vuvvq_Ynqnj64IfAHmItXxz_-xdTQGXh_G-BuPGxPXNY_Ycimiv1ZYlPFuPjsoVugnUnyu2F0TmpdztEtgI9PC1WhnTeHeRUDEBvVewOIf_PEJkPVR-UXFDg3gxbHYQBENW5XpkYnRhc22IqrB7eAoK0MbTLaPMk3uB1BKnz_B7fasSU_NU3nhXvmgHa4suvCT9oEaQSGvq4G0glOtyCiqL1FfVJ2R3KIgb2xC4NbAm4cNL5q22V_W0eYGmJ9DTBJ90UWvAWH7UeFLM1--Z" \
     --compressed \
@@ -250,7 +251,7 @@ curl https://demo.ticketswitch.com/f13/add_ons.v1 \
 from pyticketswitch import Client
 
 client = Client(user='demo', password='demopass')
-addon_events, addon_meta = client.get_upsells(token="M2--6TcZRZsfgZI0E8PmlGWqr5PQluhxE46Nqnno3Xa24lFuIKM_0IYJq40BDvisBRcXKsaGBdLfu8B5TfwI4s7jk7y7xRto_SwJL177u_vuvvq_Ynqnj64IfAHmItXxz_-xdTQGXh_G-BuPGxPXNY_Ycimiv1ZYlPFuPjsoVugnUnyu2F0TmpdztEtgI9PC1WhnTeHeRUDEBvVewOIf_PEJkPVR-UXFDg3gxbHYQBENW5XpkYnRhc22IqrB7eAoK0MbTLaPMk3uB1BKnz_B7fasSU_NU3nhXvmgHa4suvCT9oEaQSGvq4G0glOtyCiqL1FfVJ2R3KIgb2xC4NbAm4cNL5q22V_W0eYGmJ9DTBJ90UWvAWH7UeFLM1--Z")
+upsell_events, upsell_meta = client.get_upsells(token="M2--6TcZRZsfgZI0E8PmlGWqr5PQluhxE46Nqnno3Xa24lFuIKM_0IYJq40BDvisBRcXKsaGBdLfu8B5TfwI4s7jk7y7xRto_SwJL177u_vuvvq_Ynqnj64IfAHmItXxz_-xdTQGXh_G-BuPGxPXNY_Ycimiv1ZYlPFuPjsoVugnUnyu2F0TmpdztEtgI9PC1WhnTeHeRUDEBvVewOIf_PEJkPVR-UXFDg3gxbHYQBENW5XpkYnRhc22IqrB7eAoK0MbTLaPMk3uB1BKnz_B7fasSU_NU3nhXvmgHa4suvCT9oEaQSGvq4G0glOtyCiqL1FfVJ2R3KIgb2xC4NbAm4cNL5q22V_W0eYGmJ9DTBJ90UWvAWH7UeFLM1--Z")
 ```
 
 Either the `trolley_token` parameter, and/or a valid set of parameters for a
