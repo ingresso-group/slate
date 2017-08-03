@@ -1201,10 +1201,6 @@ their ID.</p></li>
 <p>These resources are described below, followed by detail of the 
 <a href="#additional-parameters">additional parameters</a> that can be passed to each.</p>
 
-<p>We also support upsell functionality. You can list upsells either by
-adding <code class="prettyprint">add_add_ons</code> and <code class="prettyprint">add_upsells</code> to <a href="#events-by-id">Events by ID</a>, or
-by requesting <a href="#upsell">upsells for the items in your trolley</a>.</p>
-
 <h2 id="events-list">Events list</h2>
 
 <p>This resource lists events. It accepts a number of search parameters to
@@ -1621,10 +1617,6 @@ are described in more detail in the
 <td>Currently all events are of type <code class="prettyprint">simple_ticket</code>. In future we may add <code class="prettyprint">hotel_room</code> and <code class="prettyprint">misc_item</code>.</td>
 </tr>
 <tr>
-<td><code class="prettyprint">event_upsell_list</code></td>
-<td>A list of event IDs that can be presented as an upsell option to customers (not always present).</td>
-</tr>
-<tr>
 <td><code class="prettyprint">geo_data</code></td>
 <td>A block containing the following geo co-ordinates:</td>
 </tr>
@@ -1786,11 +1778,11 @@ returns a dictionary of events keyed on the event&rsquo;s <code class="prettypri
 </tr>
 <tr>
 <td><code class="prettyprint">add_add_ons</code></td>
-<td>(Optional) Include a list of add-on events per event (these are events or merchandise related to the event searched for that can be included in a trolley for up-sell)</td>
+<td>(Optional) Include a list of add-on events per event (these are events or merchandise related to the event searched for that can be included in a trolley for upsell). It is more common to request these with <a href="#add-ons">add-ons</a></td>
 </tr>
 <tr>
 <td><code class="prettyprint">add_upsells</code></td>
-<td>(Optional) Include a list of up-sell events per event (these are related events that the customer may be interested in as well as the base event)</td>
+<td>(Optional) Include a list of upsell events per event (these are related events that the customer may be interested in as well as the base event)</td>
 </tr>
 </tbody></table>
 
@@ -2480,10 +2472,6 @@ returns a dictionary of events keyed on the event&rsquo;s <code class="prettypri
 <tr>
 <td><code class="prettyprint">event_type</code></td>
 <td>Currently all events are of type <code class="prettyprint">simple_ticket</code>. In future we may add <code class="prettyprint">hotel_room</code> and <code class="prettyprint">misc_item</code>.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">event_upsell_list</code></td>
-<td>A list of event IDs that can be presented as an upsell option to customers (not always present).</td>
 </tr>
 <tr>
 <td><code class="prettyprint">geo_data</code></td>
@@ -11204,18 +11192,14 @@ JSON response. Each currency has the following attributes:</p>
 </tr>
 </tbody></table>
 
-          <h1 id="upsell">Upsell</h1>
+          <h1 id="add-ons">Add-ons</h1>
 
-<p>Some events have other events or items associated with them for the purposes of
-increasing profitability. These items can be retrieved from the
-<a href="#events-by-id">Events by ID</a> call by using optional flags, but add-on items can
-only be added to a trolley already containing seats for an event that lists
-the add-on event as an add-on.</p>
+<p>Add-ons are items that can only be purchased alongside a normal event, for example
+The Lion King could have add-ons for ticket insurance, a Simba toy and a restaurant
+nearby the Lyceum Theatre.</p>
 
-<p>Ingresso provides two API endpoints that accept standard <a href="#trolley">trolley</a>
-parameters and return a list of add-on and upsell events, as documented below.</p>
-
-<h2 id="add-ons">Add-ons</h2>
+<p>Add-ons can only be added to a trolley already containing seats for an event 
+containing add-ons.</p>
 
 <blockquote>
 <p><strong>Definition</strong></p>
@@ -11455,457 +11439,6 @@ can also be included and will add the details to the response.</p>
 <tr>
 <td><code class="prettyprint">event_type</code></td>
 <td>Currently all events are of type <code class="prettyprint">simple_ticket</code>. In future we may add <code class="prettyprint">hotel_room</code> and <code class="prettyprint">misc_item</code>.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">event_upsell_list</code></td>
-<td>A list of event IDs that can be presented as an upsell option to customers (not always present).</td>
-</tr>
-<tr>
-<td><code class="prettyprint">geo_data</code></td>
-<td>A block containing the following geo co-ordinates:</td>
-</tr>
-<tr>
-<td><code class="prettyprint">geo_data.latitude</code></td>
-<td>Latitude of the event.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">geo_data.longitude</code></td>
-<td>Longitude of the event.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">has_no_perfs</code></td>
-<td><code class="prettyprint">true</code> if the event has no performances. For example some attraction tickets are valid for any date, so we do not present a list of performances to select.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">is_add_on</code></td>
-<td><code class="prettyprint">true</code> if this event is an add-on event. This means it can only be added to a trolley containing tickets for an event that lists this in its <code class="prettyprint">add_ons</code>.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">is_seated</code></td>
-<td><code class="prettyprint">true</code> for seated events.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">max_running_time</code></td>
-<td>Maximum length / duration in minutes (not always present).</td>
-</tr>
-<tr>
-<td><code class="prettyprint">min_running_time</code></td>
-<td>Minimum length / duration in minutes (not always present).</td>
-</tr>
-<tr>
-<td><code class="prettyprint">need_departure_date</code></td>
-<td>Flag indicating whether the event needs a departure date specified. This is <code class="prettyprint">false</code> for most events. Most partners can ignore this.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">need_duration</code></td>
-<td>Flag indicating whether the event needs duration (specific to <code class="prettyprint">hotel_room</code> events only). Most partners can ignore this.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">need_performance</code></td>
-<td>Flag indicating if a performance must be selected in order to retrieve availability. For the vast majority of events this will be <code class="prettyprint">true</code>.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">postcode</code></td>
-<td>Postcode of the event location.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">show_perf_time</code></td>
-<td><code class="prettyprint">false</code> if the performance time is not relevant, for example some events use a performance description rather than specific times.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">source_code</code></td>
-<td>Source supplier code e.g. <code class="prettyprint">nimax</code>.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">source_desc</code></td>
-<td>Source supplier description e.g. <code class="prettyprint">Nimax</code>.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">user_review_percent</code></td>
-<td>The aggregate user review score, e.g. <code class="prettyprint">80</code> for 80%.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">venue_desc</code></td>
-<td>Name of the venue e.g. <code class="prettyprint">Sadler&#39;s Wells</code>.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">venue_uri_desc</code></td>
-<td>URI encoded name of the venue e.g. <code class="prettyprint">Sadler%27s-Wells</code>.</td>
-</tr>
-</tbody></table>
-
-<p>The outer object also contains a <strong>paging_status</strong> object:</p>
-
-<table><thead>
-<tr>
-<th>Attribute</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td><code class="prettyprint">page_length</code></td>
-<td>The number of results per page.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">page_number</code></td>
-<td>The zero-based page number currently displayed.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">pages_remaining</code></td>
-<td>The number of pages that you need to request after the current page to retrieve all results.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">results_remaining</code></td>
-<td>The number of results in the remaining pages.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">total_unpaged_results</code></td>
-<td>The total number of results.</td>
-</tr>
-</tbody></table>
-
-<h2 id="related-events">Related Events</h2>
-
-<p>This resource returns detail for related events that can be added to a given
-trolley. Unlike add-ons, upsell events do not require a parent event to be in
-a trolley before being added, and are supplied as a way of offering other
-options to customers that they may not be aware of (such as show-and-meal deals,
-etc.).</p>
-
-<blockquote>
-<p><strong>Definition</strong></p>
-</blockquote>
-<pre class="highlight plaintext"><code>GET https://demo.ticketswitch.com/f13/upsells.v1
-</code></pre>
-<p>A trolley token or combination of parameters for a trolley call must be specified.
-This call is nullipotent and does not change the state of any existing trolley.</p>
-
-<h3 id="request">Request</h3>
-
-<blockquote>
-<p><strong>Example request</strong></p>
-</blockquote>
-<pre class="highlight shell tab-shell"><code>curl https://demo.ticketswitch.com/f13/upsells.v1 <span class="se">\</span>
-    -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
-    -d <span class="s2">"trolley_token=M2--6TcZRZsfgZI0E8PmlGWqr5PQluhxE46Nqnno3Xa24lFuIKM_0IYJq40BDvisBRcXKsaGBdLfu8B5TfwI4s7jk7y7xRto_SwJL177u_vuvvq_Ynqnj64IfAHmItXxz_-xdTQGXh_G-BuPGxPXNY_Ycimiv1ZYlPFuPjsoVugnUnyu2F0TmpdztEtgI9PC1WhnTeHeRUDEBvVewOIf_PEJkPVR-UXFDg3gxbHYQBENW5XpkYnRhc22IqrB7eAoK0MbTLaPMk3uB1BKnz_B7fasSU_NU3nhXvmgHa4suvCT9oEaQSGvq4G0glOtyCiqL1FfVJ2R3KIgb2xC4NbAm4cNL5q22V_W0eYGmJ9DTBJ90UWvAWH7UeFLM1--Z"</span> <span class="se">\</span>
-    --compressed <span class="se">\</span>
-    -G
-</code></pre><pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
-
-<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="s">'demo'</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">'demopass'</span><span class="p">)</span>
-<span class="n">upsell_events</span><span class="p">,</span> <span class="n">upsell_meta</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_upsells</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="s">"M2--6TcZRZsfgZI0E8PmlGWqr5PQluhxE46Nqnno3Xa24lFuIKM_0IYJq40BDvisBRcXKsaGBdLfu8B5TfwI4s7jk7y7xRto_SwJL177u_vuvvq_Ynqnj64IfAHmItXxz_-xdTQGXh_G-BuPGxPXNY_Ycimiv1ZYlPFuPjsoVugnUnyu2F0TmpdztEtgI9PC1WhnTeHeRUDEBvVewOIf_PEJkPVR-UXFDg3gxbHYQBENW5XpkYnRhc22IqrB7eAoK0MbTLaPMk3uB1BKnz_B7fasSU_NU3nhXvmgHa4suvCT9oEaQSGvq4G0glOtyCiqL1FfVJ2R3KIgb2xC4NbAm4cNL5q22V_W0eYGmJ9DTBJ90UWvAWH7UeFLM1--Z"</span><span class="p">)</span>
-</code></pre>
-<p>Either the <code class="prettyprint">trolley_token</code> parameter, and/or a valid set of parameters for a
-<a href="#trolley">trolley</a> call must be supplied.</p>
-
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td><code class="prettyprint">trolley_token</code></td>
-<td>A valid identifier for an existing trolley.</td>
-</tr>
-<tr>
-<td>&mdash;&mdash;&mdash;</td>
-<td>&mdash;&mdash;&mdash;&ndash;</td>
-</tr>
-<tr>
-<td><code class="prettyprint">discX</code></td>
-<td>A trolley with a discount code for added seats.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">no_of_seats</code></td>
-<td>A trolley with a specified number of seats added.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">perf_id</code></td>
-<td>A trolley with seats for the specified performance added.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">price_band_code</code></td>
-<td>A trolley with seats from the specified price band added.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">remove_items_list</code></td>
-<td>A trolley with the specified <code class="prettyprint">item_numbers</code> removed.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">seatX</code></td>
-<td>A trolley with the specified seat ID added as one of the seats.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">X_send_code</code></td>
-<td>A trolley with the specified send method for new tickets added.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">ticket_type_code</code></td>
-<td>A trolley with seats of the specified ticket type added.</td>
-</tr>
-</tbody></table>
-
-<p>The list of optional <a href="#additional-parameters">additional parameters</a> specified
-can also be included and will add the details to the response.</p>
-
-<h3 id="response">Response</h3>
-
-<blockquote>
-<p><strong>Example response</strong></p>
-</blockquote>
-<pre class="highlight shell tab-shell"><code><span class="o">{</span>
-  <span class="s2">"results"</span>: <span class="o">{</span>
-    <span class="s2">"event"</span>: <span class="o">[</span>
-      <span class="o">{</span>
-        <span class="s2">"city_code"</span>: <span class="s2">"london-uk"</span>,
-        <span class="s2">"city_desc"</span>: <span class="s2">"London"</span>,
-        <span class="s2">"classes"</span>: <span class="o">{</span>
-          <span class="s2">"dance"</span>: <span class="s2">"Ballet &amp; Dance"</span>
-        <span class="o">}</span>,
-        <span class="s2">"country_code"</span>: <span class="s2">"uk"</span>,
-        <span class="s2">"country_desc"</span>: <span class="s2">"United Kingdom"</span>,
-        <span class="s2">"critic_review_percent"</span>: 100,
-        <span class="s2">"custom_filter"</span>: <span class="o">[]</span>,
-        <span class="s2">"event_desc"</span>: <span class="s2">"Matthew Bourne's Nutcracker TEST"</span>,
-        <span class="s2">"event_id"</span>: <span class="s2">"6IF"</span>,
-        <span class="s2">"event_path"</span>: <span class="s2">"/6IF-matthew-bourne-s-nutcracker-test/"</span>,
-        <span class="s2">"event_status"</span>: <span class="s2">"live"</span>,
-        <span class="s2">"event_type"</span>: <span class="s2">"simple_ticket"</span>,
-        <span class="s2">"event_upsell_list"</span>: <span class="o">{</span>
-          <span class="s2">"event_id"</span>: <span class="o">[</span>
-            <span class="s2">"6IE"</span>
-          <span class="o">]</span>
-        <span class="o">}</span>,
-        <span class="s2">"event_uri_desc"</span>: <span class="s2">"Matthew-Bourne%27s-Nutcracker-TEST"</span>,
-        <span class="s2">"geo_data"</span>: <span class="o">{</span>
-          <span class="s2">"latitude"</span>: 51.52961137,
-          <span class="s2">"longitude"</span>: -0.10601562
-        <span class="o">}</span>,
-        <span class="s2">"has_no_perfs"</span>: <span class="nb">false</span>,
-        <span class="s2">"is_add_on"</span>: <span class="nb">false</span>,
-        <span class="s2">"is_seated"</span>: <span class="nb">true</span>,
-        <span class="s2">"max_running_time"</span>: 120,
-        <span class="s2">"min_running_time"</span>: 120,
-        <span class="s2">"need_departure_date"</span>: <span class="nb">false</span>,
-        <span class="s2">"need_duration"</span>: <span class="nb">false</span>,
-        <span class="s2">"need_performance"</span>: <span class="nb">true</span>,
-        <span class="s2">"postcode"</span>: <span class="s2">"EC1R 4TN"</span>,
-        <span class="s2">"show_perf_time"</span>: <span class="nb">true</span>,
-        <span class="s2">"source_code"</span>: <span class="s2">"ext_test0"</span>,
-        <span class="s2">"source_desc"</span>: <span class="s2">"External Test Backend 0"</span>,
-        <span class="s2">"user_review_percent"</span>: 100,
-        <span class="s2">"venue_desc"</span>: <span class="s2">"Sadler's Wells"</span>,
-        <span class="s2">"venue_uri_desc"</span>: <span class="s2">"Sadler%27s-Wells"</span>
-      <span class="o">}</span>,
-      <span class="o">{</span>
-        <span class="s2">"city_code"</span>: <span class="s2">"london-uk"</span>,
-        <span class="s2">"city_desc"</span>: <span class="s2">"London"</span>,
-        <span class="s2">"classes"</span>: <span class="o">{</span>
-          <span class="s2">"opera"</span>: <span class="s2">"Opera"</span>
-        <span class="o">}</span>,
-        <span class="s2">"country_code"</span>: <span class="s2">"uk"</span>,
-        <span class="s2">"country_desc"</span>: <span class="s2">"United Kingdom"</span>,
-        <span class="s2">"custom_filter"</span>: <span class="o">[]</span>,
-        <span class="s2">"event_desc"</span>: <span class="s2">"Toy Story - The Opera"</span>,
-        <span class="s2">"event_id"</span>: <span class="s2">"7AA"</span>,
-        <span class="s2">"event_path"</span>: <span class="s2">"/7AA-toy-story-the-opera/"</span>,
-        <span class="s2">"event_status"</span>: <span class="s2">"live"</span>,
-        <span class="s2">"event_type"</span>: <span class="s2">"simple_ticket"</span>,
-        <span class="s2">"event_uri_desc"</span>: <span class="s2">"Toy-Story-The-Opera"</span>,
-        <span class="s2">"geo_data"</span>: <span class="o">{</span>
-          <span class="s2">"latitude"</span>: 51.511556,
-          <span class="s2">"longitude"</span>: -0.11975
-        <span class="o">}</span>,
-        <span class="s2">"has_no_perfs"</span>: <span class="nb">false</span>,
-        <span class="s2">"is_add_on"</span>: <span class="nb">false</span>,
-        <span class="s2">"is_seated"</span>: <span class="nb">true</span>,
-        <span class="s2">"max_running_time"</span>: 90,
-        <span class="s2">"min_running_time"</span>: 90,
-        <span class="s2">"need_departure_date"</span>: <span class="nb">false</span>,
-        <span class="s2">"need_duration"</span>: <span class="nb">false</span>,
-        <span class="s2">"need_performance"</span>: <span class="nb">true</span>,
-        <span class="s2">"postcode"</span>: <span class="s2">"WC2E 7RQ"</span>,
-        <span class="s2">"show_perf_time"</span>: <span class="nb">true</span>,
-        <span class="s2">"source_code"</span>: <span class="s2">"ext_test0"</span>,
-        <span class="s2">"source_desc"</span>: <span class="s2">"External Test Backend 0"</span>,
-        <span class="s2">"venue_desc"</span>: <span class="s2">"Lyceum Theatre"</span>,
-        <span class="s2">"venue_uri_desc"</span>: <span class="s2">"Lyceum-Theatre"</span>
-      <span class="o">}</span>
-    <span class="o">]</span>,
-    <span class="s2">"paging_status"</span>: <span class="o">{</span>
-      <span class="s2">"page_length"</span>: 50,
-      <span class="s2">"page_number"</span>: 0,
-      <span class="s2">"pages_remaining"</span>: 0,
-      <span class="s2">"results_remaining"</span>: 0,
-      <span class="s2">"total_unpaged_results"</span>: 2
-    <span class="o">}</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-</code></pre><pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">pyticketswitch.event</span> <span class="kn">import</span> <span class="n">Event</span>
-
-<span class="p">[</span>
-    <span class="n">Event</span><span class="p">(</span>
-        <span class="n">min_running_time</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span>
-        <span class="n">event_type</span><span class="o">=</span><span class="s">u'simple_ticket'</span><span class="p">,</span>
-        <span class="n">has_performances</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-        <span class="n">venue_info_html</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-        <span class="n">critic_review_percent</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-        <span class="n">needs_departure_date</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-        <span class="n">valid_quantities</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-        <span class="n">addon_events</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-        <span class="n">availability_details</span><span class="o">=</span><span class="p">[],</span>
-        <span class="n">postcode</span><span class="o">=</span><span class="s">u'EC1R 4TN'</span><span class="p">,</span>
-        <span class="n">country_code</span><span class="o">=</span><span class="s">u'uk'</span><span class="p">,</span>
-        <span class="nb">id</span><span class="o">=</span><span class="s">u'6IF'</span><span class="p">,</span>
-        <span class="n">city</span><span class="o">=</span><span class="s">u'London'</span><span class="p">,</span>
-        <span class="n">filters</span><span class="o">=</span><span class="p">[],</span>
-        <span class="n">media</span><span class="o">=</span><span class="p">{},</span>
-        <span class="n">is_seated</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-        <span class="n">upsell_events</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-        <span class="n">event_info</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-        <span class="n">content</span><span class="o">=</span><span class="p">{},</span>
-        <span class="n">source</span><span class="o">=</span><span class="s">u'External Test Backend 0'</span><span class="p">,</span>
-        <span class="n">max_running_time</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span>
-        <span class="n">cost_range_details</span><span class="o">=</span><span class="p">[],</span>
-        <span class="n">needs_performance</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-        <span class="n">latitude</span><span class="o">=</span><span class="mf">51.52961137</span><span class="p">,</span>
-        <span class="n">upsell_list</span><span class="o">=</span><span class="p">[</span>
-            <span class="s">u'6IE'</span>
-        <span class="p">],</span>
-        <span class="n">city_code</span><span class="o">=</span><span class="s">u'london-uk'</span><span class="p">,</span>
-        <span class="n">venue_addr</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-        <span class="n">status</span><span class="o">=</span><span class="s">u'live'</span><span class="p">,</span>
-        <span class="n">description</span><span class="o">=</span><span class="s">u"Matthew Bourne's Nutcracker TEST"</span><span class="p">,</span>
-        <span class="n">venue_addr_html</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-        <span class="n">cost_range</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-        <span class="n">event_info_html</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-        <span class="n">source_code</span><span class="o">=</span><span class="s">u'ext_test0'</span><span class="p">,</span>
-        <span class="n">country</span><span class="o">=</span><span class="s">u'United Kingdom'</span><span class="p">,</span>
-        <span class="n">venue_info</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-        <span class="n">venue</span><span class="o">=</span><span class="s">u"Sadler's Wells"</span><span class="p">,</span>
-        <span class="n">longitude</span><span class="o">=-</span><span class="mf">0.10601562</span><span class="p">,</span>
-        <span class="n">is_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-        <span class="n">reviews</span><span class="o">=</span><span class="p">[],</span>
-        <span class="n">classes</span><span class="o">=</span><span class="p">{</span>
-            <span class="s">u'dance'</span><span class="p">:</span> <span class="s">u'Ballet &amp; Dance'</span>
-        <span class="p">},</span>
-        <span class="n">fields</span><span class="o">=</span><span class="p">{},</span>
-        <span class="n">needs_duration</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-        <span class="n">no_singles_cost_range</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-        <span class="n">component_events</span><span class="o">=</span><span class="p">[],</span>
-        <span class="n">show_performance_time</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-    <span class="p">),</span>
-    <span class="n">Event</span><span class="p">(</span>
-        <span class="n">min_running_time</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
-        <span class="n">event_type</span><span class="o">=</span><span class="s">u'simple_ticket'</span><span class="p">,</span>
-        <span class="n">has_performances</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-        <span class="n">venue_info_html</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-        <span class="n">critic_review_percent</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-        <span class="n">needs_departure_date</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-        <span class="n">valid_quantities</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-        <span class="n">addon_events</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-        <span class="n">availability_details</span><span class="o">=</span><span class="p">[],</span>
-        <span class="n">postcode</span><span class="o">=</span><span class="s">u'WC2E 7RQ'</span><span class="p">,</span>
-        <span class="n">country_code</span><span class="o">=</span><span class="s">u'uk'</span><span class="p">,</span>
-        <span class="nb">id</span><span class="o">=</span><span class="s">u'7AA'</span><span class="p">,</span>
-        <span class="n">city</span><span class="o">=</span><span class="s">u'London'</span><span class="p">,</span>
-        <span class="n">filters</span><span class="o">=</span><span class="p">[],</span>
-        <span class="n">media</span><span class="o">=</span><span class="p">{},</span>
-        <span class="n">is_seated</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-        <span class="n">upsell_events</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-        <span class="n">event_info</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-        <span class="n">content</span><span class="o">=</span><span class="p">{},</span>
-        <span class="n">source</span><span class="o">=</span><span class="s">u'External Test Backend 0'</span><span class="p">,</span>
-        <span class="n">max_running_time</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
-        <span class="n">cost_range_details</span><span class="o">=</span><span class="p">[],</span>
-        <span class="n">needs_performance</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-        <span class="n">latitude</span><span class="o">=</span><span class="mf">51.511556</span><span class="p">,</span>
-        <span class="n">upsell_list</span><span class="o">=</span><span class="p">[],</span>
-        <span class="n">city_code</span><span class="o">=</span><span class="s">u'london-uk'</span><span class="p">,</span>
-        <span class="n">venue_addr</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-        <span class="n">status</span><span class="o">=</span><span class="s">u'live'</span><span class="p">,</span>
-        <span class="n">description</span><span class="o">=</span><span class="s">u'Toy Story - The Opera'</span><span class="p">,</span>
-        <span class="n">venue_addr_html</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-        <span class="n">cost_range</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-        <span class="n">event_info_html</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-        <span class="n">source_code</span><span class="o">=</span><span class="s">u'ext_test0'</span><span class="p">,</span>
-        <span class="n">country</span><span class="o">=</span><span class="s">u'United Kingdom'</span><span class="p">,</span>
-        <span class="n">venue_info</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-        <span class="n">venue</span><span class="o">=</span><span class="s">u'Lyceum Theatre'</span><span class="p">,</span>
-        <span class="n">longitude</span><span class="o">=-</span><span class="mf">0.11975</span><span class="p">,</span>
-        <span class="n">is_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-        <span class="n">reviews</span><span class="o">=</span><span class="p">[],</span>
-        <span class="n">classes</span><span class="o">=</span><span class="p">{</span>
-            <span class="s">u'opera'</span><span class="p">:</span> <span class="s">u'Opera'</span>
-        <span class="p">},</span>
-        <span class="n">fields</span><span class="o">=</span><span class="p">{},</span>
-        <span class="n">needs_duration</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-        <span class="n">no_singles_cost_range</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-        <span class="n">component_events</span><span class="o">=</span><span class="p">[],</span>
-        <span class="n">show_performance_time</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-    <span class="p">)</span>
-<span class="p">]</span>
-</code></pre>
-<p>The format of the response is identical to that of the <a href="#events-list">events list</a>.</p>
-
-<table><thead>
-<tr>
-<th>Attribute</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td><code class="prettyprint">city_code</code></td>
-<td>Code of the city where the event is taking place.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">city_desc</code></td>
-<td>Name of the city where the event is taking place.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">classes</code></td>
-<td>A collection of categories (a.k.a. &ldquo;classes&rdquo;) that this event belongs to. The index is the class code, the value is the class description.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">country_code</code></td>
-<td>2-digit country code (using <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a>)</td>
-</tr>
-<tr>
-<td><code class="prettyprint">country_desc</code></td>
-<td>Name of the country where the event is taking place.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">critic_review_percent</code></td>
-<td>The aggregate critic review score, e.g. <code class="prettyprint">80</code> for 80%.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">custom_filter</code></td>
-<td>Array of custom filter codes. This can be ignored by partners.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">event_desc</code></td>
-<td>Name of the show or event e.g. <code class="prettyprint">The Lion King</code>.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">event_id</code></td>
-<td>Unique identifier for the event.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">event_path</code></td>
-<td>If you also use a white label website this can be used to navigate to the event page, e.g. <code class="prettyprint">/2J5V-la-pedrera-skip-the-line/</code>.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">event_status</code></td>
-<td>Will be <code class="prettyprint">live</code> for a normal event search. Other values are <code class="prettyprint">dead</code> and <code class="prettyprint">pending</code> but these will only be displayed when using the <code class="prettyprint">include_dead</code> or <code class="prettyprint">include_non_live</code> parameters.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">event_type</code></td>
-<td>Currently all events are of type <code class="prettyprint">simple_ticket</code>. In future we may add <code class="prettyprint">hotel_room</code> and <code class="prettyprint">misc_item</code>.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">event_upsell_list</code></td>
-<td>A list of event IDs that can be presented as an upsell option to customers (not always present).</td>
 </tr>
 <tr>
 <td><code class="prettyprint">geo_data</code></td>
