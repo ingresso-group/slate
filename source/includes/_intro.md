@@ -1,47 +1,3 @@
-<!---
-# TODOs / Questions
-
-* Improve test events
-* Mailing list for changes?
-* Explain why you sometimes get unreserved_orders
-* Note re similarity of trolley object across calls
-* Matt to add docs for cities and categories
-* Need to document the disallowed discount codes - need a test event with this data
-* Matt to add a test meta event, and refer to this in the test intro section and wherever meta events are mentioned.
-* benchmark old vs new API
-* Error codes need to be added everywhere by Pete.
-
-* Amazon suggested we return a 429 - TOO MANY REQUESTS when we return backend_call_failed or backend_call_throttling_failed. Should we use http status codes in this type of case? These cases are an exception where they don't really look like errors (initially by design...)
-
-* There are a number of places where the JSON object nesting isn't as simple as it could be. Eg instead of "event_upsell_list": ["6IE","MH0"] we have:
-  "event_upsell_list": {
-    "event_id": [
-      "6IE",
-      "MH0"
-    ]
-  }
-
-  Similarly can this:
-  "class": [
-    {
-      "class_desc": "Arts & Culture"
-    }
-  ]
-
-  be simplified to this:
-  "class": ["Arts & Culture"]
-
-* We should remove user_review_percent until we actually have some reviews in the core
-* Use a single req_media rather than requesting individual items. Merge images and video into media. Simplify the attributes returned eg just return the URL and is_secure rather than splitting up the URL into components and listing http and https variants.
-
-Possible V2 functionality:
-* A test API server or some form of rate limiting for particular users would help. Would allow us to give open access without worrying about someone hammering our main API server.
-* A reporting API would be useful - our internal reporting apps should also use this
-* Can we be more restful e.g. /events/25DR to get detail by event ID?
-* Should we have the concept of a venue with an ID? (when the venue is enforced)
--->
-
-
 # Introduction
 
 The Ingresso API is designed to allow you to sell from Ingresso's inventory of
@@ -478,6 +434,7 @@ sure your implementation is working as expected and can handle various types of
 errors and edge cases. To validate the functionality of your application,
 Ingresso will use the following representative tests.
 
+
 ### List performance dates or times
 A given event may have multiple performances on different days and times, and
 the customer must be able to choose the one they want to attend. This can be
@@ -490,6 +447,7 @@ When the event is selected in the interface,<br/>
 Then it should display the two available performances, 1 January {this year + 1}
 and 1 January {this year + 2}, at 15:30:00 UTC.
 
+
 ### Support best available booking flow
 At a minimum, the customer must be able to specify the number of seats they
 want and for which ticket type and price band. The Ingresso backend will then
@@ -500,6 +458,7 @@ When the reservation is made<br/>
 Then the application shows a reservation confirmation screen with 3 tickets
 from that price band, and allows the user to proceed with the booking and
 payment process
+
 
 ### Display the full ticket price to the customer before purchase
 The customer must be shown the full price they will pay before the purchase is
@@ -517,10 +476,16 @@ should also be listed separately. A total price should be displayed in a
 highlighted font showing the price the customer will pay (by adding the prices
 together).
 
+
 ### Display special seat conditions to customer before purchase
 Some seats in venues may have restricted views of the stage, or other
 information associated with them. It's important that the customers are made
 aware of any special seat conditions that will apply before they purchase.
+Messages can be classified as restricted view or not, but it is necessary 
+in all cases to display these messages (sometimes we aren't able to 
+accurately classify a restricted view message). These messages must be 
+displayed to the customer before they purchase, and also in the purchase
+confirmation that is sent to the customer.
 
 **Representative Test:** User reserves any seats for a Thursday performance of
 *Swan Lake* (event 6IE)<br/>
