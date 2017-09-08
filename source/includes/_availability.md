@@ -19,6 +19,12 @@ by default. This resource is described first and is important to read. We then d
 [individual seats](#individual-seats), [example seats](#example-seats), 
 [commission](#commission), and [discounts](#add-discounts).
 
+You should only send availability requests as a direct result of customers requesting 
+availability. You should not automatically request availability to populate caches. 
+[Performances with availability detail](#availability-detail) is provided for this type 
+of use case. If this doesn't fit what you are trying to do contact us api@ingresso.co.uk.
+
+<aside class="notice">We may disable API accounts making excessive availability calls.</aside>
 
 
 ## Availability

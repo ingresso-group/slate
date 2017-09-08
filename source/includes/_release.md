@@ -15,8 +15,7 @@ request availability to ensure the user is also able to select the just-released
 seats). This is necessary to ensure that all end users have the best possible
 access to tickets (including your other customers).
 
-<aside class="notice">We reserve the right to disable the API account of any 
-partner that is not releasing tickets when they should be.</aside>
+<aside class="notice">We may disable API accounts that don't release tickets when they should.</aside>
 
 ### Request
 
