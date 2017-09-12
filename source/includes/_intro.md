@@ -60,7 +60,8 @@ curl https://demo.ticketswitch.com/f13/events.v1 \
 ```
 
 <blockquote class="lang-specific shell">
-gzip must be used for all requests (with curl you can use the --compressed flag, or pass "Accept-Encoding: gzip,deflate" in the headers).
+gzip must be used for all requests (with curl you can use the --compressed flag). Most http libraries support compression (though you may need to enable this somehow), but if not and you are receiving gzip errors you can pass "Accept-Encoding: gzip" in the headers then unzip the response.
+
 curl uses the -u flag to pass basic auth credentials in the format user:password.
 </blockquote>
 
