@@ -60,10 +60,8 @@ curl https://demo.ticketswitch.com/f13/events.v1 \
 ```
 
 <blockquote class="lang-specific shell">
+gzip must be used for all requests (with curl you can use the --compressed flag, or pass "Accept-Encoding: gzip,deflate" in the headers).
 curl uses the -u flag to pass basic auth credentials in the format user:password.
-</blockquote>
-<blockquote>
-gzip must be used for all requests (with curl you can use the --compressed flag, or pass "Accept-Encoding: gzip,deflate" in the headers)
 </blockquote>
 
 > **List performances for event ID 6IF**
