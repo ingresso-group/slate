@@ -59,6 +59,13 @@ curl https://demo.ticketswitch.com/f13/events.v1 \
     -G
 ```
 
+<blockquote class="lang-specific shell">
+curl uses the -u flag to pass basic auth credentials in the format user:password.
+</blockquote>
+<blockquote>
+gzip must be used for all requests (with curl you can use the --compressed flag, or pass "Accept-Encoding: gzip,deflate" in the headers)
+</blockquote>
+
 > **List performances for event ID 6IF**
 
 ```shell
@@ -216,6 +223,11 @@ from pyticketswitch import Client
 client = Client(user='demo', password='demopass')
 ```
 
+<blockquote class="lang-specific shell">
+curl uses the -u flag to pass basic auth credentials in the format user:password.
+</blockquote>
+
+
 > Connect as the `demosub` subuser with Dutch as the preferred language
 
 ```shell
@@ -235,9 +247,6 @@ request. Authentication to the API is performed via
 <aside class="notice">Please ensure you keep your username and password secret - do not share 
 these in publicly accessible areas such GitHub, client-side code, etc.</aside>
 
-<blockquote class="lang-specific shell">
-curl uses the -u flag to pass basic auth credentials in the format user:password.
-</blockquote>
 
 
 This is all you need, but there are two additional optional parameters that can 
