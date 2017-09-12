@@ -286,6 +286,14 @@ that closely matches the examples included in this documentation.</p>
     --compressed <span class="se">\</span>
     -G
 </code></pre>
+<blockquote class="lang-specific shell">
+curl uses the -u flag to pass basic auth credentials in the format user:password.
+</blockquote>
+
+<blockquote>
+gzip must be used for all requests (with curl you can use the &ndash;compressed flag, or pass &ldquo;Accept-Encoding: gzip,deflate&rdquo; in the headers)
+</blockquote>
+
 <blockquote>
 <p><strong>List performances for event ID 6IF</strong></p>
 </blockquote>
@@ -430,6 +438,10 @@ email us: api@ingresso.co.uk</p>
 
 <span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="s">'demo'</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">'demopass'</span><span class="p">)</span>
 </code></pre>
+<blockquote class="lang-specific shell">
+curl uses the -u flag to pass basic auth credentials in the format user:password.
+</blockquote>
+
 <blockquote>
 <p>Connect as the <code class="prettyprint">demosub</code> subuser with Dutch as the preferred language</p>
 </blockquote>
@@ -446,10 +458,6 @@ request. Authentication to the API is performed via
 
 <aside class="notice">Please ensure you keep your username and password secret - do not share 
 these in publicly accessible areas such GitHub, client-side code, etc.</aside>
-
-<blockquote class="lang-specific shell">
-curl uses the -u flag to pass basic auth credentials in the format user:password.
-</blockquote>
 
 <p>This is all you need, but there are two additional optional parameters that can 
 be included:</p>
