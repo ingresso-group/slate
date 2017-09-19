@@ -418,8 +418,14 @@ when purchasing tickets.</p></li>
 access to test product only - you can make purchases with this user without any
 impact on live tickets, or any need to contact us first.</p>
 
-<p>If you would like your own API credentials in order to start selling please 
-email us: api@ingresso.co.uk</p>
+<p>The process for going on sale is:</p>
+
+<ol>
+<li><p>Start your integration using the <code class="prettyprint">demo</code> user. This is the user that all partners use during testing</p></li>
+<li><p>Once you have made good progress contact us to agree a commission deal: commercial@ingresso.co.uk</p></li>
+<li><p>When you have finished the integration we will check to ensure you support the <a href="#required-minimum-functionality">required functionality</a></p></li>
+<li><p>We will then give you a live account and you can go live</p></li>
+</ol>
 
 <h2 id="authentication">Authentication</h2>
 
@@ -11538,6 +11544,10 @@ expires when the tickets are automatically released. Reserve is typically called
 immediately before displaying a checkout page to customers to collect contact 
 details. These details are then used as parameters when
 <a href="#purchase">purchasing the reservation</a>.</p>
+
+<aside class="notice">
+Our current reserve hold lasts 15 minutes.
+</aside>
 
 <p>There are two main use cases for calling <code class="prettyprint">reserve</code>:</p>
 
