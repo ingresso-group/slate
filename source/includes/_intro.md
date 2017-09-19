@@ -199,8 +199,15 @@ All examples shown in this documentation are for the `demo` user. This user has
 access to test product only - you can make purchases with this user without any
 impact on live tickets, or any need to contact us first.
 
-If you would like your own API credentials in order to start selling please 
-email us: api@ingresso.co.uk
+The process for going on sale is:
+
+1. Start your integration using the `demo` user. This is the user that all partners use during testing
+
+2. Once you have made good progress contact us to agree a commission deal: commercial@ingresso.co.uk
+
+3. When you have finished the integration we will check to ensure you support the [required functionality](#required-minimum-functionality)
+
+4. We will then give you a live account and you can go live
 
 
 ## Authentication

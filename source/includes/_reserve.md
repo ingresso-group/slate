@@ -18,6 +18,10 @@ immediately before displaying a checkout page to customers to collect contact
 details. These details are then used as parameters when
 [purchasing the reservation](#purchase).
 
+<aside class="notice">
+Our current reserve hold lasts 15 minutes.
+</aside>
+
 There are two main use cases for calling `reserve`:
 
 1. **You only want to purchase a single order at a time**: call `reserve` with a
