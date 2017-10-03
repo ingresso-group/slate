@@ -2616,7 +2616,7 @@ describe a part of house or location within the venue.
 Attribute | Description
 --------- | -----------
 `ticket_type_code` | the identifier of the ticket type, this can be used later in the [trolley](#trolley) or [reserve](#reserve) resource.
-`ticket_type_desc` | A human readable description of the price band if applicable
+`ticket_type_desc` | A human readable description of the ticket type if applicable
 `price_band` | an array of price bands
 
 
