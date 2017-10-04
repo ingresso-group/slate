@@ -179,8 +179,7 @@ curl https://api.ticketswitch.io/transactions.v0/order:event_id,supplier_code\
 
  Attribute | Description
 -----------|--------------------------------------------------------------------------
- `status`  | String representing status of the response (along with HTTP status code).
- Can have following values: `success`, `error`, `warning`, `debug`
+ `status`  | String representing status of the response (along with HTTP status code). Can have following values: `success`, `error`, `warning`, `debug`
 `message`| Optional message, usually contains detailed error information if `status` is set to `error`.
 `count`| Number of transaction records returned
 `timestamp` | UTC time in a form of `YYYYMMddhhmmss`
