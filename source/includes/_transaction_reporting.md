@@ -1,4 +1,7 @@
-# Transaction Reporting System
+# Transaction Reporting
+
+<aside class="warning"><b>IMPORTANT:</b> Note that transaction reporting service is using different domain
+than other ticketswitch endpoints - <b>.ticketswitch.io</b> as opposed to <b>.ticketswitch.com</b></aside>
 
 > **Definition**
 
@@ -121,69 +124,72 @@ curl https://api.ticketswitch.io/transactions.v0/order:event_id,supplier_code\
 
 > **Example API reponse**
 
-``` shell
+``` json
 {
-	status: "success",
-	count: 1,
-	message: "",
-	data: [
-		{
-			transaction_id: "T123-1234-ABCD-EFGH",
-			item_number: 1,
-			user_id: "demo",
-			backend_purchase_reference: "12345",
-			event_id: "3TO7",
-			event_desc: "Wicked",
-			event_country_code: "uk",
-			venue_desc: "Apollo Victoria",
-			supplier_code: "atg",
-			purchase_time_utc: "2017-10-04T12:56:06Z",
-			purchase_time_london: "2017-10-04T13:56:06Z",
-			performance_local_time: "2018-03-03T18:30:00Z",
-			perf_type_code: "756976",
-			ticket_type_code: "XXX",
-			ticket_type_desc: "Floor Standing",
-			price_band_code: "AES",
-			discount_desc: "Regular Price",
-			send_code: "M",
-			send_desc: "Standard Post",
-			seat_ids: [
-				"GEN79",
-				"GEN80"
-			],
-			trans_status: "normal",
-			sale_mode: "internal_credit",
-			debitor_reference: null,
-			user_can_use_customer_data: false,
-			num_tickets: 2,
-			num_transactions: 1,
-			sale_currency_code: "gbp",
-			sale_seatprice: 93.5,
-			sale_surcharge: 23,
-			ticket_price: 116.5,
-			send_cost: 0,
-			commision_currency_code: "gbp",
-			user_commission_inc_vat: 15,
-			gross_commission_inc_vat: 16,
-			inside_commision_inc_vat: 0,
-			supplier_levy: 3.5,
-			supplier_fee: 0,
-			supplier_rebate: 7,
-			surcharge_non_commissionable_postage: 0,
-			surcharge_commissionable_postage: 7,
-			processing_fee: 2,
-			supplier_uplift: 0,
-			user_uplift: 0
-		}
+    "status": "success",
+    "count": 10,
+    "message": "",
+    "data": [
+    {
+            "transaction_id": "T000-0000-ABCD-EFGH",
+            "item_number": 1,
+            "user_id": "demo",
+            "backend_purchase_reference": "123456",
+            "event_id": "2GXJ",
+            "event_desc": "Wicked",
+            "event_country_code": "uk",
+            "venue_desc": "Apollo Victoria",
+            "supplier_code": "atg",
+            "purchase_time_utc": "2017-01-01T09:58:40Z",
+            "purchase_time_london": "2017-01-01T09:58:40Z",
+            "performance_local_time": "2017-01-02T19:30:00Z",
+            "perf_type_code": "748418",
+            "ticket_type_code": "CIR",
+            "ticket_type_desc": "Dress Circle",
+            "price_band_code": "A",
+            "discount_desc": "Regular Price",
+            "send_code": "H",
+            "send_desc": "E-ticket (print at home yourself)",
+            "seat_ids": [
+                "J20",
+                "J21",
+                "J22",
+                "J23"
+            ],
+            "trans_status": "normal",
+            "sale_mode": "internal_credit",
+            "debitor_reference": null,
+            "user_can_use_customer_data": false,
+            "num_tickets": 4,
+            "num_transactions": 1,
+            "sale_currency_code": "gbp",
+            "sale_seatprice": 278,
+            "sale_surcharge": 13.8,
+            "ticket_price": 291.8,
+            "send_cost": 0,
+            "commision_currency_code": "gbp",
+            "user_commission_inc_vat": 9.66,
+            "gross_commission_inc_vat": 13.8,
+            "inside_commision_inc_vat": 0,
+            "supplier_levy": 7,
+            "supplier_fee": 0,
+            "supplier_rebate": 0,
+            "surcharge_non_commissionable_postage": 0,
+            "surcharge_commissionable_postage": 0,
+            "processing_fee": 0,
+            "supplier_uplift": 0,
+            "user_uplift": 0
+        }
 	],
-	timestamp: "20171004150512",
-	_meta: null
+	"timestamp": "20171004150512",
+	"_meta": null
 }
+
 ```
 
-## Results
+### Results
 
-### Response JSON body
+#### Response JSON body
 
  Attribute | Description
 -----------|--------------------------------------------------------------------------
@@ -194,7 +200,7 @@ curl https://api.ticketswitch.io/transactions.v0/order:event_id,supplier_code\
 `_meta` | object containing additional data, if supplied.
 `data` | list of objects containing transaction records
 
-### Transaction record reference
+#### Transaction record reference
 
 Each transaction record returned from API should have following keys set:
 
