@@ -24,7 +24,7 @@ GET https://api.ticketswitch.io/transactions.v0?page_number={page_number}&page_l
 By default returned dataset is paginated and limited to 10 records per page. To iterate over the pages supply `page_number=x` query parameter to the request where `x` is unsigned integer, if this parameter is not passed the page will be set to 0 by default. To change number of records returned per page pass `page_length=y`, `y` being an integer. Maximum number of records per page is 100.
 
 > **Example request**
->
+ 
 ```shell
 curl https://api.ticketswitch.io/transactions.v0?page_number=2&page_length=20\
     -u "demo:demopass" \
@@ -33,7 +33,7 @@ curl https://api.ticketswitch.io/transactions.v0?page_number=2&page_length=20\
 
 ## Timespan options
 
->> **Definition**
+> **Definition**
 
 ```
 GET https://api.ticketswitch.io/transactions.v0?from={date}&to={date}
@@ -48,7 +48,7 @@ For example assuming we want to retrieve the records `from` September 29th 2017 
 - `2017-09-29`
 
 > **Example requests**
->
+ 
 ```shell
 curl https://api.ticketswitch.io/transactions.v0?from=2016-01-02T14:33:22&to=2016-01-03T14:25:21\
     -u "demo:demopass" \
@@ -63,7 +63,7 @@ curl https://api.ticketswitch.io/transactions.v0?from=1506623211&to=1506643200\
 
 ## Filtering the data
 
->> **Definition**
+> **Definition**
 
 ```
 GET https://api.ticketswitch.io/transactions.v0/filter:{filter_options}'
@@ -78,7 +78,7 @@ To pass filter option insert `/filter:{filter_options}` path after `/transaction
 `supplier_code` with `nimax` value will be returned. If the value of the field option contains white space enclose it within single quotes `'`.
 
 > **Example request**
->
+ 
 ``` shell
 curl https://api.ticketswitch.io/transactions.v0/filter:event_id='44AP'\
     -u "demo:demopass" \
@@ -96,7 +96,7 @@ curl https://api.ticketswitch.io/transactions.v0/filter:event_id='44AP',supplier
 
 ## Ordering options
 
->> **Definition**
+> **Definition**
 
 ```
 GET https://api.ticketswitch.io/transactions.v0/order:{order_options}
