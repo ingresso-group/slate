@@ -31,7 +31,7 @@ curl https://api.ticketswitch.io/transactions.v0?page_number=2&page_length=20\
 
 ## Timespan options
 
->> **Definitions**
+>> **Definition**
 
 ```
 GET https://api.ticketswitch.io/transactions.v0?from={date}&to={date}
@@ -59,7 +59,7 @@ curl https://api.ticketswitch.io/transactions.v0?from=1506623211&to=1506643200\
 
 ## Filtering the data
 
->> **Definitions**
+>> **Definition**
 
 ```
 GET https://api.ticketswitch.io/transactions.v0/filter:{filter_options}'
@@ -90,7 +90,7 @@ curl https://api.ticketswitch.io/transactions.v0/filter:event_id='44AP',supplier
 
 ## Ordering options
 
->> **Definitions**
+>> **Definition**
 
 ```
 GET https://api.ticketswitch.io/transactions.v0/order:{order_options}
