@@ -42,13 +42,21 @@ curl https://api.ticketswitch.io/transactions.v0?page_number=2&page_length=20\
 GET https://api.ticketswitch.io/transactions.v0?from={date}&to={date}
 ```
 
+
 Transactions API allows passing `from` and `to` query parameters that limit the time for which the data will be retrieved. The time values supplied can either be passed as UTC timestamp or as a more human readable format in simplified **ISO 8601** in a form of `<YYYY>-<MM>-<dd>T<hh>:<mm>:<ss>` (also in UTC timezone) where hours, minutes and seconds are optional and will default to either 00, 00, 00 in the case of `from` parameter or 23, 59, 59 in case of `to` if not passed.
 For example assuming we want to retrieve the records `from` September 29th 2017 at midnight (00:00:00) following time parameter values are valid:
+
 - `1506643200`
 - `2017-09-29T00:00:00`
 - `2017-09-29T00:00`
 - `2017-09-29T00`
 - `2017-09-29`
+
+
+<aside class="notice">By default if no **to** parameter is passed it will default to (current_time - 10 minutes). Not that you can set it earlier than that but we can't guarantee that list of records
+ in the last 10 minutes will be up to date</aside>
+
+<aside class="notice">If no **from** parameter is passed it will default to (**to** parameter -  120 minutes)</aside>
 
 > **Example requests**
  
