@@ -28,6 +28,7 @@ includes:
   - classes
   - bitmask_fields
   - caching
+  - transaction_reporting
 
 search: true
 ---
