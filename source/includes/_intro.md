@@ -46,11 +46,11 @@ Click below to import our collection of API examples.
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://www.getpostman.com/collections/7c834c45808672b158a7)
 
 
-## F13 Browser
+## F13 API Browser
 
-<img src="https://d1wx4w35ubmdix.cloudfront.net/wl-media/images/f13-browser.png" alt="F13 Browser">
+<img src="https://d1wx4w35ubmdix.cloudfront.net/wl-media/images/f13-browser.png" alt="F13 API Browser">
 
-We have also developed the [F13 Browser](https://f13-browser.ticketswitch.io/).
+We have also developed the [F13 API Browser](https://f13-browser.ticketswitch.io/).
 
 - Move through the Ingresso booking flow using your own API account
 - Easy to use - it can be given to non-technical people to check that the API is returning expected data
