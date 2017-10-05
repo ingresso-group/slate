@@ -53,8 +53,7 @@ For example assuming we want to retrieve the records `from` September 29th 2017 
 - `2017-09-29`
 
 
-<aside class="notice">By default if no **to** parameter is passed it will default to (current_time - 10 minutes). Not that you can set it earlier than that but we can't guarantee that list of records
- in the last 10 minutes will be up to date</aside>
+<aside class="notice">By default if no **to** parameter is passed it will default to (current_time - 10 minutes). Note that you can set it to time earlier than that but we can't guarantee that list will contain all transaction records made during last few minutes.</aside>
 
 <aside class="notice">If no **from** parameter is passed it will default to (**to** parameter -  120 minutes)</aside>
 
