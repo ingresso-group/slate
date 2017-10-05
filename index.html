@@ -15431,12 +15431,19 @@ the given account.</p>
 <pre class="highlight plaintext"><code>GET https://api.ticketswitch.io/transactions.v0?from={date}&amp;to={date}
 </code></pre>
 <p>Transactions API allows passing <code class="prettyprint">from</code> and <code class="prettyprint">to</code> query parameters that limit the time for which the data will be retrieved. The time values supplied can either be passed as UTC timestamp or as a more human readable format in simplified <strong>ISO 8601</strong> in a form of <code class="prettyprint">&lt;YYYY&gt;-&lt;MM&gt;-&lt;dd&gt;T&lt;hh&gt;:&lt;mm&gt;:&lt;ss&gt;</code> (also in UTC timezone) where hours, minutes and seconds are optional and will default to either 00, 00, 00 in the case of <code class="prettyprint">from</code> parameter or 23, 59, 59 in case of <code class="prettyprint">to</code> if not passed.
-For example assuming we want to retrieve the records <code class="prettyprint">from</code> September 29th 2017 at midnight (00:00:00) following time parameter values are valid:
-- <code class="prettyprint">1506643200</code>
-- <code class="prettyprint">2017-09-29T00:00:00</code>
-- <code class="prettyprint">2017-09-29T00:00</code>
-- <code class="prettyprint">2017-09-29T00</code>
-- <code class="prettyprint">2017-09-29</code></p>
+For example assuming we want to retrieve the records <code class="prettyprint">from</code> September 29th 2017 at midnight (00:00:00) following time parameter values are valid:</p>
+
+<ul>
+<li><code class="prettyprint">1506643200</code></li>
+<li><code class="prettyprint">2017-09-29T00:00:00</code></li>
+<li><code class="prettyprint">2017-09-29T00:00</code></li>
+<li><code class="prettyprint">2017-09-29T00</code></li>
+<li><code class="prettyprint">2017-09-29</code></li>
+</ul>
+
+<aside class="notice">By default if no **to** parameter is passed it will default to (current_time - 10 minutes). Note that you can set it to time earlier than that but we can&rsquo;t guarantee that list will contain all transaction records made during last few minutes.</aside>
+
+<aside class="notice">If no **from** parameter is passed it will default to (**to** parameter -  120 minutes)</aside>
 
 <blockquote>
 <p><strong>Example requests</strong></p>
