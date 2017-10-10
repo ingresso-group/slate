@@ -90,9 +90,12 @@ GET https://api.ticketswitch.io/transactions.v0/filter:{filter_options}'
 ```
 
 The API allows you to use filters besides the purchase time. Currently the following filters are available:
+
+
 - `event_id` - filter by Event's ID
 - `supplier_code` - Filter by name of supplier's code
 - `billable` - (boolean `true` or `false`) If set to `true` will only return records for which will be applied a charge by Ingresso (or was applied in the past), if `false` only not billable records will be returned. By default both types of transactions are returned in the query. 
+
 
 If you would find other filters useful please contact us: api@ingresso.co.uk.
 
@@ -125,10 +128,14 @@ GET https://api.ticketswitch.io/transactions.v0/order:{order_options}
 ```
 
 To order returned data insert `/order:<order_options>` after `/transactions.v0` using the set of fields you want to order by. A list of ordering fields should correspond to keys in the returned transaction records separated by `,`. By default the data is ordered descending, if you wish to order it ascending prepend the field name with a `$` character, for example `$event_id,purchase_time_utc` will order the data alphabetically by event id. If there are 2 records with same id those records will be ordered descending by purchase time. The following ordering options are supported:
+
+
 - `event_id`
 - `supplier_code`
 - `purchase_time_utc`
 - `purchase_time_london`
+
+
 
 > **Example request**
 
