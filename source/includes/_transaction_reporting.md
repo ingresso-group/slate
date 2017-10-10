@@ -6,7 +6,7 @@ than other ticketswitch endpoints - <b>.ticketswitch.io</b> as opposed to <b>.ti
 > **Definition**
 
 ```
-GET https://api.ticketswitch.io/transactions.v0
+GET https://api.ticketswitch.io/transactions.v0?from=2017-06-01
 ```
 
 The transaction reporting resource allow you to retrieve, filter and order your transactions.
@@ -30,7 +30,7 @@ By default the returned dataset is paginated and limited to 10 records per page.
 > **Example request**
  
 ```shell
-curl https://api.ticketswitch.io/transactions.v0?page_number=2&page_length=20\
+curl https://api.ticketswitch.io/transactions.v0?page_number=2&page_length=20&from=2017-06-01\
     -u "demo:demopass" \
     -X GET
 ```
@@ -70,13 +70,13 @@ For partners using this resource to maintain a full database of Ingresso transac
 > **Example requests**
  
 ```shell
-curl https://api.ticketswitch.io/transactions.v0?from=2016-01-02T14:33:22&to=2016-01-03T14:25:21\
+curl https://api.ticketswitch.io/transactions.v0?from=2016-01-02T14:33:22&to=2016-06-03T14:25:21\
     -u "demo:demopass" \
     -X GET
 ```
 
 ```shell
-curl https://api.ticketswitch.io/transactions.v0?from=1506623211&to=1506643200\
+curl https://api.ticketswitch.io/transactions.v0?from=1506623211&to=1507643200\
     -u "demo:demopass" \
     -X GET
 ```
@@ -90,8 +90,9 @@ GET https://api.ticketswitch.io/transactions.v0/filter:{filter_options}'
 ```
 
 The API allows you to use filters besides the purchase time. Currently the following filters are available:
-- `event_id`
-- `supplier_code`
+- `event_id` - filter by Event's ID
+- `supplier_code` - Filter by name of supplier's code
+- `billable` - (boolean `true` or `false`) If set to `true` will only return records for which will be applied a charge by Ingresso (or was applied in the past), if `false` only not billable records will be returned. By default both types of transactions are returned in the query. 
 
 If you would find other filters useful please contact us: api@ingresso.co.uk.
 
@@ -132,7 +133,7 @@ To order returned data insert `/order:<order_options>` after `/transactions.v0` 
 > **Example request**
 
 ``` shell
-curl https://api.ticketswitch.io/transactions.v0/order:event_id,supplier_code\
+curl https://api.ticketswitch.io/transactions.v0/order:event_id,supplier_code?from=2017-06-01\
     -u "demo:demopass" \
     -X GET
 ```
@@ -264,3 +265,4 @@ The following fields are only returned for users that have permission to view de
 `processing_fee`                       | A processing fee, not used by most partners.
 `supplier_uplift`                      | Uplift is an additional charge on top of the ticket price for an upgraded experience. This is the uplift component earned by the supplier.
 `user_uplift`                          | This is the uplift component earned by the partner.
+`billable`                             | Whether or not a charge was or will be applied to the transaction
