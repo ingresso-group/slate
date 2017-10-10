@@ -274,6 +274,18 @@ that closely matches the examples included in this documentation.</p>
 
 <p><a href="https://www.getpostman.com/collections/7c834c45808672b158a7"><img src="https://run.pstmn.io/button.svg" alt="Run in Postman" /></a></p>
 
+<h2 id="f13-api-browser">F13 API Browser</h2>
+
+<p><img src="https://d1wx4w35ubmdix.cloudfront.net/wl-media/images/f13-browser.png" alt="F13 API Browser"></p>
+
+<p>We have also developed the <a href="https://f13-browser.ticketswitch.io/">F13 API Browser</a>.</p>
+
+<ul>
+<li>Move through the Ingresso booking flow using your own API account</li>
+<li>Easy to use - it can be given to non-technical people to check that the API is returning expected data</li>
+<li>For each step the request and response data is output in a friendly format and as JSON</li>
+</ul>
+
 <h2 id="basic-booking-flow">Basic booking flow</h2>
 
 <blockquote>
@@ -4420,7 +4432,7 @@ describe a part of house or location within the venue.</p>
 </tr>
 <tr>
 <td><code class="prettyprint">ticket_type_desc</code></td>
-<td>A human readable description of the price band if applicable</td>
+<td>A human readable description of the ticket type if applicable</td>
 </tr>
 <tr>
 <td><code class="prettyprint">price_band</code></td>
@@ -15389,22 +15401,22 @@ API accounts of anyone doing this without prior approval.</p>
 
           <h1 id="transaction-reporting">Transaction Reporting</h1>
 
-<aside class="warning"><b>IMPORTANT:</b> Note that transaction reporting service is using different domain
+<aside class="notice"><b>IMPORTANT:</b> Note that transaction reporting service is using different domain
 than other ticketswitch endpoints - <b>.ticketswitch.io</b> as opposed to <b>.ticketswitch.com</b></aside>
 
 <blockquote>
 <p><strong>Definition</strong></p>
 </blockquote>
-<pre class="highlight plaintext"><code>GET https://api.ticketswitch.io/transactions.v0
+<pre class="highlight plaintext"><code>GET https://api.ticketswitch.io/transactions.v0?from=2017-06-01
 </code></pre>
-<p>Transaction API allows for retrieval, filtering and ordering of all the transactions made for
-the given account.</p>
+<p>The transaction reporting resource allow you to retrieve, filter and order your transactions.
+This can be used, for example, to regularly populate your own database of Ingresso transactions.</p>
 
 <ol>
-<li><a href="#pagination">Pagination</a>: Pagination options</li>
-<li><a href="#timespan-options">Timespan options</a>: Setting timespan for returned records</li>
-<li><a href="#filtering-options">Filtering the data</a>: Defining filter options</li>
-<li><a href="#ordering-options">Ordering options</a>: Defining order settings</li>
+<li><a href="#pagination">Pagination</a></li>
+<li><a href="#time-filters">Time filters</a></li>
+<li><a href="#other-filters">Other filters</a></li>
+<li><a href="#ordering-options">Ordering</a></li>
 </ol>
 
 <h2 id="pagination">Pagination</h2>
@@ -15414,24 +15426,25 @@ the given account.</p>
 </blockquote>
 <pre class="highlight plaintext"><code>GET https://api.ticketswitch.io/transactions.v0?page_number={page_number}&amp;page_length={num_items}
 </code></pre>
-<p>By default returned dataset is paginated and limited to 10 records per page. To iterate over the pages supply <code class="prettyprint">page_number=x</code> query parameter to the request where <code class="prettyprint">x</code> is unsigned integer, if this parameter is not passed the page will be set to 0 by default. To change number of records returned per page pass <code class="prettyprint">page_length=y</code>, <code class="prettyprint">y</code> being an integer. Maximum number of records per page is 100.</p>
+<p>By default the returned dataset is paginated and limited to 10 records per page. To iterate over the pages supply a <code class="prettyprint">page_number=x</code> query parameter where <code class="prettyprint">x</code> is an unsigned integer. If this parameter is not passed the page will be set to 0 by default. To change number of records returned per page pass <code class="prettyprint">page_length=y</code>, <code class="prettyprint">y</code> being an integer. The maximum number of records per page is 100.</p>
 
 <blockquote>
 <p><strong>Example request</strong></p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code>curl https://api.ticketswitch.io/transactions.v0?page_number<span class="o">=</span>2&amp;page_length<span class="o">=</span>20<span class="se">\</span>
+<pre class="highlight shell tab-shell"><code>curl https://api.ticketswitch.io/transactions.v0?page_number<span class="o">=</span>2&amp;page_length<span class="o">=</span>20&amp;from<span class="o">=</span>2017-06-01<span class="se">\</span>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -X GET
 </code></pre>
-<h2 id="timespan-options">Timespan options</h2>
+<h2 id="time-filters">Time Filters</h2>
 
 <blockquote>
 <p><strong>Definition</strong></p>
 </blockquote>
 <pre class="highlight plaintext"><code>GET https://api.ticketswitch.io/transactions.v0?from={date}&amp;to={date}
 </code></pre>
-<p>Transactions API allows passing <code class="prettyprint">from</code> and <code class="prettyprint">to</code> query parameters that limit the time for which the data will be retrieved. The time values supplied can either be passed as UTC timestamp or as a more human readable format in simplified <strong>ISO 8601</strong> in a form of <code class="prettyprint">&lt;YYYY&gt;-&lt;MM&gt;-&lt;dd&gt;T&lt;hh&gt;:&lt;mm&gt;:&lt;ss&gt;</code> (also in UTC timezone) where hours, minutes and seconds are optional and will default to either 00, 00, 00 in the case of <code class="prettyprint">from</code> parameter or 23, 59, 59 in case of <code class="prettyprint">to</code> if not passed.
-For example assuming we want to retrieve the records <code class="prettyprint">from</code> September 29th 2017 at midnight (00:00:00) following time parameter values are valid:</p>
+<p>The transactions API allows <code class="prettyprint">from</code> and <code class="prettyprint">to</code> query parameters to be passed to filter by the purchase time (<code class="prettyprint">purchase_time_utc</code>). The time values supplied can either be passed as UTC timestamp or as a more human readable format in simplified <strong>ISO 8601</strong> in a form of <code class="prettyprint">&lt;YYYY&gt;-&lt;MM&gt;-&lt;dd&gt;T&lt;hh&gt;:&lt;mm&gt;:&lt;ss&gt;</code> (also in UTC timezone) where hours, minutes and seconds are optional and will default to either 00, 00, 00 in the case of <code class="prettyprint">from</code> parameter or 23, 59, 59 in case of <code class="prettyprint">to</code> if not passed.</p>
+
+<p>For example to retrieve the records <code class="prettyprint">from</code> September 29th 2017 at midnight (00:00:00) the following time parameter values are valid:</p>
 
 <ul>
 <li><code class="prettyprint">1506643200</code></li>
@@ -15445,30 +15458,41 @@ For example assuming we want to retrieve the records <code class="prettyprint">f
 
 <aside class="notice">If no <b>from</b> parameter is passed it will default to (<b>to</b> parameter -  120 minutes)</aside>
 
+<p>For partners using this resource to maintain a full database of Ingresso transactions we recommend that you:</p>
+
+<ul>
+<li>Look up the maximum <code class="prettyprint">purchase_time_utc</code> in your database, add one second, and pass this as the <code class="prettyprint">from</code> parameter. If you haven&rsquo;t previously downloaded transactions then set the <code class="prettyprint">from</code> date well in the pass, for example 01/01/2000</li>
+<li>Do not pass a <code class="prettyprint">to</code> parameter - this will ensure all missing records up to 10 minutes ago are returned</li>
+<li>Order by purchase time ascending (<code class="prettyprint">$purchase_time_utc</code>)</li>
+<li>Loop through the pages and results adding them to your database</li>
+</ul>
+
 <blockquote>
 <p><strong>Example requests</strong></p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code>curl https://api.ticketswitch.io/transactions.v0?from<span class="o">=</span>2016-01-02T14:33:22&amp;to<span class="o">=</span>2016-01-03T14:25:21<span class="se">\</span>
+<pre class="highlight shell tab-shell"><code>curl https://api.ticketswitch.io/transactions.v0?from<span class="o">=</span>2016-01-02T14:33:22&amp;to<span class="o">=</span>2016-06-03T14:25:21<span class="se">\</span>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -X GET
-</code></pre><pre class="highlight shell tab-shell"><code>curl https://api.ticketswitch.io/transactions.v0?from<span class="o">=</span>1506623211&amp;to<span class="o">=</span>1506643200<span class="se">\</span>
+</code></pre><pre class="highlight shell tab-shell"><code>curl https://api.ticketswitch.io/transactions.v0?from<span class="o">=</span>1506623211&amp;to<span class="o">=</span>1507643200<span class="se">\</span>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -X GET
 </code></pre>
-<h2 id="filtering-the-data">Filtering the data</h2>
+<h2 id="other-filters">Other Filters</h2>
 
 <blockquote>
 <p><strong>Definition</strong></p>
 </blockquote>
 <pre class="highlight plaintext"><code>GET https://api.ticketswitch.io/transactions.v0/filter:{filter_options}'
 </code></pre>
-<p>The API also allows filtering the data so that only records for which keys match specifified value will be returned.
-Currently transactions API allows following keys to be filtered by:
-- <code class="prettyprint">event_id</code>
-- <code class="prettyprint">supplier_code</code></p>
+<p>The API allows you to use filters besides the purchase time. Currently the following filters are available:
+- <code class="prettyprint">event_id</code> - filter by Event&rsquo;s ID
+- <code class="prettyprint">supplier_code</code> - Filter by name of supplier&rsquo;s code
+- <code class="prettyprint">billable</code> - (boolean <code class="prettyprint">true</code> or <code class="prettyprint">false</code>) If set to <code class="prettyprint">true</code> will only return records for which will be applied a charge by Ingresso (or was applied in the past), if <code class="prettyprint">false</code> only not billable records will be returned. By default both types of transactions are returned in the query. </p>
 
-<p>To pass filter option insert <code class="prettyprint">/filter:{filter_options}</code> path after <code class="prettyprint">/transactions.0</code> endpoint with selected filter options, all options are passed in a form <code class="prettyprint">key=value</code> separated by <code class="prettyprint">,</code> for example <code class="prettyprint">/filter:event_id=44AP,supplier_code=nimax</code>, the option separator corresponds to the <code class="prettyprint">AND</code> logical statement where key should match json key in returned transaction record, this means that in the above example only records with <code class="prettyprint">event_id</code> equal to <code class="prettyprint">44AP</code> and
-<code class="prettyprint">supplier_code</code> with <code class="prettyprint">nimax</code> value will be returned. If the value of the field option contains white space enclose it within single quotes <code class="prettyprint">&#39;</code>.</p>
+<p>If you would find other filters useful please contact us: api@ingresso.co.uk.</p>
+
+<p>To pass a filter option insert <code class="prettyprint">/filter:{filter_options}</code> after <code class="prettyprint">/transactions.0</code>. All options are passed as <code class="prettyprint">key=value</code> separated by <code class="prettyprint">,</code>. For example: <code class="prettyprint">/filter:event_id=44AP,supplier_code=nimax</code>. The comma separator corresponds to the <code class="prettyprint">AND</code> logical statement; so in the above example only records with <code class="prettyprint">event_id</code> equal to <code class="prettyprint">44AP</code> and
+<code class="prettyprint">supplier_code</code> equal to <code class="prettyprint">nimax</code> will be returned. If the value contains white space then enclose it in single quotes <code class="prettyprint">&#39;</code>.</p>
 
 <blockquote>
 <p><strong>Example request</strong></p>
@@ -15487,8 +15511,7 @@ Currently transactions API allows following keys to be filtered by:
 </blockquote>
 <pre class="highlight plaintext"><code>GET https://api.ticketswitch.io/transactions.v0/order:{order_options}
 </code></pre>
-<p>To order returned data insert <code class="prettyprint">/order:&lt;order_options&gt;</code> path after <code class="prettyprint">/transactions.v0</code> endpoint with set of fields you want to order the data by. A list of ordering fields should correspond to keys in returned transaction records separated by <code class="prettyprint">,</code>. By default the data is ordered descending, if you wish to order it ascending prepend field name with <code class="prettyprint">$</code> character, for example <code class="prettyprint">$event_id,purchase_time_utc</code> will order data alphabetically by event id,
-and if there are 2 records with same id those records will be ordered descending by purchase time. Currently following ordering options are supported:
+<p>To order returned data insert <code class="prettyprint">/order:&lt;order_options&gt;</code> after <code class="prettyprint">/transactions.v0</code> using the set of fields you want to order by. A list of ordering fields should correspond to keys in the returned transaction records separated by <code class="prettyprint">,</code>. By default the data is ordered descending, if you wish to order it ascending prepend the field name with a <code class="prettyprint">$</code> character, for example <code class="prettyprint">$event_id,purchase_time_utc</code> will order the data alphabetically by event id. If there are 2 records with same id those records will be ordered descending by purchase time. The following ordering options are supported:
 - <code class="prettyprint">event_id</code>
 - <code class="prettyprint">supplier_code</code>
 - <code class="prettyprint">purchase_time_utc</code>
@@ -15497,7 +15520,7 @@ and if there are 2 records with same id those records will be ordered descending
 <blockquote>
 <p><strong>Example request</strong></p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code>curl https://api.ticketswitch.io/transactions.v0/order:event_id,supplier_code<span class="se">\</span>
+<pre class="highlight shell tab-shell"><code>curl https://api.ticketswitch.io/transactions.v0/order:event_id,supplier_code?from<span class="o">=</span>2017-06-01<span class="se">\</span>
     -u <span class="s2">"demo:demopass"</span> <span class="se">\</span>
     -X GET
 </code></pre>
@@ -15569,8 +15592,6 @@ and if there are 2 records with same id those records will be ordered descending
 </span></code></pre>
 <h3 id="results">Results</h3>
 
-<h4 id="response-json-body">Response JSON body</h4>
-
 <table><thead>
 <tr>
 <th>Attribute</th>
@@ -15579,7 +15600,7 @@ and if there are 2 records with same id those records will be ordered descending
 </thead><tbody>
 <tr>
 <td><code class="prettyprint">status</code></td>
-<td>String representing status of the response (along with HTTP status code). Can have following values: <code class="prettyprint">success</code>, <code class="prettyprint">error</code>, <code class="prettyprint">warning</code>, <code class="prettyprint">debug</code></td>
+<td>String representing the status of the response (along with an HTTP status code). Can have following values: <code class="prettyprint">success</code>, <code class="prettyprint">error</code>, <code class="prettyprint">warning</code>, <code class="prettyprint">debug</code></td>
 </tr>
 <tr>
 <td><code class="prettyprint">message</code></td>
@@ -15587,25 +15608,23 @@ and if there are 2 records with same id those records will be ordered descending
 </tr>
 <tr>
 <td><code class="prettyprint">count</code></td>
-<td>Number of transaction records returned</td>
+<td>Number of transaction records returned.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">timestamp</code></td>
-<td>UTC time in a form of <code class="prettyprint">YYYYMMddhhmmss</code></td>
+<td>UTC time in a form of <code class="prettyprint">YYYYMMddhhmmss</code>.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">_meta</code></td>
-<td>object containing additional data, if supplied.</td>
+<td>Object containing additional data, if supplied.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">data</code></td>
-<td>list of objects containing transaction records</td>
+<td>List of objects containing transaction records, defined below.</td>
 </tr>
 </tbody></table>
 
-<h4 id="transaction-record-reference">Transaction record reference</h4>
-
-<p>Each transaction record returned from API should have following keys set:</p>
+<p>Each transaction record returned from the API will have the following keys set:</p>
 
 <table><thead>
 <tr>
@@ -15615,7 +15634,11 @@ and if there are 2 records with same id those records will be ordered descending
 </thead><tbody>
 <tr>
 <td><code class="prettyprint">transaction_id</code></td>
-<td>Unique identifier for transaction.</td>
+<td>The primary Ingresso transaction reference.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">item_number</code></td>
+<td>A unique sequential number for the order. The second order added to the trolley will have item_number 2. The combination of <code class="prettyprint">transaction_id</code> and <code class="prettyprint">item_number</code> is unique.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">user_id</code></td>
@@ -15623,11 +15646,11 @@ and if there are 2 records with same id those records will be ordered descending
 </tr>
 <tr>
 <td><code class="prettyprint">backend_purchase_ref</code></td>
-<td>Purchase reference from external ticketing system.</td>
+<td>The purchase reference from the supplier ticketing system.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">event_id</code></td>
-<td>Unique identifier for event.</td>
+<td>Unique identifier for the event.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">event_desc</code></td>
@@ -15647,7 +15670,7 @@ and if there are 2 records with same id those records will be ordered descending
 </tr>
 <tr>
 <td><code class="prettyprint">purchase_time_utc</code></td>
-<td>Purchase UTC time.</td>
+<td>Purchase time (UTC).</td>
 </tr>
 <tr>
 <td><code class="prettyprint">purchase_time_london</code></td>
@@ -15691,7 +15714,7 @@ and if there are 2 records with same id those records will be ordered descending
 </tr>
 <tr>
 <td><code class="prettyprint">debitor_reference</code></td>
-<td>If using Stripe this will be Stripe&rsquo;s charge ID.</td>
+<td>If using Stripe this will be Stripe&rsquo;s Charge ID.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">user_can_use_customer_data</code></td>
@@ -15733,47 +15756,21 @@ and if there are 2 records with same id those records will be ordered descending
 <td><code class="prettyprint">user_commission_inc_vat</code></td>
 <td>The commission earned for this transaction (all commission amounts are totals, not an amount per ticket).</td>
 </tr>
-<tr>
-<td><code class="prettyprint">gross_commission_inc_vat</code></td>
-<td>The total commission available, including Ingresso&rsquo;s commission earned.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">inside_commision_inc_vat</code></td>
-<td>The total inside commission (commission paid by a supplier from the <code class="prettyprint">sale_seatprice</code>).</td>
-</tr>
-<tr>
-<td><code class="prettyprint">supplier_levy</code></td>
-<td>The total restoration levy or venue facility fee.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">supplier_fee</code></td>
-<td>A fee paid to the supplier.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">supplier_rebate</code></td>
-<td>Another type of fee paid to the supplier.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">surcharge_non_commissionable_postage</code></td>
-<td>A postage fee that is added as part of the <code class="prettyprint">sale_surcharge</code> and excluded from commission calculations, not used by most partners.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">surcharge_commissionable_postage</code></td>
-<td>A postage fee that is added as part of the <code class="prettyprint">sale_surcharge</code> and included within commission calculations, not used by most partners.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">processing_fee</code></td>
-<td>A processing fee, not used by most partners.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">supplier_uplift</code></td>
-<td>Uplift is an additional charge on top of the ticket price for an upgraded experience. This is the uplift component earned by the supplier.</td>
-</tr>
-<tr>
-<td><code class="prettyprint">user_uplift</code></td>
-<td>This is the uplift component earned by the partner.</td>
-</tr>
 </tbody></table>
+
+<p>The following fields are only returned for users that have permission to view detailed commission information:</p>
+
+<p><code class="prettyprint">gross_commission_inc_vat</code>             | The total commission available (Ingresso&rsquo;s commission + user_commission_inc_vat).
+<code class="prettyprint">inside_commision_inc_vat</code>             | The total inside commission (commission paid by a supplier from the <code class="prettyprint">sale_seatprice</code>).
+<code class="prettyprint">supplier_levy</code>                        | The total restoration levy or venue facility fee.
+<code class="prettyprint">supplier_fee</code>                         | A fee paid to the supplier.
+<code class="prettyprint">supplier_rebate</code>                      | Another type of fee paid to the supplier.
+<code class="prettyprint">surcharge_non_commissionable_postage</code> | A postage fee that is added as part of the <code class="prettyprint">sale_surcharge</code> and excluded from commission calculations, not used by most partners.
+<code class="prettyprint">surcharge_commissionable_postage</code>     | A postage fee that is added as part of the <code class="prettyprint">sale_surcharge</code> and included within commission calculations, not used by most partners.
+<code class="prettyprint">processing_fee</code>                       | A processing fee, not used by most partners.
+<code class="prettyprint">supplier_uplift</code>                      | Uplift is an additional charge on top of the ticket price for an upgraded experience. This is the uplift component earned by the supplier.
+<code class="prettyprint">user_uplift</code>                          | This is the uplift component earned by the partner.
+<code class="prettyprint">billable</code>                             | Whether or not a charge was or will be applied to the transaction</p>
 
       </div>
       <div class="dark-box">
