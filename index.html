@@ -15756,21 +15756,61 @@ This can be used, for example, to regularly populate your own database of Ingres
 <td><code class="prettyprint">user_commission_inc_vat</code></td>
 <td>The commission earned for this transaction (all commission amounts are totals, not an amount per ticket).</td>
 </tr>
+<tr>
+<td><code class="prettyprint">billable</code></td>
+<td>Whether or not a charge was or will be applied to the transaction</td>
+</tr>
 </tbody></table>
 
 <p>The following fields are only returned for users that have permission to view detailed commission information:</p>
 
-<p><code class="prettyprint">gross_commission_inc_vat</code>             | The total commission available (Ingresso&rsquo;s commission + user_commission_inc_vat).
-<code class="prettyprint">inside_commision_inc_vat</code>             | The total inside commission (commission paid by a supplier from the <code class="prettyprint">sale_seatprice</code>).
-<code class="prettyprint">supplier_levy</code>                        | The total restoration levy or venue facility fee.
-<code class="prettyprint">supplier_fee</code>                         | A fee paid to the supplier.
-<code class="prettyprint">supplier_rebate</code>                      | Another type of fee paid to the supplier.
-<code class="prettyprint">surcharge_non_commissionable_postage</code> | A postage fee that is added as part of the <code class="prettyprint">sale_surcharge</code> and excluded from commission calculations, not used by most partners.
-<code class="prettyprint">surcharge_commissionable_postage</code>     | A postage fee that is added as part of the <code class="prettyprint">sale_surcharge</code> and included within commission calculations, not used by most partners.
-<code class="prettyprint">processing_fee</code>                       | A processing fee, not used by most partners.
-<code class="prettyprint">supplier_uplift</code>                      | Uplift is an additional charge on top of the ticket price for an upgraded experience. This is the uplift component earned by the supplier.
-<code class="prettyprint">user_uplift</code>                          | This is the uplift component earned by the partner.
-<code class="prettyprint">billable</code>                             | Whether or not a charge was or will be applied to the transaction</p>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">gross_commission_inc_vat</code></td>
+<td>The total commission available (Ingresso&rsquo;s commission + user_commission_inc_vat).</td>
+</tr>
+<tr>
+<td><code class="prettyprint">inside_commision_inc_vat</code></td>
+<td>The total inside commission (commission paid by a supplier from the <code class="prettyprint">sale_seatprice</code>).</td>
+</tr>
+<tr>
+<td><code class="prettyprint">supplier_levy</code></td>
+<td>The total restoration levy or venue facility fee.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">supplier_fee</code></td>
+<td>A fee paid to the supplier.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">supplier_rebate</code></td>
+<td>Another type of fee paid to the supplier.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">surcharge_non_commissionable_postage</code></td>
+<td>A postage fee that is added as part of the <code class="prettyprint">sale_surcharge</code> and excluded from commission calculations, not used by most partners.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">surcharge_commissionable_postage</code></td>
+<td>A postage fee that is added as part of the <code class="prettyprint">sale_surcharge</code> and included within commission calculations, not used by most partners.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">processing_fee</code></td>
+<td>A processing fee, not used by most partners.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">supplier_uplift</code></td>
+<td>Uplift is an additional charge on top of the ticket price for an upgraded experience. This is the uplift component earned by the supplier.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">user_uplift</code></td>
+<td>This is the uplift component earned by the partner.</td>
+</tr>
+</tbody></table>
 
       </div>
       <div class="dark-box">
