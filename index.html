@@ -15484,10 +15484,13 @@ This can be used, for example, to regularly populate your own database of Ingres
 </blockquote>
 <pre class="highlight plaintext"><code>GET https://api.ticketswitch.io/transactions.v0/filter:{filter_options}'
 </code></pre>
-<p>The API allows you to use filters besides the purchase time. Currently the following filters are available:
-- <code class="prettyprint">event_id</code> - filter by Event&rsquo;s ID
-- <code class="prettyprint">supplier_code</code> - Filter by name of supplier&rsquo;s code
-- <code class="prettyprint">billable</code> - (boolean <code class="prettyprint">true</code> or <code class="prettyprint">false</code>) If set to <code class="prettyprint">true</code> will only return records for which will be applied a charge by Ingresso (or was applied in the past), if <code class="prettyprint">false</code> only not billable records will be returned. By default both types of transactions are returned in the query. </p>
+<p>The API allows you to use filters besides the purchase time. Currently the following filters are available:</p>
+
+<ul>
+<li><code class="prettyprint">event_id</code> - filter by Event&rsquo;s ID</li>
+<li><code class="prettyprint">supplier_code</code> - Filter by name of supplier&rsquo;s code</li>
+<li><code class="prettyprint">billable</code> - (boolean <code class="prettyprint">true</code> or <code class="prettyprint">false</code>) If set to <code class="prettyprint">true</code> will only return records for which will be applied a charge by Ingresso (or was applied in the past), if <code class="prettyprint">false</code> only not billable records will be returned. By default both types of transactions are returned in the query. </li>
+</ul>
 
 <p>If you would find other filters useful please contact us: api@ingresso.co.uk.</p>
 
@@ -15511,11 +15514,14 @@ This can be used, for example, to regularly populate your own database of Ingres
 </blockquote>
 <pre class="highlight plaintext"><code>GET https://api.ticketswitch.io/transactions.v0/order:{order_options}
 </code></pre>
-<p>To order returned data insert <code class="prettyprint">/order:&lt;order_options&gt;</code> after <code class="prettyprint">/transactions.v0</code> using the set of fields you want to order by. A list of ordering fields should correspond to keys in the returned transaction records separated by <code class="prettyprint">,</code>. By default the data is ordered descending, if you wish to order it ascending prepend the field name with a <code class="prettyprint">$</code> character, for example <code class="prettyprint">$event_id,purchase_time_utc</code> will order the data alphabetically by event id. If there are 2 records with same id those records will be ordered descending by purchase time. The following ordering options are supported:
-- <code class="prettyprint">event_id</code>
-- <code class="prettyprint">supplier_code</code>
-- <code class="prettyprint">purchase_time_utc</code>
-- <code class="prettyprint">purchase_time_london</code></p>
+<p>To order returned data insert <code class="prettyprint">/order:&lt;order_options&gt;</code> after <code class="prettyprint">/transactions.v0</code> using the set of fields you want to order by. A list of ordering fields should correspond to keys in the returned transaction records separated by <code class="prettyprint">,</code>. By default the data is ordered descending, if you wish to order it ascending prepend the field name with a <code class="prettyprint">$</code> character, for example <code class="prettyprint">$event_id,purchase_time_utc</code> will order the data alphabetically by event id. If there are 2 records with same id those records will be ordered descending by purchase time. The following ordering options are supported:</p>
+
+<ul>
+<li><code class="prettyprint">event_id</code></li>
+<li><code class="prettyprint">supplier_code</code></li>
+<li><code class="prettyprint">purchase_time_utc</code></li>
+<li><code class="prettyprint">purchase_time_london</code></li>
+</ul>
 
 <blockquote>
 <p><strong>Example request</strong></p>
