@@ -252,9 +252,12 @@ Name                                   | Description
 `send_cost`                            | Send method cost.
 `commission_currency_code`             | `ISO 4217` three letter code that applies to all of the following commission attributes.
 `user_commission_inc_vat`              | The commission earned for this transaction (all commission amounts are totals, not an amount per ticket).
+`billable`                             | Whether or not a charge was or will be applied to the transaction
 
 The following fields are only returned for users that have permission to view detailed commission information:
 
+Name                                   | Description
+---------------------------------------|----------------------------------------------------------------------------------------------------------------------------------
 `gross_commission_inc_vat`             | The total commission available (Ingresso's commission + user_commission_inc_vat).
 `inside_commision_inc_vat`             | The total inside commission (commission paid by a supplier from the `sale_seatprice`).
 `supplier_levy`                        | The total restoration levy or venue facility fee.
@@ -265,4 +268,3 @@ The following fields are only returned for users that have permission to view de
 `processing_fee`                       | A processing fee, not used by most partners.
 `supplier_uplift`                      | Uplift is an additional charge on top of the ticket price for an upgraded experience. This is the uplift component earned by the supplier.
 `user_uplift`                          | This is the uplift component earned by the partner.
-`billable`                             | Whether or not a charge was or will be applied to the transaction
