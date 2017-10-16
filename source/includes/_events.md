@@ -139,6 +139,7 @@ Parameter | Description
           "longitude": -0.10601562
         },
         "has_no_perfs": false,
+        "is_add_on": false,
         "is_seated": true,
         "max_running_time": 120,
         "min_running_time": 120,
@@ -180,6 +181,7 @@ Parameter | Description
           "longitude": -0.10601562
         },
         "has_no_perfs": false,
+        "is_add_on": false,
         "is_seated": true,
         "max_running_time": 120,
         "min_running_time": 90,
@@ -231,6 +233,7 @@ from pyticketswitch.event import Event
         min_running_time=120,
         show_performance_time=True,
         has_performances=True,
+        is_add_on=False,
         is_seated=True,
         needs_departure_date=False,
         needs_duration=False,
@@ -263,6 +266,7 @@ from pyticketswitch.event import Event
         min_running_time=90,
         show_performance_time=True,
         has_performances=True,
+        is_add_on=False,
         is_seated=True,
         needs_departure_date=False,
         needs_duration=False,

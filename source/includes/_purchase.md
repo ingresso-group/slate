@@ -85,6 +85,13 @@ we recommend that you don't send any email address if `needs_email_address` is
 customer service email address) and it will be your responsibility to contact
 the customer or pass on booking confirmation.
 
+* Please note that some vendor systems require customer email addresses to be
+  unique, as they create an internal customer object connected to the booking.
+  In this case, subsequent purchases using the same email address may fail or
+  overwrite customer names from previous purchases, so please let us know if you
+  plan to use an internal email address and we will ensure that the purchases
+  for these vendor systems use a unique email address per-transaction.
+
 * The address fields (for example `address_line_one`) need to be passed to us.
 The only use for these is for tickets that will be posted by Ingresso or the
 supplier, so it is possible to only pass the customer's address when the
