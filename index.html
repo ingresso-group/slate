@@ -1415,6 +1415,7 @@ are described in more detail in the
           <span class="s2">"longitude"</span>: -0.10601562
         <span class="o">}</span>,
         <span class="s2">"has_no_perfs"</span>: <span class="nb">false</span>,
+        <span class="s2">"is_add_on"</span>: <span class="nb">false</span>,
         <span class="s2">"is_seated"</span>: <span class="nb">true</span>,
         <span class="s2">"max_running_time"</span>: 120,
         <span class="s2">"min_running_time"</span>: 120,
@@ -1456,6 +1457,7 @@ are described in more detail in the
           <span class="s2">"longitude"</span>: -0.10601562
         <span class="o">}</span>,
         <span class="s2">"has_no_perfs"</span>: <span class="nb">false</span>,
+        <span class="s2">"is_add_on"</span>: <span class="nb">false</span>,
         <span class="s2">"is_seated"</span>: <span class="nb">true</span>,
         <span class="s2">"max_running_time"</span>: 120,
         <span class="s2">"min_running_time"</span>: 90,
@@ -1504,6 +1506,7 @@ are described in more detail in the
         <span class="n">min_running_time</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span>
         <span class="n">show_performance_time</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="n">has_performances</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">is_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">is_seated</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="n">needs_departure_date</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">needs_duration</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
@@ -1536,6 +1539,7 @@ are described in more detail in the
         <span class="n">min_running_time</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
         <span class="n">show_performance_time</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="n">has_performances</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">is_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">is_seated</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="n">needs_departure_date</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">needs_duration</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
@@ -12679,6 +12683,12 @@ we recommend that you don&rsquo;t send any email address if <code class="prettyp
 <code class="prettyprint">false</code>; if it is <code class="prettyprint">true</code> then send an internal email address (for example your
 customer service email address) and it will be your responsibility to contact
 the customer or pass on booking confirmation.</p></li>
+<li><p>Please note that some vendor systems require customer email addresses to be
+unique, as they create an internal customer object connected to the booking.
+In this case, subsequent purchases using the same email address may fail or
+overwrite customer names from previous purchases, so please let us know if you
+plan to use an internal email address and we will ensure that the purchases
+for these vendor systems use a unique email address per-transaction.</p></li>
 <li><p>The address fields (for example <code class="prettyprint">address_line_one</code>) need to be passed to us.
 The only use for these is for tickets that will be posted by Ingresso or the
 supplier, so it is possible to only pass the customer&rsquo;s address when the
