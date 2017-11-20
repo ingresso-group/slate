@@ -620,6 +620,8 @@ Attribute | Description
 
 **`seats` attributes:**
 
+Attribute | Description
+--------- | -----------
 `col_id` | The column identifier of the seat.
 `full_id` | The ID of the seat - comprised of the `col_id` and the `row_id`, sometimes with a separator between them.
 `is_restricted_view` | `true` if the seat is classified as having a restricted view.
