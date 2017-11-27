@@ -452,6 +452,7 @@ moment we have only implemented a single language):
 Examples will be included in this documentation, but if you require further
 detail you can refer to the appropriate documentation for the language wrapper.
 
+
 ## Required Minimum Functionality
 
 Before your application can go live, there are a number of minimum
@@ -462,6 +463,7 @@ Ingresso will use the following representative tests.
 
 
 ### List performance dates or times
+
 A given event may have multiple performances on different days and times, and
 the customer must be able to choose the one they want to attend. This can be
 done by listing them, or in a calendar interface, or in any other way that is
@@ -475,6 +477,7 @@ and 1 January {this year + 2}, at 15:30:00 UTC.
 
 
 ### Support best available booking flow
+
 At a minimum, the customer must be able to specify the number of seats they
 want and for which ticket type and price band. The Ingresso backend will then
 reserve the best available seats that meet the requirements.
@@ -504,6 +507,7 @@ together).
 
 
 ### Display special seat conditions to customer before purchase
+
 Some seats in venues may have restricted views of the stage, or other
 information associated with them. It's important that the customers are made
 aware of any special seat conditions that will apply before they purchase.
@@ -526,7 +530,9 @@ When the seats are selected <br/>
 Then the application should show that these seats have restricted views, and
 show the seat text for C6 ("Haunted seat").
 
+
 ### Release seats if customer does not proceed with the booking flow
+
 A customer may change their mind about the number or type of seats to be
 reserved for a performance. If your customer selects and reserves seats, then
 goes back to select and reserve additional seats or removes the reserved seats
@@ -548,7 +554,9 @@ Ingresso API. This must be done before any further call to `reserve`.<br/>
 Optionally it should also display a message to the customer indicating the
 seat reservation has been released.
 
+
 ### Display different send methods including eTickets
+
 Various venues support different methods of sending tickets (including post,
 collect from box office, or printable eTickets). Some of these may carry an
 additional fee. Where available, different send methods should be offered to
@@ -567,7 +575,9 @@ Then the ticket with the appropriate barcode will be sent to their email or
 otherwise permanently saved within your application after purchase has been
 confirmed
 
+
 ### Gracefully handle reservation failures and seat changes
+
 Especially for popular shows, it is quite common that seats that are requested
 are purchased by other customers before they can be purchased by the user of
 your application. In this case, the Ingresso system will return a failure or,
@@ -588,7 +598,9 @@ Then the reservation process will proceed but the seat numbers will have been
 changed and your application should notify the customer that the seats have
 changed.
 
+
 ### Gracefully handle purchase failures
+
 The purchase process can fail for various reasons. The purchase call will
 usually return a reason for failure, if known, after which the reserve status
 will be set to "failed" and the seats automatically released by the backend.
@@ -604,7 +616,24 @@ Then the application should attempt the purchase through the Ingresso API. When
 it returns the failure, a notification should be displayed to the customer and
 a new reservation should be made, indicating the seats may have changed.
 
+
+### Handle purchase timeouts
+
+Occassionally supplier systems can suffer performance problems or outages that
+result in purchase requests taking a long time. In this case Ingresso will not
+time out. If the purchase ends up succeeding after 2 minutes we will return
+purchase success to you, and you will be invoiced for the tickets as normal. If
+you have asked Ingresso to send confirmation emails on your behalf the customer
+will receive an email once the purchase succeeds.
+
+Our recommendation:
+
+- If a purchase is taking a long time then encourage your customer to wait as long as possibe, for example by telling them after 30 seconds "Sorry we are still awaiting confirmation from the ticket supplier, please wait a further 15 seconds".
+- If you time out on the front-end then you should have backend code to handle the case where the purchase succeeds, or a process to reconcile the successful transactions we think you have made (for example using the [transaction reporting](#transaction-reporting) endpoint) with the transactions you have confirmed to customers.
+
+
 ## Recommended Functionality
+
 In addition to basic best-available booking flow and error handling outlined
 above, Ingresso recommends supporting additional functionality that will
 benefit your customers and help improve your user experience. The following
