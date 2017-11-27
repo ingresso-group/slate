@@ -629,7 +629,6 @@ will receive an email once the purchase succeeds.
 Our recommendation:
 
 - If a purchase is taking a long time then encourage your customer to wait as long as possibe, for example by telling them after 30 seconds "Sorry we are still awaiting confirmation from the ticket supplier, please wait a further 15 seconds".
-- If you time out on the front-end then you should have backend code to handle the case where the purchase succeeds, or a process to reconcile the successful transactions we think you have made (for example using the [transaction reporting](#transaction-reporting) endpoint) with the transactions you have confirmed to customers.
 
 
 ## Recommended Functionality
