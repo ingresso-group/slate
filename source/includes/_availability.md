@@ -346,10 +346,11 @@ the availability data returned is therefore:
 <img src="https://d1wx4w35ubmdix.cloudfront.net/wl-media/images/availability-hierarchy.png" alt="Availability Hierarchy">
 
 <aside class="notice">In the UK market, offers are typically classified as
-either "discounted face value" or "no booking fee". Discounted face value offers
-have an offer seatprice that is lower than the full price seatprice (and
-normally they have an offer surcharge of zero). No booking fee offers have an
-offer seatprice equal to the full price seatprice, and an offer surcharge equal
+either "discounted face value" or "no booking fee" - both will have 
+is_offer = true. Discounted face value offers sale_seatprice that is lower 
+than the non_offer_sale_seatprice (and normally they have 
+sale_surcharge equal to zero). No booking fee offers have a sale_seatprice
+equal to non_offer_sale_seatprice, and an offer surcharge equal
 to zero. The standard is to not display a saving percentage for no booking fee
 offers (some suppliers do not like their offers to show as percentage
 discounts), and instead display "No fees" or similar.</aside>
