@@ -243,10 +243,12 @@ ticketing websites entirely on top of the API (for example
 <a href="https://www.disneytickets.co.uk">Disney Tickets</a> and
 <a href="https://www.fromtheboxoffice.com">From The Box Office</a>). </p>
 
-<p>The Ingresso API is a fully transactional API, loosely based on REST. You format
-GET or POST requests in <a href="http://www.json.org/">JSON</a> and you will receive either
-a JSON-formatted response or an HTTP error. The API is internally known as F13, 
-which is why you see /f13 in the endpoints.</p>
+<p>The Ingresso API is a fully transactional API, loosely based on REST. You make a
+request using name:value pairs (specified as query string parameters or in the
+request body with the appropriate Content-Type header set). The content types
+supported include standard form encodings, or <a href="http://www.json.org/">JSON</a>
+(flattened). You will receive either a JSON-formatted response or an HTTP error.
+The API is internally known as F13, which is why you see /f13 in the endpoints.</p>
 
 <p>We describe objects in a consistent way across different resources (for example
 the output of <a href="#events">events</a> and <a href="#performances">performances</a> includes a
@@ -975,6 +977,22 @@ purchase<br/>
 Then the application should attempt the purchase through the Ingresso API. When
 it returns the failure, a notification should be displayed to the customer and
 a new reservation should be made, indicating the seats may have changed.</p>
+
+<h3 id="handle-purchase-timeouts">Handle purchase timeouts</h3>
+
+<p>Occassionally supplier systems can suffer performance problems or outages that
+result in purchase requests taking a long time. In this case Ingresso will not
+time out. If the purchase ends up succeeding after 2 minutes we will return
+purchase success to you, and you will be invoiced for the tickets as normal. If
+you have asked Ingresso to send confirmation emails on your behalf the customer
+will receive an email once the purchase succeeds.</p>
+
+<p>Our recommendation:</p>
+
+<ul>
+<li>If a purchase is taking a long time then encourage your customer to wait as long as possibe, for example by telling them after 30 seconds &ldquo;Sorry we are still awaiting confirmation from the ticket supplier, please wait a further 15 seconds&rdquo;.</li>
+<li>If you time out on the front-end then you should have backend code to handle the case where the Ingresso purchase succeeds, or a process to reconcile the successful transactions we think you have made (for example using the <a href="#transaction-reporting">transaction reporting</a> endpoint) against the transactions you have confirmed to customers, and ask Ingresso (customerservices@ingresso.co.uk) to cancel any orders you haven&rsquo;t confirmed. Note that it won&rsquo;t be possible to cancel bookings for performances that have passed.</li>
+</ul>
 
 <h2 id="recommended-functionality">Recommended Functionality</h2>
 
@@ -7134,10 +7152,11 @@ the availability data returned is therefore:</p>
 <p><img src="https://d1wx4w35ubmdix.cloudfront.net/wl-media/images/availability-hierarchy.png" alt="Availability Hierarchy"></p>
 
 <aside class="notice">In the UK market, offers are typically classified as
-either &ldquo;discounted face value&rdquo; or &ldquo;no booking fee&rdquo;. Discounted face value offers
-have an offer seatprice that is lower than the full price seatprice (and
-normally they have an offer surcharge of zero). No booking fee offers have an
-offer seatprice equal to the full price seatprice, and an offer surcharge equal
+either &ldquo;discounted face value&rdquo; or &ldquo;no booking fee&rdquo; - both will have 
+is_offer = true. Discounted face value offers sale_seatprice that is lower 
+than the non_offer_sale_seatprice (and normally they have 
+sale_surcharge equal to zero). No booking fee offers have a sale_seatprice
+equal to non_offer_sale_seatprice, and an offer surcharge equal
 to zero. The standard is to not display a saving percentage for no booking fee
 offers (some suppliers do not like their offers to show as percentage
 discounts), and instead display &ldquo;No fees&rdquo; or similar.</aside>
@@ -7259,7 +7278,7 @@ JSON response. Each currency has the following attributes:</p>
 </tr>
 <tr>
 <td><code class="prettyprint">allows_leaving_single_seats</code></td>
-<td>In most cases this is <code class="prettyprint">always</code>. When set to <code class="prettyprint">never</code>, the supplier ticketing system does not allow us to leave single seats (which are difficult to sell). If you attempt to reserve when leaving a single seat the reserve will fail, so you should prevent your customer from making a selection that leaves a single seat. Some supplier ticketing systems will allow a reservation to succeed if there is no other possible seat selection with the number of desired tickets that would not also leave a single seat (e.g. two tickets are requested and all available seat blocks are of size 3 or smaller). In this case the flag may be set to <code class="prettyprint">if_necessary</code>.</td>
+<td>In most cases this is <code class="prettyprint">always</code>. When set to <code class="prettyprint">never</code>, the supplier ticketing system does not allow us to leave single seats (which are difficult to sell). If you attempt to reserve when leaving a single seat the reserve will fail, so you should prevent your customer from making a selection that leaves a single seat. The other possible value is <code class="prettyprint">if_necessary</code>: reservations will succeed if there is no other possible seat selection with the number of desired tickets that would not also leave a single seat (e.g. two tickets are requested and all available seat blocks are of size 3 or smaller).</td>
 </tr>
 <tr>
 <td><code class="prettyprint">discount_code</code></td>
@@ -12489,12 +12508,37 @@ integration is described in detail within <a href="#purchasing-with-stripe">purc
 
 <p><strong><code class="prettyprint">seats</code> attributes:</strong></p>
 
-<p><code class="prettyprint">col_id</code> | The column identifier of the seat.
-<code class="prettyprint">full_id</code> | The ID of the seat - comprised of the <code class="prettyprint">col_id</code> and the <code class="prettyprint">row_id</code>, sometimes with a separator between them.
-<code class="prettyprint">is_restricted_view</code> | <code class="prettyprint">true</code> if the seat is classified as having a restricted view.
-<code class="prettyprint">row_id</code> | The row identifier of the seat.
-<code class="prettyprint">seat_text</code> | A message about the seat that must be displayed to customers.
-<code class="prettyprint">seat_text_code</code> | An identifier for the seat text (only unique within the current <code class="prettyprint">bundle_source_code</code>). Not useful for most partners.</p>
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">col_id</code></td>
+<td>The column identifier of the seat.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">full_id</code></td>
+<td>The ID of the seat - comprised of the <code class="prettyprint">col_id</code> and the <code class="prettyprint">row_id</code>, sometimes with a separator between them.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">is_restricted_view</code></td>
+<td><code class="prettyprint">true</code> if the seat is classified as having a restricted view.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">row_id</code></td>
+<td>The row identifier of the seat.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">seat_text</code></td>
+<td>A message about the seat that must be displayed to customers.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">seat_text_code</code></td>
+<td>An identifier for the seat text (only unique within the current <code class="prettyprint">bundle_source_code</code>). Not useful for most partners.</td>
+</tr>
+</tbody></table>
 
 <p>The outer object includes a <strong><code class="prettyprint">currency_details</code></strong> object containing one currency
 object (indexed on the currency code) for every currency referenced in the
