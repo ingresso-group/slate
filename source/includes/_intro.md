@@ -441,6 +441,18 @@ processing to retrieve the requested data, which will slow down the resource,
 sometimes substantially. They should therefore only be used where necessary.
 
 
+## Request ID logging
+
+In order to more easily trace the effect of API calls through the TicketSwitch
+system, every API response will include a tracking ID in the header
+`X-Request-Id`. This value is used internally to the TicketSwitch system to
+track requests to supplier systems and other internal services, and is recorded
+against reservation and purchase records as well as call logs. If you need to
+debug any request made to the API, please include this request ID when
+contacting Ingresso. We recommend including this and other headers in your logs
+if an error occurs.
+
+
 ## API libraries / SDKs
 
 Our API libraries implement a thin client over the API. Where the API 
