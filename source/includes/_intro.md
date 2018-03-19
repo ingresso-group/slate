@@ -13,12 +13,10 @@ ticketing websites entirely on top of the API (for example
 [Disney Tickets](https://www.disneytickets.co.uk) and
 [From The Box Office](https://www.fromtheboxoffice.com)). 
 
-The Ingresso API is a fully transactional API, loosely based on REST. You make a
-request using name:value pairs (specified as query string parameters or in the
-request body with the appropriate Content-Type header set). The content types
-supported include standard form encodings, or [JSON](http://www.json.org/)
-(flattened). You will receive either a JSON-formatted response or an HTTP error.
-The API is internally known as F13, which is why you see /f13 in the endpoints.
+The Ingresso API is a fully transactional API, loosely based on REST. You format
+GET or POST requests in [JSON](http://www.json.org/) and you will receive either
+a JSON-formatted response or an HTTP error. The API is internally known as F13, 
+which is why you see /f13 in the endpoints.
 
 We describe objects in a consistent way across different resources (for example
 the output of [events](#events) and [performances](#performances) includes a
