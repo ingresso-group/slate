@@ -48,6 +48,8 @@ If you want to collect payment via your own Stripe account you will need to get
 agreement to sell tickets on credit, and you will need to provide Ingresso your 
 Stripe keys to allow us to process payment on your behalf. 
 
+If you wish to use Ingresso's Stripe account we have some requirements 
+to reduce fraud, so please get in touch with us first.
 
 In the examples below we will describe how to purchase using the on-credit and
 Stripe options in more detail. We then describe how to handle generic redirects
