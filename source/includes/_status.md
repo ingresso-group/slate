@@ -35,6 +35,7 @@ Parameter | Description
 `add_customer` | Retrieve customer data (only applies to purchased transactions)
 `add_external_sale_page` | Retrieve the HTML for the confirmation page, if you requested Ingresso to save this when [purchasing](#purchase) (only applies to purchased transactions). *Primarily for internal use*.
 `transaction_uuid` | The unique identifier returned by a previous [reserve](#reserve).
+`req_predicted_commission`| *Optional*. Include to retrieve [commission](#commission) data. For most partners this will include `predicted_user_commission` only (the predicted amount you earn per ticket). Some partners will also see `predicted_gross_commission`, which is the total commission available to be shared between Ingresso and our partner. By default you will see `predicted_user_commission` only - if you think you need to see `predicted_gross_commission` as well then please get in touch.
 
 ### Response
 
