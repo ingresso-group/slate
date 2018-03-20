@@ -243,12 +243,10 @@ ticketing websites entirely on top of the API (for example
 <a href="https://www.disneytickets.co.uk">Disney Tickets</a> and
 <a href="https://www.fromtheboxoffice.com">From The Box Office</a>). </p>
 
-<p>The Ingresso API is a fully transactional API, loosely based on REST. You make a
-request using name:value pairs (specified as query string parameters or in the
-request body with the appropriate Content-Type header set). The content types
-supported include standard form encodings, or <a href="http://www.json.org/">JSON</a>
-(flattened). You will receive either a JSON-formatted response or an HTTP error.
-The API is internally known as F13, which is why you see /f13 in the endpoints.</p>
+<p>The Ingresso API is a fully transactional API, loosely based on REST. You format
+GET or POST requests in <a href="http://www.json.org/">JSON</a> and you will receive either
+a JSON-formatted response or an HTTP error. The API is internally known as F13, 
+which is why you see /f13 in the endpoints.</p>
 
 <p>We describe objects in a consistent way across different resources (for example
 the output of <a href="#events">events</a> and <a href="#performances">performances</a> includes a
@@ -808,6 +806,17 @@ different about themselves, for example <code class="prettyprint">req_cost_range
 <p>Note that the <code class="prettyprint">req_</code> and <code class="prettyprint">add_</code> variables all result in extra
 processing to retrieve the requested data, which will slow down the resource,
 sometimes substantially. They should therefore only be used where necessary.</p>
+
+<h2 id="request-id-logging">Request ID logging</h2>
+
+<p>In order to more easily trace the effect of API calls through the TicketSwitch
+system, every API response will include a tracking ID in the header
+<code class="prettyprint">X-Request-Id</code>. This value is used internally to the TicketSwitch system to
+track requests to supplier systems and other internal services, and is recorded
+against reservation and purchase records as well as call logs. If you need to
+debug any request made to the API, please include this request ID when
+contacting Ingresso. We recommend including this and other headers in your logs
+if an error occurs.</p>
 
 <h2 id="api-libraries-sdks">API libraries / SDKs</h2>
 
@@ -7337,8 +7346,6 @@ therefore only be used where necessary.</p>
 
 <h2 id="individual-seats">Individual Seats</h2>
 
-<aside class="warning">NOTE: we are going to change the format of the seats to better support large seated venues. The change will not be dramatic, but if you integrate against the current version you will need to update your integration later.</aside>
-
 <p>The Ingresso API can return a list of all available seats, allowing you to give
 your customers choice rather than forcing them to take the best available
 seats. If you have included <code class="prettyprint">add_seat_blocks</code> in your request, the event
@@ -12694,6 +12701,9 @@ call.</p>
 <p>If you want to collect payment via your own Stripe account you will need to get
 agreement to sell tickets on credit, and you will need to provide Ingresso your 
 Stripe keys to allow us to process payment on your behalf. </p>
+
+<p>If you wish to use Ingresso&rsquo;s Stripe account we have some requirements 
+to reduce fraud, so please get in touch with us first.</p>
 
 <p>In the examples below we will describe how to purchase using the on-credit and
 Stripe options in more detail. We then describe how to handle generic redirects
