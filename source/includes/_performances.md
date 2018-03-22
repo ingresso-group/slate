@@ -8,10 +8,8 @@ the same, there are some exceptions:
 - Some events have performances that do not have a time component - they are
   valid for the entire day
 - Some events have performances with a performance name rather than a time
-  (TODO: add more detail)
-- Some events do not have performances - they are valid on all dates (TODO: add
-  more detail)
-- Departure and usage dates, (TODO do we need these?)
+- Some events do not have performances - they are valid on all dates
+- Departure and usage dates
 
 An event is considered live when it has one or more future performances. The API
 will not return performances that are more than 2 years in the future by
