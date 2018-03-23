@@ -7,11 +7,11 @@ with the Ingresso API you are able to view and purchase live ticketing inventory
 from a number of different venues. 
 
 Example partners that have integrated with the Ingresso API are 
-[Amazon](https://tickets.amazon.co.uk/) and 
+[GetYourGuide](https://www.getyourguide.com/) and 
 [lastminute.com](http://www.lastminute.com/theatre/). We also build our own 
-ticketing websites entirely on top of the API (for example 
-[Disney Tickets](https://www.disneytickets.co.uk) and
-[From The Box Office](https://www.fromtheboxoffice.com)). 
+ticketing websites entirely on top of the API, for example 
+[Ticketmaster Theatre](https://theatre.ticketmaster.co.uk/book/25DR-the-lion-king/) and
+[From The Box Office](https://www.fromtheboxoffice.com). 
 
 The Ingresso API is a fully transactional API, loosely based on REST. You format
 GET or POST requests in [JSON](http://www.json.org/) and you will receive either
