@@ -49,7 +49,9 @@ agreement to sell tickets on credit, and you will need to provide Ingresso your
 Stripe keys to allow us to process payment on your behalf. 
 
 If you wish to use Ingresso's Stripe account we have some requirements 
-to reduce fraud, so please get in touch with us first.
+to reduce fraud including implementing 3D Secure support and passing in the 
+customer's IP address, so please get in touch with us first. We however encourage 
+partners to open their own Stripe account rather than use ours.
 
 In the examples below we will describe how to purchase using the on-credit and
 Stripe options in more detail. We then describe how to handle generic redirects
@@ -771,6 +773,10 @@ You will need to provide Stripe with the appropriate publishable key -
 this is returned by Ingresso in the [reserve call](#reserve) as
 bundle.debitor.debitor_integration_data.publishable_key.
 
+You must pass in the actual customer's `remote_ip` if you are taking payment via 
+Ingresso's Stripe account - we use this for fraud checks. It is also useful to
+pass in the `remote_site` so we know which website the customer purchased on.
+
 Retrieving the Stripe token is the first half of the payment process - further
 server-side code is required to complete the second half. You don't need to 
 worry about this as Ingresso's Stripe integration takes care of it. Once you 
@@ -804,6 +810,8 @@ curl https://demo.ticketswitch.com/f13/purchase.v1 \
     -d "email_address=tester@gmail.com" \
     -d "ext_test0_callback/stripeToken=tok_1A5rfVHIklODsaxBzQYBklUA" \
     -d "send_confirmation_email=yes" \
+    -d "remote_ip=101.102.103.104" \
+    -d "remote_site=www.myticketshop.com" \
     --compressed \
     -X POST
 ```
@@ -857,6 +865,8 @@ following parameter should be specified:
 Parameter | Description
 --------- | -----------
 `X_callback/stripeToken` | The single-use token retrieved from Stripe. You should replace `X` with the `source_code` returned by `reserve`. So for `source_code=ext_test0` the parameter name used is `ext_test0_callback/stripeToken`. If you support basketing and your customer is attempting to purchase items across multiple bundles, you should provide one stripe token per bundle (each bundle has a unique `source_code`).
+`remote_ip` | The end customer's IP address.
+`remote_site` | The website the end customer is purchasing from, not including `https://` or `http://`.
 
 
 ### Purchase response
