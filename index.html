@@ -200,7 +200,7 @@
       <script src="javascripts/all.js"></script>
   </head>
 
-  <body class="index" data-languages="[&quot;shell&quot;,&quot;python&quot;]">
+  <body class="index" data-languages="[&quot;shell&quot;,&quot;python&quot;,&quot;javascript&quot;]">
     <a href="#" id="nav-button">
       <span>
         NAV
@@ -212,6 +212,7 @@
         <div class="lang-selector">
               <a href="#" data-language-name="shell">cURL</a>
               <a href="#" data-language-name="python">Python</a>
+              <a href="#" data-language-name="javascript">Javascript</a>
         </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
@@ -237,11 +238,11 @@ with the Ingresso API you are able to view and purchase live ticketing inventory
 from a number of different venues. </p>
 
 <p>Example partners that have integrated with the Ingresso API are 
-<a href="https://tickets.amazon.co.uk/">Amazon</a> and 
+<a href="https://www.getyourguide.com/">GetYourGuide</a> and 
 <a href="http://www.lastminute.com/theatre/">lastminute.com</a>. We also build our own 
-ticketing websites entirely on top of the API (for example 
-<a href="https://www.disneytickets.co.uk">Disney Tickets</a> and
-<a href="https://www.fromtheboxoffice.com">From The Box Office</a>). </p>
+ticketing websites entirely on top of the API, for example 
+<a href="https://theatre.ticketmaster.co.uk/book/25DR-the-lion-king/">Ticketmaster Theatre</a> and
+<a href="https://www.fromtheboxoffice.com">From The Box Office</a>. </p>
 
 <p>The Ingresso API is a fully transactional API, loosely based on REST. You format
 GET or POST requests in <a href="http://www.json.org/">JSON</a> and you will receive either
@@ -5204,11 +5205,9 @@ the same, there are some exceptions:</p>
 <ul>
 <li>Some events have performances that do not have a time component - they are
 valid for the entire day</li>
-<li>Some events have performances with a performance name rather than a time
-(TODO: add more detail)</li>
-<li>Some events do not have performances - they are valid on all dates (TODO: add
-more detail)</li>
-<li>Departure and usage dates, (TODO do we need these?)</li>
+<li>Some events have performances with a performance name rather than a time</li>
+<li>Some events do not have performances - they are valid on all dates</li>
+<li>Departure and usage dates</li>
 </ul>
 
 <p>An event is considered live when it has one or more future performances. The API
@@ -12690,20 +12689,27 @@ return a success or failure.</p>
 <h3 id="stripe">Stripe</h3>
 
 <p>Stripe is a developer-friendly payment provider that is simple to integrate
-with. The Ingresso API provides integration support for Stripe - you pass us a
-Stripe token and we handle the rest. We support partners collecting payment via
-their own Stripe account or into Ingresso&rsquo;s Stripe account.</p>
+with. The Ingresso API provides a payment processing engine that gives you
+integration support for Stripe and other payment sources. You pass us a Stripe
+token or 3D Secure source generated on your checkout page, and we handle the
+rest. We support partners collecting payment via their own Stripe account or
+into Ingresso&rsquo;s Stripe account.</p>
 
-<p>In either case you need to collect a Stripe token after your customer enters
-their payment details, and pass that to Ingresso after making the purchase
-call.</p>
+<p>In either case, you need integrate against
+<a href="https://stripe.com/docs/stripe-js/reference">Stripe.js</a> and collect a Stripe
+token after your customer enters their payment details.
+The token or source information is passed to Ingresso before making the
+purchase call.</p>
 
 <p>If you want to collect payment via your own Stripe account you will need to get
-agreement to sell tickets on credit, and you will need to provide Ingresso your 
+an agreement with us to sell tickets on credit, and we will invoice you for
+the ticket price less your commission. You will need to provide Ingresso your
 Stripe keys to allow us to process payment on your behalf. </p>
 
 <p>If you wish to use Ingresso&rsquo;s Stripe account we have some requirements 
-to reduce fraud, so please get in touch with us first.</p>
+to reduce fraud including implementing 3D Secure support and passing in the 
+customer&rsquo;s IP address, so please get in touch with us first. We however encourage 
+partners to open their own Stripe account rather than use ours.</p>
 
 <p>In the examples below we will describe how to purchase using the on-credit and
 Stripe options in more detail. We then describe how to handle generic redirects
@@ -13826,13 +13832,17 @@ more information drop us an email at
 <p>In order to purchase with Stripe you need the following steps:</p>
 
 <ol>
-<li>Retrieve a Stripe token (further detail below).</li>
-<li>Call <code class="prettyprint">purchase</code> passing in the Stripe token from step 1.</li>
+<li>Retrieve a Stripe token or payment source (further detail below).</li>
+<li>Save the Stripe token or payment source in our payment processing engine,
+which will return a unique token as a reference</li>
+<li>Call <code class="prettyprint">purchase.v1</code> passing in the payment engine reference from step 2.</li>
 </ol>
 
-<p>Note that you need to retrieve and pass in one Stripe token for each <code class="prettyprint">bundle</code> that you
+<p>Note that you need to retrieve and pass in one payment engine token for each <code class="prettyprint">bundle</code> that you
 reserve. If you only support the purchase of one item at a time, or if you don&rsquo;t
 use the Ingresso API to help manage basketing then you can ignore this.</p>
+
+<h3 id="generating-a-stripe-token">Generating a Stripe token</h3>
 
 <p>Stripe collects payment information on your behalf, and returns a single-use 
 token. The payment information can either be collected on your own checkout page
@@ -13841,12 +13851,95 @@ in a PCI-compliant manner (&ldquo;Elements&rdquo;), with a mobile-friendly form
 
 <p>You will need to provide Stripe with the appropriate publishable key -
 this is returned by Ingresso in the <a href="#reserve">reserve call</a> as
-bundle.debitor.debitor_integration_data.publishable_key.</p>
+bundle.debitor.debitor_integration_data.stripe.publishable_key.</p>
+
+<p>For anti-fraud reasons, we recommend generating a 3D Secure payment source
+as per the <a href="https://stripe.com/docs/sources/three-d-secure">Stripe docs</a>, and
+this is one of the requirements for using the Ingresso Stripe account.</p>
+
+<h3 id="saving-the-stripe-token-in-the-ingresso-payments-system">Saving the Stripe token in the Ingresso Payments system</h3>
+
+<blockquote>
+<p><strong>Example saving payment details</strong></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl https://payments.ingresso.co.uk/api/save-details <span class="se">\</span>
+    -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+    -H <span class="s2">"Authorization: Bearer key_XYZ789123"</span> <span class="se">\</span>
+    -X POST <span class="se">\</span>
+    -d @- <span class="sh">&lt;&lt; EOF
+{
+    "stripe_source": "src_ABCD1234",
+    "stripe_source_amount": 6250,
+    "stripe_meta_email_address": "customer@example.com",
+    "stripe_meta_event_ids": "6IF",
+    "stripe_meta_send_methods": "collect",
+    "stripe_meta_days_to_performance": 37,
+    "stripe_meta_user_id": "demo",
+    "stripe_meta_ip_address": "101.102.103.104"
+}
+EOF
+</span></code></pre><pre class="highlight python tab-python"><code><span class="c"># We suggest Javascript integration on the front end, but you can use</span>
+<span class="c"># a HTTP requests library if you'd prefer.</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">integration_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">cider_api_endpoint</span><span class="p">:</span> <span class="s2">"https://payments.ingresso.co.uk/api"</span><span class="p">,</span>
+    <span class="na">cider_api_token</span><span class="p">:</span> <span class="s2">"key_XYZ789123"</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="c1">// get Stripe token</span>
+<span class="kd">let</span> <span class="nx">stripeToken</span> <span class="o">=</span> <span class="s2">"tok_visa"</span><span class="p">;</span>
+
+<span class="kr">const</span> <span class="nx">http</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+<span class="nx">http</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">'POST'</span><span class="p">,</span> <span class="nx">integration_data</span><span class="p">.</span><span class="nx">cider_api_endpoint</span> <span class="o">+</span> <span class="s1">'/save-details'</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+<span class="nx">http</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s1">'Content-type'</span><span class="p">,</span> <span class="s1">'application/json'</span><span class="p">);</span>
+<span class="nx">http</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s1">'Authorization'</span><span class="p">,</span> <span class="s1">'Bearer '</span> <span class="o">+</span> <span class="nx">integration_data</span><span class="p">.</span><span class="nx">cider_api_key</span><span class="p">);</span>
+<span class="nx">http</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// get token from response</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="c1">// handle error</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+<span class="nx">http</span><span class="p">.</span><span class="nx">onerror</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Unable to connect"</span><span class="p">);</span>
+<span class="nx">http</span><span class="p">.</span><span class="nx">ontimeout</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Connection timed out."</span><span class="p">);</span>
+<span class="nx">http</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span> <span class="na">stripe_token</span><span class="p">:</span> <span class="nx">stripeToken</span> <span class="p">}));</span>
+</code></pre>
+<blockquote>
+<p><strong>Example response</strong></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="o">{</span><span class="s2">"token"</span>: <span class="s2">"cider_XYZ789123"</span><span class="o">}</span>
+</code></pre>
+<p>Once you have the Stripe token, you must save it in Ingresso&rsquo;s payment
+processing Engine (called Cider). The API endpoint you can use is also found in
+the <a href="#reserve">reserve call</a> integration data, as
+<code class="prettyprint">bundle.debitor.debitor_integration_data.cider_api_endpoint</code>. You will need to
+use a unique key per reservation, found at
+<code class="prettyprint">debitor_integration_data.cider_api_token</code>.</p>
+
+<p>The API endpoint will look something like <code class="prettyprint">https://payments.ingresso.co.uk/api</code>
+and you can save the stripe token or source generated above by making a HTTP
+<code class="prettyprint">POST</code> request to this endpoint + <code class="prettyprint">/save-details</code>, and authenticating with the
+key provided in the integration data.</p>
+
+<p>In addition to saving stripe tokens and payment sources, you can also save
+metadata about the purchase to this endpoint, which will be saved in Stripe
+against the purchase record. This is very important for anti-fraud rules when
+using the Ingresso Stripe account, and may be useful for your own account too.</p>
+
+<p>You must pass in the actual customer&rsquo;s <code class="prettyprint">remote_ip</code> if you are taking payment via 
+Ingresso&rsquo;s Stripe account - we use this for fraud checks. It is also useful to
+pass in the <code class="prettyprint">remote_site</code> so we know which website the customer purchased on.</p>
+
+<p>One primary advantage of saving the details in this way is that it will not
+appear in Ingresso&rsquo;s logs or database, and is only used as metadata in Stripe,
+so it reduces the spread of personally identifiable information.</p>
+
+<h3 id="making-the-purchase-call">Making the purchase call</h3>
 
 <p>Retrieving the Stripe token is the first half of the payment process - further
 server-side code is required to complete the second half. You don&rsquo;t need to 
-worry about this as Ingresso&rsquo;s Stripe integration takes care of it. Once you 
-have provided the Stripe token we will handle the following steps:</p>
+worry about this as Ingresso&rsquo;s payment processor takes care of it. Once you 
+have saved the Stripe token and retrieved the cider token, we will handle the
+following steps:</p>
 
 <ul>
 <li><p>Authorise the payment with Stripe.</p></li>
@@ -13873,13 +13966,15 @@ step fails we automatically refund the Stripe payment.</em></p></li>
     -d <span class="s2">"country_code=uk"</span> <span class="se">\</span>
     -d <span class="s2">"phone=0203 137 7420"</span> <span class="se">\</span>
     -d <span class="s2">"email_address=tester@gmail.com"</span> <span class="se">\</span>
-    -d <span class="s2">"ext_test0_callback/stripeToken=tok_1A5rfVHIklODsaxBzQYBklUA"</span> <span class="se">\</span>
+    -d <span class="s2">"ext_test0_callback/cider_token=cider_XYZ789123"</span> <span class="se">\</span>
     -d <span class="s2">"send_confirmation_email=yes"</span> <span class="se">\</span>
+    -d <span class="s2">"remote_ip=101.102.103.104"</span> <span class="se">\</span>
+    -d <span class="s2">"remote_site=www.myticketshop.com"</span> <span class="se">\</span>
     --compressed <span class="se">\</span>
     -X POST
 </code></pre><pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">pyticketswitch</span> <span class="kn">import</span> <span class="n">Client</span>
 <span class="kn">from</span> <span class="nn">pyticketswitch.customer</span> <span class="kn">import</span> <span class="n">Customer</span>
-<span class="kn">from</span> <span class="nn">pyticketswitch.payment_methods</span> <span class="kn">import</span> <span class="n">StripeDetails</span>
+<span class="kn">from</span> <span class="nn">pyticketswitch.payment_methods</span> <span class="kn">import</span> <span class="n">CiderDetails</span>
 
 
 <span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="s">'demo-stripe'</span><span class="p">,</span> <span class="s">'demopass'</span><span class="p">)</span>
@@ -13897,14 +13992,15 @@ step fails we automatically refund the Stripe payment.</em></p></li>
     <span class="n">user_can_use_customer_data</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">stripe_details</span> <span class="o">=</span> <span class="n">StripeDetails</span><span class="p">({</span>
-    <span class="s">'ext_test0'</span><span class="p">:</span> <span class="s">'tok_1AFPJeHIklODsaxBJntq4YAm'</span><span class="p">,</span>
-<span class="p">})</span>
+<span class="n">cider_details</span> <span class="o">=</span> <span class="n">CiderDetails</span><span class="p">(</span>
+    <span class="p">{</span><span class="s">'cider_token'</span><span class="p">:</span> <span class="s">'cider_XYZ789123'</span><span class="p">},</span>
+    <span class="p">[</span><span class="s">'ext_test0'</span><span class="p">],</span>
+<span class="p">)</span>
 
 <span class="n">status</span><span class="p">,</span> <span class="n">callout</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">make_purchase</span><span class="p">(</span>
     <span class="s">'7150d25f-301b-11e7-bede-0025903268a0'</span><span class="p">,</span>
     <span class="n">customer</span><span class="p">,</span>
-    <span class="n">payment_method</span><span class="o">=</span><span class="n">stripe_details</span><span class="p">,</span>
+    <span class="n">payment_method</span><span class="o">=</span><span class="n">cider_details</span><span class="p">,</span>
     <span class="n">send_confirmation_email</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre>
@@ -13913,7 +14009,8 @@ step fails we automatically refund the Stripe payment.</em></p></li>
 <ol>
 <li>Call <a href="#reserve">reserve</a></li>
 <li>Enter test card details into the <a href="https://stripe.com/docs/elements">Stripe Elements example form</a> and copy the Stripe token returned.</li>
-<li>Call purchase, replacing the transaction_uuid and ext_test0_callback/stripeToken with the values from the 2 steps above.</li>
+<li>Save the Stripe token in the Ingresso Payments processing service (Cider)</li>
+<li>Call purchase, replacing the transaction_uuid and ext_test0_callback/cider_token with the values from the 3 steps above.</li>
 </ol>
 
 <aside class="notice">If you are using our Postman examples, the relevant calls are &ldquo;reserve - best available - stripe user&rdquo; and &ldquo;purchase - stripe user&rdquo;.</aside>
@@ -13929,8 +14026,16 @@ following parameter should be specified:</p>
 </tr>
 </thead><tbody>
 <tr>
-<td><code class="prettyprint">X_callback/stripeToken</code></td>
-<td>The single-use token retrieved from Stripe. You should replace <code class="prettyprint">X</code> with the <code class="prettyprint">source_code</code> returned by <code class="prettyprint">reserve</code>. So for <code class="prettyprint">source_code=ext_test0</code> the parameter name used is <code class="prettyprint">ext_test0_callback/stripeToken</code>. If you support basketing and your customer is attempting to purchase items across multiple bundles, you should provide one stripe token per bundle (each bundle has a unique <code class="prettyprint">source_code</code>).</td>
+<td><code class="prettyprint">remote_ip</code></td>
+<td>The end customer&rsquo;s IP address.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">remote_site</code></td>
+<td>The website the end customer is purchasing from, not including <code class="prettyprint">https://</code> or <code class="prettyprint">http://</code>.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">X_callback/cider_token</code></td>
+<td>The single-use token retrieved from Cider after saving the stripe token or payment source being used. You should replace <code class="prettyprint">X</code> with the <code class="prettyprint">source_code</code> returned by <code class="prettyprint">reserve</code>. So for <code class="prettyprint">source_code=ext_test0</code> the parameter name used is <code class="prettyprint">ext_test0_callback/stripeToken</code>. If you support basketing and your customer is attempting to purchase items across multiple bundles, you should provide the same Cider token for each bundle (each bundle has a unique <code class="prettyprint">source_code</code>).</td>
 </tr>
 </tbody></table>
 
@@ -14266,12 +14371,19 @@ following parameter should be specified:</p>
                 <span class="n">total</span><span class="o">=</span><span class="mf">49.5</span><span class="p">,</span>
                 <span class="n">currency_code</span><span class="o">=</span><span class="s">'gbp'</span><span class="p">,</span>
                 <span class="n">debitor</span><span class="o">=</span><span class="n">Debitor</span><span class="p">(</span>
-                    <span class="nb">type</span><span class="o">=</span><span class="s">'stripe'</span><span class="p">,</span>
-                    <span class="n">name</span><span class="o">=</span><span class="s">'stripe'</span><span class="p">,</span>
-                    <span class="n">description</span><span class="o">=</span><span class="s">'Stripe Debitor'</span><span class="p">,</span>
+                    <span class="nb">type</span><span class="o">=</span><span class="s">'cider'</span><span class="p">,</span>
+                    <span class="n">name</span><span class="o">=</span><span class="s">'cider'</span><span class="p">,</span>
+                    <span class="n">description</span><span class="o">=</span><span class="s">'Cider'</span><span class="p">,</span>
                     <span class="n">integration_data</span><span class="o">=</span><span class="p">{</span>
-                        <span class="s">'publishable_key'</span><span class="p">:</span> <span class="s">'pk_test_b7N9DOwbo4B9t6EqCf9jFzfa'</span><span class="p">,</span>
-                        <span class="s">'statement_descriptor'</span><span class="p">:</span> <span class="s">'Test Stripe Account'</span>
+                        <span class="s">'cider_api_token'</span><span class="p">:</span> <span class="s">'key_XYZ789123'</span><span class="p">,</span>
+                        <span class="s">'cider_api_endpoint'</span><span class="p">:</span> <span class="s">'https://payments.ingresso.co.uk/api'</span><span class="p">,</span>
+                        <span class="s">'cider_js'</span><span class="p">:</span> <span class="s">'https://payments.ingresso.co.uk/static/js/cider/cider.js'</span><span class="p">,</span>
+                        <span class="s">'merchant_group_country_code'</span><span class="p">:</span> <span class="s">'gb'</span><span class="p">,</span>
+                        <span class="s">'stripe'</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s">'publishable_key'</span><span class="p">:</span> <span class="s">'pk_test_b7N9DOwbo4B9t6EqCf9jFzfa'</span><span class="p">,</span>
+                            <span class="s">'payment_sources_enabled'</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+                            <span class="s">'required'</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+                        <span class="p">},</span>
                     <span class="p">},</span>
                 <span class="p">),</span>
             <span class="p">)</span>
@@ -14327,8 +14439,8 @@ following parameter should be specified:</p>
 
 <p>This section describes how to handle generic redirects which are needed for
 other supported payment providers such as Global Collect. The vast majority of
-partners are either on-credit or Stripe, and so will not  need to read this
-section.</p>
+partners are either on-credit or Stripe, and so will use the payment methods
+mentioned above, but this supporting this method is recommended where possible.</p>
 
 <p>Redirects are required when:</p>
 
@@ -15887,6 +15999,7 @@ This can be used, for example, to regularly populate your own database of Ingres
           <div class="lang-selector">
                 <a href="#" data-language-name="shell">cURL</a>
                 <a href="#" data-language-name="python">Python</a>
+                <a href="#" data-language-name="javascript">Javascript</a>
           </div>
       </div>
     </div>
