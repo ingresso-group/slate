@@ -36,16 +36,21 @@ return a success or failure.
 ### Stripe 
 
 Stripe is a developer-friendly payment provider that is simple to integrate
-with. The Ingresso API provides integration support for Stripe - you pass us a
-Stripe token and we handle the rest. We support partners collecting payment via
-their own Stripe account or into Ingresso's Stripe account.
+with. The Ingresso API provides a payment processing engine that gives you
+integration support for Stripe and other payment sources. You pass us a Stripe
+token or 3D Secure source generated on your checkout page, and we handle the
+rest. We support partners collecting payment via their own Stripe account or
+into Ingresso's Stripe account.
 
-In either case you need to collect a Stripe token after your customer enters
-their payment details, and pass that to Ingresso after making the purchase
-call.
+In either case, you need integrate against
+[Stripe.js](https://stripe.com/docs/stripe-js/reference) and collect a Stripe
+token after your customer enters their payment details.
+The token or source information is passed to Ingresso before making the
+purchase call.
 
 If you want to collect payment via your own Stripe account you will need to get
-agreement to sell tickets on credit, and you will need to provide Ingresso your 
+an agreement with us to sell tickets on credit, and we will invoice you for
+the ticket price less your commission. You will need to provide Ingresso your
 Stripe keys to allow us to process payment on your behalf. 
 
 If you wish to use Ingresso's Stripe account we have some requirements 
@@ -757,13 +762,16 @@ Attribute | Description
 
 In order to purchase with Stripe you need the following steps:
 
-1. Retrieve a Stripe token (further detail below).
-2. Call `purchase` passing in the Stripe token from step 1.
+1. Retrieve a Stripe token or payment source (further detail below).
+2. Save the Stripe token or payment source in our payment processing engine,
+   which will return a unique token as a reference
+3. Call `purchase.v1` passing in the payment engine reference from step 2.
 
-Note that you need to retrieve and pass in one Stripe token for each `bundle` that you
+Note that you need to retrieve and pass in one payment engine token for each `bundle` that you
 reserve. If you only support the purchase of one item at a time, or if you don't
 use the Ingresso API to help manage basketing then you can ignore this.
 
+#### Generating a Stripe token
 Stripe collects payment information on your behalf, and returns a single-use 
 token. The payment information can either be collected on your own checkout page
 in a PCI-compliant manner ("Elements"), with a mobile-friendly form 
@@ -771,16 +779,69 @@ in a PCI-compliant manner ("Elements"), with a mobile-friendly form
 
 You will need to provide Stripe with the appropriate publishable key -
 this is returned by Ingresso in the [reserve call](#reserve) as
-bundle.debitor.debitor_integration_data.publishable_key.
+bundle.debitor.debitor_integration_data.stripe.publishable_key.
+
+For anti-fraud reasons, we recommend generating a 3D Secure payment source
+as per the [Stripe docs](https://stripe.com/docs/sources/three-d-secure), and
+this is one of the requirements for using the Ingresso Stripe account.
+
+#### Saving the Stripe token in the Ingresso Payments system
+Once you have the Stripe token, you must save it in Ingresso's payment
+processing Engine (called Cider). The API endpoint you can use is also found in
+the [reserve call](#reserve) integration data, as
+`bundle.debitor.debitor_integration_data.cider_api_endpoint`. You will need to
+use a unique key per reservation, found at
+`debitor_integration_data.cider_api_token`.
+
+The API endpoint will look something like `https://payments.ingresso.co.uk/api`
+and you can save the stripe token or source generated above by making a HTTP
+`POST` request to this endpoint + `/save-details`, and authenticating with the
+key provided in the integration data.
+
+In addition to saving stripe tokens and payment sources, you can also save
+metadata about the purchase to this endpoint, which will be saved in Stripe
+against the purchase record. This is very important for anti-fraud rules when
+using the Ingresso Stripe account, and may be useful for your own account too.
 
 You must pass in the actual customer's `remote_ip` if you are taking payment via 
 Ingresso's Stripe account - we use this for fraud checks. It is also useful to
 pass in the `remote_site` so we know which website the customer purchased on.
 
+> **Example saving payment details**
+```shell
+curl https://payments.ingresso.co.uk/api/save-details \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer key_XYZ789123" \
+    -X POST \
+    -d @- << EOF
+{
+    "stripe_source": "src_ABCD1234",
+    "stripe_source_amount": 6250,
+    "stripe_meta_email_address": "customer@example.com",
+    "stripe_meta_event_ids": "6IF",
+    "stripe_meta_send_methods": "collect",
+    "stripe_meta_days_to_performance": 37,
+    "stripe_meta_user_id": "demo",
+    "stripe_meta_ip_address": "101.102.103.104"
+}
+EOF
+```
+
+> **Example response**
+```shell
+{"token": "cider_XYZ789123"}
+```
+
+One primary advantage of saving the details in this way is that it will not
+appear in Ingresso's logs or database, and is only used as metadata in Stripe,
+so it reduces the spread of personally identifiable information.
+
+#### Making the purchase call
 Retrieving the Stripe token is the first half of the payment process - further
 server-side code is required to complete the second half. You don't need to 
-worry about this as Ingresso's Stripe integration takes care of it. Once you 
-have provided the Stripe token we will handle the following steps:
+worry about this as Ingresso's payment processor takes care of it. Once you 
+have saved the Stripe token and retrieved the cider token, we will handle the
+following steps:
 
 * Authorise the payment with Stripe.
 
@@ -808,7 +869,7 @@ curl https://demo.ticketswitch.com/f13/purchase.v1 \
     -d "country_code=uk" \
     -d "phone=0203 137 7420" \
     -d "email_address=tester@gmail.com" \
-    -d "ext_test0_callback/stripeToken=tok_1A5rfVHIklODsaxBzQYBklUA" \
+    -d "ext_test0_callback/cider_token=cider_XYZ789123" \
     -d "send_confirmation_email=yes" \
     -d "remote_ip=101.102.103.104" \
     -d "remote_site=www.myticketshop.com" \
@@ -819,7 +880,7 @@ curl https://demo.ticketswitch.com/f13/purchase.v1 \
 ```python
 from pyticketswitch import Client
 from pyticketswitch.customer import Customer
-from pyticketswitch.payment_methods import StripeDetails
+from pyticketswitch.payment_methods import CiderDetails
 
 
 client = Client('demo-stripe', 'demopass')
@@ -837,14 +898,15 @@ customer = Customer(
     user_can_use_customer_data=True,
 )
 
-stripe_details = StripeDetails({
-    'ext_test0': 'tok_1AFPJeHIklODsaxBJntq4YAm',
-})
+cider_details = CiderDetails(
+    {'cider_token': 'cider_XYZ789123'},
+    ['ext_test0'],
+)
 
 status, callout, meta = client.make_purchase(
     '7150d25f-301b-11e7-bede-0025903268a0',
     customer,
-    payment_method=stripe_details,
+    payment_method=cider_details,
     send_confirmation_email=True,
 )
 ```
@@ -854,7 +916,8 @@ To complete a test Stripe purchase:
 
 1. Call [reserve](#reserve)
 2. Enter test card details into the [Stripe Elements example form](https://stripe.com/docs/elements) and copy the Stripe token returned.
-3. Call purchase, replacing the transaction_uuid and ext_test0_callback/stripeToken with the values from the 2 steps above.
+3. Save the Stripe token in the Ingresso Payments processing service (Cider)
+4. Call purchase, replacing the transaction_uuid and ext_test0_callback/cider_token with the values from the 3 steps above.
 
 <aside class="notice">If you are using our Postman examples, the relevant calls are "reserve - best available - stripe user" and "purchase - stripe user".</aside>
 
@@ -864,9 +927,9 @@ following parameter should be specified:
 
 Parameter | Description
 --------- | -----------
-`X_callback/stripeToken` | The single-use token retrieved from Stripe. You should replace `X` with the `source_code` returned by `reserve`. So for `source_code=ext_test0` the parameter name used is `ext_test0_callback/stripeToken`. If you support basketing and your customer is attempting to purchase items across multiple bundles, you should provide one stripe token per bundle (each bundle has a unique `source_code`).
 `remote_ip` | The end customer's IP address.
 `remote_site` | The website the end customer is purchasing from, not including `https://` or `http://`.
+`X_callback/cider_token` | The single-use token retrieved from Cider after saving the stripe token or payment source being used. You should replace `X` with the `source_code` returned by `reserve`. So for `source_code=ext_test0` the parameter name used is `ext_test0_callback/stripeToken`. If you support basketing and your customer is attempting to purchase items across multiple bundles, you should provide the same Cider token for each bundle (each bundle has a unique `source_code`).
 
 
 ### Purchase response
@@ -1203,12 +1266,19 @@ Status(
                 total=49.5,
                 currency_code='gbp',
                 debitor=Debitor(
-                    type='stripe',
-                    name='stripe',
-                    description='Stripe Debitor',
+                    type='cider',
+                    name='cider',
+                    description='Cider',
                     integration_data={
-                        'publishable_key': 'pk_test_b7N9DOwbo4B9t6EqCf9jFzfa',
-                        'statement_descriptor': 'Test Stripe Account'
+                        'cider_api_token': 'key_XYZ789123',
+                        'cider_api_endpoint': 'https://payments.ingresso.co.uk/api',
+                        'cider_js': 'https://payments.ingresso.co.uk/static/js/cider/cider.js',
+                        'merchant_group_country_code': 'gb',
+                        'stripe': {
+                            'publishable_key': 'pk_test_b7N9DOwbo4B9t6EqCf9jFzfa',
+                            'payment_sources_enabled': true,
+                            'required': true,
+                        },
                     },
                 ),
             )
@@ -1267,8 +1337,8 @@ The response is identical to the `purchase` response described in [purchasing on
 
 This section describes how to handle generic redirects which are needed for
 other supported payment providers such as Global Collect. The vast majority of
-partners are either on-credit or Stripe, and so will not  need to read this
-section.
+partners are either on-credit or Stripe, and so will use the payment methods
+mentioned above, but this supporting this method is recommended where possible.
 
 Redirects are required when:
 
