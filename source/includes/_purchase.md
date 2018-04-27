@@ -771,7 +771,7 @@ Note that you need to retrieve and pass in one payment engine token for each `bu
 reserve. If you only support the purchase of one item at a time, or if you don't
 use the Ingresso API to help manage basketing then you can ignore this.
 
-#### Generating a Stripe token
+### Generating a Stripe token
 Stripe collects payment information on your behalf, and returns a single-use 
 token. The payment information can either be collected on your own checkout page
 in a PCI-compliant manner ("Elements"), with a mobile-friendly form 
@@ -785,7 +785,65 @@ For anti-fraud reasons, we recommend generating a 3D Secure payment source
 as per the [Stripe docs](https://stripe.com/docs/sources/three-d-secure), and
 this is one of the requirements for using the Ingresso Stripe account.
 
-#### Saving the Stripe token in the Ingresso Payments system
+### Saving the Stripe token in the Ingresso Payments system
+
+> **Example saving payment details**
+
+```shell
+curl https://payments.ingresso.co.uk/api/save-details \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer key_XYZ789123" \
+    -X POST \
+    -d @- << EOF
+{
+    "stripe_source": "src_ABCD1234",
+    "stripe_source_amount": 6250,
+    "stripe_meta_email_address": "customer@example.com",
+    "stripe_meta_event_ids": "6IF",
+    "stripe_meta_send_methods": "collect",
+    "stripe_meta_days_to_performance": 37,
+    "stripe_meta_user_id": "demo",
+    "stripe_meta_ip_address": "101.102.103.104"
+}
+EOF
+```
+
+```python
+# We suggest Javascript integration on the front end, but you can use
+# a HTTP requests library if you'd prefer.
+```
+
+```javascript
+const integration_data = {
+    cider_api_endpoint: "https://payments.ingresso.co.uk/api",
+    cider_api_token: "key_XYZ789123",
+};
+
+// get Stripe token
+let stripeToken = "tok_visa";
+
+const http = new XMLHttpRequest();
+http.open('POST', integration_data.cider_api_endpoint + '/save-details', true);
+http.setRequestHeader('Content-type', 'application/json');
+http.setRequestHeader('Authorization', 'Bearer ' + integration_data.cider_api_key);
+http.onload = () => {
+    if (http.status === 200) {
+        // get token from response
+    } else {
+        // handle error
+    }
+};
+http.onerror = () => console.log("Unable to connect");
+http.ontimeout = () => console.log("Connection timed out.");
+http.send(JSON.stringify({ stripe_token: stripeToken }));
+```
+
+> **Example response**
+
+```shell
+{"token": "cider_XYZ789123"}
+```
+
 Once you have the Stripe token, you must save it in Ingresso's payment
 processing Engine (called Cider). The API endpoint you can use is also found in
 the [reserve call](#reserve) integration data, as
@@ -807,36 +865,11 @@ You must pass in the actual customer's `remote_ip` if you are taking payment via
 Ingresso's Stripe account - we use this for fraud checks. It is also useful to
 pass in the `remote_site` so we know which website the customer purchased on.
 
-> **Example saving payment details**
-```shell
-curl https://payments.ingresso.co.uk/api/save-details \
-    -H "Content-Type: application/json" \
-    -H "Authorization: Bearer key_XYZ789123" \
-    -X POST \
-    -d @- << EOF
-{
-    "stripe_source": "src_ABCD1234",
-    "stripe_source_amount": 6250,
-    "stripe_meta_email_address": "customer@example.com",
-    "stripe_meta_event_ids": "6IF",
-    "stripe_meta_send_methods": "collect",
-    "stripe_meta_days_to_performance": 37,
-    "stripe_meta_user_id": "demo",
-    "stripe_meta_ip_address": "101.102.103.104"
-}
-EOF
-```
-
-> **Example response**
-```shell
-{"token": "cider_XYZ789123"}
-```
-
 One primary advantage of saving the details in this way is that it will not
 appear in Ingresso's logs or database, and is only used as metadata in Stripe,
 so it reduces the spread of personally identifiable information.
 
-#### Making the purchase call
+### Making the purchase call
 Retrieving the Stripe token is the first half of the payment process - further
 server-side code is required to complete the second half. You don't need to 
 worry about this as Ingresso's payment processor takes care of it. Once you 
