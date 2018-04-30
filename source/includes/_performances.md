@@ -397,7 +397,7 @@ Attribute | Description
 
 Attribute | Description
 --------- | -----------
-`cached_max_seats` | This is the maximum number of contiguous seats that can be booked for this performance, based on Ingresso's cached data. Note that if the event supports seat selection you are not limited by the number of contiguous seats, so this value should be used in the context of best available only. (TODO is this optional?)
+`cached_max_seats` | This is the maximum number of contiguous seats that can be booked for this performance, based on Ingresso's cached data. Note that if the event supports seat selection you are not limited by the number of contiguous seats, so this value should be used in the context of best available only.
 `date_desc` | human readable date description
 `event_id` | Unique identifier for the event that this performance is an instance of
 `has_pool_seats` | Whether this performance has seats available from the general pool of tickets. This is ignored by most partners.
