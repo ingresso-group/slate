@@ -173,18 +173,18 @@ website - for example [Ticketmaster Theatre](https://theatre.ticketmaster.co.uk)
 Ingresso. It is possible to use the API in conjunction with a white label
 website as a partial integration. Some examples of partial integrations:
 
-    * Maintain a listing of events on your own site, and use Ingresso's white label
+    a) Maintain a listing of events on your own site, and use Ingresso's white label
 website for booking the tickets. In this case the Ingresso API can be used to 
 [list events](#events-list).
 
-    * Ingresso have invested in a high-conversion booking app (where the customer
+    b) Ingresso have invested in a high-conversion booking app (where the customer
 selects their performance and seats). This page is often where most development
 time is spent. It is possible to link to our booking page and we will
 automatically redirect back to your checkout page once the customer has
 successfully reserved their seats. You can link to our full booking page or just
-embed our seat selection widget within your site.
+use Feather to add seat selection to your site.
 
-    * Use the Ingresso API to display events, performances and availability, then
+    c) Use the Ingresso API to display events, performances and availability, then
 send your customer to our white label website for checkout. It is possible for
 Ingresso to then redirect the customer back to your confirmation page if the
 purchase is successful.
