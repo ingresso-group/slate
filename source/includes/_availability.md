@@ -13,6 +13,8 @@ at the time the request was made. There is therefore no guarantee that the
 tickets will still be available to purchase at some future time. Tickets are
 only guaranteed to be held after you [reserve tickets](#reserve).
 
+<aside class="notice">Ingresso offer an interactive seat map widget called [Feather](https://github.com/ingresso-group/feather-demo) that can be embedded in your website, saving you development effort.</aside>
+
 We have a single availability resource that will return best available seating
 by default. This resource is described first and is important to read. We then describe
 [optional parameters](#optional-parameters) that can be passed to request 

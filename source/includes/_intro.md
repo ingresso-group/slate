@@ -148,14 +148,26 @@ and purchase multiple items at once by adding them to a [trolley](#trolley).*
 
 ## Types of API integration
 
-The Ingresso API supports a variety of different integration types. The most
-common is a **full integration** - this is where our partner uses all
+The Ingresso API supports a variety of different integration types. 
+
+1. **Full integration**: this is where our partner uses all
 functionality of the Ingresso API to retrieve listings of events and
 performances (often in advance to populate their own database) then to request
 availability and reserve and purchase tickets in real-time.
 
-Ingresso also offer partners an individually branded "white label" ticketing
-website - for example [Disney Tickets](https://www.disneytickets.co.uk) and
+2. **Feather**: Ingresso offer a seat selection widget product called Feather that
+can be embedded on your website. It is used in conjunction with the Ingresso API
+to reduce the development needed to offer seat selection to your
+customers. You use the API to retrieve performances so you can present a calendar
+to customers. When a performance is selected, you use Feather to display availability
+for that performance, and to reserve the customer's chosen seats. Feather will handle 
+complexities like preventing single seats from being left, and suggesting alternate 
+seats when the desired seats are no longer available. If the reserve is successful 
+you will return a transaction reference that you can then purchase via the API.
+View the [Feather documentation and demo](https://github.com/ingresso-group/feather-demo).
+
+3. Ingresso also offer partners an individually branded "white label" ticketing
+website - for example [Ticketmaster Theatre](https://theatre.ticketmaster.co.uk) and
 [From The Box Office](https://www.fromtheboxoffice.com) are fully developed by
 Ingresso. It is possible to use the API in conjunction with a white label
 website as a **partial integration**. Some examples of partial integrations:
