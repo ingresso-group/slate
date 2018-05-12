@@ -166,24 +166,25 @@ seats when the desired seats are no longer available. If the reserve is successf
 you will return a transaction reference that you can then purchase via the API.
 View the [Feather documentation and demo](https://github.com/ingresso-group/feather-demo).
 
-3. Ingresso also offer partners an individually branded "white label" ticketing
+3. **Partial Integration**: Ingresso also offer partners an individually 
+branded "white label" ticketing
 website - for example [Ticketmaster Theatre](https://theatre.ticketmaster.co.uk) and
 [From The Box Office](https://www.fromtheboxoffice.com) are fully developed by
 Ingresso. It is possible to use the API in conjunction with a white label
-website as a **partial integration**. Some examples of partial integrations:
+website as a partial integration. Some examples of partial integrations:
 
-* Maintain a listing of events on your own site, and use Ingresso's white label
+    * Maintain a listing of events on your own site, and use Ingresso's white label
 website for booking the tickets. In this case the Ingresso API can be used to 
 [list events](#events-list).
 
-* Ingresso have invested in a high-conversion booking app (where the customer
+    * Ingresso have invested in a high-conversion booking app (where the customer
 selects their performance and seats). This page is often where most development
 time is spent. It is possible to link to our booking page and we will
 automatically redirect back to your checkout page once the customer has
 successfully reserved their seats. You can link to our full booking page or just
 embed our seat selection widget within your site.
 
-* Use the Ingresso API to display events, performances and availability, then
+    * Use the Ingresso API to display events, performances and availability, then
 send your customer to our white label website for checkout. It is possible for
 Ingresso to then redirect the customer back to your confirmation page if the
 purchase is successful.

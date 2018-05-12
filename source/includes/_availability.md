@@ -13,13 +13,16 @@ at the time the request was made. There is therefore no guarantee that the
 tickets will still be available to purchase at some future time. Tickets are
 only guaranteed to be held after you [reserve tickets](#reserve).
 
-<aside class="notice">Ingresso offer an interactive seat map widget called [Feather](https://github.com/ingresso-group/feather-demo) that can be embedded in your website, saving you development effort.</aside>
-
 We have a single availability resource that will return best available seating
 by default. This resource is described first and is important to read. We then describe
 [optional parameters](#optional-parameters) that can be passed to request 
 [individual seats](#individual-seats), [example seats](#example-seats), 
 [commission](#commission), and [discounts](#add-discounts).
+
+**Note**: Ingresso offer an interactive seat map widget called 
+[Feather](https://github.com/ingresso-group/feather-demo) that can be embedded in your 
+website, saving you development effort. This is an alternative to requesting availability
+via the API and displaying it yourself.
 
 You should only send availability requests as a direct result of customers requesting 
 availability. You should not automatically request availability to populate caches. 
@@ -435,7 +438,10 @@ is seated, and the supplier system supports seat selection, then we will return
 seat blocks containing seats. You can check for the presence of the seat blocks
 to determine whether you can offer seat selection to your customer.
 
-<aside class="notice">We have some options to save development effort when implementing seat selection. Please contact us for more detail api@ingresso.co.uk</aside>
+**Note**: Ingresso offer an interactive seat map widget called 
+[Feather](https://github.com/ingresso-group/feather-demo) that can be embedded in your 
+website, saving you development effort. This is an alternative to requesting individual
+seats via the API and displaying them to customers yourself.
 
 ### Request
 
