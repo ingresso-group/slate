@@ -82,10 +82,10 @@ performance, and are described in more detail in the
 
 Parameter | Description
 --------- | -----------
-`req_avail_details` | Returns [availability details](#availability-detail) - a cached list of unique ticket types and price bands available for this performance. **This parameter is not commonly used.**
+`req_avail_details` | Returns [availability details](#availability-detail) - a cached list of unique ticket types and price bands available for this performance. **This data should not be considered as an accurate representation of the current state of availability for a performance.**
 `req_cost_range` | Returns [cost ranges](#cost-ranges) - a from price and offer detail for each event. *Most partners include this parameter.*
 `req_cost_range_best_value_offer` | Returns the offer with the highest percentage saving. *This is the most commonly used offer cost range.*
-`req_cost_range_details` | Returns a list of unique ticket types and price bands and their cost ranges across all performances.
+`req_cost_range_details` | Returns a list of unique ticket types and price bands and their cost ranges across all performances. 
 `req_cost_range_max_saving_offer` | Returns the offer with the highest absolute saving.
 `req_cost_range_min_cost_offer` | Returns the offer with the lowest cost.
 `req_cost_range_top_price_offer` | Returns the offer with the highest cost. This is the least used offer cost range.
@@ -427,6 +427,9 @@ with the `req_avail_details` parameter - this will return the list of available
 price bands from Ingresso's cached data. Note that the cached data can be out of
 date or not present, and doesn't return seating data, so we do not recommend
 this in most cases.
+
+**This data should not be considered as an accurate representation of the
+current state of availability for a performance.**
 
 ### Request
 
@@ -836,6 +839,8 @@ should not attempt to make multiple availability requests in order to keep this
 data up to date - please contact us instead to discuss options
 [api@ingresso.co.uk](mailto:api@ingresso.co.uk).
 
+**This data should not be considered as an accurate representation of the current state availability for a performance.**
+
 ### Request
 
 > **Example request**
@@ -858,7 +863,7 @@ performances, meta = client.get_performances(['6L9-M2R'], availability=True)
 
 Parameter | Description
 --------- | -----------
-`req_avail_details` | Returns a list of unique ticket types and price bands that are available for this performance. **This parameter is not commonly used.**
+`req_avail_details` | Returns a list of unique ticket types and price bands that are available for this performance. **This data should not be considered as an accurate representation of the current state of availability for a performance.**
 
 ### Response
 

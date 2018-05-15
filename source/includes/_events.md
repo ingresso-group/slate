@@ -81,8 +81,8 @@ are described in more detail in the
 
 Parameter | Description
 --------- | -----------
-`req_avail_details` | Returns [availability details](#availability-details) - a cached list of unique ticket types and price bands available for this event across all performances. **This parameter is not commonly used.**
-`req_avail_details_with_perfs` | This will add the list of available performance dates to each avail detail object. *Only valid if used alongside req_avail_details*.
+`req_avail_details` | Returns [availability details](#availability-details) - a cached list of unique ticket types and price bands available for this event across all performances. **This data should not be considered as an accurate representation of the current state of availability for an event or performance.**
+`req_avail_details_with_perfs` | This will add the list of available performance dates to each avail detail object. *Only valid if used alongside req_avail_details*. **This data should not be considered as an accurate representation of the current state of availability for an event or performance.**
 `req_cost_range` | Returns [cost ranges](#cost-range) - a from price and offer detail for each event. *Most partners include this parameter.*
 `req_cost_range_best_value_offer` | Returns the offer with the highest percentage saving. *This is the most commonly used offer cost range.*
 `req_cost_range_details` | Returns a list of unique ticket types and price bands and their cost ranges across all performances. **This parameter is not commonly used.**
@@ -390,8 +390,8 @@ These parameters can be passed in to request additional data for each event, and
 
 Parameter | Description
 --------- | -----------
-`req_avail_details` | Returns [availability details](#availability-details) - a cached list of unique ticket types and price bands available for this event across all performances. **This parameter is not commonly used.**
-`req_avail_details_with_perfs` | This will add the list of available performance dates to each avail detail object. *Only valid if used alongside req_avail_details*.
+`req_avail_details` | Returns [availability details](#availability-details) - a cached list of unique ticket types and price bands available for this event across all performances. **This data should not be considered as an accurate representation of the current state of availability for an event or performance.**
+`req_avail_details_with_perfs` | This will add the list of available performance dates to each avail detail object. *Only valid if used alongside req_avail_details*. **This data should not be considered as an accurate representation of the current state of availability for an event or performance.**
 `req_cost_range` | Returns [cost ranges](#cost-range) - a from price and offer detail for each event. *Most partners include this parameter.*
 `req_cost_range_best_value_offer` | Returns the offer with the highest percentage saving. *This is the most commonly used offer cost range.*
 `req_cost_range_details` | Returns a list of unique ticket types and price bands and their cost ranges across all performances. **This parameter is not commonly used.**
@@ -2691,6 +2691,10 @@ end-users or by scheduled processes that Ingresso use to update this data. You
 should not attempt to make multiple availability requests in order to keep this
 data up to date - please contact us instead to discuss options
 [api@ingresso.co.uk](mailto:api@ingresso.co.uk).
+
+**This data should not be considered as an accurate representation of the
+current state availability for an event or performance.**
+
 
 ### Request
 
