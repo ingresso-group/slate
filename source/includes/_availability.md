@@ -26,6 +26,11 @@ of use case. If this doesn't fit what you are trying to do contact us api@ingres
 
 <aside class="notice">We may disable API accounts making excessive availability calls.</aside>
 
+**Important**: Ingresso offer an interactive seat map widget called 
+[Feather](https://github.com/ingresso-group/feather-demo) that can be embedded in your 
+website, saving you development effort. This is an alternative to requesting availability
+via the API and displaying it yourself.
+
 
 ## Availability
 
@@ -433,7 +438,10 @@ is seated, and the supplier system supports seat selection, then we will return
 seat blocks containing seats. You can check for the presence of the seat blocks
 to determine whether you can offer seat selection to your customer.
 
-<aside class="notice">We have some options to save development effort when implementing seat selection. Please contact us for more detail api@ingresso.co.uk</aside>
+**Note**: Ingresso offer an interactive seat map widget called 
+[Feather](https://github.com/ingresso-group/feather-demo) that can be embedded in your 
+website, saving you development effort. This is an alternative to requesting individual
+seats via the API and displaying them to customers yourself.
 
 ### Request
 

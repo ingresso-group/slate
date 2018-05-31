@@ -148,30 +148,43 @@ and purchase multiple items at once by adding them to a [trolley](#trolley).*
 
 ## Types of API integration
 
-The Ingresso API supports a variety of different integration types. The most
-common is a **full integration** - this is where our partner uses all
+The Ingresso API supports a variety of different integration types. 
+
+1. **Full integration**: this is where our partner uses all
 functionality of the Ingresso API to retrieve listings of events and
 performances (often in advance to populate their own database) then to request
 availability and reserve and purchase tickets in real-time.
 
-Ingresso also offer partners an individually branded "white label" ticketing
-website - for example [Disney Tickets](https://www.disneytickets.co.uk) and
+2. **Feather**: Ingresso offer a seat selection widget product called Feather that
+can be embedded on your website. It is used in conjunction with the Ingresso API
+to reduce the development needed to offer seat selection to your
+customers. You use the API to retrieve performances so you can present a calendar
+to customers. When a performance is selected, you use Feather to display availability
+for that performance, and to reserve the customer's chosen seats. Feather will handle 
+complexities like preventing single seats from being left, and suggesting alternate 
+seats when the desired seats are no longer available. If the reserve is successful 
+you will return a transaction reference that you can then purchase via the API.
+View the [Feather documentation and demo](https://github.com/ingresso-group/feather-demo).
+
+3. **Partial Integration**: Ingresso also offer partners an individually 
+branded "white label" ticketing
+website - for example [Ticketmaster Theatre](https://theatre.ticketmaster.co.uk) and
 [From The Box Office](https://www.fromtheboxoffice.com) are fully developed by
 Ingresso. It is possible to use the API in conjunction with a white label
-website as a **partial integration**. Some examples of partial integrations:
+website as a partial integration. Some examples of partial integrations:
 
-* Maintain a listing of events on your own site, and use Ingresso's white label
+    a) Maintain a listing of events on your own site, and use Ingresso's white label
 website for booking the tickets. In this case the Ingresso API can be used to 
 [list events](#events-list).
 
-* Ingresso have invested in a high-conversion booking app (where the customer
+    b) Ingresso have invested in a high-conversion booking app (where the customer
 selects their performance and seats). This page is often where most development
 time is spent. It is possible to link to our booking page and we will
 automatically redirect back to your checkout page once the customer has
 successfully reserved their seats. You can link to our full booking page or just
-embed our seat selection widget within your site.
+use Feather to add seat selection to your site.
 
-* Use the Ingresso API to display events, performances and availability, then
+    c) Use the Ingresso API to display events, performances and availability, then
 send your customer to our white label website for checkout. It is possible for
 Ingresso to then redirect the customer back to your confirmation page if the
 purchase is successful.
