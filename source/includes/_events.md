@@ -1671,9 +1671,7 @@ Attribute | Description
 
 ## Reviews
 
-A lot of events have user and critic reviews. At the moment only our critic
-reviews are available via the API, but in the near future we will look to expose
-our user reviews as well.
+We expose critic reviews for events that have them.
 
 
 ### Request
