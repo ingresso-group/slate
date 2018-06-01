@@ -636,6 +636,7 @@ will be two `ticket_order`s: one for ADULT and one for CHILD.
 Attribute | Description
 --------- | -----------
 `discarded_orders` | As discussed above, adding an order will remove anything in the trolley which would prevent it being added. See below for detail of the `order` object.
+`input_contained_unavailable_order` | This is a flag that will get set to `true` if part of the trolley request could not be added to the trolley. This occurs when we weren't able to find any available products that matched the request and it usually means the user has passed in invalid parameters or is requesting an item that is sold out.
 `trolley_contents` | See below for object detail.
 `trolley_token` | The identifier for the trolley (this is an internal hash representing the items in the trolley, so the identifier will be the same for identical trolleys).
 
