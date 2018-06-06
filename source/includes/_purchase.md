@@ -27,7 +27,7 @@ the URL returned should be presented to the customer.
 Your [payment option](#payment-options) determines how you should call purchase.
 The two main options are:
 
-### On credit purchasing
+### On-credit purchasing
 
 You take payment using a payment provider of your own choosing. When calling
 purchase you should just provide customer data, and the purchase call will
@@ -760,6 +760,13 @@ Attribute | Description
 
 ## Purchasing with Stripe
 
+Purchasing with Stripe requires your API user to be set up to use the Ingresso
+Payments service, which will require contacting us. If you are interested in
+testing this functionality, the `demo-stripe` user has been created which is
+already set up this way. The password is the same as for the `demo` user.
+After creating a reservation with this user, you can proceed to test purchasing
+with Stripe, as outlined below.
+
 In order to purchase with Stripe you need the following steps:
 
 1. Retrieve a Stripe token or payment source (further detail below).
@@ -867,7 +874,10 @@ pass in the `remote_site` so we know which website the customer purchased on.
 
 One primary advantage of saving the details in this way is that it will not
 appear in Ingresso's logs or database, and is only used as metadata in Stripe,
-so it reduces the spread of personally identifiable information.
+so it reduces the spread of personally identifiable information. Please note
+that the call must include a valid Authorization header with the key included in
+the reservation response debitor integration data, and should be well-formed
+JSON, as per the examples.
 
 ### Making the purchase call
 Retrieving the Stripe token is the first half of the payment process - further
