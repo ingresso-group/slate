@@ -748,6 +748,7 @@ Parameter | Description
 ```
 
 FIXME: no cost ranges on this performance
+
 ```python
 from pyticketswitch.performance import Performance
 
