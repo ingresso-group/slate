@@ -370,33 +370,46 @@ and purchase multiple items at once by adding them to a <a href="#trolley">troll
 
 <h2 id="types-of-api-integration">Types of API integration</h2>
 
-<p>The Ingresso API supports a variety of different integration types. The most
-common is a <strong>full integration</strong> - this is where our partner uses all
+<p>The Ingresso API supports a variety of different integration types. </p>
+
+<ol>
+<li><p><strong>Full integration</strong>: this is where our partner uses all
 functionality of the Ingresso API to retrieve listings of events and
 performances (often in advance to populate their own database) then to request
-availability and reserve and purchase tickets in real-time.</p>
-
-<p>Ingresso also offer partners an individually branded &ldquo;white label&rdquo; ticketing
-website - for example <a href="https://www.disneytickets.co.uk">Disney Tickets</a> and
+availability and reserve and purchase tickets in real-time.</p></li>
+<li><p><strong>Feather</strong>: Ingresso offer a seat selection widget product called Feather that
+can be embedded on your website. It is used in conjunction with the Ingresso API
+to reduce the development needed to offer seat selection to your
+customers. You use the API to retrieve performances so you can present a calendar
+to customers. When a performance is selected, you use Feather to display availability
+for that performance, and to reserve the customer&rsquo;s chosen seats. Feather will handle 
+complexities like preventing single seats from being left, and suggesting alternate 
+seats when the desired seats are no longer available. If the reserve is successful 
+you will return a transaction reference that you can then purchase via the API.
+View the <a href="https://github.com/ingresso-group/feather-demo">Feather documentation and demo</a>.</p></li>
+<li><p><strong>Partial Integration</strong>: Ingresso also offer partners an individually 
+branded &ldquo;white label&rdquo; ticketing
+website - for example <a href="https://theatre.ticketmaster.co.uk">Ticketmaster Theatre</a> and
 <a href="https://www.fromtheboxoffice.com">From The Box Office</a> are fully developed by
 Ingresso. It is possible to use the API in conjunction with a white label
-website as a <strong>partial integration</strong>. Some examples of partial integrations:</p>
+website as a partial integration. Some examples of partial integrations:</p>
 
-<ul>
-<li><p>Maintain a listing of events on your own site, and use Ingresso&rsquo;s white label
+<p>a) Maintain a listing of events on your own site, and use Ingresso&rsquo;s white label
 website for booking the tickets. In this case the Ingresso API can be used to 
-<a href="#events-list">list events</a>.</p></li>
-<li><p>Ingresso have invested in a high-conversion booking app (where the customer
+<a href="#events-list">list events</a>.</p>
+
+<p>b) Ingresso have invested in a high-conversion booking app (where the customer
 selects their performance and seats). This page is often where most development
 time is spent. It is possible to link to our booking page and we will
 automatically redirect back to your checkout page once the customer has
 successfully reserved their seats. You can link to our full booking page or just
-embed our seat selection widget within your site.</p></li>
-<li><p>Use the Ingresso API to display events, performances and availability, then
+use Feather to add seat selection to your site.</p>
+
+<p>c) Use the Ingresso API to display events, performances and availability, then
 send your customer to our white label website for checkout. It is possible for
 Ingresso to then redirect the customer back to your confirmation page if the
 purchase is successful.</p></li>
-</ul>
+</ol>
 
 <h2 id="payment-options">Payment Options</h2>
 
@@ -3369,9 +3382,7 @@ curl https://demo.ticketswitch.com/f13/events_by_id.v1 <span class="se">\</span>
 
 <h2 id="reviews">Reviews</h2>
 
-<p>A lot of events have user and critic reviews. At the moment only our critic
-reviews are available via the API, but in the near future we will look to expose
-our user reviews as well.</p>
+<p>We expose critic reviews for events that have them.</p>
 
 <h3 id="request">Request</h3>
 
@@ -5673,7 +5684,7 @@ performance, and are described in more detail in the
 </thead><tbody>
 <tr>
 <td><code class="prettyprint">cached_max_seats</code></td>
-<td>This is the maximum number of contiguous seats that can be booked for this performance, based on Ingresso&rsquo;s cached data. Note that if the event supports seat selection you are not limited by the number of contiguous seats, so this value should be used in the context of best available only. (TODO is this optional?)</td>
+<td>This is the maximum number of contiguous seats that can be booked for this performance, based on Ingresso&rsquo;s cached data. Note that if the event supports seat selection you are not limited by the number of contiguous seats, so this value should be used in the context of best available only.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">date_desc</code></td>
@@ -6129,32 +6140,30 @@ the &ldquo;best&rdquo; offer). Most API users request cost ranges.</p>
   <span class="o">}</span>
 <span class="o">}</span>
 </code></pre>
-<p>FIXME: no cost ranges on this performance
-&ldquo;`python
-from pyticketswitch.performance import Performance</p>
+<p>FIXME: no cost ranges on this performance</p>
+<pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">pyticketswitch.performance</span> <span class="kn">import</span> <span class="n">Performance</span>
 
-<p>{
-    &lsquo;6L9-M2R&rsquo;: Performance(
-        id=&lsquo;6L9-M2R&rsquo;,
-        event_id=&lsquo;6L9&rsquo;,
-        date_time=datetime.datetime(2017, 4, 5, 22, 30, tzinfo=tzoffset(None, -25200)),
-        date_description=&lsquo;Wed, 5th April 2017&rsquo;,
-        time_description=&lsquo;10.30 PM&rsquo;,
-        has_pool_seats=False,
-        is_limited=False,
-        cached_max_seats=None,
-        cost_range=None,
-        no_singles_cost_range=None,
-        is_ghost=True,
-        name=None,
-        running_time=None,
-        availability_details=[</p>
+<span class="p">{</span>
+    <span class="s">'6L9-M2R'</span><span class="p">:</span> <span class="n">Performance</span><span class="p">(</span>
+        <span class="nb">id</span><span class="o">=</span><span class="s">'6L9-M2R'</span><span class="p">,</span>
+        <span class="n">event_id</span><span class="o">=</span><span class="s">'6L9'</span><span class="p">,</span>
+        <span class="n">date_time</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">tzinfo</span><span class="o">=</span><span class="n">tzoffset</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="o">-</span><span class="mi">25200</span><span class="p">)),</span>
+        <span class="n">date_description</span><span class="o">=</span><span class="s">'Wed, 5th April 2017'</span><span class="p">,</span>
+        <span class="n">time_description</span><span class="o">=</span><span class="s">'10.30 PM'</span><span class="p">,</span>
+        <span class="n">has_pool_seats</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">is_limited</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">cached_max_seats</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">cost_range</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">no_singles_cost_range</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">is_ghost</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">running_time</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">availability_details</span><span class="o">=</span><span class="p">[</span>
 
-<p>],
-    )
-}
-&rdquo;`</p>
-
+        <span class="p">],</span>
+    <span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
 <aside class="notice">In the UK market, offers are typically classified as
 either &ldquo;discounted face value&rdquo; or &ldquo;no booking fee&rdquo;. Discounted face value
 offers have an offer seatprice that is lower than the full price seatprice (and
@@ -6820,6 +6829,11 @@ of use case. If this doesn&rsquo;t fit what you are trying to do contact us api@
 
 <aside class="notice">We may disable API accounts making excessive availability calls.</aside>
 
+<p><strong>Important</strong>: Ingresso offer an interactive seat map widget called 
+<a href="https://github.com/ingresso-group/feather-demo">Feather</a> that can be embedded in your 
+website, saving you development effort. This is an alternative to requesting availability
+via the API and displaying it yourself.</p>
+
 <h2 id="availability">Availability</h2>
 
 <h3 id="request">Request</h3>
@@ -7352,7 +7366,10 @@ is seated, and the supplier system supports seat selection, then we will return
 seat blocks containing seats. You can check for the presence of the seat blocks
 to determine whether you can offer seat selection to your customer.</p>
 
-<aside class="notice">We have some options to save development effort when implementing seat selection. Please contact us for more detail api@ingresso.co.uk</aside>
+<p><strong>Note</strong>: Ingresso offer an interactive seat map widget called 
+<a href="https://github.com/ingresso-group/feather-demo">Feather</a> that can be embedded in your 
+website, saving you development effort. This is an alternative to requesting individual
+seats via the API and displaying them to customers yourself.</p>
 
 <h3 id="request">Request</h3>
 
@@ -11009,6 +11026,10 @@ will be two <code class="prettyprint">ticket_order</code>s: one for ADULT and on
 <td>As discussed above, adding an order will remove anything in the trolley which would prevent it being added. See below for detail of the <code class="prettyprint">order</code> object.</td>
 </tr>
 <tr>
+<td><code class="prettyprint">input_contained_unavailable_order</code></td>
+<td>This is a flag that will get set to <code class="prettyprint">true</code> if part of the trolley request could not be added to the trolley. This occurs when we weren&rsquo;t able to find any available products that matched the request and it usually means the user has passed in invalid parameters or is requesting an item that is sold out.</td>
+</tr>
+<tr>
 <td><code class="prettyprint">trolley_contents</code></td>
 <td>See below for object detail.</td>
 </tr>
@@ -12185,6 +12206,10 @@ this to avoid them receiving errors consistently.
 <td>Indicates whether it is possible to change the non-blank <code class="prettyprint">prefilled_address</code> data. This is primarily for internal use and can be ignored for normal use cases (it only applies to partners who have asked to have a prefilled address held in the Ingresso system). In most cases this will be <code class="prettyprint">true</code>. If it is <code class="prettyprint">false</code> the non-blank <code class="prettyprint">prefilled_address</code> fields will be used when tickets are purchased and we will ignore the values in these fields if they are passed to us.</td>
 </tr>
 <tr>
+<td><code class="prettyprint">input_contained_unavailable_order</code></td>
+<td>This is a flag that will get set to <code class="prettyprint">true</code> if part of the reservation request could not be reserved. This occurs when we weren&rsquo;t able to find any available products that matched the request and it usually means the user has passed in invalid parameters or is requesting an item that is sold out.</td>
+</tr>
+<tr>
 <td><code class="prettyprint">needs_agent_reference</code></td>
 <td>For the vast majority of partners this will be <code class="prettyprint">false</code> and can be ignored. However some partners ask to require that they specify their own reference when purchasing tickets - if this is <code class="prettyprint">true</code> then the reference must be passed in.</td>
 </tr>
@@ -12680,7 +12705,7 @@ the URL returned should be presented to the customer.</p>
 <p>Your <a href="#payment-options">payment option</a> determines how you should call purchase.
 The two main options are:</p>
 
-<h3 id="on-credit-purchasing">On credit purchasing</h3>
+<h3 id="on-credit-purchasing">On-credit purchasing</h3>
 
 <p>You take payment using a payment provider of your own choosing. When calling
 purchase you should just provide customer data, and the purchase call will
@@ -13829,6 +13854,13 @@ more information drop us an email at
 
 <h2 id="purchasing-with-stripe">Purchasing with Stripe</h2>
 
+<p>Purchasing with Stripe requires your API user to be set up to use the Ingresso
+Payments service, which will require contacting us. If you are interested in
+testing this functionality, the <code class="prettyprint">demo-stripe</code> user has been created which is
+already set up this way. The password is the same as for the <code class="prettyprint">demo</code> user.
+After creating a reservation with this user, you can proceed to test purchasing
+with Stripe, as outlined below.</p>
+
 <p>In order to purchase with Stripe you need the following steps:</p>
 
 <ol>
@@ -13931,7 +13963,10 @@ pass in the <code class="prettyprint">remote_site</code> so we know which websit
 
 <p>One primary advantage of saving the details in this way is that it will not
 appear in Ingresso&rsquo;s logs or database, and is only used as metadata in Stripe,
-so it reduces the spread of personally identifiable information.</p>
+so it reduces the spread of personally identifiable information. Please note
+that the call must include a valid Authorization header with the key included in
+the reservation response debitor integration data, and should be well-formed
+JSON, as per the examples.</p>
 
 <h3 id="making-the-purchase-call">Making the purchase call</h3>
 
@@ -15580,6 +15615,8 @@ API accounts of anyone doing this without prior approval.</p>
 <aside class="notice"><b>IMPORTANT:</b> Note that transaction reporting service is using different domain
 than other ticketswitch endpoints - <b>.ticketswitch.io</b> as opposed to <b>.ticketswitch.com</b></aside>
 
+<aside class="notice"><b>NOTE:</b>Transaction records are not live data, so a delay of between a few seconds and a few minutes can be expected between the transaction being completed and becoming visible in the reports</aside> 
+
 <blockquote>
 <p><strong>Definition</strong></p>
 </blockquote>
@@ -15764,7 +15801,20 @@ This can be used, for example, to regularly populate your own database of Ingres
             </span><span class="s2">"surcharge_commissionable_postage"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
             </span><span class="s2">"processing_fee"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
             </span><span class="s2">"supplier_uplift"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"user_uplift"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+            </span><span class="s2">"user_uplift"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"customer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doe"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"address_line_one"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Butterwick 1"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"address_line_two"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hammersmith"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"town"</span><span class="p">:</span><span class="w"> </span><span class="s2">"London"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"county"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Greater London"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"country_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"uk"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"postcode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"W68DL"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"work_phone"</span><span class="p">:</span><span class="w"> </span><span class="mi">1234567</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"home_phone"</span><span class="p">:</span><span class="w"> </span><span class="mi">1234567</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"customerservices@ingresso.co.uk"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
         </span><span class="p">}</span><span class="w">
     </span><span class="p">],</span><span class="w">
     </span><span class="s2">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20171004150512"</span><span class="p">,</span><span class="w">
@@ -15991,6 +16041,60 @@ This can be used, for example, to regularly populate your own database of Ingres
 <tr>
 <td><code class="prettyprint">user_uplift</code></td>
 <td>This is the uplift component earned by the partner.</td>
+</tr>
+</tbody></table>
+
+<p>The customer fields are only returned for users which have permissions to see detailed customer data</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">first_name</code></td>
+<td>First name of the customer</td>
+</tr>
+<tr>
+<td><code class="prettyprint">last_name</code></td>
+<td>Last name of the customer</td>
+</tr>
+<tr>
+<td><code class="prettyprint">address_line_one</code></td>
+<td>First line of customer&rsquo;s address</td>
+</tr>
+<tr>
+<td><code class="prettyprint">address_line_two</code></td>
+<td>Second line of customer&rsquo;s address</td>
+</tr>
+<tr>
+<td><code class="prettyprint">town</code></td>
+<td>Address&rsquo; city</td>
+</tr>
+<tr>
+<td><code class="prettyprint">county</code></td>
+<td>Address&rsquo; county</td>
+</tr>
+<tr>
+<td><code class="prettyprint">country</code></td>
+<td>Customer&rsquo;s country</td>
+</tr>
+<tr>
+<td><code class="prettyprint">postcode</code></td>
+<td>Customer&rsquo;s postcode</td>
+</tr>
+<tr>
+<td><code class="prettyprint">home_phone</code></td>
+<td>Customer&rsquo;s home phone</td>
+</tr>
+<tr>
+<td><code class="prettyprint">work_phone</code></td>
+<td>Customer&rsquo;s work phone</td>
+</tr>
+<tr>
+<td><code class="prettyprint">email</code></td>
+<td>Customer&rsquo;s email</td>
 </tr>
 </tbody></table>
 
