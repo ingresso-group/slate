@@ -3,6 +3,8 @@
 <aside class="notice"><b>IMPORTANT:</b> Note that transaction reporting service is using different domain
 than other ticketswitch endpoints - <b>.ticketswitch.io</b> as opposed to <b>.ticketswitch.com</b></aside>
 
+<aside class="notice"><b>NOTE:</b>Transaction records are not live data, so a delay of between a few seconds and a few minutes can be expected between the transaction being completed and becoming visible in the reports</aside> 
+
 > **Definition**
 
 ```
@@ -203,7 +205,20 @@ curl https://api.ticketswitch.io/transactions.v0/order:event_id,supplier_code?fr
             "surcharge_commissionable_postage": 0,
             "processing_fee": 0,
             "supplier_uplift": 0,
-            "user_uplift": 0
+            "user_uplift": 0,
+            "customer": {
+                "first_name": "John",
+                "last_name": "Doe",
+                "address_line_one": "Butterwick 1",
+                "address_line_two": "Hammersmith",
+                "town": "London",
+                "county": "Greater London",
+                "country_code": "uk",
+                "postcode": "W68DL",
+                "work_phone": 1234567,
+                "home_phone": 1234567,
+                "email": "customerservices@ingresso.co.uk"
+            }
         }
 	],
 	"timestamp": "20171004150512",
@@ -211,6 +226,7 @@ curl https://api.ticketswitch.io/transactions.v0/order:event_id,supplier_code?fr
 }
 
 ```
+
 
 ### Results
 
@@ -275,3 +291,20 @@ Name                                   | Description
 `processing_fee`                       | A processing fee, not used by most partners.
 `supplier_uplift`                      | Uplift is an additional charge on top of the ticket price for an upgraded experience. This is the uplift component earned by the supplier.
 `user_uplift`                          | This is the uplift component earned by the partner.
+
+The customer fields are only returned for users which have permissions to see detailed customer data
+
+Name                                   | Description
+---------------------------------------|----------------------------------------------------------------------------------------------------------------------------------
+`first_name`                           | First name of the customer
+`last_name`                            | Last name of the customer
+`address_line_one`                     | First line of customer's address
+`address_line_two`                     | Second line of customer's address
+`town`                                 | Address' city
+`county`                               | Address' county
+`country`                              | Customer's country
+`postcode`                             | Customer's postcode
+`home_phone`                           | Customer's home phone
+`work_phone`                           | Customer's work phone
+`email`                                | Customer's email
+
