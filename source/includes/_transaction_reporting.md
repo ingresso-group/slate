@@ -187,6 +187,7 @@ curl https://api.ticketswitch.io/transactions.v0/order:event_id,supplier_code?fr
             "sale_mode": "internal_credit",
             "debitor_reference": null,
             "user_can_use_customer_data": false,
+            "supplier_can_use_customer_data": false,
             "num_tickets": 4,
             "num_transactions": 1,
             "sale_currency_code": "gbp",
@@ -266,6 +267,7 @@ Name                                   | Description
 `sale_mode`                            | The mode used to purchase tickets. Will be internal_credit if the sale was made on credit or external_redirect if the sale was made using Stripe or with a redirect.
 `debitor_reference`                    | If using Stripe this will be Stripe's Charge ID.
 `user_can_use_customer_data`           | Data protection question - set to true if the customer has opted in to receiving marketing emails from you.
+`supplier_can_use_customer_data`       | Data protection question - set to true if the customer has opted in to receiving marketing emails from the event provider.
 `num_tickets`                          | Number of purchased tickets.
 `num_transactions`                     | This will be 1 for the first item in the order and 0 for the rest.
 `sale_currency_code`                   | `ISO 4217` three letter code that applies to the `sale_seatprice`, `sale_surcharge`, `ticket_price`, `send_cost`.
