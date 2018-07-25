@@ -294,7 +294,9 @@ Name                                   | Description
 `supplier_uplift`                      | Uplift is an additional charge on top of the ticket price for an upgraded experience. This is the uplift component earned by the supplier.
 `user_uplift`                          | This is the uplift component earned by the partner.
 
+
 The customer fields are only returned for users which have permissions to see detailed customer data - by default these fields won't be included - if you would like them included please contact us: api@ingresso.co.uk.
+
 For testing you can use the user `demo-customerdata` (password `demopass`). You can purchase with this user the same way you can with `demo`, however note that any customer data you enter when purchasing will be visible by everyone, so **do not enter any data you do not want the internet to see**. 
 
 Name                                   | Description
