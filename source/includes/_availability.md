@@ -197,6 +197,7 @@ Parameter | Description
       "currency_pre_symbol": "£"
     }
   },
+  "max_bundle_size": 1,
   "valid_quantities": [
     1,
     2,
@@ -374,6 +375,7 @@ Attribute | Description
 `contiguous_seat_selection_only` | If you have requested individual seats a value of `true` indicates that you can only select consecutive seats. `false` indicates that you can select seats without restriction *within a single ticket type and price band*. In most cases this will be `false`. If you would like to allow your customers to select seats without restriction across price bands and ticket types, you need to add multiple orders to a [trolley](#trolley), one order for each price band. However there are currently some restrictions enforced so if you want to do this you will need to contact us first api@ingresso.co.uk
 `currency_code` | The currency code for the availability.
 `currency_details` | Further detail for the currency, object described below.
+`max_bundle_size` | The maximum number of orders that can be added to a trolley for this event. Useful for buying tickets from different ticket types and price bands. If this isn't present then there is no max bundle size.
 `valid_quantities` | An array of valid quantities.
 
 
