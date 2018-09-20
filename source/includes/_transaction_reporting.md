@@ -101,7 +101,7 @@ The API allows you to use filters besides the purchase time. Currently the follo
 
 If you would find other filters useful please contact us: api@ingresso.co.uk.
 
-To pass a filter option insert `/filter:{filter_options}` after `/transactions.0`. All options are passed as `key=value` separated by `,`. For example: `/filter:event_id=44AP,supplier_code=nimax`. The comma separator corresponds to the `AND` logical statement; so in the above example only records with `event_id` equal to `44AP` and
+To pass a filter option insert `/filter:{filter_options}` after `/transactions.v0`. All options are passed as `key=value` separated by `,`. For example: `/filter:event_id=44AP,supplier_code=nimax`. The comma separator corresponds to the `AND` logical statement; so in the above example only records with `event_id` equal to `44AP` and
 `supplier_code` equal to `nimax` will be returned. If the value contains white space then enclose it in single quotes `'`.
 
 > **Example request**
