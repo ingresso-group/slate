@@ -59,6 +59,16 @@ We have also developed the [F13 API Browser](https://f13-browser.ticketswitch.io
 
 ## Basic booking flow
 
+The Ingresso API is designed around booking seats for theatre product, and some
+of the parameters may use language (e.g. `seat`) reflective of that. However, it
+is flexible enough to be used for booking a wide range of different products,
+including general-admission attractions products, merchandise and more.
+
+For most products that have limited capacity availability, the following basic
+booking flow should be followed to ensure the most accurate availability is
+shown to your customer, but some [additional parameters](#availability-details)
+may be used to shortcut this flow for some types of products.
+
 > **List events including from prices and a single image**
 
 ```shell
@@ -73,7 +83,7 @@ curl https://demo.ticketswitch.com/f13/events.v1 \
 <blockquote class="lang-specific shell">
 gzip must be used for all requests (with curl you can use the --compressed flag). Most http libraries support compression (though you may need to enable this somehow), but if not and you are receiving gzip errors you can pass "Accept-Encoding: gzip" in the headers then unzip the response.
 
-curl uses the -u flag to pass basic auth credentials in the format user:password.
+curl uses the -u flag to pass HTTP Basic Authentication credentials in the format user:password.
 </blockquote>
 
 > **List performances for event ID 6IF**
