@@ -289,6 +289,16 @@ that closely matches the examples included in this documentation.</p>
 
 <h2 id="basic-booking-flow">Basic booking flow</h2>
 
+<p>The Ingresso API is designed around booking seats for theatre product, and some
+of the parameters may use language (e.g. <code class="prettyprint">seat</code>) reflective of that. However, it
+is flexible enough to be used for booking a wide range of different products,
+including general-admission attractions products, merchandise and more.</p>
+
+<p>For most products that have limited capacity availability, the following basic
+booking flow should be followed to ensure the most accurate availability is
+shown to your customer, but some <a href="#availability-details">additional parameters</a>
+may be used to shortcut this flow for some types of products.</p>
+
 <blockquote>
 <p><strong>List events including from prices and a single image</strong></p>
 </blockquote>
@@ -302,7 +312,7 @@ that closely matches the examples included in this documentation.</p>
 <blockquote class="lang-specific shell">
 gzip must be used for all requests (with curl you can use the &ndash;compressed flag). Most http libraries support compression (though you may need to enable this somehow), but if not and you are receiving gzip errors you can pass &ldquo;Accept-Encoding: gzip&rdquo; in the headers then unzip the response.
 
-curl uses the -u flag to pass basic auth credentials in the format user:password.
+curl uses the -u flag to pass HTTP Basic Authentication credentials in the format user:password.
 </blockquote>
 
 <blockquote>
@@ -7024,6 +7034,7 @@ via the API and displaying it yourself.</p>
       <span class="s2">"currency_pre_symbol"</span>: <span class="s2">"£"</span>
     <span class="o">}</span>
   <span class="o">}</span>,
+  <span class="s2">"max_bundle_size"</span>: 1,
   <span class="s2">"valid_quantities"</span>: <span class="o">[</span>
     1,
     2,
@@ -7221,6 +7232,10 @@ response that includes seats.</p>
 <tr>
 <td><code class="prettyprint">currency_details</code></td>
 <td>Further detail for the currency, object described below.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">max_bundle_size</code></td>
+<td>The maximum number of orders that can be added to a trolley for this event. Useful for buying tickets from different ticket types and price bands. If this isn&rsquo;t present then there is no max bundle size.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">valid_quantities</code></td>
@@ -15707,7 +15722,7 @@ This can be used, for example, to regularly populate your own database of Ingres
 
 <p>If you would find other filters useful please contact us: api@ingresso.co.uk.</p>
 
-<p>To pass a filter option insert <code class="prettyprint">/filter:{filter_options}</code> after <code class="prettyprint">/transactions.0</code>. All options are passed as <code class="prettyprint">key=value</code> separated by <code class="prettyprint">,</code>. For example: <code class="prettyprint">/filter:event_id=44AP,supplier_code=nimax</code>. The comma separator corresponds to the <code class="prettyprint">AND</code> logical statement; so in the above example only records with <code class="prettyprint">event_id</code> equal to <code class="prettyprint">44AP</code> and
+<p>To pass a filter option insert <code class="prettyprint">/filter:{filter_options}</code> after <code class="prettyprint">/transactions.v0</code>. All options are passed as <code class="prettyprint">key=value</code> separated by <code class="prettyprint">,</code>. For example: <code class="prettyprint">/filter:event_id=44AP,supplier_code=nimax</code>. The comma separator corresponds to the <code class="prettyprint">AND</code> logical statement; so in the above example only records with <code class="prettyprint">event_id</code> equal to <code class="prettyprint">44AP</code> and
 <code class="prettyprint">supplier_code</code> equal to <code class="prettyprint">nimax</code> will be returned. If the value contains white space then enclose it in single quotes <code class="prettyprint">&#39;</code>.</p>
 
 <blockquote>
@@ -16049,7 +16064,9 @@ This can be used, for example, to regularly populate your own database of Ingres
 </tr>
 </tbody></table>
 
-<p>The customer fields are only returned for users which have permissions to see detailed customer data</p>
+<p>The customer fields are only returned for users which have permissions to see detailed customer data - by default these fields won&rsquo;t be included - if you would like them included please contact us: api@ingresso.co.uk.</p>
+
+<p>For testing you can use the user <code class="prettyprint">demo-customerdata</code> (password <code class="prettyprint">demopass</code>). You can purchase with this user the same way you can with <code class="prettyprint">demo</code>, however note that any customer data you enter when purchasing will be visible by everyone, so <strong>do not enter any data you do not want the internet to see</strong>. </p>
 
 <table><thead>
 <tr>
