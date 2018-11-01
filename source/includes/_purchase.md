@@ -193,7 +193,7 @@ Parameter | Description
 --------- | -----------
 `address_line_one` | The first line of the customer's address - required. Either pass your customer's address or your head office address (see customer data note above). 
 `address_line_two` | The second line of the customer's address. *Optional if `address_line_one` is provided.*
-`agent_ref` | Partners can pass their own transaction reference to be stored in the Ingresso platform. *Optional.*
+`agent_reference` | Partners can pass their own transaction reference to be stored in the Ingresso platform. *Optional.*
 `country_code` | The [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code of the customer's address - required. The country code must have been present in the `allowed_countries` list from [reserve](#reserve).
 `county` | The county of region of the customer's address. *Optional.*
 `email_address` | The customer's email address. Required when `needs_email_address` was `true` from the [reserve](#reserve) response. We recommend this is provided - see customer data note above.
