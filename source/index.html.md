@@ -23,6 +23,7 @@ includes:
   - reserve
   - release
   - purchase
+  - reserve_page_archive
   - status
   - trans_id_status
   - cities
