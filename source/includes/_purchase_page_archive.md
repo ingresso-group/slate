@@ -6,6 +6,8 @@ GET https://demo.ticketswitch.com/f13/purchase_page_archive.v1
 ```
 This API call is faster than the [status](#status) API call as it is not getting the status of the purchase, it is simply retrieving the previously sent purchase response, verbatim.
 This means that you can access all the data that you would normally require from a status call, except that the status could be out of date (as it will be exactly the same as the original purchase response).
+As this is simply returning a verbatim copy of the original purchase response, HTTP content negotiation and any of the usually recognised `req_` variables will be ignored.
+If the original purchase response was an error then the same error will be returned when you request the purchase page archive.
 
 
 ### Request

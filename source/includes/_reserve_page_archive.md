@@ -8,6 +8,8 @@ This API call is faster than the [status](#status) API call as it is not getting
 Reservation responses are held for 24 hours, this exceeds the length of time that reservations are valid for.
 Do not interpret this response as meaning that a reservation is still being held as it is simply a verbatim copy of the original reservation response.
 This means that you can access all the data that you would normally require from a status call, except that the status and the amount of time left on the reservation will not have been updated (as it will be exactly the same as the original reservation response).
+As this is simply returning a verbatim copy of the original reservation response, HTTP content negotiation and any of the usually recognised `req_` variables will be ignored.
+If the original reservation response was an error then the same error will be returned when you request the reserve page archive.
 
 
 ### Request
