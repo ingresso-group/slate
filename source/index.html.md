@@ -24,6 +24,7 @@ includes:
   - release
   - purchase
   - reserve_page_archive
+  - purchase_page_archive
   - status
   - trans_id_status
   - cities

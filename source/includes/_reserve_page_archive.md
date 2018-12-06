@@ -4,12 +4,11 @@
 ```
 GET https://demo.ticketswitch.com/f13/reserve_page_archive.v1
 ```
+This API call is faster than the [status](#status) API call as it is not getting the status of the reservation, it is simply retrieving the previously sent reservation response, verbatim.
+Reservation responses are held for 24 hours, this exceeds the length of time that reservations are valid for.
+Do not interpret this response as meaning that a reservation is still being held as it is simply a verbatim copy of the original reservation response.
+This means that you can access all the data that you would normally require from a status call, except that the status and the amount of time left on the reservation will not have been updated (as it will be exactly the same as the original reservation response).
 
-This API call should be used in preference to the [status](#status) API call.
-It is faster than the status API call.
-It returns an exact replica of the original reservation response.
-This means that you can access all that data that you would normally require from a status call, except that the status and the amount of time left on the reservation will not have been updated (as it will be exactly the same as the original reservation response).
-The reservation responses are cached for 24 hours.
 
 ### Request
 
@@ -31,10 +30,6 @@ reservation, meta = client.get_reservation(
     transaction_uuid="U-986E1961-F8B7-11E8-8434-AC1F6B465FBC-C7DCDC47-LDNX"
 )
 ```
-
-Note that the request parameters and response attributes are similar to
-[status](#status).
-
 
 Parameter | Description
 --------- | -----------
@@ -349,5 +344,5 @@ The returned attributes are identical to the original reserve response, even if 
 Attribute | Description
 --------- | -----------
 `reserve_iso8601_date_and_time` | The time the tickets were successfully reserved.
-`transaction_status` | Will be `reserved` as that is what it was at the time of the reservation
+`transaction_status` | Will always be `reserved` as that is what it was at the time of the reservation, even if the transaction has since expired or been purchased.
 `trolley` | The `trolley` object, the trolley attributes are as described in the [reserve](#reserve) response. Note that the value of `minutes_left_on_reserve` will be out of date as it will be the same as it was at reserve time.
