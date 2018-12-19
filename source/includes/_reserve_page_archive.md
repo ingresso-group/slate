@@ -11,7 +11,7 @@ This means that you can access all the data that you would normally require from
 As this is simply returning a verbatim copy of the original reservation response, HTTP content negotiation and any of the usually recognised `req_` variables will be ignored.
 If the original reservation response was an error then the same error will be returned when you request the reserve page archive.
 If the reservation is not found then you will get an 400 error with `error_code: 8`.
-If the reservation is no longer being stored (i.e. more than 24 hours have passed since the original reservation was made) you will get a 404 error with `error_code: 8`.
+If the reservation is no longer being stored (i.e. more than 24 hours have passed since the original reservation was made) you will get a 410 Gone error with `error_code: 8`.
 
 ### Request
 

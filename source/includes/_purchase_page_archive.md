@@ -10,7 +10,7 @@ As this is simply returning a verbatim copy of the original purchase response, H
 If the original purchase response was an error then the same error will be returned when you request the purchase page archive.
 The purchase responses are kept for at least a year.
 If the purchase is not found then you will get an 400 error with `error_code: 8`.
-If the purchase is no longer being stored (i.e. more than a year has passed since the original purchase was made) you will get a 404 error with `error_code: 8`.
+If the purchase is no longer being stored (i.e. more than a year has passed since the original purchase was made) you will get a 410 Gone error with `error_code: 8`.
 
 
 ### Request
