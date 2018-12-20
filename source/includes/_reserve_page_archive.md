@@ -4,7 +4,7 @@
 ```
 GET https://demo.ticketswitch.com/f13/reserve_page_archive.v1
 ```
-This API call is faster than the [status](#status) API call as it is not getting the status of the reservation, it is simply retrieving the previously sent reservation response, verbatim.
+This API call does not get an up to date status of the reservation, it is simply retrieving the previously sent reservation response, verbatim.
 Reservation responses are held for 24 hours, this exceeds the length of time that reservations are valid for.
 Do not interpret this response as meaning that a reservation is still being held as it is simply a verbatim copy of the original reservation response.
 This means that you can access all the data that you would normally require from a status call, except that the status and the amount of time left on the reservation will not have been updated (as it will be exactly the same as the original reservation response).
