@@ -86,6 +86,7 @@ can also be included and will add the details to the response.
         },
         "has_no_perfs": false,
         "is_add_on": true,
+        "is_auto_quantity_add_on": true,
         "is_seated": false,
         "need_departure_date": false,
         "need_duration": false,
@@ -152,6 +153,7 @@ from pyticketswitch.event import Event
         venue=u'Lyric Apollo',
         longitude=-0.22639,
         is_add_on=True,
+        is_auto_quantity_add_on=True,
         reviews=[],
         classes={
             u'theatre': u'Theatre'
@@ -185,7 +187,8 @@ Attribute | Description
 `geo_data.latitude` | Latitude of the event.
 `geo_data.longitude` | Longitude of the event.
 `has_no_perfs` | `true` if the event has no performances. For example some attraction tickets are valid for any date, so we do not present a list of performances to select.
-`is_add_on` | `true` if this event is an add-on event. This means it can only be added to a trolley containing tickets for an event that lists this in its `add_ons`.
+`is_add_on` | `false` if this event is an add-on event. This means it can only be added to a trolley containing tickets for an event that lists this in its `add_ons`.
+`is_auto_quantity_add_on` | `false`  Indicates whether add on quantity will be modified based on the number of ticket orders, if true number of addons will be equal to total number of tickets for all parent events in the trolley.
 `is_seated` | `true` for seated events.
 `max_running_time` | Maximum length / duration in minutes (not always present).
 `min_running_time` | Minimum length / duration in minutes (not always present).
