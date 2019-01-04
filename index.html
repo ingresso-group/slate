@@ -1467,6 +1467,7 @@ are described in more detail in the
         <span class="o">}</span>,
         <span class="s2">"has_no_perfs"</span>: <span class="nb">false</span>,
         <span class="s2">"is_add_on"</span>: <span class="nb">false</span>,
+        <span class="s2">"is_auto_quantity_add_on"</span>: <span class="nb">false</span>,
         <span class="s2">"is_seated"</span>: <span class="nb">true</span>,
         <span class="s2">"max_running_time"</span>: 120,
         <span class="s2">"min_running_time"</span>: 120,
@@ -1509,6 +1510,7 @@ are described in more detail in the
         <span class="o">}</span>,
         <span class="s2">"has_no_perfs"</span>: <span class="nb">false</span>,
         <span class="s2">"is_add_on"</span>: <span class="nb">false</span>,
+        <span class="s2">"is_auto_quantity_add_on"</span>: <span class="nb">false</span>,
         <span class="s2">"is_seated"</span>: <span class="nb">true</span>,
         <span class="s2">"max_running_time"</span>: 120,
         <span class="s2">"min_running_time"</span>: 90,
@@ -1562,6 +1564,7 @@ are described in more detail in the
         <span class="n">needs_departure_date</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">needs_duration</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">needs_performance</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">is_auto_quantity_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">upsell_list</span><span class="o">=</span><span class="p">[</span>
             <span class="s">'6IE'</span><span class="p">,</span>
             <span class="s">'MH0'</span>
@@ -1595,6 +1598,7 @@ are described in more detail in the
         <span class="n">needs_departure_date</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">needs_duration</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">needs_performance</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">is_auto_quantity_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">upsell_list</span><span class="o">=</span><span class="p">[</span>
             <span class="s">'6IF'</span><span class="p">,</span>
             <span class="s">'6KU'</span><span class="p">,</span>
@@ -1675,7 +1679,11 @@ are described in more detail in the
 </tr>
 <tr>
 <td><code class="prettyprint">is_add_on</code></td>
-<td><code class="prettyprint">true</code> if this event is an add-on event. This means it can only be added to a trolley containing tickets for an event that lists this in its <code class="prettyprint">add_ons</code>.</td>
+<td><code class="prettyprint">false</code> if this event is an add-on event. This means it can only be added to a trolley containing tickets for an event that lists this in its <code class="prettyprint">add_ons</code>.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">is_auto_quantity_add_on</code></td>
+<td><code class="prettyprint">false</code>  Indicates whether add on quantity will be modified based on the number of ticket orders, if true number of addons will be equal to total number of tickets for all parent events in the trolley.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">is_seated</code></td>
@@ -1961,6 +1969,7 @@ returns a dictionary of events keyed on the event&rsquo;s <code class="prettypri
         <span class="o">}</span>,
         <span class="s2">"has_no_perfs"</span>: <span class="nb">false</span>,
         <span class="s2">"is_add_on"</span>: <span class="nb">false</span>,
+        <span class="s2">"is_auto_quantity_add_on"</span>: <span class="nb">false</span>,
         <span class="s2">"is_seated"</span>: <span class="nb">true</span>,
         <span class="s2">"max_running_time"</span>: 120,
         <span class="s2">"min_running_time"</span>: 90,
@@ -2013,6 +2022,7 @@ returns a dictionary of events keyed on the event&rsquo;s <code class="prettypri
         <span class="o">}</span>,
         <span class="s2">"has_no_perfs"</span>: <span class="nb">false</span>,
         <span class="s2">"is_add_on"</span>: <span class="nb">false</span>,
+        <span class="s2">"is_auto_quantity_add_on"</span>: <span class="nb">false</span>,
         <span class="s2">"is_seated"</span>: <span class="nb">true</span>,
         <span class="s2">"max_running_time"</span>: 120,
         <span class="s2">"min_running_time"</span>: 120,
@@ -2065,6 +2075,7 @@ returns a dictionary of events keyed on the event&rsquo;s <code class="prettypri
         <span class="n">show_performance_time</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="n">has_performances</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="n">is_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">is_auto_quantity_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">is_seated</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="n">needs_departure_date</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">needs_duration</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
@@ -2107,6 +2118,7 @@ returns a dictionary of events keyed on the event&rsquo;s <code class="prettypri
           <span class="o">}</span>,
           <span class="s2">"has_no_perfs"</span>: <span class="nb">false</span>,
           <span class="s2">"is_add_on"</span>: <span class="nb">true</span>,
+          <span class="s2">"is_auto_quantity_add_on"</span>: <span class="nb">true</span>,
           <span class="s2">"is_seated"</span>: <span class="nb">false</span>,
           <span class="s2">"need_departure_date"</span>: <span class="nb">false</span>,
           <span class="s2">"need_duration"</span>: <span class="nb">false</span>,
@@ -2146,6 +2158,7 @@ returns a dictionary of events keyed on the event&rsquo;s <code class="prettypri
         <span class="o">}</span>,
         <span class="s2">"has_no_perfs"</span>: <span class="nb">false</span>,
         <span class="s2">"is_add_on"</span>: <span class="nb">false</span>,
+        <span class="s2">"is_auto_quantity_add_on"</span>: <span class="nb">false</span>,
         <span class="s2">"is_seated"</span>: <span class="nb">true</span>,
         <span class="s2">"max_running_time"</span>: 90,
         <span class="s2">"min_running_time"</span>: 90,
@@ -2181,6 +2194,7 @@ returns a dictionary of events keyed on the event&rsquo;s <code class="prettypri
           <span class="o">}</span>,
           <span class="s2">"has_no_perfs"</span>: <span class="nb">false</span>,
           <span class="s2">"is_add_on"</span>: <span class="nb">false</span>,
+          <span class="s2">"is_auto_quantity_add_on"</span>: <span class="nb">false</span>,
           <span class="s2">"is_seated"</span>: <span class="nb">true</span>,
           <span class="s2">"max_running_time"</span>: 90,
           <span class="s2">"min_running_time"</span>: 90,
@@ -2221,6 +2235,7 @@ returns a dictionary of events keyed on the event&rsquo;s <code class="prettypri
           <span class="o">}</span>,
           <span class="s2">"has_no_perfs"</span>: <span class="nb">false</span>,
           <span class="s2">"is_add_on"</span>: <span class="nb">false</span>,
+          <span class="s2">"is_auto_quantity_add_on"</span>: <span class="nb">false</span>,
           <span class="s2">"is_seated"</span>: <span class="nb">true</span>,
           <span class="s2">"max_running_time"</span>: 120,
           <span class="s2">"min_running_time"</span>: 120,
@@ -2297,6 +2312,7 @@ returns a dictionary of events keyed on the event&rsquo;s <code class="prettypri
                 <span class="n">venue</span><span class="o">=</span><span class="s">u'Lyric Apollo'</span><span class="p">,</span>
                 <span class="n">longitude</span><span class="o">=-</span><span class="mf">0.22639</span><span class="p">,</span>
                 <span class="n">is_add_on</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                <span class="n">is_auto_quantity_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
                 <span class="n">reviews</span><span class="o">=</span><span class="p">[],</span>
                 <span class="n">classes</span><span class="o">=</span><span class="p">{</span>
                     <span class="s">u'theatre'</span><span class="p">:</span> <span class="s">u'Theatre'</span>
@@ -2356,6 +2372,7 @@ returns a dictionary of events keyed on the event&rsquo;s <code class="prettypri
                 <span class="n">venue</span><span class="o">=</span><span class="s">u'Lyceum Theatre'</span><span class="p">,</span>
                 <span class="n">longitude</span><span class="o">=-</span><span class="mf">0.11975</span><span class="p">,</span>
                 <span class="n">is_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                <span class="n">is_auto_quantity_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
                 <span class="n">reviews</span><span class="o">=</span><span class="p">[],</span>
                 <span class="n">classes</span><span class="o">=</span><span class="p">{</span>
                     <span class="s">u'opera'</span><span class="p">:</span> <span class="s">u'Opera'</span>
@@ -2407,6 +2424,7 @@ returns a dictionary of events keyed on the event&rsquo;s <code class="prettypri
                 <span class="n">venue</span><span class="o">=</span><span class="s">u"Sadler's Wells"</span><span class="p">,</span>
                 <span class="n">longitude</span><span class="o">=-</span><span class="mf">0.10601562</span><span class="p">,</span>
                 <span class="n">is_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                <span class="n">is_auto_quantity_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
                 <span class="n">reviews</span><span class="o">=</span><span class="p">[],</span>
                 <span class="n">classes</span><span class="o">=</span><span class="p">{</span>
                     <span class="s">u'dance'</span><span class="p">:</span> <span class="s">u'Ballet &amp; Dance'</span>
@@ -2442,6 +2460,7 @@ returns a dictionary of events keyed on the event&rsquo;s <code class="prettypri
         <span class="n">venue</span><span class="o">=</span><span class="s">u'Lyric Apollo'</span><span class="p">,</span>
         <span class="n">longitude</span><span class="o">=-</span><span class="mf">0.22639</span><span class="p">,</span>
         <span class="n">is_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">is_auto_quantity_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">reviews</span><span class="o">=</span><span class="p">[],</span>
         <span class="n">classes</span><span class="o">=</span><span class="p">{</span>
             <span class="s">u'theatre'</span><span class="p">:</span> <span class="s">u'Theatre'</span>
@@ -2733,6 +2752,7 @@ all media requests are consolidated.</p>
         <span class="o">}</span>,
         <span class="s2">"has_no_perfs"</span>: <span class="nb">false</span>,
         <span class="s2">"is_add_on"</span>: <span class="nb">false</span>,
+        <span class="s2">"is_auto_quantity_add_on"</span>: <span class="nb">false</span>,
         <span class="s2">"is_seated"</span>: <span class="nb">true</span>,
         <span class="s2">"max_running_time"</span>: 120,
         <span class="s2">"media"</span>: <span class="o">{</span>
@@ -2900,7 +2920,8 @@ all media requests are consolidated.</p>
         <span class="n">min_running_time</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span>
         <span class="n">show_performance_time</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="n">has_performances</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-        <span class="s">"is_add_on"</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+        <span class="n">is_add_on</span><span class="o">=</span><span class="n">false</span><span class="p">,</span>
+        <span class="n">is_auto_quantity_add_on</span><span class="o">=</span><span class="n">false</span><span class="p">,</span>
         <span class="n">is_seated</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="n">needs_departure_date</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">needs_duration</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
@@ -3176,6 +3197,7 @@ curl https://demo.ticketswitch.com/f13/events_by_id.v1 <span class="se">\</span>
         <span class="o">}</span>,
         <span class="s2">"has_no_perfs"</span>: <span class="nb">false</span>,
         <span class="s2">"is_add_on"</span>: <span class="nb">false</span>,
+        <span class="s2">"is_auto_quantity_add_on"</span>: <span class="nb">false</span>,
         <span class="s2">"is_seated"</span>: <span class="nb">true</span>,
         <span class="s2">"max_running_time"</span>: 120,
         <span class="s2">"min_running_time"</span>: 120,
@@ -3285,7 +3307,8 @@ curl https://demo.ticketswitch.com/f13/events_by_id.v1 <span class="se">\</span>
         <span class="n">min_running_time</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span>
         <span class="n">show_performance_time</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="n">has_performances</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-        <span class="n">is_add_on</span><span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="n">is_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">is_auto_quantity_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">is_seated</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="n">needs_departure_date</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">needs_duration</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
@@ -3459,6 +3482,7 @@ curl https://demo.ticketswitch.com/f13/events_by_id.v1 <span class="se">\</span>
         <span class="o">}</span>,
         <span class="s2">"has_no_perfs"</span>: <span class="nb">false</span>,
         <span class="s2">"is_add_on"</span>: <span class="nb">false</span>,
+        <span class="s2">"is_auto_quantity_add_on"</span>: <span class="nb">false</span>,
         <span class="s2">"is_seated"</span>: <span class="nb">true</span>,
         <span class="s2">"max_running_time"</span>: 120,
         <span class="s2">"min_running_time"</span>: 120,
@@ -3540,6 +3564,7 @@ curl https://demo.ticketswitch.com/f13/events_by_id.v1 <span class="se">\</span>
         <span class="n">show_performance_time</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="n">has_performances</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="n">is_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">is_auto_quantity_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">is_seated</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="n">needs_departure_date</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">needs_duration</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
@@ -3792,6 +3817,7 @@ definitions of the &ldquo;best&rdquo; offer). Most API users request cost ranges
         <span class="o">}</span>,
         <span class="s2">"has_no_perfs"</span>: <span class="nb">false</span>,
         <span class="s2">"is_add_on"</span>: <span class="nb">false</span>,
+        <span class="s2">"is_auto_quantity_add_on"</span>: <span class="nb">false</span>,
         <span class="s2">"is_seated"</span>: <span class="nb">true</span>,
         <span class="s2">"max_running_time"</span>: 120,
         <span class="s2">"min_running_time"</span>: 90,
@@ -3842,6 +3868,7 @@ definitions of the &ldquo;best&rdquo; offer). Most API users request cost ranges
         <span class="n">show_performance_time</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="n">has_performances</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="n">is_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">is_auto_quantity_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">is_seated</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="n">needs_departure_date</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">needs_duration</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
@@ -4259,6 +4286,7 @@ range data.</p>
         <span class="o">}</span>,
         <span class="s2">"has_no_perfs"</span>: <span class="nb">false</span>,
         <span class="s2">"is_add_on"</span>: <span class="nb">false</span>, 
+        <span class="s2">"is_auto_quantity_add_on"</span>: <span class="nb">false</span>,
         <span class="s2">"is_seated"</span>: <span class="nb">true</span>,
         <span class="s2">"max_running_time"</span>: 120,
         <span class="s2">"min_running_time"</span>: 120,
@@ -4315,6 +4343,7 @@ range data.</p>
         <span class="n">show_performance_time</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="n">has_performances</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="n">is_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">is_auto_quantity_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">is_seated</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="n">needs_departure_date</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">needs_duration</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
@@ -4939,6 +4968,7 @@ data up to date - please contact us instead to discuss options
         <span class="o">}</span>,
         <span class="s2">"has_no_perfs"</span>: <span class="nb">false</span>,
         <span class="s2">"is_add_on"</span>: <span class="nb">false</span>,
+        <span class="s2">"is_auto_quantity_add_on"</span>: <span class="nb">false</span>,
         <span class="s2">"is_seated"</span>: <span class="nb">true</span>,
         <span class="s2">"max_running_time"</span>: 120,
         <span class="s2">"min_running_time"</span>: 120,
@@ -4992,6 +5022,7 @@ data up to date - please contact us instead to discuss options
         <span class="n">show_performance_time</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="n">has_performances</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="n">is_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">is_auto_quantity_add_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">is_seated</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="n">needs_departure_date</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">needs_duration</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
@@ -11045,7 +11076,7 @@ will be two <code class="prettyprint">ticket_order</code>s: one for ADULT and on
 <td>This is a flag that will get set to <code class="prettyprint">true</code> if part of the trolley request could not be added to the trolley. This occurs when we weren&rsquo;t able to find any available products that matched the request and it usually means the user has passed in invalid parameters or is requesting an item that is sold out.</td>
 </tr>
 <tr>
-<td><code class="prettyprint">trolley_contents</code></td>
+<td><code class="prettyprint">trolley_token_contents</code></td>
 <td>See below for object detail.</td>
 </tr>
 <tr>
@@ -11054,7 +11085,7 @@ will be two <code class="prettyprint">ticket_order</code>s: one for ADULT and on
 </tr>
 </tbody></table>
 
-<p><strong><code class="prettyprint">trolley_contents</code> attributes:</strong></p>
+<p><strong><code class="prettyprint">trolley_token_contents</code> attributes:</strong></p>
 
 <table><thead>
 <tr>
@@ -11367,6 +11398,7 @@ can also be included and will add the details to the response.</p>
         <span class="o">}</span>,
         <span class="s2">"has_no_perfs"</span>: <span class="nb">false</span>,
         <span class="s2">"is_add_on"</span>: <span class="nb">true</span>,
+        <span class="s2">"is_auto_quantity_add_on"</span>: <span class="nb">true</span>,
         <span class="s2">"is_seated"</span>: <span class="nb">false</span>,
         <span class="s2">"need_departure_date"</span>: <span class="nb">false</span>,
         <span class="s2">"need_duration"</span>: <span class="nb">false</span>,
@@ -11430,6 +11462,7 @@ can also be included and will add the details to the response.</p>
         <span class="n">venue</span><span class="o">=</span><span class="s">u'Lyric Apollo'</span><span class="p">,</span>
         <span class="n">longitude</span><span class="o">=-</span><span class="mf">0.22639</span><span class="p">,</span>
         <span class="n">is_add_on</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">is_auto_quantity_add_on</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="n">reviews</span><span class="o">=</span><span class="p">[],</span>
         <span class="n">classes</span><span class="o">=</span><span class="p">{</span>
             <span class="s">u'theatre'</span><span class="p">:</span> <span class="s">u'Theatre'</span>
@@ -11516,7 +11549,11 @@ can also be included and will add the details to the response.</p>
 </tr>
 <tr>
 <td><code class="prettyprint">is_add_on</code></td>
-<td><code class="prettyprint">true</code> if this event is an add-on event. This means it can only be added to a trolley containing tickets for an event that lists this in its <code class="prettyprint">add_ons</code>.</td>
+<td><code class="prettyprint">false</code> if this event is an add-on event. This means it can only be added to a trolley containing tickets for an event that lists this in its <code class="prettyprint">add_ons</code>.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">is_auto_quantity_add_on</code></td>
+<td><code class="prettyprint">false</code>  Indicates whether add on quantity will be modified based on the number of ticket orders, if true number of addons will be equal to total number of tickets for all parent events in the trolley.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">is_seated</code></td>
@@ -12886,7 +12923,7 @@ more information drop us an email at
 <td>The second line of the customer&rsquo;s address. <em>Optional if <code class="prettyprint">address_line_one</code> is provided.</em></td>
 </tr>
 <tr>
-<td><code class="prettyprint">agent_ref</code></td>
+<td><code class="prettyprint">agent_reference</code></td>
 <td>Partners can pass their own transaction reference to be stored in the Ingresso platform. <em>Optional.</em></td>
 </tr>
 <tr>
