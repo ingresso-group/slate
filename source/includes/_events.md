@@ -140,6 +140,7 @@ Parameter | Description
         },
         "has_no_perfs": false,
         "is_add_on": false,
+        "is_auto_quantity_add_on": false,
         "is_seated": true,
         "max_running_time": 120,
         "min_running_time": 120,
@@ -182,6 +183,7 @@ Parameter | Description
         },
         "has_no_perfs": false,
         "is_add_on": false,
+        "is_auto_quantity_add_on": false,
         "is_seated": true,
         "max_running_time": 120,
         "min_running_time": 90,
@@ -238,6 +240,7 @@ from pyticketswitch.event import Event
         needs_departure_date=False,
         needs_duration=False,
         needs_performance=False,
+        is_auto_quantity_add_on=False,
         upsell_list=[
             '6IE',
             'MH0'
@@ -271,6 +274,7 @@ from pyticketswitch.event import Event
         needs_departure_date=False,
         needs_duration=False,
         needs_performance=False,
+        is_auto_quantity_add_on=False,
         upsell_list=[
             '6IF',
             '6KU',
@@ -298,7 +302,8 @@ Attribute | Description
 `geo_data.latitude` | Latitude of the event.
 `geo_data.longitude` | Longitude of the event.
 `has_no_perfs` | `true` if the event has no performances. For example some attraction tickets are valid for any date, so we do not present a list of performances to select.
-`is_add_on` | `true` if this event is an add-on event. This means it can only be added to a trolley containing tickets for an event that lists this in its `add_ons`.
+`is_add_on` | `false` if this event is an add-on event. This means it can only be added to a trolley containing tickets for an event that lists this in its `add_ons`.
+`is_auto_quantity_add_on` | `false`  Indicates whether add on quantity will be modified based on the number of ticket orders, if true number of addons will be equal to total number of tickets for all parent events in the trolley.
 `is_seated` | `true` for seated events.
 `max_running_time` | Maximum length / duration in minutes (not always present).
 `min_running_time` | Minimum length / duration in minutes (not always present).
@@ -450,6 +455,7 @@ Parameter | Description
         },
         "has_no_perfs": false,
         "is_add_on": false,
+        "is_auto_quantity_add_on": false,
         "is_seated": true,
         "max_running_time": 120,
         "min_running_time": 90,
@@ -502,6 +508,7 @@ Parameter | Description
         },
         "has_no_perfs": false,
         "is_add_on": false,
+        "is_auto_quantity_add_on": false,
         "is_seated": true,
         "max_running_time": 120,
         "min_running_time": 120,
@@ -557,6 +564,7 @@ from pyticketswitch.event import Event
         show_performance_time=True,
         has_performances=True,
         is_add_on=False,
+        is_auto_quantity_add_on=False,
         is_seated=True,
         needs_departure_date=False,
         needs_duration=False,
@@ -600,6 +608,7 @@ from pyticketswitch.event import Event
           },
           "has_no_perfs": false,
           "is_add_on": true,
+          "is_auto_quantity_add_on": true,
           "is_seated": false,
           "need_departure_date": false,
           "need_duration": false,
@@ -639,6 +648,7 @@ from pyticketswitch.event import Event
         },
         "has_no_perfs": false,
         "is_add_on": false,
+        "is_auto_quantity_add_on": false,
         "is_seated": true,
         "max_running_time": 90,
         "min_running_time": 90,
@@ -674,6 +684,7 @@ from pyticketswitch.event import Event
           },
           "has_no_perfs": false,
           "is_add_on": false,
+          "is_auto_quantity_add_on": false,
           "is_seated": true,
           "max_running_time": 90,
           "min_running_time": 90,
@@ -714,6 +725,7 @@ from pyticketswitch.event import Event
           },
           "has_no_perfs": false,
           "is_add_on": false,
+          "is_auto_quantity_add_on": false,
           "is_seated": true,
           "max_running_time": 120,
           "min_running_time": 120,
@@ -793,6 +805,7 @@ from pyticketswitch.event import Event
                 venue=u'Lyric Apollo',
                 longitude=-0.22639,
                 is_add_on=True,
+                is_auto_quantity_add_on=False,
                 reviews=[],
                 classes={
                     u'theatre': u'Theatre'
@@ -852,6 +865,7 @@ from pyticketswitch.event import Event
                 venue=u'Lyceum Theatre',
                 longitude=-0.11975,
                 is_add_on=False,
+                is_auto_quantity_add_on=False,
                 reviews=[],
                 classes={
                     u'opera': u'Opera'
@@ -903,6 +917,7 @@ from pyticketswitch.event import Event
                 venue=u"Sadler's Wells",
                 longitude=-0.10601562,
                 is_add_on=False,
+                is_auto_quantity_add_on=False,
                 reviews=[],
                 classes={
                     u'dance': u'Ballet & Dance'
@@ -938,6 +953,7 @@ from pyticketswitch.event import Event
         venue=u'Lyric Apollo',
         longitude=-0.22639,
         is_add_on=False,
+        is_auto_quantity_add_on=False,
         reviews=[],
         classes={
             u'theatre': u'Theatre'
@@ -1097,6 +1113,7 @@ Parameter | Description
         },
         "has_no_perfs": false,
         "is_add_on": false,
+        "is_auto_quantity_add_on": false,
         "is_seated": true,
         "max_running_time": 120,
         "media": {
@@ -1267,7 +1284,8 @@ from pyticketswitch.event import Event
         min_running_time=120,
         show_performance_time=True,
         has_performances=True,
-        "is_add_on": false,
+        is_add_on=false,
+        is_auto_quantity_add_on=false,
         is_seated=True,
         needs_departure_date=False,
         needs_duration=False,
@@ -1475,6 +1493,7 @@ Parameter | Description
         },
         "has_no_perfs": false,
         "is_add_on": false,
+        "is_auto_quantity_add_on": false,
         "is_seated": true,
         "max_running_time": 120,
         "min_running_time": 120,
@@ -1587,7 +1606,8 @@ from pyticketswitch.event import Event
         min_running_time=120,
         show_performance_time=True,
         has_performances=True,
-        is_add_on= False,
+        is_add_on=False,
+        is_auto_quantity_add_on=False,
         is_seated=True,
         needs_departure_date=False,
         needs_duration=False,
@@ -1736,6 +1756,7 @@ Parameter | Description
         },
         "has_no_perfs": false,
         "is_add_on": false,
+        "is_auto_quantity_add_on": false,
         "is_seated": true,
         "max_running_time": 120,
         "min_running_time": 120,
@@ -1819,6 +1840,7 @@ from pyticketswitch.event import Event
         show_performance_time=True,
         has_performances=True,
         is_add_on=False,
+        is_auto_quantity_add_on=False,
         is_seated=True,
         needs_departure_date=False,
         needs_duration=False,
@@ -2022,6 +2044,7 @@ Parameter | Description
         },
         "has_no_perfs": false,
         "is_add_on": false,
+        "is_auto_quantity_add_on": false,
         "is_seated": true,
         "max_running_time": 120,
         "min_running_time": 90,
@@ -2075,6 +2098,7 @@ from pyticketswitch.event import Event
         show_performance_time=True,
         has_performances=True,
         is_add_on=False,
+        is_auto_quantity_add_on=False,
         is_seated=True,
         needs_departure_date=False,
         needs_duration=False,
@@ -2396,6 +2420,7 @@ Parameter | Description
         },
         "has_no_perfs": false,
         "is_add_on": false, 
+        "is_auto_quantity_add_on": false,
         "is_seated": true,
         "max_running_time": 120,
         "min_running_time": 120,
@@ -2455,6 +2480,7 @@ from pyticketswitch.price_band import PriceBand
         show_performance_time=True,
         has_performances=True,
         is_add_on=False,
+        is_auto_quantity_add_on=False,
         is_seated=True,
         needs_departure_date=False,
         needs_duration=False,
@@ -2967,6 +2993,7 @@ Parameter | Description
         },
         "has_no_perfs": false,
         "is_add_on": false,
+        "is_auto_quantity_add_on": false,
         "is_seated": true,
         "max_running_time": 120,
         "min_running_time": 120,
@@ -3023,6 +3050,7 @@ from pyticketswitch.event import Event
         show_performance_time=True,
         has_performances=True,
         is_add_on=False,
+        is_auto_quantity_add_on=False,
         is_seated=True,
         needs_departure_date=False,
         needs_duration=False,
