@@ -8,8 +8,11 @@ GET https://demo.ticketswitch.com/f13/status.v1?transaction_uuid={trans_uuid}
 This resource allows you to view the details and status of a transaction. A
 transaction is created when tickets are [reserved](#reserve), and it changes
 status if it is [purchased](#purchase) or [released](#release). Status can be
-called on transactions in any state. An example use is to retrieve information
-to display on a confirmation page.
+called on transactions in any state. As the status call is a blocking call,
+only call the status if you require an up to date status, if you simply want
+the result of the reserve or purchase you just made then please use the
+[Reserve Page Archive](#reserve-page-archive) or [Purchase Page Archive](#purchase-page-archive)
+API calls.
 
 ### Request
 
