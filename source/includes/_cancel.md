@@ -58,7 +58,7 @@ Parameter | Description
 
 ### Response
 
-> **Example response**
+> **Example response -- successful cancellation**
 
 ```shell
 {
@@ -383,9 +383,250 @@ Cancellation(
 )
 ```
 
+> **Example response -- must also cancel**
 
-The `cancelled_status` for each order item will become `cancelled` if it has been cancelled.
-Some items are not cancellable, their `cancelled_status` will be `not_permitted` in the API requests before cancellation (e.g. [purchase](#purchase) and [status](#status)) and after the cancel API request.
+```shell
+{
+   "must_also_cancel" : [
+      {
+         "cancellation_comment" : "",
+         "send_method" : {
+            "send_cost_in_desired" : 8.76,
+            "send_type" : "post",
+            "send_final_type" : "post",
+            "send_desc" : "Post worldwide",
+            "send_cost" : 10,
+            "send_code" : "POST"
+         },
+         "ticket_orders" : {
+            "ticket_order" : [
+               {
+                  "seats" : [
+                     {
+                        "is_restricted_view" : false,
+                        "row_id" : "YC",
+                        "full_id" : "YC472",
+                        "col_id" : "472"
+                     },
+                     {
+                        "full_id" : "YC473",
+                        "col_id" : "473",
+                        "row_id" : "YC",
+                        "is_restricted_view" : false
+                     },
+                     {
+                        "col_id" : "474",
+                        "full_id" : "YC474",
+                        "row_id" : "YC",
+                        "is_restricted_view" : false
+                     }
+                  ],
+                  "sale_combined_in_desired" : 135.75,
+                  "sale_surcharge_in_desired" : 13.14,
+                  "sale_seatprice" : 140,
+                  "total_sale_surcharge" : 45,
+                  "total_sale_combined" : 465,
+                  "discount_desc" : "",
+                  "total_sale_combined_in_desired" : 407.24,
+                  "sale_surcharge" : 15,
+                  "total_sale_surcharge_in_desired" : 39.41,
+                  "no_of_seats" : 3,
+                  "total_sale_seatprice" : 420,
+                  "sale_combined" : 155,
+                  "sale_seatprice_in_desired" : 122.61,
+                  "total_sale_seatprice_in_desired" : 367.83,
+                  "discount_code" : ""
+               }
+            ]
+         },
+         "total_sale_combined_in_desired" : 407.24,
+         "total_sale_seatprice" : 420,
+         "seat_request_status" : "not_requested",
+         "backend_cancellation_reference" : "",
+         "requested_seat_ids" : [],
+         "internal_purchase_sub_ref" : "",
+         "ticket_type_desc" : "Menu French Cancan",
+         "internal_reserve_sub_ref" : "",
+         "price_band_code" : "A/pool",
+         "user_commission" : {
+            "commission_currency_code" : "eur",
+            "amount_including_vat" : 0,
+            "amount_excluding_vat" : 0
+         },
+         "total_sale_combined" : 465,
+         "backend_purchase_reference" : "PURCHASE-3AFD",
+         "event" : {
+            "custom_filter" : [],
+            "min_running_time" : 120,
+            "geo_data" : {
+               "latitude" : 0,
+               "longitude" : 0
+            },
+            "postcode" : "75018",
+            "event_id" : "BPT",
+            "venue_uri_desc" : "Bal-du-Moulin-Rouge",
+            "has_no_perfs" : false,
+            "need_performance" : true,
+            "source_code" : "ext_test1",
+            "event_uri_desc" : "Moulin-Rouge-%28Dinner-Show%29",
+            "event_type" : "simple_ticket",
+            "is_auto_quantity_add_on" : false,
+            "country_code" : "fr",
+            "venue_desc" : "Bal du Moulin Rouge",
+            "show_perf_time" : true,
+            "classes" : {
+               "attract" : "Attractions",
+               "theatre" : "Theatre"
+            },
+            "source_desc" : "Test System One",
+            "max_running_time" : 120,
+            "event_status" : "live",
+            "need_departure_date" : false,
+            "need_duration" : false,
+            "event_desc" : "Moulin Rouge (Dinner Show)",
+            "country_desc" : "France",
+            "is_seated" : true,
+            "is_add_on" : false
+         },
+         "gross_commission" : {
+            "amount_including_vat" : 60,
+            "amount_excluding_vat" : 50,
+            "commission_currency_code" : "eur"
+         },
+         "total_no_of_seats" : 3,
+         "ticket_type_code" : "CANCAN",
+         "performance" : {
+            "is_limited" : false,
+            "running_time" : 120,
+            "iso8601_date_and_time" : "2019-04-01T19:00:00+02:00",
+            "event_id" : "BPT",
+            "perf_id" : "BPT-E6P",
+            "date_desc" : "Mon, 1st April 2019",
+            "has_pool_seats" : true,
+            "is_ghost" : false,
+            "time_desc" : "7.00 PM"
+         },
+         "total_sale_surcharge_in_desired" : 39.41,
+         "internal_reserve_sub_ref2" : "",
+         "cancellation_status" : "possible",
+         "total_sale_seatprice_in_desired" : 367.83,
+         "item_number" : 2,
+         "total_sale_surcharge" : 45
+      }
+   ],
+   "currency_details" : {
+      "eur" : {
+         "currency_pre_symbol" : "â¬",
+         "currency_post_symbol" : "",
+         "currency_number" : 978,
+         "currency_code" : "eur",
+         "currency_places" : 2,
+         "currency_factor" : 100
+      }
+   }
+}
+```
+
+```python
+from pyticketswitch.cancellation import Cancellation
+...
+
+Cancellation(
+    must_also_cancel=[Order(
+        item=2,
+        backend_purchase_reference=PURCHASE-286D
+        cancellation_status="possible",
+        event=Event(
+            id='BPT',
+            status='live',
+            description="Moulin Rouge (Dinner Show)",
+            source='External Test Backend 1',
+            source_code='ext_test1',
+            event_type='simple_ticket',
+            venue='Bal du Moulin Rouge',
+            classes={
+               'attract' : 'Attractions',
+               'theatre' : 'Theatre'
+            },
+            postcode='75018',
+            country='France',
+            country_code='fr',
+            latitude=0,
+            longitude=0,
+            max_running_time=120,
+            min_running_time=120,
+            show_performance_time=True,
+            has_performances=True,
+            is_seated=True,
+            needs_departure_date=False,
+            needs_duration=False,
+            needs_performance=False,
+        ),
+        performance=Performance(
+            id='BPT-E6P',
+            event_id='BPT',
+            date_time=datetime.datetime(2019, 4, 01, 19, 00, tzinfo=tzoffset(None, 7200)),
+            date_description='Mon, 1st April 2019',
+            time_description='7.00 PM',
+            has_pool_seats=True,
+            is_limited=False,
+            is_ghost=False,
+            running_time=120,
+        ),
+        price_band_code='A/pool',
+        ticket_type_code='CANCAN',
+        ticket_type_description='Menu French Cancan',
+        ticket_orders=[
+            TicketOrder(
+                code='',
+                seats=[
+                    Seat(
+                        id='YC472',
+                        column='472',
+                        row='YC',
+                        separator='',
+                        is_restricted=False,
+                    ),
+                    Seat(
+                        id='YC473',
+                        column='473',
+                        row='YC',
+                        separator='',
+                        is_restricted=False,
+                    ),
+                    Seat(
+                        id='YC474',
+                        column='474',
+                        row='YC',
+                        separator='',
+                        is_restricted=False,
+                    ),
+                ],
+                description='',
+                number_of_seats=3,
+                seatprice=140.0,
+                surcharge=15.0,
+                total_seatprice=420.0,
+                total_surcharge=15.0,
+            ),
+        ],
+        number_of_seats=3,
+        total_seatprice=420.0,
+        total_surcharge=45.0,
+        seat_request_status='not_requested',
+        send_method=SendMethod(
+            code='POST',
+            cost=10,
+            description='Post worldwide',
+            type='post',
+        ),
+    )]
+)
+```
+
+
+The `cancellation_status` for each order item will become `cancelled` if it has been cancelled.
+Some items are not cancellable, their `cancellation_status` will be `not_permitted` in the API requests before cancellation (e.g. [purchase](#purchase) and [status](#status)) and after the cancel API request.
 If the cancellation of an order item is tried and fails then the order item `cancellation_status` will become `tried_and_failed`.
 In some circumstances the call might return the `must_also_cancel` list, which means that you must also specify the items in that list in order to cancel the items that you requested to cancel originally.
 
