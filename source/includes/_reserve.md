@@ -47,7 +47,7 @@ If you would like to allow your customers to select seats without restriction
 across price bands and ticket types, you need to add multiple orders to a
 [trolley](#trolley), one order for each ticket type / price band. However there
 are currently some restrictions enforced so if you want to do this you will need
-to contact us first api@ingresso.co.uk.
+to contact us first techsupport@ingresso.co.uk.
 
 ### Request
 

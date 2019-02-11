@@ -46,7 +46,7 @@ inaccurate.
 ## Other caching requirements
 
 If the above caching does not solve your problem, or if you have other caching
-requirements, please get in touch! api@ingresso.co.uk
+requirements, please get in touch! techsupport@ingresso.co.uk
 
 Do not go away and implement your own caching system that continuously makes
 availability requests to Ingresso, without discussing this with us in advance.

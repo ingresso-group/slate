@@ -793,7 +793,7 @@ Additionally, both events have the following conditions in common:
 
 There is a seating plan available for 7AB and 7AA, which will be helpful if
 you decide to implement seat selection on your front end. Please email
-[api@ingresso.co.uk](mailto:api@ingresso.co.uk) and we can talk you through how
+[techsupport@ingresso.co.uk](mailto:techsupport@ingresso.co.uk) and we can talk you through how
 to do this.
 
 It may be useful to use our [B2B website](https://b2b.ingresso.co.uk/b2b/) as a

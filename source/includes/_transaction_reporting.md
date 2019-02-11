@@ -99,7 +99,7 @@ The API allows you to use filters besides the purchase time. Currently the follo
 - `billable` - (boolean `true` or `false`) If set to `true` will only return records for which will be applied a charge by Ingresso (or was applied in the past), if `false` only not billable records will be returned. By default both types of transactions are returned in the query. 
 
 
-If you would find other filters useful please contact us: api@ingresso.co.uk.
+If you would find other filters useful please contact us: techsupport@ingresso.co.uk.
 
 To pass a filter option insert `/filter:{filter_options}` after `/transactions.v0`. All options are passed as `key=value` separated by `,`. For example: `/filter:event_id=44AP,supplier_code=nimax`. The comma separator corresponds to the `AND` logical statement; so in the above example only records with `event_id` equal to `44AP` and
 `supplier_code` equal to `nimax` will be returned. If the value contains white space then enclose it in single quotes `'`.
@@ -295,7 +295,7 @@ Name                                   | Description
 `user_uplift`                          | This is the uplift component earned by the partner.
 
 
-The customer fields are only returned for users which have permissions to see detailed customer data - by default these fields won't be included - if you would like them included please contact us: api@ingresso.co.uk.
+The customer fields are only returned for users which have permissions to see detailed customer data - by default these fields won't be included - if you would like them included please contact us: techsupport@ingresso.co.uk.
 
 For testing you can use the user `demo-customerdata` (password `demopass`). You can purchase with this user the same way you can with `demo`, however note that any customer data you enter when purchasing will be visible by everyone, so **do not enter any data you do not want the internet to see**. 
 

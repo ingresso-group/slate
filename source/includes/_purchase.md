@@ -688,7 +688,7 @@ Attribute | Description
 --------- | -----------
 `backend_purchase_reference` | The purchase reference from the supplier ticketing system. *This reference should be included on customer confirmation emails and self-print vouchers* as this is the only reference that the venue will recognise.
 `event` | The event object, with the same format as for the [events endpoint](#events-by-id).
-`gross_commission` | The total commission available to both Ingresso and the partner. This will only be visible for partners on margin share agreements or where Ingresso take a fixed fee. If you believe you should have gross_commission visible please contact us api@ingresso.co.uk.
+`gross_commission` | The total commission available to both Ingresso and the partner. This will only be visible for partners on margin share agreements or where Ingresso take a fixed fee. If you believe you should have gross_commission visible please contact us techsupport@ingresso.co.uk.
 `gross_commission.amount_excluding_vat` | The total commission amount excluding sales tax.
 `gross_commission.amount_including_vat` | The total commission amount including sales tax.
 `gross_commission.commission_currency` | The commission currency (note that this can be different to the currency seen by the customer).
