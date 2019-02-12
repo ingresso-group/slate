@@ -287,6 +287,8 @@ All of the parameters used to request [additional data for events](#additional-p
         "order": [
           {
             "backend_purchase_reference": "PURCHASE-6710-1",
+            "cancellation_comment" : "",
+            "cancellation_status" : "possible",
             "event": {
               "city_code": "london-uk",
               "city_desc": "London",
@@ -457,6 +459,8 @@ Status(
                 orders=[
                     Order(
                         item=1,
+                        cancellation_comment='',
+                        cancellation_status='possible',
                         event=Event(
                             id='7AB',
                             status='live',
@@ -687,6 +691,8 @@ Attribute | Description
 Attribute | Description
 --------- | -----------
 `backend_purchase_reference` | The purchase reference from the supplier ticketing system. *This reference should be included on customer confirmation emails and self-print vouchers* as this is the only reference that the venue will recognise.
+`cancellation_comment` | A comment from the cancellation attempt.
+`cancellation_status` | If this is `not_permitted` then it is not possible to cancel this order, if it is `possible` then it is possible to cancel this order, see [cancellations](#cancel).
 `event` | The event object, with the same format as for the [events endpoint](#events-by-id).
 `gross_commission` | The total commission available to both Ingresso and the partner. This will only be visible for partners on margin share agreements or where Ingresso take a fixed fee. If you believe you should have gross_commission visible please contact us api@ingresso.co.uk.
 `gross_commission.amount_excluding_vat` | The total commission amount excluding sales tax.
@@ -1040,6 +1046,8 @@ Parameter | Description
         "order": [
           {
             "backend_purchase_reference": "PURCHASE-17BB2-1",
+            "cancellation_comment" : "",
+            "cancellation_status" : "possible",
             "event": {
               "city_code": "london-uk",
               "city_desc": "London",
@@ -1210,6 +1218,8 @@ Status(
                 orders=[
                     Order(
                         item=1,
+                        cancellation_comment='',
+                        cancellation_status='possible',
                         event=Event(
                             id='6IF',
                             status='live',

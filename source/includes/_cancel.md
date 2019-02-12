@@ -262,9 +262,10 @@ Cancellation(
                 orders=[
                     Order(
                         item=1,
-                        backend_cancellation_reference="ATTEMPT-482281",
-                        backend_purchase_reference=PURCHASE-286D
-                        cancellation_status="cancelled",
+                        backend_cancellation_reference='ATTEMPT-482281',
+                        backend_purchase_reference='PURCHASE-286D',
+                        cancellation_comment='',
+                        cancellation_status='cancelled',
                         event=Event(
                             id='6IF',
                             status='live',
@@ -534,8 +535,9 @@ from pyticketswitch.cancellation import Cancellation
 Cancellation(
     must_also_cancel=[Order(
         item=2,
-        backend_purchase_reference=PURCHASE-286D
-        cancellation_status="possible",
+        backend_purchase_reference='PURCHASE-286D',
+        cancellation_comment='',
+        cancellation_status='possible',
         event=Event(
             id='BPT',
             status='live',

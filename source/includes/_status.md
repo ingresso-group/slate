@@ -14,6 +14,9 @@ the result of the reserve or purchase you just made then please use the
 [Reserve Page Archive](#reserve-page-archive) or [Purchase Page Archive](#purchase-page-archive)
 API calls.
 
+Note that transactions that have been cancelled still have a `transaction_status` of `purchased` --- you must check the `cancellation_status` at the order level to know if a transaction (or orders within) have been cancelled.
+See the [cancel](#cancel) docs for more information on this point.
+
 ### Request
 
 > **Example request**
