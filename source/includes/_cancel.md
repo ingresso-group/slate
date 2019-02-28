@@ -7,7 +7,7 @@ POST https://demo.ticketswitch.com/f13/cancel.v1?transaction_uuid={trans_uuid}&c
 
 This endpoint allows users to attempt to cancel [purchased](#purchase) transactions (there is no guarantee that cancellations will succeed).
 By default, users are unable to cancel transactions.
-If you believe that you should be able to cancel transactions then contact us api@ingresso.co.uk.
+If you believe that you should be able to cancel transactions then contact us techsupport@ingresso.co.uk.
 
 If you would like to attempt to cancel a transaction, follow these steps:
 1. Check if the order items within the transaction are cancellable by looking at the `cancellation_status` of each of the order items in the [purchase](#purchase) or [status](#status) response (they are cancellable if `cancellation_status` is `possible`).
