@@ -27,6 +27,7 @@ includes:
   - purchase_page_archive
   - status
   - trans_id_status
+  - cancel
   - cities
   - classes
   - bitmask_fields
