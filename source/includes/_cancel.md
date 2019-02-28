@@ -242,7 +242,7 @@ Parameter | Description
 
 ```python
 from pyticketswitch.trolley import Trolley
-from pyticketswitch.cancellation import Cancellation
+from pyticketswitch.cancellation import CancellationResult
 from pyticketswitch.seat import Seat
 from pyticketswitch.performance import Performance
 from pyticketswitch.purchase_result import PurchaseResult
@@ -252,7 +252,7 @@ from pyticketswitch.send_method import SendMethod
 from pyticketswitch.order import Order
 from pyticketswitch.bundle import Bundle
 
-Cancellation(
+CancellationResult(
     cancelled_item_numbers=[1],
     trolley=Trolley(
         transaction_uuid='284d9c3a-d698-11e6-be8c-002590326962',
@@ -529,10 +529,10 @@ Cancellation(
 ```
 
 ```python
-from pyticketswitch.cancellation import Cancellation
+from pyticketswitch.cancellation import CancellationResult
 ...
 
-Cancellation(
+CancellationResult(
     must_also_cancel=[Order(
         item=2,
         backend_purchase_reference='PURCHASE-286D',
