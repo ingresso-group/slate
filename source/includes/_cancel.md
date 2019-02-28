@@ -30,7 +30,7 @@ curl https://demo.ticketswitch.com/f13/cancel.v1 \
 from pyticketswitch import Client
 
 client = Client('demo', 'demopass')
-status, meta = client.cancel(transaction_uuid='284d9c3a-d698-11e6-be8c-002590326962')
+status, meta = client.cancel_purchase(transaction_uuid='284d9c3a-d698-11e6-be8c-002590326962')
 ```
 
 > **Example request - specify order items to cancel by item number**
@@ -48,7 +48,7 @@ curl https://demo.ticketswitch.com/f13/cancel.v1 \
 from pyticketswitch import Client
 
 client = Client('demo', 'demopass')
-status, meta = client.cancel(transaction_uuid='284d9c3a-d698-11e6-be8c-002590326962', cancel_items_list=[1,3])
+status, meta = client.cancel_purchase(transaction_uuid='284d9c3a-d698-11e6-be8c-002590326962', cancel_items_list=[1,3])
 ```
 
 Parameter | Description
