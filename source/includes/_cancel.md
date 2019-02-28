@@ -11,7 +11,7 @@ If you believe that you should be able to cancel transactions then contact us te
 
 If you would like to attempt to cancel a transaction, follow these steps:
 1. Check if the order items within the transaction are cancellable by looking at the `cancellation_status` of each of the order items in the [purchase](#purchase) or [status](#status) response (they are cancellable if `cancellation_status` is `possible`).
-2. Attempt the cancellation of the `"cancellation_status": "possible"` order items. You can specify which order items to cancel in the transaction with the optional list, `cancel_items_list`. If you don't specify any order items to cancel then it will be assumed that the whole transaction should be cancelled.
+2. Attempt the cancellation of the `"cancellation_status": "possible"` order items. You can specify which order items to cancel in the transaction with the optional list, `cancel_items_list`. If you don't specify any order items to cancel then it will be assumed that the whole transaction should be cancelled (Ingresso will then attempt to cancel all items that can be cancelled).
 3. Check the response to see if the cancellation worked as you expected, for example some order items may not succeed in getting cancelled, whereas others might. Cancelling some items may cause other items to be cancelled. Check both the high level `cancelled_item_numbers` and the updated `cancellation_status` on each of the orders within the trolley. There might be a charge for the cancellation.
 
 ### Request
