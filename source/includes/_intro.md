@@ -690,7 +690,7 @@ or using an interactive seating chart).
 
 ### (Required) Seat selection respects leaving singles policy
 If seat selection is supported, your interface must respect the
-`allow_leaving_single_seats` attribute set for each price band by a performance
+`allows_leaving_single_seats` attribute set for each price band by a performance
 availability call. If the seat selection chosen by your customer would leave a
 single seat by itself in a block, and this is not allowed by the venue for the
 price band the seats are in, your application must indicate to the customer that
