@@ -821,6 +821,18 @@ It can be useful to test different dispatch methods:
 - Toy Story (7AA) has a "self-print voucher" option without the barcode
 
 
+## Live Testing
+
+Sometimes partners wish to make test purchases of live events via our API. If you do that please ensure you:
+
+- Always check with us before purchasing something - email operations@ingresso.co.uk
+- Choose a date that is as far in advance as possible. If you book tickets for today there normally won't be enough time to cancel them.
+- After you put through a successful test purchase either cancel it via the API (if that is possible - often it isn't) or notify customerservices@ingresso.co.uk so they can cancel it. 
+- Use "test" as either the customer first or last name - an internal Ingresso alert is sent for transactions for a "test" customer that haven't yet been cancelled.
+
+<aside class="warning">If the tickets cannot be cancelled with the supplier as a result of you not following these instructions then you will be responsible for the cost of the tickets.</aside>
+
+
 ## Versioning
 
 The API version number forms part of the URL, for example
