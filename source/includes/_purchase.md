@@ -33,39 +33,6 @@ You take payment using a payment provider of your own choosing. When calling
 purchase you should just provide customer data, and the purchase call will
 return a success or failure.
 
-### Stripe 
-
-Stripe is a developer-friendly payment provider that is simple to integrate
-with. The Ingresso API provides a payment processing engine that gives you
-integration support for Stripe and other payment sources. You pass us a Stripe
-token or 3D Secure source generated on your checkout page, and we handle the
-rest. We support partners collecting payment via their own Stripe account or
-into Ingresso's Stripe account.
-
-In either case, you need integrate against
-[Stripe.js](https://stripe.com/docs/stripe-js/reference) and collect a Stripe
-token after your customer enters their payment details.
-The token or source information is passed to Ingresso before making the
-purchase call.
-
-If you want to collect payment via your own Stripe account you will need to get
-an agreement with us to sell tickets on credit, and we will invoice you for
-the ticket price less your commission. You will need to provide Ingresso your
-Stripe keys to allow us to process payment on your behalf. 
-
-If you wish to use Ingresso's Stripe account we have some requirements 
-to reduce fraud including implementing 3D Secure support and passing in the 
-customer's IP address, so please get in touch with us first. We however encourage 
-partners to open their own Stripe account rather than use ours.
-
-In the examples below we will describe how to purchase using the on-credit and
-Stripe options in more detail. We then describe how to handle generic redirects
-which are needed for other supported payment providers such as Global Collect.
-We recommend that all partners that wish to use Stripe also implement generic
-redirects - this is a small amount of additional development work that ensures 
-you will be able to accept alternate payment methods both now and in future.
-
-
 ### Notes on sending customer data
 
 * You must pass in the customer name, phone number and address for the purchase
