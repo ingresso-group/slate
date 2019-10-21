@@ -31,7 +31,7 @@ accidentally returned.
 > **Definition**
 
 ```
-GET https://demo.ticketswitch.com/f13/events.v1
+GET https://api.ticketswitch.com/f13/events.v1
 ```
 
 ### Request
@@ -39,7 +39,7 @@ GET https://demo.ticketswitch.com/f13/events.v1
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/events.v1 \
+curl https://api.ticketswitch.com/f13/events.v1 \
     -u "demo:demopass" \
     -d "keywords=matthew" \
     -d "country_code=uk" \
@@ -336,7 +336,7 @@ Attribute | Description
 > **Definition**
 
 ```
-GET https://demo.ticketswitch.com/f13/events_by_id.v1?event_id_list={eventidlist}
+GET https://api.ticketswitch.com/f13/events_by_id.v1?event_id_list={eventidlist}
 ```
 
 This resource returns detail for one or more specific events by their ID. It
@@ -345,7 +345,7 @@ returns a dictionary of events keyed on the event's `event_id`.
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
+curl https://api.ticketswitch.com/f13/events_by_id.v1 \
     -u "demo:demopass" \
     -d "event_id_list=6IF,6IE" \
     --compressed \
@@ -363,7 +363,7 @@ events, meta = client.get_events(event_ids=['6IF'])
 > **Example request - with add-on and upsell events included**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
+curl https://api.ticketswitch.com/f13/events_by_id.v1 \
     -i "demo:demopass" \
     -d "event_id_list=7AB" \
     -d "add_add_ons" \
@@ -1036,7 +1036,7 @@ all media requests are consolidated.
 > **Example Request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
+curl https://api.ticketswitch.com/f13/events_by_id.v1 \
     -u "demo:demopass" \
     -d "event_id_list=6IF" \
     -d "req_media_triplet_one" \
@@ -1434,7 +1434,7 @@ many events are being returned.
 
 ```shell
 
-curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
+curl https://api.ticketswitch.com/f13/events_by_id.v1 \
     -u "demo:demopass" \
     -d "event_id_list=6IF" \
     -d "req_extra_info" \
@@ -1700,7 +1700,7 @@ We expose critic reviews for events that have them.
 > **Example Request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
+curl https://api.ticketswitch.com/f13/events_by_id.v1 \
     -u "demo:demopass" \
     -d "event_id_list=6IF" \
     -d "req_reviews" \
@@ -1915,7 +1915,7 @@ price.</aside>
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
+curl https://api.ticketswitch.com/f13/events_by_id.v1 \
     -u "demo:demopass" \
     -d "event_id_list=6L9" \
     -d "req_cost_range" \
@@ -2211,7 +2211,7 @@ the parent event object.
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
+curl https://api.ticketswitch.com/f13/events_by_id.v1 \
     -u "demo:demopass" \
     -d "event_id_list=6IF" \
     -d "req_cost_range_details" \
@@ -2721,7 +2721,7 @@ data up to date - please contact us instead to discuss options
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
+curl https://api.ticketswitch.com/f13/events_by_id.v1 \
     -u "demo:demopass" \
     -d "event_id_list=6IF" \
     -d "req_avail_details" \

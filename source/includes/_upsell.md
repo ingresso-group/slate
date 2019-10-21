@@ -10,7 +10,7 @@ containing add-ons.
 > **Definition**
 
 ```
-GET https://demo.ticketswitch.com/f13/add_ons.v1
+GET https://api.ticketswitch.com/f13/add_ons.v1
 ```
 
 This resource returns detail for which add-on events may be added to a given
@@ -23,7 +23,7 @@ will not change the state of any existing trolley.
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/add_ons.v1 \
+curl https://api.ticketswitch.com/f13/add_ons.v1 \
     -u "demo:demopass" \
     -d "trolley_token=M2--6TcZRZsfgZI0E8PmlGWqr5PQluhxE46Nqnno3Xa24lFuIKM_0IYJq40BDvisBRcXKsaGBdLfu8B5TfwI4s7jk7y7xRto_SwJL177u_vuvvq_Ynqnj64IfAHmItXxz_-xdTQGXh_G-BuPGxPXNY_Ycimiv1ZYlPFuPjsoVugnUnyu2F0TmpdztEtgI9PC1WhnTeHeRUDEBvVewOIf_PEJkPVR-UXFDg3gxbHYQBENW5XpkYnRhc22IqrB7eAoK0MbTLaPMk3uB1BKnz_B7fasSU_NU3nhXvmgHa4suvCT9oEaQSGvq4G0glOtyCiqL1FfVJ2R3KIgb2xC4NbAm4cNL5q22V_W0eYGmJ9DTBJ90UWvAWH7UeFLM1--Z" \
     --compressed \

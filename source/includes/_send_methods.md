@@ -1,7 +1,7 @@
 # Send Methods
 
 ```
-GET https://demo.ticketswitch.com/f13/send_methods.v1?perf_id={performanceid}
+GET https://api.ticketswitch.com/f13/send_methods.v1?perf_id={performanceid}
 ```
 
 This section describes the available methods of delivery for a given
@@ -18,7 +18,7 @@ called as needed to ensure the user isn't seeing options that are out of date.
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/send_methods.v1 \
+curl https://api.ticketswitch.com/f13/send_methods.v1 \
     -u "demo:demopass" \
     -d "perf_id=6IF-B0I" \
     --compressed \

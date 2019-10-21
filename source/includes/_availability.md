@@ -3,7 +3,7 @@
 > **Definition**
 
 ```
-GET https://demo.ticketswitch.com/f13/availability.v1?perf_id={performanceid}
+GET https://api.ticketswitch.com/f13/availability.v1?perf_id={performanceid}
 ```
 
 **`availability`** lists the tickets that are currently available for a performance.
@@ -39,7 +39,7 @@ via the API and displaying it yourself.
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/availability.v1 \
+curl https://api.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
     -d "perf_id=6IF-B5P" \
     --compressed \
@@ -450,7 +450,7 @@ seats via the API and displaying them to customers yourself.
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/availability.v1 \
+curl https://api.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
     -d "perf_id=7AB-5" \
     -d "add_seat_blocks" \
@@ -1271,7 +1271,7 @@ no need to also request example seats.
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/availability.v1 \
+curl https://api.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
     -d "perf_id=7AB-5" \
     -d "no_of_seats=3" \
@@ -1552,7 +1552,7 @@ subtract commission from the total ticket price (`sale_seatprice` +
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/availability.v1 \
+curl https://api.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
     -d "perf_id=6IF-B5P" \
     -d "req_predicted_commission" \
@@ -1958,7 +1958,7 @@ of available tickets.
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/availability.v1 \
+curl https://api.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
     -d "perf_id=6IF-B5P" \
     -d "add_discounts" \

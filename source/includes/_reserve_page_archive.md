@@ -2,7 +2,7 @@
 > **Definition**
 
 ```
-GET https://demo.ticketswitch.com/f13/reserve_page_archive.v1
+GET https://api.ticketswitch.com/f13/reserve_page_archive.v1
 ```
 This API call does not get an up to date status of the reservation, it is simply retrieving the previously sent reservation response, verbatim.
 Reservation responses are held for 24 hours, this exceeds the length of time that reservations are valid for.
@@ -18,7 +18,7 @@ If the reservation is no longer being stored (i.e. more than 24 hours have passe
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/reserve_page_archive.v1 \
+curl https://api.ticketswitch.com/f13/reserve_page_archive.v1 \
     -u "demo:demopass" \
     -d "transaction_uuid=U-986E1961-F8B7-11E8-8434-AC1F6B465FBC-C7DCDC47-LDNX" \
     --compressed \

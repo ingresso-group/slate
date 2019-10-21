@@ -72,7 +72,7 @@ may be used to shortcut this flow for some types of products.
 > **List events including from prices and a single image**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/events.v1 \
+curl https://api.ticketswitch.com/f13/events.v1 \
     -u "demo:demopass" \
     -d "req_cost_range" \
     -d "req_media_triplet_one" \
@@ -89,7 +89,7 @@ curl uses the -u flag to pass HTTP Basic Authentication credentials in the forma
 > **List performances for event ID 6IF**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/performances.v1 \
+curl https://api.ticketswitch.com/f13/performances.v1 \
     -u "demo:demopass" \
     -d "event_id=6IF" \
     -d "page_len=200" \
@@ -100,7 +100,7 @@ curl https://demo.ticketswitch.com/f13/performances.v1 \
 > **Display availability for the 9th May performance**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/availability.v1 \
+curl https://api.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
     -d "perf_id=6IF-B0T" \
     --compressed \
@@ -110,7 +110,7 @@ curl https://demo.ticketswitch.com/f13/availability.v1 \
 > **Reserve 2 tickets in price band A in the Circle**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/reserve.v1 \
+curl https://api.ticketswitch.com/f13/reserve.v1 \
     -u "demo:demopass" \
     -d "perf_id=6IF-B0T" \
     -d "ticket_type_code=CIRCLE" \
@@ -123,7 +123,7 @@ curl https://demo.ticketswitch.com/f13/reserve.v1 \
 > **Purchase the tickets**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/purchase.v1 \
+curl https://api.ticketswitch.com/f13/purchase.v1 \
     -u "demo:demopass" \
     -d "transaction_uuid=XXXXXXXX" \
     --compressed \
@@ -249,7 +249,7 @@ The process for going on sale is:
 > Example request with authentication
 
 ```shell
-curl https://demo.ticketswitch.com/f13/events.v1 \
+curl https://api.ticketswitch.com/f13/events.v1 \
     -u "demo:demopass" \
     -d "s_keys=matthew" \
     -d "s_coco=uk" \
@@ -271,7 +271,7 @@ curl uses the -u flag to pass basic auth credentials in the format user:password
 > Connect as the `demosub` subuser with Dutch as the preferred language
 
 ```shell
-curl https://demo.ticketswitch.com/f13/events.v1/demo/demosub/nl \
+curl https://api.ticketswitch.com/f13/events.v1/demo/demosub/nl \
     -u "demo:demopass" \
     -d "s_keys=matthew" \
     -d "req_extra_info" \
@@ -836,7 +836,7 @@ Sometimes partners wish to make test purchases of live events via our API. If yo
 ## Versioning
 
 The API version number forms part of the URL, for example
-https://demo.ticketswitch.com/f13/events.v1 uses version 1. We will always
+https://api.ticketswitch.com/f13/events.v1 uses version 1. We will always
 endeavour to add functionality and make changes in a backward-compatible manner,
 but when that is not possible we will implement a new version. We will then
 introduce a deprecation schedule for the replaced version and notify all

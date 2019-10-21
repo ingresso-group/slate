@@ -2,7 +2,7 @@
 > **Definition**
 
 ```
-POST https://demo.ticketswitch.com/f13/purchase.v1
+POST https://api.ticketswitch.com/f13/purchase.v1
 ```
 
 To purchase tickets you must first [reserve](#reserve) them. You can then
@@ -108,7 +108,7 @@ more information drop us an email at
 > **Example request - purchasing on-credit**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/purchase.v1 \
+curl https://api.ticketswitch.com/f13/purchase.v1 \
     -u "demo:demopass" \
     -d "transaction_uuid=61cfd4eb-1f5b-11e7-b228-0025903268dc" \
     -d "first_name=Test" \
@@ -875,7 +875,7 @@ step fails we automatically refund the Stripe payment.*
 > **Example purchase request - Stripe**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/purchase.v1 \
+curl https://api.ticketswitch.com/f13/purchase.v1 \
     -u "demo-stripe:demopass" \
     -d "transaction_uuid=2e740db5-1b65-11e7-9e97-002590326932" \
     -d "first_name=Test" \
@@ -1383,7 +1383,7 @@ To support generic redirects you should use the following sequence:
 > **Example purchase request - generic redirects**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/purchase.v1 \
+curl https://api.ticketswitch.com/f13/purchase.v1 \
     -u "demo-redirect:demopass" \
     -d "transaction_uuid=a75a03c3-efc2-11e6-a96d-d0bf9c45f5c0" \
     -d "first_name=Test" \
@@ -1465,7 +1465,7 @@ Parameter | Description
 ``` shell
 {
   "callout": {
-    "callout_destination_url": "https://demo.ticketswitch.com/tickets/dummy_redirect.buy/demo-redirect",
+    "callout_destination_url": "https://api.ticketswitch.com/tickets/dummy_redirect.buy/demo-redirect",
     "callout_parameters": {
       "return_url": "https://www.yourticketingsite.com/token.FIRST_UNIQUE_TOKEN/return.php",
       "title": "Dummy external card details page for debit on system 'ext_test0'"
@@ -1547,7 +1547,7 @@ Attribute | Description
 > **Example callback request - generic redirects**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/callback.v1/this.FIRST_UNIQUE_TOKEN/next.NEXT_UNIQUE_TOKEN \
+curl https://api.ticketswitch.com/f13/callback.v1/this.FIRST_UNIQUE_TOKEN/next.NEXT_UNIQUE_TOKEN \
     -u "demo-redirect:demopass" \
     -d "param1=asdfasdfsdfasdff" \
     -r "https://www.thepaymentpage.com/asdfsadfsdafasdf" \

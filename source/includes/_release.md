@@ -2,7 +2,7 @@
 > **Definition**
 
 ```
-POST https://demo.ticketswitch.com/f13/release.v1?transaction_uuid={trans_uuid}
+POST https://api.ticketswitch.com/f13/release.v1?transaction_uuid={trans_uuid}
 ```
 
 This resource allows you to release previously-reserved tickets. It is important
@@ -22,7 +22,7 @@ access to tickets (including your other customers).
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/release.v1 \
+curl https://api.ticketswitch.com/f13/release.v1 \
     -u "demo:demopass" \
     -d "transaction_uuid=f2158be3-d29e-11e6-8aab-0025903268dc" \
     --compressed \

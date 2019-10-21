@@ -2,7 +2,7 @@
 > **Definition**
 
 ```
-POST https://demo.ticketswitch.com/f13/reserve.v1
+POST https://api.ticketswitch.com/f13/reserve.v1
 ```
 
 <aside class="notice">
@@ -54,7 +54,7 @@ to contact us first techsupport@ingresso.co.uk.
 > **Example request - reserving best available tickets, specifying specific discount codes**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/reserve.v1 \
+curl https://api.ticketswitch.com/f13/reserve.v1 \
     -u "demo:demopass" \
     -d "perf_id=6IF-B1S" \
     -d "ticket_type_code=CIRCLE" \
@@ -83,7 +83,7 @@ reservation, meta = client.make_reservation(
 > **Example request - reserving specific seats**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/reserve.v1 \
+curl https://api.ticketswitch.com/f13/reserve.v1 \
     -u "demo:demopass" \
     -d "perf_id=7AB-5" \
     -d "ticket_type_code=STALLS" \
@@ -112,7 +112,7 @@ reservation, meta = client.make_reservation(
 > **Example request - reserving orders previously added to a trolley**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/reserve.v1 \
+curl https://api.ticketswitch.com/f13/reserve.v1 \
     -u "demo:demopass" \
     -d "trolley_token=s2--pFMaAzbxn3wG3zY-OAuclGgU9zzsUFJOLXpOquDKNGpwGn205i4_XzD6O6i8ZCqo2qxmA5QdvETbr7DlqTsbLayzHrvvf9zrz2NdGZuggwXHdx3cgPdbJzFeexIylGsxo7d3T9FWUkViv76Rz7qUH8qXeb9nWjF7ahrNsuHA8w_R63XmOQVNDIvJFS1hC6vFO3sD3t0MqKKguqRWuP4mM2vRN6BimgWYqrNqQw5D_-bfumE1Xl2vXu3FgSEp_N9dpsQ1fXK3qfoOiH-Hsd0F2Zh84IyMcrJkGZH8dlhdEWbvaMlu1rQ8Kw6hJMUigc31jbfHjuquCpDgI-OKyV8LQuQGz8wZsxj3jwWmLClcl50W7p1dTVLEYIW52jWqALRYFAresEGqzct0xDCeaoAjZ5vagMS2KXVmZ" \
     --compressed \
