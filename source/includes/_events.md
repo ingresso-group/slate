@@ -301,7 +301,7 @@ Attribute | Description
 `geo_data` | A block containing the following geo co-ordinates:
 `geo_data.latitude` | Latitude of the event.
 `geo_data.longitude` | Longitude of the event.
-`has_no_perfs` | `true` if the event has no performances. For example some attraction tickets are valid for any date, so we do not present a list of performances to select.
+`has_no_perfs` | `true` if the event has no performances. All events must have performances to be sold, so an event without performances cannot be sold and will likely soon have its `event_status` set to `dead`.
 `is_add_on` | `false` if this event is an add-on event. This means it can only be added to a trolley containing tickets for an event that lists this in its `add_ons`.
 `is_auto_quantity_add_on` | `false`  Indicates whether add on quantity will be modified based on the number of ticket orders, if true number of addons will be equal to total number of tickets for all parent events in the trolley.
 `is_seated` | `true` for seated events.
@@ -309,7 +309,7 @@ Attribute | Description
 `min_running_time` | Minimum length / duration in minutes (not always present).
 `need_departure_date` | Flag indicating whether the event needs a departure date specified. This is `false` for most events. Most partners can ignore this.
 `need_duration` | Flag indicating whether the event needs duration (specific to `hotel_room` events only). Most partners can ignore this.
-`need_performance` | Flag indicating if a performance must be selected in order to retrieve availability. For the vast majority of events this will be `true`.
+`need_performance` | Flag indicating if an event supports performances. For events that require a date and time to be selected this will be `true`. Other events, for example some attraction tickets, are valid for any date; these events will return `false` however they will still return a list of dummy performances - you should not present these performances to the end user but you should programmatically choose any single performance when requesting availability.
 `postcode` | Postcode of the event location.
 `show_perf_time` | `false` if the performance time is not relevant, for example some events use a performance description rather than specific times.
 `source_code` | Source supplier code e.g. `nimax`.
