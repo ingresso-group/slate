@@ -10,7 +10,6 @@ Example partners that have integrated with the Ingresso API are
 [GetYourGuide](https://www.getyourguide.com/) and 
 [lastminute.com](http://www.lastminute.com/theatre/). We also build our own 
 ticketing websites entirely on top of the API, for example 
-[Ticketmaster Theatre](https://theatre.ticketmaster.co.uk/book/25DR-the-lion-king/) and
 [From The Box Office](https://www.fromtheboxoffice.com). 
 
 The Ingresso API is a fully transactional API, loosely based on REST. You format
