@@ -1548,6 +1548,7 @@ subtract commission from the total ticket price (`sale_seatprice` +
 `sale_surcharge`) you have the net price of the ticket.
 
 There are important caveats to note:
+
 1. The price and commission is not guaranteed until tickets are [reserved](#reserve). 
 Ingresso do not store the commission values returned in this availability request so 
 we cannot refer to it later. Some suppliers have rules where the price will change 
@@ -1558,6 +1559,7 @@ is normally unknown when requesting availability.
 It is also possible but unlikely for Ingresso's commission configuration to 
 change between you requesting availability and reserving. For these reasons 
 commission values are marked as "predicted". 
+
 2. It is possible for the commission currency to be different to the selling currency, 
 since the commission currency usually relates to the supplier while the selling 
 currency is targeted at the end customer. When the currencies are different you 
