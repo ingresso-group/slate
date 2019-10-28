@@ -1547,6 +1547,23 @@ Availability will return the predicted per ticket commission you will earn. If y
 subtract commission from the total ticket price (`sale_seatprice` +
 `sale_surcharge`) you have the net price of the ticket.
 
+There are important caveats to note:
+1. The price and commission is not guaranteed until tickets are [reserved](#reserve). 
+Ingresso do not store the commission values returned in this availability request so 
+we cannot refer to it later. Some suppliers have rules where the price will change 
+after tickets are reserved (for example lowering the price to a family rate when
+2 adults and 2 children are selected) - that would likely also affect commission. 
+Similarly, the number of tickets can impact the commission but the number of tickets
+is normally unknown when requesting availability.
+It is also possible but unlikely for Ingresso's commission configuration to 
+change between you requesting availability and reserving. For these reasons 
+commission values are marked as "predicted". 
+2. It is possible for the commission currency to be different to the selling currency, 
+since the commission currency usually relates to the supplier while the selling 
+currency is targeted at the end customer. When the currencies are different you 
+can't simply subtract commission from total ticket price.
+
+
 ### Request
 
 > **Example request**
