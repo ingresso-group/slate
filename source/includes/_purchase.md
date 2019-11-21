@@ -732,6 +732,7 @@ Attribute | Description
 `row_id` | The row identifier of the seat.
 `seat_text` | A message about the seat that must be displayed to customers.
 `seat_text_code` | An identifier for the seat text (only unique within the current `bundle_source_code`). Not useful for most partners.
+`barcode` | The barcode data for the ticket if returned by the supplier system.
 
 
 ## Purchasing with Stripe
