@@ -47,7 +47,15 @@ If you would like to allow your customers to select seats without restriction
 across price bands and ticket types, you need to add multiple orders to a
 [trolley](#trolley), one order for each ticket type / price band. However there
 are currently some restrictions enforced so if you want to do this you will need
-to contact us first techsupport@ingresso.co.uk.
+to contact us first: techsupport@ingresso.co.uk.
+
+<aside class="warning">
+Since some suppliers use dynamic pricing, it is possible for the price to change 
+between when you request availability and when you reserve tickets. You should
+therefore check the `sale_seatprice` and `sale_surcharge` in this response to
+check they haven't changed since you requested availability, and if they have
+you may choose to warn the customer.
+</aside>
 
 ### Request
 
