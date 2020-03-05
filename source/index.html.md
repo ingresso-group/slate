@@ -1,14 +1,14 @@
 ---
 title: Ingresso API docs
 
-language_tabs:
+language_tabs: # must be one of https://git.io/vQNgJ
   - shell: cURL
   - python: Python
   - javascript: Javascript
 
 toc_footers:
   - <a href='#how-to-get-access-to-the-api'>Sign up for a developer key</a>
-  - <a href='https://github.com/tripit/slate'>Documentation powered by Slate</a>
+  - <a href='https://github.com/lord/slate'>Documentation Powered by Slate</a>
 
 includes:
   - intro
