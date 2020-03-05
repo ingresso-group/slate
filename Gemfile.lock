@@ -118,7 +118,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  middleman (~> 4.3)
+  middleman (~> 4.2)
   middleman-autoprefixer (~> 2.7)
   middleman-sprockets (~> 4.1)
   middleman-syntax (~> 3.0)
