@@ -789,16 +789,9 @@ GET https://demo-stripe.ticketswitch.com/api/complete_booking/<transaction_uuid>
 
 Parameter | Description
 --------- | -----------
-`transaction_uuid` | The unique reference for the reserved tickets, taken from
-the [reserve](#reserve) response. May also be provided as a GET query string
-parameter.
-`trolley_token` | The `trolley_token` used to create the reservation.
-*Optional.*
-`referer_url` | The URL of the page from which your customer is coming
-(mispelling in line with the [HTTP specification](https://en.wikipedia.org/wiki/HTTP_referer#Etymology)
-). If not specified it will be taken from the request header. Used to send the
-customer back to you if they request a change in their booking details.
-*Optional.*
+`transaction_uuid` | The unique reference for the reserved tickets, taken from the [reserve](#reserve) response. May also be provided as a GET query string parameter.
+`trolley_token` | The `trolley_token` used to create the reservation. *Optional.*
+`referer_url` | The URL of the page from which your customer is coming (mispelling in line with the [HTTP specification](https://en.wikipedia.org/wiki/HTTP_referer#Etymology)). If not specified it will be taken from the request header. Used to send the customer back to you if they request a change in their booking details. *Optional.*
 
 After the purchase has completed, on the `demo-stripe` white label the customer
 is taken to the White Label's confirmation page at
