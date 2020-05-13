@@ -58,9 +58,10 @@ We have also developed the [F13 API Browser](https://f13-browser.ticketswitch.io
 
 ## Basic booking flow
 
-The Ingresso API is designed around booking seats for theatre product, and some
-of the parameters may use language (e.g. `seat`) reflective of that. However, it
-is flexible enough to be used for booking a wide range of different products,
+The Ingresso API was designed to support the more complex task of booking 
+tickets for live entertainment events, and some parameters use language 
+(e.g. `seat`) reflective of that. However, the API includes
+support for booking a wide range of different products,
 including general-admission attractions products, merchandise and more.
 
 For most products that have limited capacity availability, the following basic
@@ -467,7 +468,7 @@ sometimes substantially. They should therefore only be used where necessary.
 
 In order to more easily trace the effect of API calls through the TicketSwitch
 system, every API response will include a tracking ID in the header
-`X-Request-Id`. This value is used internally to the TicketSwitch system to
+`X-Request-Id`. This value is used internally to the Ingresso platform to
 track requests to supplier systems and other internal services, and is recorded
 against reservation and purchase records as well as call logs. If you need to
 debug any request made to the API, please include this request ID when
@@ -510,11 +511,25 @@ Then it should display the two available performances, 1 January {this year + 1}
 and 1 January {this year + 2}, at 15:30:00 UTC.
 
 
+### Support undated events 
+
+Some venues such as theme parks sell undated tickets. These events 
+have `need_performance` = `false` and have an auto-generated
+performance that your integration should auto-select. It should be 
+possible for customers to purchase tickets without having to choose or
+see the auto-generated date in the API.
+
+**Representative Test:** User selects *Ingressoland - Any Time*
+(event ID 1D7B8)<br/>
+It is possible to make it to checkout without needing to select a date (i.e.
+the performance is auto-selected).
+
+
 ### Support best available booking flow
 
-At a minimum, the customer must be able to specify the number of seats they
+At a minimum, the customer must be able to specify the number of tickets they
 want and for which ticket type and price band. The Ingresso backend will then
-reserve the best available seats that meet the requirements.
+reserve the best available tickets that meet the requirements.
 
 **Representative Test:** User selects 3 tickets for event 6IF in the stalls band B<br/>
 When the reservation is made<br/>
@@ -524,13 +539,14 @@ payment process
 
 
 ### Display the full ticket price to the customer before purchase
+
 The customer must be shown the full price they will pay before the purchase is
 confirmed and their payment taken.
 <aside class="notice">If selling in the UK market, the ticket seat price and
 the surcharge should be itemised separately. Make sure to follow all market
 regulations for the countries and regions you are selling in.</aside>
 
-**Representative Test:** User confirms reservation of 1 seat for event 7AB in the stalls
+**Representative Test:** User confirms reservation of 1 ticket for event 7AB in the stalls
 band A (e.g. seat B4)<br/>
 When the confirmation and payment screen is displayed<br/>
 Then the full price should be displayed as £55.00, showing a £50.00 seat price
@@ -538,6 +554,27 @@ and a £5.00 surcharge. Any dispatch methods that incur an additional cost
 should also be listed separately. A total price should be displayed in a
 highlighted font showing the price the customer will pay (by adding the prices
 together).
+
+
+### Display different send methods including eTickets
+
+Various venues support different methods of sending tickets (including post,
+collect from box office, or printable eTickets). Some of these may carry an
+additional fee. Where available, different send methods should be offered to
+the customer, and your application should support eTickets (either provided by
+Ingresso or your own format with a barcode retrieved from the Ingresso API).
+
+**Representative Test:** User confirms reservation of tickets for Toy Story --
+The Opera (7AA)<br/>
+When the customer selects the Toy Story(7AA) event<br/>
+Then the available send methods of *Printable eTicket* and *Post worldwide* are
+shown.
+
+**Representative Test:** User selects *Printable eTicket* and checks out<br/>
+When the customer has purchased the tickets<br/>
+Then the ticket with the appropriate barcode will be sent to their email or
+otherwise permanently saved within your application after purchase has been
+confirmed
 
 
 ### Display special seat conditions to customer before purchase
@@ -565,18 +602,18 @@ Then the application should show that these seats have restricted views, and
 show the seat text for C6 ("Haunted seat").
 
 
-### Release seats if customer does not proceed with the booking flow
+### Release tickets if customer does not proceed with the booking flow
 
-A customer may change their mind about the number or type of seats to be
-reserved for a performance. If your customer selects and reserves seats, then
-goes back to select and reserve additional seats or removes the reserved seats
-from their basket, the initial seats should be [released](#release).
+A customer may change their mind about the number or type of tickets to be
+reserved for a performance. If your customer selects and reserves tickets, then
+goes back to select and reserve additional tickets or removes the reserved tickets
+from their basket, the initial tickets should be [released](#release).
 
 <aside class="warning">Failure to release the initial reservation will mean the
-customer is unable to reserve seats (even though they are actually available),
+customer is unable to reserve tickets (even though they are actually available),
 and needlessly reduces inventory for everyone including your other customers.
 Ingresso will automatically release any reserve after 15 minutes of inactivity,
-but you must release seats as soon as possible. Ingresso reserves the right to
+but you must release tickets as soon as possible. Ingresso reserves the right to
 disable the API account of any partner that does not release tickets when they
 should.</aside>
 
@@ -586,28 +623,7 @@ When the customer selects a second reservation or empties their basket<br/>
 Then your application should call the `release` resource of the
 Ingresso API. This must be done before any further call to `reserve`.<br/>
 Optionally it should also display a message to the customer indicating the
-seat reservation has been released.
-
-
-### Display different send methods including eTickets
-
-Various venues support different methods of sending tickets (including post,
-collect from box office, or printable eTickets). Some of these may carry an
-additional fee. Where available, different send methods should be offered to
-the customer, and your application should support eTickets (either provided by
-Ingresso or your own format with a barcode retrieved from the Ingresso API).
-
-**Representative Test:** User confirms reservation of tickets for Toy Story --
-The Opera (7AA)<br/>
-When the customer selects the Toy Story(7AA) event<br/>
-Then the available send methods of *Printable eTicket* and *Post worldwide* are
-shown.
-
-**Representative Test:** User selects *Printable eTicket* and checks out<br/>
-When the customer has purchased the tickets<br/>
-Then the ticket with the appropriate barcode will be sent to their email or
-otherwise permanently saved within your application after purchase has been
-confirmed
+ticket reservation has been released.
 
 
 ### Gracefully handle reservation failures and seat changes
@@ -637,12 +653,12 @@ changed.
 
 The purchase process can fail for various reasons. The purchase call will
 usually return a reason for failure, if known, after which the reserve status
-will be set to "failed" and the seats automatically released by the backend.
+will be set to "failed" and the tickets automatically released by the backend.
 The reserve must be made again and the seat numbers can change, so your
 application must notify the customer and show the confirmation again before
 attempting to repurchase.
 
-**Representative Test:** User attempts to purchase any number of seats for
+**Representative Test:** User attempts to purchase any number of tickets for
 event 6IE and enters `fail part one` in address line two<br/>
 When the customer enters `fail part one` in the address line two and clicks to
 purchase<br/>
@@ -768,6 +784,8 @@ ID = 6IF) and "Matthew Bourne's Swan Lake test" (6IE).
 - The Nutcracker (6IF) has no OPA or STUDENT discounts in price band B
 - The Nutcracker (6IF) has "collect from the venue" and "post" dispatch methods
   available
+- Ingressoland (1D7B8) is an undated event, meaning a dummy performance is 
+  displayed - this shouldn't be displayed to the user and should be auto-selected
 
 For testing events that allow selection of specific seats, use either "The
 Unremarkable Incident of the Cat at Lunchtime" (event ID = 7AB) or "Toy Story
@@ -807,7 +825,7 @@ Some of these other test events have specific conditions that you can check:
 
 - La Femme (6L9) has blanket discounts
 - La Femme (6L9) has a special offer
-- V&A memberships (6KF) only allow a single seat to be selected and have a type
+- V&A memberships (6KF) only allow a single ticket to be selected and have a type
   of `use_last_perf`
 - California Disney (9XY) is post only (can be used to generate 'no sends' if
   you select a performance date within the next few days)
