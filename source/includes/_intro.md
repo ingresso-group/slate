@@ -364,8 +364,8 @@ Status Code | Description
 One specific case that is worth mentioning in detail is when the API returns a
 502 HTTP status code. This indicates that your request required a connection to an
 upstream server (for example the supplier ticketing system, or a payment
-provider), but we were unable to establish the connection. A lot of the
-systems that our API connects to are very fragile; we do what we can to
+provider), but we were unable to establish the connection. Some of the
+supplier systems that our API connects to are fragile; we do what we can to
 mitigate this, but sometimes those upstream servers simply won't be available
 to service your request. In these situations you could attempt to retry the
 request in case it was just momentary issue, failing that waiting a short time
