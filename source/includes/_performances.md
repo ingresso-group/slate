@@ -1027,6 +1027,8 @@ Attribute | Description
 
 The **avail detail** indicates what prices we have seen for this performance.
 
+<aside class="notice">We always return an array of avail details. For Events and Months the array can contain multiple items, but for Performances there will only ever be one item.</aside>
+
 Attribute | Description
 --------- | -----------
 `absolute_saving` | Defined as (`full_seatprice` + `full_surcharge`) - (`seatprice` + `surcharge`)
