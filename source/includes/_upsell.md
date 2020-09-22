@@ -4,7 +4,7 @@ Add-ons are items that can only be purchased alongside a normal event, for examp
 The Lion King could have add-ons for ticket insurance, a Simba toy and a restaurant
 nearby the Lyceum Theatre.
 
-Add-ons can only be added to a trolley already containing seats for an event 
+Add-ons can only be added to a trolley already containing tickets for an event 
 containing add-ons.
 
 > **Definition**
@@ -44,14 +44,14 @@ Parameter | Description
 --------- | -----------
 `trolley_token` | A valid identifier for an existing trolley.
 --------- | -----------
-`discX` | A trolley with a discount code for added seats.
-`no_of_seats` | A trolley with a specified number of seats added.
-`perf_id` | A trolley with seats for the specified performance added.
-`price_band_code` | A trolley with seats from the specified price band added.
+`discX` | A trolley with a discount code for added tickets.
+`no_of_seats` | A trolley with a specified number of tickets added.
+`perf_id` | A trolley with tickets for the specified performance added.
+`price_band_code` | A trolley with tickets from the specified price band added.
 `remove_items_list` | A trolley with the specified `item_numbers` removed.
-`seatX` | A trolley with the specified seat ID added as one of the seats.
+`seatX` | A trolley with the specified seat ID added as one of the tickets.
 `X_send_code` | A trolley with the specified send method for new tickets added.
-`ticket_type_code` | A trolley with seats of the specified ticket type added.
+`ticket_type_code` | A trolley with tickets of the specified ticket type added.
 
 The list of optional [additional parameters](#additional-parameters) specified
 can also be included and will add the details to the response.
