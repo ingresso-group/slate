@@ -54,7 +54,7 @@ Parameter | Description
 `price_band_code` | The price band code you want to view discounts for.
 `ticket_type_code` | The ticket type code you want to view discounts for.
 `req_predicted_commission`| *Optional*. Include to retrieve [commission](#commission) data. For most partners this will include `predicted_user_commission` only (the predicted amount you earn per ticket). Some partners will also see `predicted_gross_commission`, which is the total commission available to be shared between Ingresso and our partner. By default you will see `predicted_user_commission` only - if you think you need to see `predicted_gross_commission` as well then please get in touch.
-`no_of_seats` | *Optional*. The number of seats the customer would like. If this is specified then only discounts valid for the number of seats will be shown.
+`no_of_seats` | *Optional*. The number of tickets the customer would like. If this is specified then only discounts valid for the number of tickets will be shown.
 `promo_code` | *Optional*. If the supplier supports a promo code this can be specified to unlock a discount. This feature is not commonly used with partners.
 
 
