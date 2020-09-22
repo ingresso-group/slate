@@ -183,7 +183,7 @@ Parameter | Description
 `perf_id` | The performance identifier for the tickets that you want to add to your trolley.
 `price_band_code` | The price band identifier for the tickets that you want to add to your trolley.
 `remove_items_list` | A comma separated list of order `item_number`s that were previously added to the trolley and that you now want to remove.
-`seatX` | Specify a specific seat for ticket number X, with zero-based numbering (so to specify seat A12 as the first ticket use `seat0=A12`). If seat numbers are not specified then when the trolley is later reserved you will receive best available seats.
+`seatX` | Specify a specific seat for ticket number X, with zero-based numbering (so to specify seat A12 as the first ticket use `seat0=A12`). If seat numbers are not specified then when the trolley is later reserved you will receive best available tickets.
 `X_send_code` | Specify a send / despatch method for supplier system X. If this is not present it will default to the first send method. For example, to specify the POST send method for the nimax supplier system, use `nimax_send_code=POST`.
 `ticket_type_code` | The ticket type identifier for the tickets that you want to add to your trolley.
 `trolley_token` | The identifier for the trolley. This is used to add additional orders to a trolley, or to remove orders in a trolley.
@@ -675,9 +675,9 @@ Attribute | Description
 `price_band_code` | The code for a price band, for example "C/pool". The price band code is generally made up of the code from the underlying supplier system, e.g. "C", followed by a "/" separator then "pool" or "alloc", indicating whether the price band is taken from the general pool of tickets or is from a ring-fenced allocation.
 `seat_request_status` | The status of your tickets after they have been reserved. Possible values are `not_requested` (specific seats not requested), `got_none` (you requested A13 and A14 but we gave you A15 and A16), `got_partial` (you requested A13 and A14 but we gave you A14 and A15), `got_all` (you requested A13 and A14 and you got A13 and A14 - by far the most common response when requesting specific seats). 
 `ticket_orders` | A number of ticket_order objects, details below.
-`ticket_type_code` | The unique identifier for the ticket type. For seated events this refers to a part of house / seating area such as Grand Circle.
+`ticket_type_code` | The unique identifier for the ticket type. For attractions this can refer to variations such as General Admission or Fast Track, and there is often only only. For seated events this normally refers to a part of house / seating area such as Grand Circle.
 `ticket_type_desc` | The description for the ticket type. This should be displayed to the customer
-`total_no_of_seats` | The number of seats for this order.
+`total_no_of_seats` | The number of tickets for this order.
 `total_sale_seatprice` | The total face value for this order.
 `total_sale_surcharge` | The total booking fee for this order.
 
