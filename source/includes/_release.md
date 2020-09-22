@@ -12,7 +12,7 @@ or similar, or because they implicitly imply that they want to continue
 browsing, for example by pressing back on your checkout page (when a user
 presses back on sites developed by Ingresso we release their reservation then
 request availability to ensure the user is also able to select the just-released
-seats). This is necessary to ensure that all end users have the best possible
+tickets). This is necessary to ensure that all end users have the best possible
 access to tickets (including your other customers).
 
 <aside class="notice">We may disable API accounts that don't release tickets when they should.</aside>
