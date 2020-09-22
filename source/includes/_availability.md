@@ -13,7 +13,7 @@ at the time the request was made. There is therefore no guarantee that the
 tickets will still be available to purchase at some future time. Tickets are
 only guaranteed to be held after you [reserve tickets](#reserve).
 
-We have a single availability resource that will return best available seating
+We have a single availability resource that will return best available tickets
 by default. This resource is described first and is important to read. We then describe
 [optional parameters](#optional-parameters) that can be passed to request 
 [individual seats](#individual-seats), [example seats](#example-seats), 
@@ -56,7 +56,7 @@ ticket_types, meta = client.get_availability('6IF-B5P')
 Attribute | Description
 --------- | -----------
 `perf_id` | The identifier of the performance that you wish to request availability for.
-`no_of_seats` | *Optional*. The number of seats the customer would like. If this is specified then availability will only be shown for price bands with at least that many contiguous seats available.
+`no_of_seats` | *Optional*. The number of tickets the customer would like. If this is specified then seated availability will only be shown for price bands with at least that many contiguous seats available.
 `promo_code` | *Optional*. If the supplier supports a promo code this can be specified to unlock discounted pricing. This feature is not commonly used with partners.
 
 
@@ -398,7 +398,7 @@ Attribute | Description
 Attribute | Description
 --------- | -----------
 `price_band` | Object described below.
-`ticket_type_code` | The unique identifier for the ticket type. For seated events this refers to a part of house / seating area such as Grand Circle.
+`ticket_type_code` | The unique identifier for the ticket type. For attractions this can refer to variations such as General Admission or Fast Track, and there is often only only. For seated events this normally refers to a part of house / seating area such as Grand Circle.
 `ticket_type_desc` | The description for the ticket type. This should be displayed to the customer (if you are offering seat selection to your customer then you would typically hard-code the description when drawing a seating plan).
 
 
