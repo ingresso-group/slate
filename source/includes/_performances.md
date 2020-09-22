@@ -400,7 +400,7 @@ Attribute | Description
 `cached_max_seats` | This is the maximum number of contiguous seats that can be booked for this performance, based on Ingresso's cached data. Note that if the event supports seat selection you are not limited by the number of contiguous seats, so this value should be used in the context of best available only.
 `date_desc` | human readable date description
 `event_id` | Unique identifier for the event that this performance is an instance of
-`has_pool_seats` | Whether this performance has seats available from the general pool of tickets. This is ignored by most partners.
+`has_pool_seats` | Whether this performance has tickets available from the general pool of tickets. This is ignored by most partners.
 `is_ghost` | `true` when this performance is no longer on sale. When you request performances for an event we will only return performances that are on sale (so `is_ghost` will always be `false`), however it is possible to request [performances by ID](#performances-by-id) for a ghost performance.
 `is_limited` | Indicates whether the supply of tickets is known to be extremely limited. This is usually taken to be fewer than four remaining, though not all ticket sources provide this information. Where the information is not available the flag will always be set to `false`
 `iso8601_date_and_time` | ISO 8601 date and time
@@ -534,7 +534,7 @@ Attribute | Description
 --------- | -----------
 `date_desc` | human readable date description
 `event_id` | Unique identifier for the event that this performance is an instance of
-`has_pool_seats` | Whether this performance has seats available from the general pool of tickets. This is ignored by most partners.
+`has_pool_seats` | Whether this performance has tickets available from the general pool of tickets. This is ignored by most partners.
 `is_ghost` | `true` when this performance is no longer on sale. When you request performances for an event we will only return performances that are on sale (so `is_ghost` will always be `false`), however it is possible to request [performances by ID](#performances-by-id) for a ghost performance.
 `is_limited` | Indicates whether the supply of tickets is known to be extremely limited. This is usually taken to be fewer than four remaining, though not all ticket sources provide this information. Where the information is not available the flag will always be set to `false`
 `iso8601_date_and_time` | ISO 8601 date and time
