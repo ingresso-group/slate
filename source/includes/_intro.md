@@ -40,9 +40,9 @@ times in most cases.
 We have a public library available for [Postman](https://www.getpostman.com/) 
 that closely matches the examples included in this documentation.
 
-Click below to import our collection of API examples.
+Click below to view our collection of API examples.
 
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://www.getpostman.com/collections/7c834c45808672b158a7)
+[![View on Postman](https://run.pstmn.io/button.svg)](https://www.getpostman.com/collections/7c834c45808672b158a7)
 
 
 ## F13 API Browser
@@ -54,6 +54,15 @@ We have also developed the [F13 API Browser](https://f13-browser.ticketswitch.io
 - Move through the Ingresso booking flow using your own API account
 - Easy to use - it can be given to non-technical people to check that the API is returning expected data
 - For each step the request and response data is output in a friendly format and as JSON
+
+
+## Getting started
+
+The best way to try out the Ingresso API is through our public examples, we recommend you use Postman in order to import the API example requests, these can be imported by copying the [Postman collection URL link](https://www.getpostman.com/collections/7c834c45808672b158a7) into your local Postman API tool.
+
+Once you have imported our examples you will then see the folder with our requests, these requests are in order of our [workflow](#basic-booking-flow) which is explained in the next step below. You can now proceed to use the example API requests and view the flow and see the responses from our API.
+
+As you continue through our documentation you will see a variety of CURL requests with hints and tips which you can import into Postman to test.
 
 
 ## Basic booking flow
