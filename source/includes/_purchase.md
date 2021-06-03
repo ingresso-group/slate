@@ -123,6 +123,7 @@ curl https://api.ticketswitch.com/f13/purchase.v1 \
     -d "user_can_use_customer_data=true" \
     -d "email_address=testing@gmail.com" \
     -d "send_confirmation_email=true" \
+    -d "privacy_policy_version=2.2.1" \
     --compressed \
     -X POST
 ```
@@ -179,6 +180,7 @@ Parameter | Description
 `user_can_use_customer_data` | Data protection question - set this to `true` if the customer has opted in to receiving marketing emails from you. Most partners manage marketing opt-ins themselves so do not provide this. Ingresso will never send marketing communications to your customers based on this parameter. *Optional - it will default to false.*
 `work_phone` | The customer's work phone number. *Optional if `phone` is provided.*
 `world_can_use_customer_data` | Data protection question - set this to `true` if the customer has opted in to receiving marketing emails communication from you and third-parties. *Optional - it will default to false.*
+`privacy_policy_version` | The version of your website privacy policy that the customer has agreed to. This is freeform text, not necessarily a number. *Optional - it will default to blank.*
 
 All of the parameters used to request [additional data for events](#additional-parameters) can also be added.
 
@@ -220,6 +222,7 @@ All of the parameters used to request [additional data for events](#additional-p
     "last_name_latin": "Tester",
     "postcode": "W6 8DL",
     "postcode_latin": "W6 8DL",
+    "privacy_policy_version": "2.2.1",
     "suffix": "",
     "suffix_latin": "",
     "supplier_can_use_customer_data": false,
@@ -1474,6 +1477,7 @@ curl https://api.ticketswitch.com/f13/purchase.v1 \
     -d "client_http_user_agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8" \
     -d "client_http_accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" \
     -d "send_confirmation_email=yes" \
+    -d "privacy_policy_version=2.2.1" \
     -X POST
 ```
 
