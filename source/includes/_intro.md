@@ -42,8 +42,8 @@ that closely matches the examples included in this documentation.
 
 Click below to import our collection of API examples.
 
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://www.getpostman.com/collections/7c834c45808672b158a7)
-
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/4cb5e7fd8ecd7fdf1fa9)
+or download directly [here](https://www.getpostman.com/collections/4cb5e7fd8ecd7fdf1fa9)
 
 ## F13 API Browser
 
