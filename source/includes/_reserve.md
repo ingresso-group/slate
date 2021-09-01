@@ -490,6 +490,111 @@ Reservation(
 
 ```
 
+> **Example response - one order - reserved failed**
+
+```shell
+{
+    "input_contained_unavailable_order": false,
+    "unreserved_orders": [
+        {
+            "event": {
+                "city_code": "london-uk",
+                "city_desc": "London",
+                "classes": {
+                    "theatre": "Theatre"
+                },
+                "country_code": "uk",
+                "country_desc": "United Kingdom",
+                "custom_filter": [],
+                "event_desc": "TEST EVENT - The Unremarkable Incident of the Cat at Lunchtime",
+                "event_id": "7AB",
+                "event_path": "/7AB-test-event-the-unremarkable-incident-of-the-cat-at-lunchtime/",
+                "event_status": "live",
+                "event_type": "simple_ticket",
+                "event_upsell_list": {
+                    "event_id": [
+                        "7AA",
+                        "6IF"
+                    ]
+                },
+                "event_uri_desc": "TEST-EVENT-The-Unremarkable-Incident-of-the-Cat-at-Lunchtime",
+                "geo_data": {
+                    "latitude": 51.49306,
+                    "longitude": -0.22639
+                },
+                "has_no_perfs": false,
+                "is_add_on": false,
+                "is_auto_quantity_add_on": false,
+                "is_date_matched_add_on": false,
+                "is_seated": true,
+                "is_time_matched_add_on": false,
+                "need_departure_date": false,
+                "need_duration": false,
+                "need_performance": true,
+                "postcode": "W6 7ES",
+                "show_perf_time": true,
+                "source_code": "ext_test1",
+                "source_desc": "External Test Backend 1",
+                "venue_desc": "Lyric Apollo",
+                "venue_uri_desc": "Lyric-Apollo"
+            },
+            "internal_reserve_sub_ref": "",
+            "internal_reserve_sub_ref2": "",
+            "item_number": 1,
+            "performance": {
+                "date_desc": "Sun, 1st January 2023",
+                "event_id": "7AB",
+                "has_pool_seats": true,
+                "is_ghost": false,
+                "is_limited": false,
+                "iso8601_date_and_time": "2023-01-01T15:30:00Z",
+                "perf_id": "7AB-9",
+                "time_desc": "3.30 PM"
+            },
+            "price_band_code": "B/pool",
+            "requested_seat_ids": [
+                "H9",
+                "H10"
+            ],
+            "reserve_failure_comment": "Seat H10 causes failure.",
+            "seat_request_status": "got_none",
+            "send_method": {
+                "can_generate_self_print": false,
+                "has_html_page": true,
+                "send_code": "VOUCH",
+                "send_cost": 0.0,
+                "send_desc": "Printable E-Ticket (Test)",
+                "send_type": "selfprint"
+            },
+            "ticket_orders": {
+                "ticket_order": [
+                    {
+                        "discount_code": "NORMAL",
+                        "discount_desc": "Regular Ticket",
+                        "discount_semantic_type": "standard",
+                        "no_of_seats": 2,
+                        "sale_combined": 35.0,
+                        "sale_seatprice": 30.0,
+                        "sale_surcharge": 5.0,
+                        "total_sale_combined": 70.0,
+                        "total_sale_seatprice": 60.0,
+                        "total_sale_surcharge": 10.0
+                    }
+                ]
+            },
+            "ticket_type_code": "CIRCLE",
+            "ticket_type_desc": "Dress Circle",
+            "total_no_of_seats": 2,
+            "total_sale_combined": 70.0,
+            "total_sale_seatprice": 60.0,
+            "total_sale_surcharge": 10.0
+        }
+    ]
+}
+```
+
+<!-- Add pyticketswitch equivalent -->
+
 The response will include an identifier for the reserve, detail of the reserved
 items, detail of items that weren't able to be reserved, and a set of flags 
 that confirm the information you need to collect from your customer when 
@@ -523,12 +628,12 @@ Attribute | Description
 `prefilled_address.postcode` | The postcode / zip code - if this is non-blank it should be prefilled.
 `prefilled_address.town` | The town - if this is non-blank it should be prefilled.
 `prefilled_address.work_phone` | The work phone - if this is non-blank it should be prefilled.
-`reserved_trolley` | See below for object detail.
+`trolley_contents` | See below for object detail.
 `supports_billing_address` | For the vast majority of partners this can be ignored (it isn't relevant to partners who purchase on-credit). When it is `true` a separate address may be provided when purchasing tickets, and this will be used to validate the payment card address for venue systems that perform address verification checks.
 `unreserved_orders` | A list of orders that could not be reserved.
 
 
-**`reserved_trolley` attributes:**
+**`trolley_contents` attributes:**
 
 Attribute | Description
 --------- | -----------
@@ -598,6 +703,7 @@ Attribute | Description
 `item_number` | A unique sequential number for the `order`. The second order added to the trolley will have `item_number` 2. The `item_number` remains constant as orders are added or removed, so if `item_number` 1 is removed, the first order will be `item_number` 2.
 `performance` | The [performance](#performance-object) for this order.
 `price_band_code` | The code for a price band, for example "C/pool". The price band code is generally made up of the code from the underlying supplier system, e.g. "C", followed by a "/" separator then "pool" or "alloc", indicating whether the price band is taken from the general pool of tickets or is from a ring-fenced allocation.
+`reserve_failure_comment` | A comment relating to why reserving this order failed. This field will appear when reserving the order failed and it lies in the `unreserved_orders` array.
 `seat_request_status` | The status of your tickets after they have been reserved. Possible values are `not_requested` (specific seats not requested), `got_none` (you requested A13 and A14 but we gave you A15 and A16), `got_partial` (you requested A13 and A14 but we gave you A14 and A15), `got_all` (you requested A13 and A14 and you got A13 and A14 - by far the most common response when requesting specific seats). 
 `ticket_orders` | An array of ticket_order objects, one for each discount code. See below for detail.
 `ticket_type_code` | The unique identifier for the ticket type. For attractions this can refer to variations such as General Admission or Fast Track, and there is often only only. For seated events this normally refers to a part of house / seating area such as Grand Circle.
