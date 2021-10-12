@@ -328,6 +328,9 @@ All of the parameters used to request [additional data for events](#additional-p
               "send_final_type": "collect",
               "send_type": "collect"
             },
+            "supported_barcode_types": [
+              "qr_code"
+            ],
             "ticket_orders": {
               "ticket_order": [
                 {
@@ -676,6 +679,7 @@ Attribute | Description
 `price_band_code` | The code for a price band, for example "C/pool". The price band code is generally made up of the code from the underlying supplier system, e.g. "C", followed by a "/" separator then "pool" or "alloc", indicating whether the price band is taken from the general pool of tickets or is from a ring-fenced allocation.
 `seat_request_status` | The status of your tickets after they have been reserved. Possible values are `not_requested` (specific seats not requested), `got_none` (you requested A13 and A14 but we gave you A15 and A16), `got_partial` (you requested A13 and A14 but we gave you A14 and A15), `got_all` (you requested A13 and A14 and you got A13 and A14 - by far the most common response when requesting specific seats).
 `send_method` | See below for object detail.
+`supported_barcode_types` | An array of strings. See below for possible values
 `ticket_orders` | An array of ticket_order objects, one for each discount code. See below for detail.
 `ticket_type_code` | The unique identifier for the ticket type. For attractions this can refer to variations such as General Admission or Fast Track, and there is often only only. For seated events this normally refers to a part of house / seating area such as Grand Circle.
 `ticket_type_desc` | The description for the ticket type. This should be displayed to the customer
@@ -705,6 +709,28 @@ Attribute | Description
 `send_final_comment` | . Will not always be present.
 `send_final_type` | The classification of send method: one of `selfprint`, `collect` or `post`. The final_type should be the same as the type.
 `send_type` | The classification of send method: one of `selfprint`, `collect` or `post`.
+
+
+**`supported_barcode_types` values:**
+
+An array of strings with the following possible values:
+
+Barcode Type Value |
+--------- |
+`aztec` |
+`aztec_small` |
+`datamatrix` |
+`code128` |
+`code93` |
+`code39` |
+`interleaved_2of5` |
+`ean` |
+`upc` |
+`codabar` |
+`msi` |
+`plessey` |
+`qr_code` |
+`pdf417` |
 
 
 **`ticket_order` attributes:**
@@ -1152,6 +1178,9 @@ Parameter | Description
               "send_final_type": "collect",
               "send_type": "collect"
             },
+            "supported_barcode_types": [
+              "qr_code"
+            ],
             "ticket_orders": {
               "ticket_order": [
                 {
