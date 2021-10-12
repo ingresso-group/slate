@@ -717,20 +717,8 @@ An array of strings with the following possible values:
 
 Barcode Type Value |
 --------- |
-`aztec` |
-`aztec_small` |
-`datamatrix` |
 `code128` |
-`code93` |
-`code39` |
-`interleaved_2of5` |
-`ean` |
-`upc` |
-`codabar` |
-`msi` |
-`plessey` |
 `qr_code` |
-`pdf417` |
 
 
 **`ticket_order` attributes:**
