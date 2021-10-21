@@ -715,16 +715,14 @@ Attribute | Description
 
 An array of strings with the following possible values:
 
-Barcode Type Value | Description
------------- |
-`code128`    |
-`qr_code`    |
-`pdf417`     |
-`aztec`      |
-`aztec_small`|
-`datamatrix` |
-`code39`     |
-`code93`     |
+* `code128`
+* `qr_code`
+* `pdf417`
+* `aztec`
+* `aztec_small`
+* `datamatrix`
+* `code39`
+* `code93`
 
 **`ticket_order` attributes:**
 
