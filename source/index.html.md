@@ -33,6 +33,7 @@ includes:
   - classes
   - bitmask_fields
   - caching
+  - orders_sold
   - transaction_reporting
 
 search: true
