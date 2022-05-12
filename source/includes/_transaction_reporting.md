@@ -1,9 +1,12 @@
 # Transaction Reporting
 
+<aside class="notice"><b>DEPRECATED:</b> Note that transaction reporting service is using different domain
+than other ticketswitch endpoints - <b>.ticketswitch.io</b> as opposed to <b>.ticketswitch.com</b></aside>
+
 <aside class="notice"><b>IMPORTANT:</b> Note that transaction reporting service is using different domain
 than other ticketswitch endpoints - <b>.ticketswitch.io</b> as opposed to <b>.ticketswitch.com</b></aside>
 
-<aside class="notice"><b>NOTE:</b>Transaction records are not live data, so a delay of between a few seconds and a few minutes can be expected between the transaction being completed and becoming visible in the reports</aside> 
+<aside class="notice"><b>NOTE:</b> Transaction records are not live data, so a delay of between a few seconds and a few minutes can be expected between the transaction being completed and becoming visible in the reports</aside> 
 
 > **Definition**
 

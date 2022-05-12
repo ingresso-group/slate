@@ -1,0 +1,8 @@
+# Orders Supplied
+> **Definition**
+
+```
+GET https://api.ticketswitch.com/f13/orders_supplied.v1
+```
+
+This call is currently only available to select users - contact us.
