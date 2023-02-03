@@ -387,6 +387,7 @@ Attribute | Description
 `running_time` | The length / duration of the performance in minutes
 `time_desc` | A human readable time description
 `cached_max_seats` | This should not be used. Earlier versions of the documentation implied that it held a meaningful value for the availability, but this is not true, and the attribute was not always present. If you are using it then you should stop, and switch to cost range data instead if you still want cached availability data. For the time being the value will be one million instead of being absent entirely if the data is not available.
+`cached_max_seats_is_real` | A 'yes' / 'no' string indicating whether the data in the previous variable is actually real or not. Can be used whilst migrating away from using it.
 
 
 ## Performances by ID
