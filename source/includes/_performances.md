@@ -108,7 +108,6 @@ Parameter | Description
     },
     "performance": [
       {
-        "cached_max_seats": 6,
         "date_desc": "Thu, 9th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
@@ -120,7 +119,6 @@ Parameter | Description
         "time_desc": "7.30 PM"
       },
       {
-        "cached_max_seats": 6,
         "date_desc": "Fri, 10th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
@@ -132,7 +130,6 @@ Parameter | Description
         "time_desc": "7.30 PM"
       },
       {
-        "cached_max_seats": 6,
         "date_desc": "Sun, 12th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
@@ -144,7 +141,6 @@ Parameter | Description
         "time_desc": "7.30 PM"
       },
       {
-        "cached_max_seats": 6,
         "date_desc": "Mon, 13th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
@@ -156,7 +152,6 @@ Parameter | Description
         "time_desc": "7.30 PM"
       },
       {
-        "cached_max_seats": 6,
         "date_desc": "Tue, 14th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
@@ -169,7 +164,6 @@ Parameter | Description
         "time_desc": "7.30 PM"
       },
       {
-        "cached_max_seats": 6,
         "date_desc": "Wed, 15th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
@@ -181,7 +175,6 @@ Parameter | Description
         "time_desc": "7.30 PM"
       },
       {
-        "cached_max_seats": 6,
         "date_desc": "Thu, 16th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
@@ -193,7 +186,6 @@ Parameter | Description
         "time_desc": "7.30 PM"
       },
       {
-        "cached_max_seats": 6,
         "date_desc": "Fri, 17th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
@@ -205,7 +197,6 @@ Parameter | Description
         "time_desc": "7.30 PM"
       },
       {
-        "cached_max_seats": 6,
         "date_desc": "Sun, 19th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
@@ -217,7 +208,6 @@ Parameter | Description
         "time_desc": "7.30 PM"
       },
       {
-        "cached_max_seats": 6,
         "date_desc": "Mon, 20th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
@@ -245,7 +235,6 @@ from pyticketswitch.performance import Performance
         time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
-        cached_max_seats=6,
         no_singles_cost_range=None,
         is_ghost=False,
         running_time=120,
@@ -258,7 +247,6 @@ from pyticketswitch.performance import Performance
         time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
-        cached_max_seats=6,
         is_ghost=False,
         running_time=120,
     ),
@@ -270,7 +258,6 @@ from pyticketswitch.performance import Performance
         time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
-        cached_max_seats=6,
         is_ghost=False,
         running_time=120,
     ),
@@ -282,7 +269,6 @@ from pyticketswitch.performance import Performance
         time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
-        cached_max_seats=6,
         is_ghost=False,
         running_time=120,
     ),
@@ -294,7 +280,6 @@ from pyticketswitch.performance import Performance
         time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
-        cached_max_seats=6,
         is_ghost=False,
         running_time=120,
     ),
@@ -306,7 +291,6 @@ from pyticketswitch.performance import Performance
         time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
-        cached_max_seats=6,
         is_ghost=False,
         running_time=120,
     ),
@@ -318,7 +302,6 @@ from pyticketswitch.performance import Performance
         time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
-        cached_max_seats=6,
         is_ghost=False,
         running_time=120,
     ),
@@ -330,7 +313,6 @@ from pyticketswitch.performance import Performance
         time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
-        cached_max_seats=6,
         is_ghost=False,
         running_time=120,
     ),
@@ -342,7 +324,6 @@ from pyticketswitch.performance import Performance
         time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
-        cached_max_seats=6,
         is_ghost=False,
         running_time=120,
     ),
@@ -354,7 +335,6 @@ from pyticketswitch.performance import Performance
         time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
-        cached_max_seats=6,
         is_ghost=False,
         running_time=120,
     ),
@@ -366,7 +346,6 @@ from pyticketswitch.performance import Performance
         time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
-        cached_max_seats=6,
         is_ghost=False,
         running_time=120,
     )
@@ -397,7 +376,6 @@ Attribute | Description
 
 Attribute | Description
 --------- | -----------
-`cached_max_seats` | This is the maximum number of contiguous seats that can be booked for this performance, based on Ingresso's cached data. Note that if the event supports seat selection you are not limited by the number of contiguous seats, so this value should be used in the context of best available only.
 `date_desc` | human readable date description
 `event_id` | Unique identifier for the event that this performance is an instance of
 `has_pool_seats` | Whether this performance has tickets available from the general pool of tickets. This is ignored by most partners.
@@ -407,7 +385,8 @@ Attribute | Description
 `perf_id` | Unique identifier for the performance
 `perf_name` | A human readable description of the performance. Performance names are not always present but must be displayed when they are. Performance names are typically used where performances of an event differ significantly in more than just date and time (sometimes the supplier system will not return the time to us in a structured format but it will instead be included as part of the performance name). Event ID 6IF includes some performances with names.
 `running_time` | The length / duration of the performance in minutes
-`time_desc` | human readable time description
+`time_desc` | A human readable time description
+`cached_max_seats` | This should not be used. Earlier versions of the documentation implied that it held a meaningful value for the availability, but this is not ture, and the variable was not always present. If you are using it then you should stop, and switch to cost range data instead if you still want cached availability data.
 
 
 ## Performances by ID
@@ -642,7 +621,6 @@ Parameter | Description
   },
   "performances_by_id": {
     "6L9-M2R": {
-      "cached_max_seats": 15,
       "cost_range": {
         "best_value_offer": {
           "absolute_saving": 9,
@@ -761,7 +739,6 @@ from pyticketswitch.performance import Performance
         time_description='10.30 PM',
         has_pool_seats=False,
         is_limited=False,
-        cached_max_seats=None,
         cost_range=None,
         no_singles_cost_range=None,
         is_ghost=True,
