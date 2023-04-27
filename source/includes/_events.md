@@ -83,6 +83,7 @@ Parameter | Description
 --------- | -----------
 `req_avail_details` | Returns [availability details](#availability-details) - a cached list of unique ticket types and price bands available for this event across all performances. **This parameter is not commonly used.**
 `req_avail_details_with_perfs` | This will add the list of available performance dates to each avail detail object. *Only valid if used alongside req_avail_details*.
+`req_avail_detail_discounts` | Adds non standard discounts to availability details *Only valid when used alongside req_avail_details*
 `req_cost_range` | Returns [cost ranges](#cost-range) - a from price and offer detail for each event. *Most partners include this parameter.*
 `req_cost_range_best_value_offer` | Returns the offer with the highest percentage saving. *This is the most commonly used offer cost range.*
 `req_cost_range_details` | Returns a list of unique ticket types and price bands and their cost ranges across all performances. **This parameter is not commonly used.**
@@ -90,6 +91,7 @@ Parameter | Description
 `req_cost_range_min_cost_offer` | Returns the offer with the lowest cost.
 `req_cost_range_top_price_offer` | Returns the offer with the highest cost. This is the least used offer cost range.
 `req_cost_range_no_singles_data` | This returns another cost range object that excludes availability with only 1 consecutive seat available. The prices in this cost range will therefore be the same or higher than the outer cost range. It has the same structure as the main cost range (so if you want to see the "best value offer" in the no singles data, you need to add `req_cost_range_best_value_offer` and you will see this data in both cost ranges).
+`req_cost_range_discounts` | Adds alternate discounts to cost range data *Only valid if used alongside req_cost_range*
 `req_extra_info` | Returns the [descriptive info](#extra-info) for the event, returned as individual sections (`structured_info`) or as a single summary (`event_info` / `event_info_html`).
 `req_media_triplet_one` | Triplet one (jpg/png 520x390). [See further detail on media](#media).
 `req_media_triplet_two` | Triplet two if available (jpg/png 520x390).
