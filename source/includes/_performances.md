@@ -83,7 +83,9 @@ performance, and are described in more detail in the
 Parameter | Description
 --------- | -----------
 `req_avail_details` | Returns [availability details](#availability-detail) - a cached list of unique ticket types and price bands available for this performance. **This parameter is not commonly used.**
+`req_avail_detail_discounts` | Adds non standard discounts to availability details *Only valid when used alongside req_avail_details*
 `req_cost_range` | Returns [cost ranges](#cost-ranges) - a from price and offer detail for each event. *Most partners include this parameter.*
+`req_cost_range_discounts` | Returns cost range discounts
 `req_cost_range_best_value_offer` | Returns the offer with the highest percentage saving. *This is the most commonly used offer cost range.*
 `req_cost_range_details` | Returns a list of unique ticket types and price bands and their cost ranges across all performances.
 `req_cost_range_max_saving_offer` | Returns the offer with the highest absolute saving.
