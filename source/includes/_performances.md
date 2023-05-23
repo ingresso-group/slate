@@ -75,6 +75,7 @@ Parameter | Description
 `page_length` | Length of a page, default 50.
 `page_number` | Page number, default 0, ignored if page_len is not present.
 `date_range` | Date range in the form `yyyymmdd:yyyymmdd` (both are optional)
+`s_time` | Performance time in the form `HHMM` e.g. `1915` for 7:15pm
 
 These parameters can be passed in to request additional data for each 
 performance, and are described in more detail in the 
