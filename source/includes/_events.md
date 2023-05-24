@@ -64,7 +64,7 @@ Parameter | Description
 `circle` | Return events within in a circular geographical area. Three colon-separated values are needed for **latitude**, **longitude**, and **radius in kilometres**.  Example: `51.52961137:-0.10601562:10`.
 `city_code` | Return events in a particular city. The list of city codes can be retrieved using the [cities](#cities) resource.
 `country_code` | 2-digit country code (using [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-`include_dead` | Include dead events in the results. This could be useful if you dynamically retrieve the list of events from Ingresso and want to continue to display an event page after an event dies, for example to help with search engine optimisation.
+`add_dead_events` | Include dead events in the results. This could be useful if you dynamically retrieve the list of events from Ingresso and want to continue to display an event page after an event dies, for example to help with search engine optimisation.
 `offers_only` | If set to `true` the response will only include events with a special offer. Note that we rely on cached data, so we cannot guarantee complete accuracy.
 
 These parameters are used to control the output if more than one event is returned:
