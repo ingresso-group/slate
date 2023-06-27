@@ -858,11 +858,12 @@ curl https://payments.ingresso.co.uk/api/save-details \
     -d @- << EOF
 {
     "stripe_source": "src_ABCD1234",
-    "stripe_source_amount": 6250,
     "stripe_meta_email_address": "customer@example.com",
-    "stripe_meta_event_ids": "6IF",
+    "stripe_meta_phone_number": "02045123456",
+    "stripe_meta_last_four": "4242",
+    "stripe_meta_event_ids": "6IF, 7AB",
     "stripe_meta_send_methods": "collect",
-    "stripe_meta_days_to_performance": 37,
+    "stripe_meta_days_to_performances": "37, 94",
     "stripe_meta_user_id": "demo",
     "stripe_meta_ip_address": "101.102.103.104"
 }
