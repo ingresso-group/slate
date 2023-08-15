@@ -1,7 +1,7 @@
 # Months
 
 ```
-GET https://demo.ticketswitch.com/f13/months.v1?event_id={eventid}
+GET https://api.ticketswitch.com/f13/months.v1?event_id={eventid}
 ```
 
 This resource gives a summary of the availability across calendar months
@@ -15,7 +15,7 @@ It is an optional resource that not all partners choose to use.
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/months.v1 \
+curl https://api.ticketswitch.com/f13/months.v1 \
     -u "demo:demopass" \
     -d "event_id=6IF" \
     --compressed \

@@ -2,7 +2,7 @@
 > **Definition**
 
 ```
-POST https://demo.ticketswitch.com/f13/purchase.v1
+POST https://api.ticketswitch.com/f13/purchase.v1
 ```
 
 To purchase tickets you must first [reserve](#reserve) them. You can then
@@ -141,7 +141,7 @@ more information drop us an email at
 > **Example request - purchasing on-credit**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/purchase.v1 \
+curl https://api.ticketswitch.com/f13/purchase.v1 \
     -u "demo:demopass" \
     -d "transaction_uuid=61cfd4eb-1f5b-11e7-b228-0025903268dc" \
     -d "first_name=Test" \
@@ -156,6 +156,7 @@ curl https://demo.ticketswitch.com/f13/purchase.v1 \
     -d "user_can_use_customer_data=true" \
     -d "email_address=testing@gmail.com" \
     -d "send_confirmation_email=true" \
+    -d "privacy_policy_version=2.2.1" \
     --compressed \
     -X POST
 ```
@@ -212,6 +213,7 @@ Parameter | Description
 `user_can_use_customer_data` | Data protection question - set this to `true` if the customer has opted in to receiving marketing emails from you. Most partners manage marketing opt-ins themselves so do not provide this. Ingresso will never send marketing communications to your customers based on this parameter. *Optional - it will default to false.*
 `work_phone` | The customer's work phone number. *Optional if `phone` is provided.*
 `world_can_use_customer_data` | Data protection question - set this to `true` if the customer has opted in to receiving marketing emails communication from you and third-parties. *Optional - it will default to false.*
+`privacy_policy_version` | The version of your website privacy policy that the customer has agreed to. This is freeform text, not necessarily a number. *Optional - it will default to blank.*
 
 All of the parameters used to request [additional data for events](#additional-parameters) can also be added.
 
@@ -253,6 +255,7 @@ All of the parameters used to request [additional data for events](#additional-p
     "last_name_latin": "Tester",
     "postcode": "W6 8DL",
     "postcode_latin": "W6 8DL",
+    "privacy_policy_version": "2.2.1",
     "suffix": "",
     "suffix_latin": "",
     "supplier_can_use_customer_data": false,
@@ -358,6 +361,9 @@ All of the parameters used to request [additional data for events](#additional-p
               "send_final_type": "collect",
               "send_type": "collect"
             },
+            "supported_barcode_types": [
+              "qr_code"
+            ],
             "ticket_orders": {
               "ticket_order": [
                 {
@@ -706,10 +712,11 @@ Attribute | Description
 `price_band_code` | The code for a price band, for example "C/pool". The price band code is generally made up of the code from the underlying supplier system, e.g. "C", followed by a "/" separator then "pool" or "alloc", indicating whether the price band is taken from the general pool of tickets or is from a ring-fenced allocation.
 `seat_request_status` | The status of your tickets after they have been reserved. Possible values are `not_requested` (specific seats not requested), `got_none` (you requested A13 and A14 but we gave you A15 and A16), `got_partial` (you requested A13 and A14 but we gave you A14 and A15), `got_all` (you requested A13 and A14 and you got A13 and A14 - by far the most common response when requesting specific seats).
 `send_method` | See below for object detail.
+`supported_barcode_types` | An array of strings. See below for possible values
 `ticket_orders` | An array of ticket_order objects, one for each discount code. See below for detail.
-`ticket_type_code` | The unique identifier for the ticket type. For seated events this refers to a part of house / seating area such as Grand Circle.
+`ticket_type_code` | The unique identifier for the ticket type. For attractions this can refer to variations such as General Admission or Fast Track, and there is often only only. For seated events this normally refers to a part of house / seating area such as Grand Circle.
 `ticket_type_desc` | The description for the ticket type. This should be displayed to the customer
-`total_no_of_seats` | The number of seats for this order.
+`total_no_of_seats` | The number of tickets for this order.
 `total_sale_seatprice` | The total face value for this order.
 `total_sale_seatprice_in_desired` | The total face value for this order, converted to your `desired_currency`. This field will not be present for most partners.
 `total_sale_surcharge` | The total booking fee for this order.
@@ -736,6 +743,19 @@ Attribute | Description
 `send_final_type` | The classification of send method: one of `selfprint`, `collect` or `post`. The final_type should be the same as the type.
 `send_type` | The classification of send method: one of `selfprint`, `collect` or `post`.
 
+
+**`supported_barcode_types` values:**
+
+An array of strings with the following possible values:
+
+* `code128`
+* `qr_code`
+* `pdf417`
+* `aztec`
+* `aztec_small`
+* `datamatrix`
+* `code39`
+* `code93`
 
 **`ticket_order` attributes:**
 
@@ -765,9 +785,34 @@ Attribute | Description
 `row_id` | The row identifier of the seat.
 `seat_text` | A message about the seat that must be displayed to customers.
 `seat_text_code` | An identifier for the seat text (only unique within the current `bundle_source_code`). Not useful for most partners.
+`barcode` | The barcode data for the ticket if returned by the supplier system.
 
 
 ## Purchasing with Stripe
+
+Ingresso have an integration with Stripe for credit card processing, and can
+accept payment on your behalf from your customers. Ingresso Payments has a
+completed PCI-DSS SAQ-D and attestation of compliance as a payment service
+provider and our card payments solution uses Stripe to ensure no cardholder data
+goes through our systems.
+
+There are two ways that you can integrate with Ingresso using Stripe. The
+Ingresso white label is fully integrated on the front- and back-end with
+Stripe and is EU PSD2-compliant with support for Strong Customer Authentication,
+Apple Pay and Google Pay and mobile-ready. This is our recommended approach to
+integrating using Ingresso's payment services as this integration is
+well-tested, has thorough error handling for when payments or bookings fail and
+can be styled to match your branding while also keeping the booking flow and
+post-checkout flow on your own platform - you can simply redirect the customer
+to the Ingresso checkout page, and have them redirected back to you once payment
+has been taken.
+
+The other way is to do the work of integrating with Stripe on your own site and
+sending tokenised payment information to Ingresso with the purchase request, and
+implementing all of the error handling and compliance support on your own
+platform - this gives you the greatest level of control over the user
+experience, but is a somewhat complex undertaking, which is why Ingresso
+recommends leveraging the white label solution for most partners.
 
 Purchasing with Stripe requires your API user to be set up to use the Ingresso
 Payments service, which will require contacting us. If you are interested in
@@ -775,6 +820,7 @@ testing this functionality, the `demo-stripe` user has been created which is
 already set up this way. The password is the same as for the `demo` user.
 After creating a reservation with this user, you can proceed to test purchasing
 with Stripe, as outlined below.
+
 
 ### Purchasing with a Stripe payment intent
 In order to purchase with Stripe you need the following steps:
@@ -1415,23 +1461,63 @@ To purchase with Stripe using a token or payment source you need the following s
    which will return a unique token as a reference
 3. Call `purchase.v1` passing in the payment engine reference from step 2.
 
-Note that you need to retrieve and pass in one payment engine token for each `bundle` that you
+### Using the Ingresso white label
+
+To use the Ingresso white label solution only for the checkout functionality,
+you will need at a minimum the `transaction_uuid` from the [reserve](#reserve)
+step. However, for optimal customer experience it is also highly recommended
+that you provide a `trolley_token` that was used to create the reservation as
+well.
+
+For your live integration you will need to contact us to get a white label
+created for you that has your branding and configuration created, but for the
+purposes of integration you can test against the white label at
+`https://demo-stripe.ticketswitch.com/` using the `demo-stripe` user as above.
+
+Create a 302 redirect to the white label `complete_booking` API:
+
+```
+GET https://demo-stripe.ticketswitch.com/api/complete_booking/<transaction_uuid>/?trolley_token=<token>&referer_url=<referer_url>
+```
+
+Parameter | Description
+--------- | -----------
+`transaction_uuid` | The unique reference for the reserved tickets, taken from the [reserve](#reserve) response. May also be provided as a GET query string parameter.
+`trolley_token` | The `trolley_token` used to create the reservation. *Optional.*
+`referer_url` | The URL of the page from which your customer is coming (mispelling in line with the [HTTP specification](https://en.wikipedia.org/wiki/HTTP_referer#Etymology)). If not specified it will be taken from the request header. Used to send the customer back to you if they request a change in their booking details. *Optional.*
+
+After the purchase has completed, on the `demo-stripe` white label the customer
+is taken to the White Label's confirmation page at
+`https://demo-stripe.ticketswitch.com/confirmation/<transaction_uuid>/` - this
+behaviour is customisable and we can redirect the customer to any URL containing
+the `transaction_uuid` as a parameter. 
+
+### Direct integration to the Ingresso payments API
+
+In order to purchase with Stripe directly you need the following steps:
+
+1. Retrieve the Stripe PaymentIntent ID and client secret from the reservation
+   response in the `bundle.debitor.debitor_integration_data.stripe` section
+2. Update the PaymentIntent as per the [Stripe API
+   docs](https://stripe.com/docs/api/payment_intents/update)
+3. Call `purchase.v1` passing in the PaymentIntent reference from step 2.
+
+Note that you need to retrieve and pass in one payment parameter for each `bundle` that you
 reserve. If you only support the purchase of one item at a time, or if you don't
-use the Ingresso API to help manage basketing then you can ignore this.
+use the Ingresso API to help manage basketing then you can ignore this but it is
+a requirement for proper bundling support.
 
-### Generating a Stripe token
-Stripe collects payment information on your behalf, and returns a single-use 
-token. The payment information can either be collected on your own checkout page
-in a PCI-compliant manner ("Elements"), with a mobile-friendly form 
-("Checkout"), or via their mobile SDKs. See [Stripe's Quickstart guide](https://stripe.com/docs/quickstart).
-
+### Updating the Stripe PaymentIntent
 You will need to provide Stripe with the appropriate publishable key -
 this is returned by Ingresso in the [reserve call](#reserve) as
-bundle.debitor.debitor_integration_data.stripe.publishable_key.
+`bundle.debitor.debitor_integration_data.stripe.publishable_key`.
 
-For anti-fraud reasons, we recommend generating a 3D Secure payment source
-as per the [Stripe docs](https://stripe.com/docs/sources/three-d-secure), and
-this is one of the requirements for using the Ingresso Stripe account.
+Follow the [Stripe PaymentIntents
+Guide](https://stripe.com/docs/payments/payment-intents#passing-to-client) for
+how to use a PaymentIntent with
+[Stripe.js](https://stripe.com/docs/js/payment_intents) to ensure your
+integration is compatible with PCI-DSS and customer payment card information is
+kept secure.
 
 ### Saving the Stripe token in the Ingresso Payments system
 
@@ -1445,11 +1531,12 @@ curl https://payments.ingresso.co.uk/api/save-details \
     -d @- << EOF
 {
     "stripe_source": "src_ABCD1234",
-    "stripe_source_amount": 6250,
     "stripe_meta_email_address": "customer@example.com",
-    "stripe_meta_event_ids": "6IF",
+    "stripe_meta_phone_number": "02045123456",
+    "stripe_meta_last_four": "4242",
+    "stripe_meta_event_ids": "6IF, 7AB",
     "stripe_meta_send_methods": "collect",
-    "stripe_meta_days_to_performance": 37,
+    "stripe_meta_days_to_performances": "37, 94",
     "stripe_meta_user_id": "demo",
     "stripe_meta_ip_address": "101.102.103.104"
 }
@@ -1465,10 +1552,14 @@ EOF
 const integration_data = {
     cider_api_endpoint: "https://payments.ingresso.co.uk/api",
     cider_api_token: "key_XYZ789123",
+    stripe: {
+        payment_intent: "pi_test",
+        client_secret: "secret"
+    }
 };
 
-// get Stripe token
-let stripeToken = "tok_visa";
+// get Stripe PaymentIntent and update it using the Stripe.js API
+let stripePaymentIntent = integration_data.stripe.payment_intent;
 
 const http = new XMLHttpRequest();
 http.open('POST', integration_data.cider_api_endpoint + '/save-details', true);
@@ -1483,7 +1574,7 @@ http.onload = () => {
 };
 http.onerror = () => console.log("Unable to connect");
 http.ontimeout = () => console.log("Connection timed out.");
-http.send(JSON.stringify({ stripe_token: stripeToken }));
+http.send(JSON.stringify({ stripe_payment_intent: stripePaymentIntent }));
 ```
 
 > **Example response**
@@ -1492,9 +1583,9 @@ http.send(JSON.stringify({ stripe_token: stripeToken }));
 {"token": "cider_XYZ789123"}
 ```
 
-Once you have the Stripe token, you must save it in Ingresso's payment
-processing Engine (called Cider). The API endpoint you can use is also found in
-the [reserve call](#reserve) integration data, as
+Once you have updated the Stripe PaymentIntent, you must save it in Ingresso's
+payment processing Engine (called Cider). The API endpoint you can use is also
+found in the [reserve call](#reserve) integration data, as
 `bundle.debitor.debitor_integration_data.cider_api_endpoint`. You will need to
 use a unique key per reservation, found at
 `debitor_integration_data.cider_api_token`.
@@ -1504,7 +1595,7 @@ and you can save the stripe token or source generated above by making a HTTP
 `POST` request to this endpoint + `/save-details`, and authenticating with the
 key provided in the integration data.
 
-In addition to saving stripe tokens and payment sources, you can also save
+In addition to saving stripe data and payment sources, you can also save
 metadata about the purchase to this endpoint, which will be saved in Stripe
 against the purchase record. This is very important for anti-fraud rules when
 using the Ingresso Stripe account, and may be useful for your own account too.
@@ -1521,18 +1612,19 @@ the reservation response debitor integration data, and should be well-formed
 JSON, as per the examples.
 
 ### Making the purchase call
-Retrieving the Stripe token is the first half of the payment process - further
+Updating the Stripe PaymentIntent is the first half of the payment process - further
 server-side code is required to complete the second half. You don't need to 
 worry about this as Ingresso's payment processor takes care of it. Once you 
 have saved the Stripe token and retrieved the cider token, we will handle the
 following steps:
 
-* Authorise the payment with Stripe.
+* Authorise the payment with Stripe (validate that the PaymentIntent is
+  chargeable and of sufficient value to account for the transaction)
 
 * Purchase your reserved tickets with the supplier ticketing system. *If this 
 step fails we automatically refund the Stripe payment.*
 
-* Capture the payment with Stripe.
+* Capture the payment from Stripe.
 
 
 ### Purchase request
@@ -1540,7 +1632,7 @@ step fails we automatically refund the Stripe payment.*
 > **Example purchase request - Stripe**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/purchase.v1 \
+curl https://api.ticketswitch.com/f13/purchase.v1 \
     -u "demo-stripe:demopass" \
     -d "transaction_uuid=2e740db5-1b65-11e7-9e97-002590326932" \
     -d "first_name=Test" \
@@ -1751,6 +1843,9 @@ Parameter | Description
               "send_final_type": "collect",
               "send_type": "collect"
             },
+            "supported_barcode_types": [
+              "qr_code"
+            ],
             "ticket_orders": {
               "ticket_order": [
                 {
@@ -2017,8 +2112,14 @@ Status(
 )
 ```
 
-The response is identical to the `purchase` response described in [purchasing on credit](#purchasing-on-credit).
+The response is identical to the `purchase` response described in
+[purchasing on credit](#purchasing-on-credit), with some additional information
+about the debitor result to aid with handling payment failures.
 
+As the process and certification of an integration with Ingresso Payments and
+Stripe can be quite challenging, it is highly recommended that partners use the
+Ingresso White Label checkout component as part of their solution as this is
+tested and maintained.
 
 
 ## Purchasing with redirect
@@ -2043,12 +2144,16 @@ To support generic redirects you should use the following sequence:
 6. If any further redirects are required, the `callback` response will include a `callout` section. You should continue to follow steps 3, 4 and 5 until the `callback` response no longer includes a `callout` section. At this point the purchase will be complete (it will have either succeeded or failed). 
 
 
+Please note as an alternative to the integration steps above, the Ingresso
+Payments solution may also be used as a generic redirect, in which case the
+payment page will be presented by the Ingresso payment service directly.
+
 ### Purchase request
 
 > **Example purchase request - generic redirects**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/purchase.v1 \
+curl https://api.ticketswitch.com/f13/purchase.v1 \
     -u "demo-redirect:demopass" \
     -d "transaction_uuid=a75a03c3-efc2-11e6-a96d-d0bf9c45f5c0" \
     -d "first_name=Test" \
@@ -2066,6 +2171,7 @@ curl https://demo.ticketswitch.com/f13/purchase.v1 \
     -d "client_http_user_agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8" \
     -d "client_http_accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" \
     -d "send_confirmation_email=yes" \
+    -d "privacy_policy_version=2.2.1" \
     -X POST
 ```
 
@@ -2130,7 +2236,7 @@ Parameter | Description
 ``` shell
 {
   "callout": {
-    "callout_destination_url": "https://demo.ticketswitch.com/tickets/dummy_redirect.buy/demo-redirect",
+    "callout_destination_url": "https://api.ticketswitch.com/tickets/dummy_redirect.buy/demo-redirect",
     "callout_parameters": {
       "return_url": "https://www.yourticketingsite.com/token.FIRST_UNIQUE_TOKEN/return.php",
       "title": "Dummy external card details page for debit on system 'ext_test0'"
@@ -2212,7 +2318,7 @@ Attribute | Description
 > **Example callback request - generic redirects**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/callback.v1/this.FIRST_UNIQUE_TOKEN/next.NEXT_UNIQUE_TOKEN \
+curl https://api.ticketswitch.com/f13/callback.v1/this.FIRST_UNIQUE_TOKEN/next.NEXT_UNIQUE_TOKEN \
     -u "demo-redirect:demopass" \
     -d "param1=asdfasdfsdfasdff" \
     -r "https://www.thepaymentpage.com/asdfsadfsdafasdf" \

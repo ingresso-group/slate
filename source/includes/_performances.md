@@ -31,7 +31,7 @@ These two resources are described below, followed by detail of the
 > **Definition**
 
 ```
-GET https://demo.ticketswitch.com/f13/performances.v1?event_id={eventid}
+GET https://api.ticketswitch.com/f13/performances.v1?event_id={eventid}
 ```
 
 This call returns a list of performances for a particular event. The list is
@@ -54,7 +54,7 @@ Typical use cases:
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/performances.v1 \
+curl https://api.ticketswitch.com/f13/performances.v1 \
     -u "demo:demopass" \
     -d "event_id=6IF" \
     -d "page_length=10" \
@@ -83,7 +83,9 @@ performance, and are described in more detail in the
 Parameter | Description
 --------- | -----------
 `req_avail_details` | Returns [availability details](#availability-detail) - a cached list of unique ticket types and price bands available for this performance. **This parameter is not commonly used.**
+`req_avail_detail_discounts` | Adds non standard discounts to availability details *Only valid when used alongside req_avail_details*
 `req_cost_range` | Returns [cost ranges](#cost-ranges) - a from price and offer detail for each event. *Most partners include this parameter.*
+`req_cost_range_discounts` | Returns cost range discounts
 `req_cost_range_best_value_offer` | Returns the offer with the highest percentage saving. *This is the most commonly used offer cost range.*
 `req_cost_range_details` | Returns a list of unique ticket types and price bands and their cost ranges across all performances.
 `req_cost_range_max_saving_offer` | Returns the offer with the highest absolute saving.
@@ -108,7 +110,6 @@ Parameter | Description
     },
     "performance": [
       {
-        "cached_max_seats": 6,
         "date_desc": "Thu, 9th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
@@ -120,7 +121,6 @@ Parameter | Description
         "time_desc": "7.30 PM"
       },
       {
-        "cached_max_seats": 6,
         "date_desc": "Fri, 10th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
@@ -132,7 +132,6 @@ Parameter | Description
         "time_desc": "7.30 PM"
       },
       {
-        "cached_max_seats": 6,
         "date_desc": "Sun, 12th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
@@ -144,7 +143,6 @@ Parameter | Description
         "time_desc": "7.30 PM"
       },
       {
-        "cached_max_seats": 6,
         "date_desc": "Mon, 13th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
@@ -156,7 +154,6 @@ Parameter | Description
         "time_desc": "7.30 PM"
       },
       {
-        "cached_max_seats": 6,
         "date_desc": "Tue, 14th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
@@ -169,7 +166,6 @@ Parameter | Description
         "time_desc": "7.30 PM"
       },
       {
-        "cached_max_seats": 6,
         "date_desc": "Wed, 15th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
@@ -181,7 +177,6 @@ Parameter | Description
         "time_desc": "7.30 PM"
       },
       {
-        "cached_max_seats": 6,
         "date_desc": "Thu, 16th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
@@ -193,7 +188,6 @@ Parameter | Description
         "time_desc": "7.30 PM"
       },
       {
-        "cached_max_seats": 6,
         "date_desc": "Fri, 17th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
@@ -205,7 +199,6 @@ Parameter | Description
         "time_desc": "7.30 PM"
       },
       {
-        "cached_max_seats": 6,
         "date_desc": "Sun, 19th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
@@ -217,7 +210,6 @@ Parameter | Description
         "time_desc": "7.30 PM"
       },
       {
-        "cached_max_seats": 6,
         "date_desc": "Mon, 20th March 2017",
         "event_id": "6IF",
         "has_pool_seats": true,
@@ -245,7 +237,6 @@ from pyticketswitch.performance import Performance
         time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
-        cached_max_seats=6,
         no_singles_cost_range=None,
         is_ghost=False,
         running_time=120,
@@ -258,7 +249,6 @@ from pyticketswitch.performance import Performance
         time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
-        cached_max_seats=6,
         is_ghost=False,
         running_time=120,
     ),
@@ -270,7 +260,6 @@ from pyticketswitch.performance import Performance
         time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
-        cached_max_seats=6,
         is_ghost=False,
         running_time=120,
     ),
@@ -282,7 +271,6 @@ from pyticketswitch.performance import Performance
         time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
-        cached_max_seats=6,
         is_ghost=False,
         running_time=120,
     ),
@@ -294,7 +282,6 @@ from pyticketswitch.performance import Performance
         time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
-        cached_max_seats=6,
         is_ghost=False,
         running_time=120,
     ),
@@ -306,7 +293,6 @@ from pyticketswitch.performance import Performance
         time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
-        cached_max_seats=6,
         is_ghost=False,
         running_time=120,
     ),
@@ -318,7 +304,6 @@ from pyticketswitch.performance import Performance
         time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
-        cached_max_seats=6,
         is_ghost=False,
         running_time=120,
     ),
@@ -330,7 +315,6 @@ from pyticketswitch.performance import Performance
         time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
-        cached_max_seats=6,
         is_ghost=False,
         running_time=120,
     ),
@@ -342,7 +326,6 @@ from pyticketswitch.performance import Performance
         time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
-        cached_max_seats=6,
         is_ghost=False,
         running_time=120,
     ),
@@ -354,7 +337,6 @@ from pyticketswitch.performance import Performance
         time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
-        cached_max_seats=6,
         is_ghost=False,
         running_time=120,
     ),
@@ -366,7 +348,6 @@ from pyticketswitch.performance import Performance
         time_description='7.30 PM',
         has_pool_seats=True,
         is_limited=False,
-        cached_max_seats=6,
         is_ghost=False,
         running_time=120,
     )
@@ -397,17 +378,18 @@ Attribute | Description
 
 Attribute | Description
 --------- | -----------
-`cached_max_seats` | This is the maximum number of contiguous seats that can be booked for this performance, based on Ingresso's cached data. Note that if the event supports seat selection you are not limited by the number of contiguous seats, so this value should be used in the context of best available only.
 `date_desc` | human readable date description
 `event_id` | Unique identifier for the event that this performance is an instance of
-`has_pool_seats` | Whether this performance has seats available from the general pool of tickets. This is ignored by most partners.
+`has_pool_seats` | Whether this performance has tickets available from the general pool of tickets. This is ignored by most partners.
 `is_ghost` | `true` when this performance is no longer on sale. When you request performances for an event we will only return performances that are on sale (so `is_ghost` will always be `false`), however it is possible to request [performances by ID](#performances-by-id) for a ghost performance.
 `is_limited` | Indicates whether the supply of tickets is known to be extremely limited. This is usually taken to be fewer than four remaining, though not all ticket sources provide this information. Where the information is not available the flag will always be set to `false`
 `iso8601_date_and_time` | ISO 8601 date and time
 `perf_id` | Unique identifier for the performance
 `perf_name` | A human readable description of the performance. Performance names are not always present but must be displayed when they are. Performance names are typically used where performances of an event differ significantly in more than just date and time (sometimes the supplier system will not return the time to us in a structured format but it will instead be included as part of the performance name). Event ID 6IF includes some performances with names.
 `running_time` | The length / duration of the performance in minutes
-`time_desc` | human readable time description
+`time_desc` | A human readable time description
+`cached_max_seats` | This should not be used. Earlier versions of the documentation implied that it held a meaningful value for the availability, but this is not true, and the attribute was not always present. If you are using it then you should stop, and switch to cost range data instead if you still want cached availability data. For the time being the value will be one million instead of being absent entirely if the data is not available.
+`cached_max_seats_is_real` | A boolean indicating whether the data in the previous variable is actually real or not. Can be used whilst migrating away from using it.
 
 
 ## Performances by ID
@@ -415,7 +397,7 @@ Attribute | Description
 > **Definition**
 
 ```
-GET https://demo.ticketswitch.com/f13/performances_by_id.v1?perf_id_list={perfidlist}
+GET https://api.ticketswitch.com/f13/performances_by_id.v1?perf_id_list={perfidlist}
 ```
 
 This resource is used to return detail for one or more performances by their ID.
@@ -433,7 +415,7 @@ this in most cases.
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/performances_by_id.v1 \
+curl https://api.ticketswitch.com/f13/performances_by_id.v1 \
     -u "demo:demopass" \
     -d "perf_id_list=6IF-B2E,6IF-B2F" \
     --compressed \
@@ -534,7 +516,7 @@ Attribute | Description
 --------- | -----------
 `date_desc` | human readable date description
 `event_id` | Unique identifier for the event that this performance is an instance of
-`has_pool_seats` | Whether this performance has seats available from the general pool of tickets. This is ignored by most partners.
+`has_pool_seats` | Whether this performance has tickets available from the general pool of tickets. This is ignored by most partners.
 `is_ghost` | `true` when this performance is no longer on sale. When you request performances for an event we will only return performances that are on sale (so `is_ghost` will always be `false`), however it is possible to request [performances by ID](#performances-by-id) for a ghost performance.
 `is_limited` | Indicates whether the supply of tickets is known to be extremely limited. This is usually taken to be fewer than four remaining, though not all ticket sources provide this information. Where the information is not available the flag will always be set to `false`
 `iso8601_date_and_time` | ISO 8601 date and time
@@ -579,7 +561,7 @@ price.</aside>
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/performances_by_id.v1 \
+curl https://api.ticketswitch.com/f13/performances_by_id.v1 \
     -u "demo:demopass" \
     -d "perf_id_list=6L9-M5P" \
     -d "req_cost_range" \
@@ -642,7 +624,6 @@ Parameter | Description
   },
   "performances_by_id": {
     "6L9-M2R": {
-      "cached_max_seats": 15,
       "cost_range": {
         "best_value_offer": {
           "absolute_saving": 9,
@@ -761,7 +742,6 @@ from pyticketswitch.performance import Performance
         time_description='10.30 PM',
         has_pool_seats=False,
         is_limited=False,
-        cached_max_seats=None,
         cost_range=None,
         no_singles_cost_range=None,
         is_ghost=True,
@@ -842,7 +822,7 @@ data up to date - please contact us instead to discuss options
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/performances_by_id.v1 \
+curl https://api.ticketswitch.com/f13/performances_by_id.v1 \
     -u "demo:demopass" \
     -d "perf_id_list=6L9-M2R" \
     -d "req_avail_details" \
@@ -1026,6 +1006,8 @@ Attribute | Description
 `price_band_desc` | A human readable description of the price band if applicable.
 
 The **avail detail** indicates what prices we have seen for this performance.
+
+<aside class="notice">We always return an array of avail details. For Events and Months the array can contain multiple items, but for Performances there will only ever be one item.</aside>
 
 Attribute | Description
 --------- | -----------

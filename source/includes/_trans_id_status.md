@@ -2,7 +2,7 @@
 > **Definition**
 
 ```
-GET https://demo.ticketswitch.com/f13/trans_id_status.v1?transaction_id={trans_id}
+GET https://api.ticketswitch.com/f13/trans_id_status.v1?transaction_id={trans_id}
 ```
 
 This resource is to provide legacy API support. In the old XML API after
@@ -19,7 +19,7 @@ If you have only used this JSON API then there is no need to use
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/trans_id_status.v1 \
+curl https://api.ticketswitch.com/f13/trans_id_status.v1 \
     -u "demo:demopass" \
     -d "transaction_id=T000-0000-8LZT-WA8D" \
     --compressed \

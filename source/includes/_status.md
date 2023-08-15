@@ -2,7 +2,7 @@
 > **Definition**
 
 ```
-GET https://demo.ticketswitch.com/f13/status.v1?transaction_uuid={trans_uuid}
+GET https://api.ticketswitch.com/f13/status.v1?transaction_uuid={trans_uuid}
 ```
 
 This resource allows you to view the details and status of a transaction. A
@@ -22,7 +22,7 @@ See the [cancel](#cancel) docs for more information on this point.
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/status.v1 \
+curl https://api.ticketswitch.com/f13/status.v1 \
     -u "demo:demopass" \
     -d "transaction_uuid=284d9c3a-d698-11e6-be8c-002590326962" \
     --compressed \

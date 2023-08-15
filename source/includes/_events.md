@@ -31,7 +31,7 @@ accidentally returned.
 > **Definition**
 
 ```
-GET https://demo.ticketswitch.com/f13/events.v1
+GET https://api.ticketswitch.com/f13/events.v1
 ```
 
 ### Request
@@ -39,7 +39,7 @@ GET https://demo.ticketswitch.com/f13/events.v1
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/events.v1 \
+curl https://api.ticketswitch.com/f13/events.v1 \
     -u "demo:demopass" \
     -d "keywords=matthew" \
     -d "country_code=uk" \
@@ -64,7 +64,7 @@ Parameter | Description
 `circle` | Return events within in a circular geographical area. Three colon-separated values are needed for **latitude**, **longitude**, and **radius in kilometres**.  Example: `51.52961137:-0.10601562:10`.
 `city_code` | Return events in a particular city. The list of city codes can be retrieved using the [cities](#cities) resource.
 `country_code` | 2-digit country code (using [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-`include_dead` | Include dead events in the results. This could be useful if you dynamically retrieve the list of events from Ingresso and want to continue to display an event page after an event dies, for example to help with search engine optimisation.
+`add_dead_events` | Include dead events in the results. This could be useful if you dynamically retrieve the list of events from Ingresso and want to continue to display an event page after an event dies, for example to help with search engine optimisation.
 `offers_only` | If set to `true` the response will only include events with a special offer. Note that we rely on cached data, so we cannot guarantee complete accuracy.
 
 These parameters are used to control the output if more than one event is returned:
@@ -83,6 +83,7 @@ Parameter | Description
 --------- | -----------
 `req_avail_details` | Returns [availability details](#availability-details) - a cached list of unique ticket types and price bands available for this event across all performances. **This parameter is not commonly used.**
 `req_avail_details_with_perfs` | This will add the list of available performance dates to each avail detail object. *Only valid if used alongside req_avail_details*.
+`req_avail_detail_discounts` | Adds non standard discounts to availability details *Only valid when used alongside req_avail_details*
 `req_cost_range` | Returns [cost ranges](#cost-range) - a from price and offer detail for each event. *Most partners include this parameter.*
 `req_cost_range_best_value_offer` | Returns the offer with the highest percentage saving. *This is the most commonly used offer cost range.*
 `req_cost_range_details` | Returns a list of unique ticket types and price bands and their cost ranges across all performances. **This parameter is not commonly used.**
@@ -90,6 +91,7 @@ Parameter | Description
 `req_cost_range_min_cost_offer` | Returns the offer with the lowest cost.
 `req_cost_range_top_price_offer` | Returns the offer with the highest cost. This is the least used offer cost range.
 `req_cost_range_no_singles_data` | This returns another cost range object that excludes availability with only 1 consecutive seat available. The prices in this cost range will therefore be the same or higher than the outer cost range. It has the same structure as the main cost range (so if you want to see the "best value offer" in the no singles data, you need to add `req_cost_range_best_value_offer` and you will see this data in both cost ranges).
+`req_cost_range_discounts` | Adds alternate discounts to cost range data *Only valid if used alongside req_cost_range*
 `req_extra_info` | Returns the [descriptive info](#extra-info) for the event, returned as individual sections (`structured_info`) or as a single summary (`event_info` / `event_info_html`).
 `req_media_triplet_one` | Triplet one (jpg/png 520x390). [See further detail on media](#media).
 `req_media_triplet_two` | Triplet two if available (jpg/png 520x390).
@@ -301,7 +303,7 @@ Attribute | Description
 `geo_data` | A block containing the following geo co-ordinates:
 `geo_data.latitude` | Latitude of the event.
 `geo_data.longitude` | Longitude of the event.
-`has_no_perfs` | `true` if the event has no performances. For example some attraction tickets are valid for any date, so we do not present a list of performances to select.
+`has_no_perfs` | `true` if the event has no performances. All events must have performances to be sold, so an event without performances cannot be sold and will likely soon have its `event_status` set to `dead`.
 `is_add_on` | `false` if this event is an add-on event. This means it can only be added to a trolley containing tickets for an event that lists this in its `add_ons`.
 `is_auto_quantity_add_on` | `false`  Indicates whether add on quantity will be modified based on the number of ticket orders, if true number of addons will be equal to total number of tickets for all parent events in the trolley.
 `is_seated` | `true` for seated events.
@@ -309,7 +311,7 @@ Attribute | Description
 `min_running_time` | Minimum length / duration in minutes (not always present).
 `need_departure_date` | Flag indicating whether the event needs a departure date specified. This is `false` for most events. Most partners can ignore this.
 `need_duration` | Flag indicating whether the event needs duration (specific to `hotel_room` events only). Most partners can ignore this.
-`need_performance` | Flag indicating if a performance must be selected in order to retrieve availability. For the vast majority of events this will be `true`.
+`need_performance` | Flag indicating if an event supports performances. For events that require a date and time to be selected this will be `true`. Other events, for example some attraction tickets, are valid for any date; these events will return `false` however they will still return a list of dummy performances - you should not present these performances to the end user but you should programmatically choose any single performance when requesting availability.
 `postcode` | Postcode of the event location.
 `show_perf_time` | `false` if the performance time is not relevant, for example some events use a performance description rather than specific times.
 `source_code` | Source supplier code e.g. `nimax`.
@@ -336,7 +338,7 @@ Attribute | Description
 > **Definition**
 
 ```
-GET https://demo.ticketswitch.com/f13/events_by_id.v1?event_id_list={eventidlist}
+GET https://api.ticketswitch.com/f13/events_by_id.v1?event_id_list={eventidlist}
 ```
 
 This resource returns detail for one or more specific events by their ID. It
@@ -345,7 +347,7 @@ returns a dictionary of events keyed on the event's `event_id`.
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
+curl https://api.ticketswitch.com/f13/events_by_id.v1 \
     -u "demo:demopass" \
     -d "event_id_list=6IF,6IE" \
     --compressed \
@@ -363,7 +365,7 @@ events, meta = client.get_events(event_ids=['6IF'])
 > **Example request - with add-on and upsell events included**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
+curl https://api.ticketswitch.com/f13/events_by_id.v1 \
     -i "demo:demopass" \
     -d "event_id_list=7AB" \
     -d "add_add_ons" \
@@ -1036,7 +1038,7 @@ all media requests are consolidated.
 > **Example Request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
+curl https://api.ticketswitch.com/f13/events_by_id.v1 \
     -u "demo:demopass" \
     -d "event_id_list=6IF" \
     -d "req_media_triplet_one" \
@@ -1434,7 +1436,7 @@ many events are being returned.
 
 ```shell
 
-curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
+curl https://api.ticketswitch.com/f13/events_by_id.v1 \
     -u "demo:demopass" \
     -d "event_id_list=6IF" \
     -d "req_extra_info" \
@@ -1700,7 +1702,7 @@ We expose critic reviews for events that have them.
 > **Example Request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
+curl https://api.ticketswitch.com/f13/events_by_id.v1 \
     -u "demo:demopass" \
     -d "event_id_list=6IF" \
     -d "req_reviews" \
@@ -1915,7 +1917,7 @@ price.</aside>
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
+curl https://api.ticketswitch.com/f13/events_by_id.v1 \
     -u "demo:demopass" \
     -d "event_id_list=6L9" \
     -d "req_cost_range" \
@@ -2211,7 +2213,7 @@ the parent event object.
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
+curl https://api.ticketswitch.com/f13/events_by_id.v1 \
     -u "demo:demopass" \
     -d "event_id_list=6IF" \
     -d "req_cost_range_details" \
@@ -2721,7 +2723,7 @@ data up to date - please contact us instead to discuss options
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/events_by_id.v1 \
+curl https://api.ticketswitch.com/f13/events_by_id.v1 \
     -u "demo:demopass" \
     -d "event_id_list=6IF" \
     -d "req_avail_details" \

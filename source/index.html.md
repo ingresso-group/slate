@@ -28,6 +28,7 @@ includes:
   - status
   - trans_id_status
   - cancel
+  - sources
   - cities
   - classes
   - bitmask_fields

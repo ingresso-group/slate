@@ -258,7 +258,7 @@ Name                                   | Description
 `purchase_time_london`                 | Purchase time (London timezone).
 `performance_local_time`               | Performance time in the timezone local to the event.
 `perf_type_code`                       | Internal code.
-`ticket_type_code`                     | The unique identifier for the ticket type. For seated events this refers to a part of house / seating area such as Grand Circle.
+`ticket_type_code`                     | The unique identifier for the ticket type. For attractions this can refer to variations such as General Admission or Fast Track, and there is often only only. For seated events this normally refers to a part of house / seating area such as Grand Circle.
 `ticket_type_desc`                     | The description for the ticket type displayed to the customer.
 `send_code`                            | Send method code.
 `send_desc`                            | Description for the send method.
@@ -271,9 +271,9 @@ Name                                   | Description
 `num_tickets`                          | Number of purchased tickets.
 `num_transactions`                     | This will be 1 for the first item in the order and 0 for the rest.
 `sale_currency_code`                   | `ISO 4217` three letter code that applies to the `sale_seatprice`, `sale_surcharge`, `ticket_price`, `send_cost`.
-`sale_seatprice`                       | Base price for the seats.
-`sale_surcharge`                       | Total surcharge for the order.
-`ticket_price`                         | Total ticket price including surcharge.
+`sale_seatprice`                       | The total face value for this order.
+`sale_surcharge`                       | The total booking fee for this order.
+`ticket_price`                         | `sale_seatprice` + `sale_surcharge`
 `send_cost`                            | Send method cost.
 `commission_currency_code`             | `ISO 4217` three letter code that applies to all of the following commission attributes.
 `user_commission_inc_vat`              | The commission earned for this transaction (all commission amounts are totals, not an amount per ticket).

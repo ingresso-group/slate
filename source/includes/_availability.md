@@ -3,7 +3,7 @@
 > **Definition**
 
 ```
-GET https://demo.ticketswitch.com/f13/availability.v1?perf_id={performanceid}
+GET https://api.ticketswitch.com/f13/availability.v1?perf_id={performanceid}
 ```
 
 **`availability`** lists the tickets that are currently available for a performance.
@@ -13,7 +13,7 @@ at the time the request was made. There is therefore no guarantee that the
 tickets will still be available to purchase at some future time. Tickets are
 only guaranteed to be held after you [reserve tickets](#reserve).
 
-We have a single availability resource that will return best available seating
+We have a single availability resource that will return best available tickets
 by default. This resource is described first and is important to read. We then describe
 [optional parameters](#optional-parameters) that can be passed to request 
 [individual seats](#individual-seats), [example seats](#example-seats), 
@@ -39,7 +39,7 @@ via the API and displaying it yourself.
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/availability.v1 \
+curl https://api.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
     -d "perf_id=6IF-B5P" \
     --compressed \
@@ -56,7 +56,7 @@ ticket_types, meta = client.get_availability('6IF-B5P')
 Attribute | Description
 --------- | -----------
 `perf_id` | The identifier of the performance that you wish to request availability for.
-`no_of_seats` | *Optional*. The number of seats the customer would like. If this is specified then availability will only be shown for price bands with at least that many contiguous seats available.
+`no_of_seats` | *Optional*. The number of tickets the customer would like. If this is specified then seated availability will only be shown for price bands with at least that many contiguous seats available.
 `promo_code` | *Optional*. If the supplier supports a promo code this can be specified to unlock discounted pricing. This feature is not commonly used with partners.
 
 
@@ -398,7 +398,7 @@ Attribute | Description
 Attribute | Description
 --------- | -----------
 `price_band` | Object described below.
-`ticket_type_code` | The unique identifier for the ticket type. For seated events this refers to a part of house / seating area such as Grand Circle.
+`ticket_type_code` | The unique identifier for the ticket type. For attractions this can refer to variations such as General Admission or Fast Track, and there is often only only. For seated events this normally refers to a part of house / seating area such as Grand Circle.
 `ticket_type_desc` | The description for the ticket type. This should be displayed to the customer (if you are offering seat selection to your customer then you would typically hard-code the description when drawing a seating plan).
 
 
@@ -450,7 +450,7 @@ seats via the API and displaying them to customers yourself.
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/availability.v1 \
+curl https://api.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
     -d "perf_id=7AB-5" \
     -d "add_seat_blocks" \
@@ -1271,7 +1271,7 @@ no need to also request example seats.
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/availability.v1 \
+curl https://api.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
     -d "perf_id=7AB-5" \
     -d "no_of_seats=3" \
@@ -1547,12 +1547,31 @@ Availability will return the predicted per ticket commission you will earn. If y
 subtract commission from the total ticket price (`sale_seatprice` +
 `sale_surcharge`) you have the net price of the ticket.
 
+There are important caveats to note:
+
+1. The price and commission is not guaranteed until tickets are [reserved](#reserve). 
+Ingresso do not store the commission values returned in this availability request so 
+we cannot refer to it later. Some suppliers have rules where the price will change 
+after tickets are reserved (for example lowering the price to a family rate when
+2 adults and 2 children are selected) - that would likely also affect commission. 
+Similarly, the number of tickets can impact the commission but the number of tickets
+is normally unknown when requesting availability.
+It is also possible but unlikely for Ingresso's commission configuration to 
+change between you requesting availability and reserving. For these reasons 
+commission values are marked as "predicted". 
+
+2. It is possible for the commission currency to be different to the selling currency, 
+since the commission currency usually relates to the supplier while the selling 
+currency is targeted at the end customer. When the currencies are different you 
+can't simply subtract commission from total ticket price.
+
+
 ### Request
 
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/availability.v1 \
+curl https://api.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
     -d "perf_id=6IF-B5P" \
     -d "req_predicted_commission" \
@@ -1958,7 +1977,7 @@ of available tickets.
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/availability.v1 \
+curl https://api.ticketswitch.com/f13/availability.v1 \
     -u "demo:demopass" \
     -d "perf_id=6IF-B5P" \
     -d "add_discounts" \

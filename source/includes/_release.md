@@ -2,7 +2,7 @@
 > **Definition**
 
 ```
-POST https://demo.ticketswitch.com/f13/release.v1?transaction_uuid={trans_uuid}
+POST https://api.ticketswitch.com/f13/release.v1?transaction_uuid={trans_uuid}
 ```
 
 This resource allows you to release previously-reserved tickets. It is important
@@ -12,7 +12,7 @@ or similar, or because they implicitly imply that they want to continue
 browsing, for example by pressing back on your checkout page (when a user
 presses back on sites developed by Ingresso we release their reservation then
 request availability to ensure the user is also able to select the just-released
-seats). This is necessary to ensure that all end users have the best possible
+tickets). This is necessary to ensure that all end users have the best possible
 access to tickets (including your other customers).
 
 <aside class="notice">We may disable API accounts that don't release tickets when they should.</aside>
@@ -22,7 +22,7 @@ access to tickets (including your other customers).
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/release.v1 \
+curl https://api.ticketswitch.com/f13/release.v1 \
     -u "demo:demopass" \
     -d "transaction_uuid=f2158be3-d29e-11e6-8aab-0025903268dc" \
     --compressed \

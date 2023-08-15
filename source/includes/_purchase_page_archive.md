@@ -2,7 +2,7 @@
 > **Definition**
 
 ```
-GET https://demo.ticketswitch.com/f13/purchase_page_archive.v1
+GET https://api.ticketswitch.com/f13/purchase_page_archive.v1
 ```
 This API call does not get an up to date status of the purchase, it is simply retrieving the previously sent purchase response, verbatim.
 This means that you can access all the data that you would normally require from a purchase call, except that the status could be out of date (as it will be exactly the same as the original purchase response).
@@ -18,7 +18,7 @@ If the purchase is no longer being stored (i.e. more than a year has passed sinc
 > **Example request**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/purchase_page_archive.v1 \
+curl https://api.ticketswitch.com/f13/purchase_page_archive.v1 \
     -u "demo:demopass" \
     -d "transaction_uuid=U-986E1961-F8B7-11E8-8434-AC1F6B465FBC-C7DCDC47-LDNX" \
     --compressed \

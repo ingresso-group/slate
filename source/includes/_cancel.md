@@ -2,7 +2,7 @@
 > **Definition**
 
 ```
-POST https://demo.ticketswitch.com/f13/cancel.v1?transaction_uuid={trans_uuid}&cancel_items_list=1,2
+POST https://api.ticketswitch.com/f13/cancel.v1?transaction_uuid={trans_uuid}&cancel_items_list=1,2
 ```
 
 This endpoint allows users to attempt to cancel [purchased](#purchase) transactions (there is no guarantee that cancellations will succeed).
@@ -19,7 +19,7 @@ If you would like to attempt to cancel a transaction, follow these steps:
 > **Example request - cancel entire transaction**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/cancel.v1 \
+curl https://api.ticketswitch.com/f13/cancel.v1 \
     -u "demo:demopass" \
     -d "transaction_uuid=284d9c3a-d698-11e6-be8c-002590326962" \
     --compressed \
@@ -36,7 +36,7 @@ status, meta = client.cancel_purchase(transaction_uuid='284d9c3a-d698-11e6-be8c-
 > **Example request - specify order items to cancel by item number**
 
 ```shell
-curl https://demo.ticketswitch.com/f13/cancel.v1 \
+curl https://api.ticketswitch.com/f13/cancel.v1 \
     -u "demo:demopass" \
     -d "transaction_uuid=284d9c3a-d698-11e6-be8c-002590326962" \
     -d "cancel_items_list=1,3" \
