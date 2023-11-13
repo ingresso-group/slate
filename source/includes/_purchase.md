@@ -699,7 +699,7 @@ Attribute | Description
 
 Attribute | Description
 --------- | -----------
-`can_generate_self_print` | `true` if you have been set up to produce your own self print vouchers (eTickets), `false` if you are using Ingresso-provided vouchers.
+`can_generate_self_print` | `true` if you are allowed up to produce your own self print vouchers (eTickets), `false` if you have to use the voucher URL below.
 `has_html_page` | `true` if an HTML voucher is returned.
 `self_print_voucher_url` | The voucher / eTicket URL. This should be displayed to your customer.
 `send_code` | The code for this send method.
