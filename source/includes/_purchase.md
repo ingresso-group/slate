@@ -670,7 +670,7 @@ Attribute | Description
 `cancellation_comment` | A comment from the cancellation attempt.
 `cancellation_status` | If this is `not_permitted` then it is not possible to cancel this order, if it is `possible` then it is possible to cancel this order, see [cancellations](#cancel).
 `event` | The event object, with the same format as for the [events endpoint](#events-by-id).
-`gross_commission` | The total commission available to both Ingresso and the partner. This will only be visible for partners on margin share agreements or where Ingresso take a fixed fee. If you believe you should have gross_commission visible please contact us techsupport@ingresso.co.uk.
+`gross_commission` | The total commission available to both Ingresso and the partner. This will only be visible for partners on margin share agreements or where Ingresso take a fixed fee. If you believe you should have gross_commission visible please contact us
 `gross_commission.amount_excluding_vat` | The total commission amount excluding sales tax.
 `gross_commission.amount_including_vat` | The total commission amount including sales tax.
 `gross_commission.commission_currency` | The commission currency (note that this can be different to the currency seen by the customer).

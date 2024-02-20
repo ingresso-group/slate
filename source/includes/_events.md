@@ -1903,7 +1903,7 @@ partners request cost ranges.
 Cost ranges are generated from availability requests made either by end-users or
 by scheduled processes that Ingresso use to update cost range data. You should
 not attempt to make multiple availability requests in order to keep this data up
-to date - please contact us instead to discuss options techsupport@ingresso.co.uk.  Cost
+to date - please contact us instead to discuss options.  Cost
 ranges are only ever returned as part of a parent object (such as event). 
 
 <aside class="notice"> Cost ranges (and avail details) are not guaranteed to be
@@ -2716,7 +2716,6 @@ Availability details are generated from availability requests made either by
 end-users or by scheduled processes that Ingresso use to update this data. You
 should not attempt to make multiple availability requests in order to keep this
 data up to date - please contact us instead to discuss options
-[techsupport@ingresso.co.uk](mailto:techsupport@ingresso.co.uk).
 
 ### Request
 
