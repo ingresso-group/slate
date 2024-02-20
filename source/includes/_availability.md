@@ -22,7 +22,7 @@ by default. This resource is described first and is important to read. We then d
 You should only send availability requests as a direct result of customers requesting 
 availability. You should not automatically request availability to populate caches. 
 [Performances with availability detail](#availability-detail) is provided for this type 
-of use case. If this doesn't fit what you are trying to do contact us techsupport@ingresso.co.uk.
+of use case. If this doesn't fit what you are trying to do contact us
 
 <aside class="notice">We may disable API accounts making excessive availability calls.</aside>
 
@@ -372,7 +372,7 @@ Attribute | Description
 `backend_is_broken` | If we see an unexpected error from the supplier system (for example a 500 error) we mark the system as "broken" for a period of time afterwards (the time can vary from nothing to 2 minutes). During this period of time this attribute will be `true` and we will return empty availability. This is an exceptional circumstance; to check if there is currently a supplier system issue you can check our [status page](https://status.ingresso.co.uk/).
 `backend_is_down` | When `true` the supplier system cannot be contacted for some reason, for example they are having technical problems or scheduled maintenance. The response will include empty availability in this case. This is an exceptional circumstance; to check if there is currently a supplier system issue you can check our [status page](https://status.ingresso.co.uk/).
 `backend_throttle_failed` | We allow a certain number of simultaneous requests to hit a supplier system and queue requests when the limit is reached. When this attribute is `true` your request has been sitting in our queue for a long time and we have timed out the request. This is an exceptional circumstance.
-`contiguous_seat_selection_only` | If you have requested individual seats a value of `true` indicates that you can only select consecutive seats. `false` indicates that you can select seats without restriction *within a single ticket type and price band*. In most cases this will be `false`. If you would like to allow your customers to select seats without restriction across price bands and ticket types, you need to add multiple orders to a [trolley](#trolley), one order for each price band. However there are currently some restrictions enforced so if you want to do this you will need to contact us first techsupport@ingresso.co.uk
+`contiguous_seat_selection_only` | If you have requested individual seats a value of `true` indicates that you can only select consecutive seats. `false` indicates that you can select seats without restriction *within a single ticket type and price band*. In most cases this will be `false`. If you would like to allow your customers to select seats without restriction across price bands and ticket types, you need to add multiple orders to a [trolley](#trolley), one order for each price band. However there are currently some restrictions enforced so if you want to do this you will need to contact us first
 `currency_code` | The currency code for the availability.
 `currency_details` | Further detail for the currency, object described below.
 `max_bundle_size` | The maximum number of orders that can be added to a trolley for this event. Useful for buying tickets from different ticket types and price bands. If this isn't present then there is no max bundle size.
