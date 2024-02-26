@@ -33,36 +33,36 @@ You take payment using a payment provider of your own choosing. When calling
 purchase you should just provide customer data, and the purchase call will
 return a success or failure.
 
-### Stripe 
+### Stripe
 
 Stripe is a developer-friendly payment provider that is simple to integrate
 with. The Ingresso API provides a payment processing engine that gives you
 integration support for Stripe and other payment sources. You pass us a Stripe
-payment intent, 3D Secure source or token generated during your checkout, and
-we handle the rest. We support partners collecting payment via their own Stripe
-account or into Ingresso's Stripe account.
+payment intent generated during your checkout, and we handle the rest.
+We support partners collecting payment via their own Stripe account or into
+Ingresso's Stripe account.
 
 In either case, you need integrate against
 [Stripe.js](https://stripe.com/docs/stripe-js/reference) and collect a Stripe
 token after your customer enters their payment details.
-The payment intent information, source information or token is passed to
+The payment intent information is passed to
 Ingresso before making the purchase call.
 
 If you want to collect payment via your own Stripe account you will need to get
 an agreement with us to sell tickets on credit, and we will invoice you for
 the ticket price less your commission. You will need to provide Ingresso your
-Stripe keys to allow us to process payment on your behalf. 
+Stripe keys to allow us to process payment on your behalf.
 
-If you wish to use Ingresso's Stripe account we have some requirements 
-to reduce fraud including implementing 3D Secure support and passing in the 
-customer's IP address, so please get in touch with us first. We however encourage 
+If you wish to use Ingresso's Stripe account we have some requirements
+to reduce fraud including implementing 3D Secure support and passing in the
+customer's IP address, so please get in touch with us first. We however encourage
 partners to open their own Stripe account rather than use ours.
 
 In the examples below we will describe how to purchase using the on-credit and
 Stripe options in more detail. We then describe how to handle generic redirects
 which are needed for other supported payment providers such as Global Collect.
 We recommend that all partners that wish to use Stripe also implement generic
-redirects - this is a small amount of additional development work that ensures 
+redirects - this is a small amount of additional development work that ensures
 you will be able to accept alternate payment methods both now and in future.
 
 
@@ -73,7 +73,7 @@ to succeed, and in some cases the email address is also required. Some partners
 do not wish to share customer data. At a minimum you should send us the customer
 name (first and last name) and phone number.
 
-* The customer name is used by the venue, in particular as a security measure 
+* The customer name is used by the venue, in particular as a security measure
 when admitting customers, so this is essential.
 
 * The phone number can be used by Ingresso or the venue in emergency
@@ -106,15 +106,15 @@ The only use for these is for tickets that will be posted by Ingresso or the
 supplier, so it is possible to only pass the customer's address when the
 customer has selected a despatch method with `send_type` = `post`. In all other
 cases you can pass a default address such as your company headquarters (in case
-it turns out that tickets need to be unexpectedly posted). Note that if you are 
-purchasing with Stripe and are using 
-[AVS](https://support.stripe.com/questions/what-is-avs) (this is common) then 
+it turns out that tickets need to be unexpectedly posted). Note that if you are
+purchasing with Stripe and are using
+[AVS](https://support.stripe.com/questions/what-is-avs) (this is common) then
 you may wish to allow your customer to enter separate post or zip codes - one to
 submit to Ingresso (postal address) and one to submit to Stripe (billing address).
 
-* If the `send_type` = `post` and you are purchasing with Stripe you may 
-wish to give customers the option of entering a separate billing address (if 
-the zip or postal code passed to Stripe is not where the customer wants the 
+* If the `send_type` = `post` and you are purchasing with Stripe you may
+wish to give customers the option of entering a separate billing address (if
+the zip or postal code passed to Stripe is not where the customer wants the
 tickets to be posted to). Note that you may not wish to support separate
 addresses to discourage fraud.
 
@@ -188,11 +188,11 @@ status, callout, meta = client.make_purchase(
 )
 ```
 
-This section describes how to purchase on credit. 
+This section describes how to purchase on credit.
 
 Parameter | Description
 --------- | -----------
-`address_line_one` | The first line of the customer's address - required. Either pass your customer's address or your head office address (see customer data note above). 
+`address_line_one` | The first line of the customer's address - required. Either pass your customer's address or your head office address (see customer data note above).
 `address_line_two` | The second line of the customer's address. *Optional if `address_line_one` is provided.*
 `agent_reference` | Partners can pass their own transaction reference to be stored in the Ingresso platform. *Optional.*
 `country_code` | The [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code of the customer's address - required. The country code must have been present in the `allowed_countries` list from [reserve](#reserve).
@@ -684,7 +684,7 @@ Attribute | Description
 `bundle_total_seatprice` | The total face value.
 `bundle_total_seatprice_in_desired` | The total face value in your desired currency. This field won't be present unless you have requested a desired currency.
 `bundle_total_send_cost` | The total cost for despatching tickets.
-`bundle_total_send_cost_in_desired` | The total despatch cost in your desired currency. 
+`bundle_total_send_cost_in_desired` | The total despatch cost in your desired currency.
 `bundle_total_surcharge` | The total booking fee.
 `bundle_total_surcharge_in_desired` | The total booking fee in your desired currency.
 `currency` | The currency of the costs.
@@ -721,7 +721,7 @@ Attribute | Description
 `total_sale_seatprice_in_desired` | The total face value for this order, converted to your `desired_currency`. This field will not be present for most partners.
 `total_sale_surcharge` | The total booking fee for this order.
 `total_sale_surcharge_in_desired` | The total booking fee for this order, converted to your `desired_currency`. This field will not be present for most partners.
-`user_commission` | The commission you earn from this transaction. 
+`user_commission` | The commission you earn from this transaction.
 `user_commission.amount_excluding_vat` | Your commission excluding sales tax.
 `user_commission.amount_excluding_vat` | Your commission excluding sales tax.
 `user_commission.amount_including_vat` | Your commission including sales tax.
@@ -922,7 +922,7 @@ use a unique key per reservation, found at
 `debitor_integration_data.cider_api_token`.
 
 The API endpoint will look something like `https://payments.ingresso.co.uk/api`
-and you can save the stripe token or source generated above by making a HTTP
+and you can save the stripe  payment intent generated above by making a HTTP
 `POST` request to this endpoint + `/save-details`, and authenticating with the
 key provided in the integration data.
 
@@ -1038,7 +1038,7 @@ Parameter | Description
 --------- | -----------
 `remote_ip` | The end customer's IP address.
 `remote_site` | The website the end customer is purchasing from, not including `https://` or `http://`.
-`X_callback/cider_token` | The single-use token retrieved from Cider after saving the stripe token or payment source being used. You should replace `X` with the `source_code` returned by `reserve`. So for `source_code=ext_test0` the parameter name used is `ext_test0_callback/cider_token`. If you support basketing and your customer is attempting to purchase items across multiple bundles, you should provide the same Cider token for each bundle (each bundle has a unique `source_code`).
+`X_callback/cider_token` | The single-use token retrieved from Cider after saving the stripe payment intent being used. You should replace `X` with the `source_code` returned by `reserve`. So for `source_code=ext_test0` the parameter name used is `ext_test0_callback/cider_token`. If you support basketing and your customer is attempting to purchase items across multiple bundles, you should provide the same Cider token for each bundle (each bundle has a unique `source_code`).
 
 
 ### Purchase response
@@ -1452,15 +1452,6 @@ The response is identical to the `purchase` response described in [purchasing on
     following details have been retained for reference.
 </aside>
 
-### Purchasing with a Stripe token or payment source
-
-To purchase with Stripe using a token or payment source you need the following steps:
-
-1. Retrieve a Stripe token or payment source (further detail below).
-2. Save the Stripe token or payment source in our payment processing engine,
-   which will return a unique token as a reference
-3. Call `purchase.v1` passing in the payment engine reference from step 2.
-
 ### Using the Ingresso white label
 
 To use the Ingresso white label solution only for the checkout functionality,
@@ -1490,7 +1481,7 @@ After the purchase has completed, on the `demo-stripe` white label the customer
 is taken to the White Label's confirmation page at
 `https://demo-stripe.ticketswitch.com/confirmation/<transaction_uuid>/` - this
 behaviour is customisable and we can redirect the customer to any URL containing
-the `transaction_uuid` as a parameter. 
+the `transaction_uuid` as a parameter.
 
 ### Direct integration to the Ingresso payments API
 
@@ -1519,27 +1510,6 @@ how to use a PaymentIntent with
 integration is compatible with PCI-DSS and customer payment card information is
 kept secure.
 
-### Saving the Stripe token in the Ingresso Payments system
-
-> **Example saving payment details**
-
-```shell
-curl https://payments.ingresso.co.uk/api/save-details \
-    -H "Content-Type: application/json" \
-    -H "Authorization: Bearer key_XYZ789123" \
-    -X POST \
-    -d @- << EOF
-{
-    "stripe_source": "src_ABCD1234",
-    "stripe_meta_email_address": "customer@example.com",
-    "stripe_meta_phone_number": "02045123456",
-    "stripe_meta_last_four": "4242",
-    "stripe_meta_event_ids": "6IF, 7AB",
-    "stripe_meta_send_methods": "collect",
-    "stripe_meta_days_to_performances": "37, 94",
-    "stripe_meta_user_id": "demo",
-    "stripe_meta_ip_address": "101.102.103.104"
-}
 EOF
 ```
 
@@ -1591,7 +1561,7 @@ use a unique key per reservation, found at
 `debitor_integration_data.cider_api_token`.
 
 The API endpoint will look something like `https://payments.ingresso.co.uk/api`
-and you can save the stripe token or source generated above by making a HTTP
+and you can save the stripe payment intent generated above by making a HTTP
 `POST` request to this endpoint + `/save-details`, and authenticating with the
 key provided in the integration data.
 
@@ -1600,7 +1570,7 @@ metadata about the purchase to this endpoint, which will be saved in Stripe
 against the purchase record. This is very important for anti-fraud rules when
 using the Ingresso Stripe account, and may be useful for your own account too.
 
-You must pass in the actual customer's `remote_ip` if you are taking payment via 
+You must pass in the actual customer's `remote_ip` if you are taking payment via
 Ingresso's Stripe account - we use this for fraud checks. It is also useful to
 pass in the `remote_site` so we know which website the customer purchased on.
 
@@ -1613,15 +1583,15 @@ JSON, as per the examples.
 
 ### Making the purchase call
 Updating the Stripe PaymentIntent is the first half of the payment process - further
-server-side code is required to complete the second half. You don't need to 
-worry about this as Ingresso's payment processor takes care of it. Once you 
+server-side code is required to complete the second half. You don't need to
+worry about this as Ingresso's payment processor takes care of it. Once you
 have saved the Stripe token and retrieved the cider token, we will handle the
 following steps:
 
 * Authorise the payment with Stripe (validate that the PaymentIntent is
   chargeable and of sufficient value to account for the transaction)
 
-* Purchase your reserved tickets with the supplier ticketing system. *If this 
+* Purchase your reserved tickets with the supplier ticketing system. *If this
 step fails we automatically refund the Stripe payment.*
 
 * Capture the payment from Stripe.
@@ -1962,7 +1932,7 @@ Status(
                                 'dance': 'Ballet & Dance'
                             },
                             filters=[
-                                
+
                             ],
                             postcode='EC1R 4TN',
                             city='London',
@@ -2031,7 +2001,7 @@ Status(
                         total_surcharge=6.0,
                         seat_request_status='not_requested',
                         requested_seat_ids=[
-                            
+
                         ],
                         backend_purchase_reference='PURCHASE-11F22-1',
                         send_method=SendMethod(
@@ -2067,7 +2037,7 @@ Status(
             )
         ],
         discarded_orders=[
-            
+
         ],
         purchase_result=PurchaseResult(
             success=True,
@@ -2138,10 +2108,10 @@ To support generic redirects you should use the following sequence:
 
 1. Call the `purchase` endpoint
 2. The Ingresso platform will determine whether you need to redirect your customer. If so the response will include a `callout` section with the information you need to redirect your customer.
-3. Redirect your customer to `callout_destination_url`, including the `callout_parameters` in the query string (they must be URL encoded). 
+3. Redirect your customer to `callout_destination_url`, including the `callout_parameters` in the query string (they must be URL encoded).
 4. After the redirect your customer will arrive back at your `return_url`, and you may receive query string or post parameters.
 5. You should then call the `callback` endpoint, passing in verbatim all query string and post parameters you have received. These are needed by Ingresso to for example finalise the payment collection.
-6. If any further redirects are required, the `callback` response will include a `callout` section. You should continue to follow steps 3, 4 and 5 until the `callback` response no longer includes a `callout` section. At this point the purchase will be complete (it will have either succeeded or failed). 
+6. If any further redirects are required, the `callback` response will include a `callout` section. You should continue to follow steps 3, 4 and 5 until the `callback` response no longer includes a `callout` section. At this point the purchase will be complete (it will have either succeeded or failed).
 
 
 Please note as an alternative to the integration steps above, the Ingresso
@@ -2217,8 +2187,8 @@ status, callout, meta = client.make_purchase(
 
 
 
-All of the parameters mentioned above in the 
-[purchasing on credit](#purchasing-on-credit) section are used. In addition the 
+All of the parameters mentioned above in the
+[purchasing on credit](#purchasing-on-credit) section are used. In addition the
 following parameters must be specified:
 
 Parameter | Description
@@ -2344,7 +2314,7 @@ status, callout, meta = client.next_callout(
 If the `purchase` response received includes `callout` data then you need to
 redirect your customer and afterwards use the `callback` endpoint.
 
-Note that the URL structure is 
+Note that the URL structure is
 `callback.v1/this.[previous token used]/next.[new token]`.
 If `purchase` was the last endpoint hit, then the "previous token used" is
 the `return_token` that was passed in to `purchase`.  If the last endpoint hit
@@ -2362,9 +2332,9 @@ The `callback` response will either:
 
 - include further `callout` data, as in the `purchase` response example above,
   in which case you should redirect your customer and call `callback` again;
-  or 
-- include similar data to the `purchase` response described in 
+  or
+- include similar data to the `purchase` response described in
   [purchasing on credit](#purchasing-on-credit) - the purchase is complete and
-  has either succeeded or failed. 
+  has either succeeded or failed.
 
 You should continue to call `callback` until you no longer see `callout` data.
