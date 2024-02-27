@@ -33,6 +33,39 @@ You take payment using a payment provider of your own choosing. When calling
 purchase you should just provide customer data, and the purchase call will
 return a success or failure.
 
+### Stripe
+
+Stripe is a developer-friendly payment provider that is simple to integrate
+with. The Ingresso API provides a payment processing engine that gives you
+integration support for Stripe and other payment sources. You pass us a Stripe
+payment intent generated during your checkout, and we handle the rest.
+We support partners collecting payment via their own Stripe account or into
+Ingresso's Stripe account.
+
+In either case, you need integrate against
+[Stripe.js](https://stripe.com/docs/stripe-js/reference) and collect a Stripe
+token after your customer enters their payment details.
+The payment intent information is passed to
+Ingresso before making the purchase call.
+
+If you want to collect payment via your own Stripe account you will need to get
+an agreement with us to sell tickets on credit, and we will invoice you for
+the ticket price less your commission. You will need to provide Ingresso your
+Stripe keys to allow us to process payment on your behalf.
+
+If you wish to use Ingresso's Stripe account we have some requirements
+to reduce fraud including implementing 3D Secure support and passing in the
+customer's IP address, so please get in touch with us first. We however encourage
+partners to open their own Stripe account rather than use ours.
+
+In the examples below we will describe how to purchase using the on-credit and
+Stripe options in more detail. We then describe how to handle generic redirects
+which are needed for other supported payment providers such as Global Collect.
+We recommend that all partners that wish to use Stripe also implement generic
+redirects - this is a small amount of additional development work that ensures
+you will be able to accept alternate payment methods both now and in future.
+
+
 ### Notes on sending customer data
 
 * You must pass in the customer name, phone number and address for the purchase
@@ -40,7 +73,7 @@ to succeed, and in some cases the email address is also required. Some partners
 do not wish to share customer data. At a minimum you should send us the customer
 name (first and last name) and phone number.
 
-* The customer name is used by the venue, in particular as a security measure 
+* The customer name is used by the venue, in particular as a security measure
 when admitting customers, so this is essential.
 
 * The phone number can be used by Ingresso or the venue in emergency
@@ -73,15 +106,15 @@ The only use for these is for tickets that will be posted by Ingresso or the
 supplier, so it is possible to only pass the customer's address when the
 customer has selected a despatch method with `send_type` = `post`. In all other
 cases you can pass a default address such as your company headquarters (in case
-it turns out that tickets need to be unexpectedly posted). Note that if you are 
-purchasing with Stripe and are using 
-[AVS](https://support.stripe.com/questions/what-is-avs) (this is common) then 
+it turns out that tickets need to be unexpectedly posted). Note that if you are
+purchasing with Stripe and are using
+[AVS](https://support.stripe.com/questions/what-is-avs) (this is common) then
 you may wish to allow your customer to enter separate post or zip codes - one to
 submit to Ingresso (postal address) and one to submit to Stripe (billing address).
 
-* If the `send_type` = `post` and you are purchasing with Stripe you may 
-wish to give customers the option of entering a separate billing address (if 
-the zip or postal code passed to Stripe is not where the customer wants the 
+* If the `send_type` = `post` and you are purchasing with Stripe you may
+wish to give customers the option of entering a separate billing address (if
+the zip or postal code passed to Stripe is not where the customer wants the
 tickets to be posted to). Note that you may not wish to support separate
 addresses to discourage fraud.
 
@@ -155,11 +188,11 @@ status, callout, meta = client.make_purchase(
 )
 ```
 
-This section describes how to purchase on credit. 
+This section describes how to purchase on credit.
 
 Parameter | Description
 --------- | -----------
-`address_line_one` | The first line of the customer's address - required. Either pass your customer's address or your head office address (see customer data note above). 
+`address_line_one` | The first line of the customer's address - required. Either pass your customer's address or your head office address (see customer data note above).
 `address_line_two` | The second line of the customer's address. *Optional if `address_line_one` is provided.*
 `agent_reference` | Partners can pass their own transaction reference to be stored in the Ingresso platform. *Optional.*
 `country_code` | The [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code of the customer's address - required. The country code must have been present in the `allowed_countries` list from [reserve](#reserve).
@@ -651,7 +684,7 @@ Attribute | Description
 `bundle_total_seatprice` | The total face value.
 `bundle_total_seatprice_in_desired` | The total face value in your desired currency. This field won't be present unless you have requested a desired currency.
 `bundle_total_send_cost` | The total cost for despatching tickets.
-`bundle_total_send_cost_in_desired` | The total despatch cost in your desired currency. 
+`bundle_total_send_cost_in_desired` | The total despatch cost in your desired currency.
 `bundle_total_surcharge` | The total booking fee.
 `bundle_total_surcharge_in_desired` | The total booking fee in your desired currency.
 `currency` | The currency of the costs.
@@ -688,7 +721,7 @@ Attribute | Description
 `total_sale_seatprice_in_desired` | The total face value for this order, converted to your `desired_currency`. This field will not be present for most partners.
 `total_sale_surcharge` | The total booking fee for this order.
 `total_sale_surcharge_in_desired` | The total booking fee for this order, converted to your `desired_currency`. This field will not be present for most partners.
-`user_commission` | The commission you earn from this transaction. 
+`user_commission` | The commission you earn from this transaction.
 `user_commission.amount_excluding_vat` | Your commission excluding sales tax.
 `user_commission.amount_excluding_vat` | Your commission excluding sales tax.
 `user_commission.amount_including_vat` | Your commission including sales tax.
@@ -788,6 +821,637 @@ already set up this way. The password is the same as for the `demo` user.
 After creating a reservation with this user, you can proceed to test purchasing
 with Stripe, as outlined below.
 
+
+### Purchasing with a Stripe payment intent
+In order to purchase with Stripe you need the following steps:
+
+1. Create a Stripe payment intent and collect payment information (further detail below).
+2. Save the Stripe payment intent in our payment processing engine, which
+   will return a unique token as a reference
+3. Call `purchase.v1` passing in the payment engine reference from step 2.
+
+Note that you need to retrieve and pass in one payment engine token for each `bundle` that you
+reserve. If you only support the purchase of one item at a time, or if you don't
+use the Ingresso API to help manage basketing then you can ignore this.
+
+### Generating a Stripe payment intent
+
+Stripe allows you to create a payment intent at the start of a customer checkout and
+use this to collect payment information on your behalf. The payment information can
+either be collected on your own checkout page in a PCI-compliant manner ("Elements"),
+with a mobile-friendly form ("Checkout"), or via their mobile SDKs.
+See [Stripe's Quickstart guide](https://stripe.com/docs/quickstart).
+
+You will need to provide Stripe with the appropriate publishable key -
+this is returned by Ingresso in the [reserve call](#reserve) as
+bundle.debitor.debitor_integration_data.stripe.publishable_key.
+
+Using Stripe payment intents ensures that you are able to meet the European
+Strong Customer Authentication (SCA) regulation when processing payments.
+
+When creating a Stripe payment intent you'll need to set its `capture_method` to
+`'manual'`. This will allow Stripe's Elements or SDKs used within your checkout page
+to handle any customer verification needed for 3D Secure 2 while still allowing
+Ingresso to process payments on your behalf.
+See [Stripe's 'Creating Payment Intents' docs](https://stripe.com/docs/payments/payment-intents/creating-payment-intents)
+for more info on this.
+
+### Saving the Stripe payment intent in the Ingresso Payments system
+
+> **Example saving payment details**
+
+```shell
+curl https://payments.ingresso.co.uk/api/save-details \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer key_XYZ789123" \
+    -X POST \
+    -d @- << EOF
+{
+    "stripe_payment_intent": "pi_ABCD1234",
+    "stripe_meta_email_address": "customer@example.com",
+    "stripe_meta_event_ids": "6IF",
+    "stripe_meta_send_methods": "collect",
+    "stripe_meta_days_to_performance": 37,
+    "stripe_meta_user_id": "demo",
+    "stripe_meta_ip_address": "101.102.103.104"
+}
+EOF
+```
+
+```python
+# We suggest Javascript integration on the front end, but you can use
+# a HTTP requests library if you'd prefer.
+```
+
+```javascript
+const integration_data = {
+    cider_api_endpoint: "https://payments.ingresso.co.uk/api",
+    cider_api_token: "key_XYZ789123",
+};
+
+// get Stripe token
+let stripePaymentIntent = "pi_ABCD1234";
+
+const http = new XMLHttpRequest();
+http.open('POST', integration_data.cider_api_endpoint + '/save-details', true);
+http.setRequestHeader('Content-type', 'application/json');
+http.setRequestHeader('Authorization', 'Bearer ' + integration_data.cider_api_key);
+http.onload = () => {
+    if (http.status === 200) {
+        // get token from response
+    } else {
+        // handle error
+    }
+};
+http.onerror = () => console.log("Unable to connect");
+http.ontimeout = () => console.log("Connection timed out.");
+http.send(JSON.stringify({ stripe_payment_intent: stripePaymentIntent }));
+```
+
+> **Example response**
+
+```shell
+{"token": "cider_XYZ789123"}
+```
+
+Once you have a Stripe payment intent, you must save it in Ingresso's payment
+processing Engine (called Cider). The API endpoint you can use is also found in
+the [reserve call](#reserve) integration data, as
+`bundle.debitor.debitor_integration_data.cider_api_endpoint`. You will need to
+use a unique key per reservation, found at
+`debitor_integration_data.cider_api_token`.
+
+The API endpoint will look something like `https://payments.ingresso.co.uk/api`
+and you can save the stripe  payment intent generated above by making a HTTP
+`POST` request to this endpoint + `/save-details`, and authenticating with the
+key provided in the integration data.
+
+In addition to saving Stripe payment intents, you can also save
+metadata about the purchase to this endpoint, which will be saved in Stripe
+against the purchase record. This is very important for anti-fraud rules when
+using the Ingresso Stripe account, and may be useful for your own account too.
+
+You must pass in the actual customer's `remote_ip` if you are taking payment via
+Ingresso's Stripe account - we use this for fraud checks. It is also useful to
+pass in the `remote_site` so we know which website the customer purchased on.
+
+One primary advantage of saving the details in this way is that it will not
+appear in Ingresso's logs or database, and is only used as metadata in Stripe,
+so it reduces the spread of personally identifiable information. Please note
+that the call must include a valid Authorization header with the key included in
+the reservation response debitor integration data, and should be well-formed
+JSON, as per the examples.
+
+
+### Making the purchase call
+Creating a Stripe payment intent is the first half of the payment process - further
+server-side code is required to complete the second half. You don't need to
+worry about this as Ingresso's payment processor takes care of it. Once you
+have saved the Stripe payment intent and retrieved the cider token, we will handle the
+following steps:
+
+* Authorise the payment with Stripe (if necessary).
+
+* Purchase your reserved tickets with the supplier ticketing system. *If this
+step fails we automatically refund the Stripe payment.*
+
+* Capture the payment with Stripe.
+
+
+### Purchase request
+
+> **Example purchase request - Stripe**
+
+```shell
+curl https://demo.ticketswitch.com/f13/purchase.v1 \
+    -u "demo-stripe:demopass" \
+    -d "transaction_uuid=2e740db5-1b65-11e7-9e97-002590326932" \
+    -d "first_name=Test" \
+    -d "last_name=Tester" \
+    -d "address_line_one=Metro Building" \
+    -d "address_line_two=1 Butterwick" \
+    -d "town=London" \
+    -d "county=London" \
+    -d "postcode=W6 8DL" \
+    -d "country_code=uk" \
+    -d "phone=0203 137 7420" \
+    -d "email_address=tester@gmail.com" \
+    -d "ext_test0_callback/cider_token=cider_XYZ789123" \
+    -d "send_confirmation_email=yes" \
+    -d "remote_ip=101.102.103.104" \
+    -d "remote_site=www.myticketshop.com" \
+    --compressed \
+    -X POST
+```
+
+```python
+from pyticketswitch import Client
+from pyticketswitch.customer import Customer
+from pyticketswitch.payment_methods import CiderDetails
+
+
+client = Client('demo-stripe', 'demopass')
+
+customer = Customer(
+    first_name='Test',
+    last_name='Tester',
+    address_lines=['Metro Building', '1 Butterwick'],
+    town='London',
+    county='London',
+    post_code='W6 8DL',
+    country_code='uk',
+    phone='0203 137 7420',
+    email='testing@gmail.com',
+    user_can_use_customer_data=True,
+)
+
+cider_details = CiderDetails(
+    {'cider_token': 'cider_XYZ789123'},
+    ['ext_test0'],
+)
+
+status, callout, meta = client.make_purchase(
+    '7150d25f-301b-11e7-bede-0025903268a0',
+    customer,
+    payment_method=cider_details,
+    send_confirmation_email=True,
+)
+```
+
+
+To complete a test Stripe purchase:
+
+1. Call [reserve](#reserve)
+2. Create a [Stripe payment intent](https://stripe.com/docs/payments/payment-intents/quickstart)
+3. Enter and handle test card details with the Stripe Elements example form using the
+Stripe payment intent's `client_secret`.
+4. Save the Stripe payment intent ID in the Ingresso Payments processing service (Cider)
+5. Call purchase, replacing the transaction_uuid and ext_test0_callback/cider_token with the values from the 4 steps above.
+
+<aside class="notice">If you are using our Postman examples, the relevant calls are "reserve - best available - stripe user" and "purchase - stripe user".</aside>
+
+All of the parameters mentioned above in the
+[purchasing on credit](#purchasing-on-credit) section are used. In addition the
+following parameter should be specified:
+
+Parameter | Description
+--------- | -----------
+`remote_ip` | The end customer's IP address.
+`remote_site` | The website the end customer is purchasing from, not including `https://` or `http://`.
+`X_callback/cider_token` | The single-use token retrieved from Cider after saving the stripe payment intent being used. You should replace `X` with the `source_code` returned by `reserve`. So for `source_code=ext_test0` the parameter name used is `ext_test0_callback/cider_token`. If you support basketing and your customer is attempting to purchase items across multiple bundles, you should provide the same Cider token for each bundle (each bundle has a unique `source_code`).
+
+
+### Purchase response
+> **Example purchase response - Stripe**
+
+```shell
+{
+  "currency_details": {
+    "gbp": {
+      "currency_code": "gbp",
+      "currency_factor": 100,
+      "currency_number": 826,
+      "currency_places": 2,
+      "currency_post_symbol": "",
+      "currency_pre_symbol": "£"
+    }
+  },
+  "customer": {
+    "addr_line_one": "Metro Building",
+    "addr_line_one_latin": "Metro Building",
+    "addr_line_two": "1 Butterwick",
+    "addr_line_two_latin": "1 Butterwick",
+    "agent_ref": "",
+    "country": "United Kingdom",
+    "country_code": "uk",
+    "country_latin": "United Kingdom",
+    "county": "",
+    "county_latin": "",
+    "dp_supplier": false,
+    "dp_user": false,
+    "dp_world": false,
+    "email_addr": "tester@gmail.com",
+    "first_name": "Test",
+    "first_name_latin": "Test",
+    "home_phone": "0203 137 7420",
+    "initials": "",
+    "initials_latin": "",
+    "last_name": "Tester",
+    "last_name_latin": "Tester",
+    "postcode": "W6 8DL",
+    "postcode_latin": "W6 8DL",
+    "suffix": "",
+    "suffix_latin": "",
+    "title": "",
+    "title_latin": "",
+    "town": "London",
+    "town_latin": "London",
+    "work_phone": "0203 137 7420"
+  },
+  "language_list": "en-gb,en,en-us,nl",
+  "purchase_iso8601_date_and_time": "2017-03-03T15:58:26Z",
+  "reserve_iso8601_date_and_time": "2017-03-03T15:58:01Z",
+  "transaction_status": "purchased",
+  "trolley_contents": {
+    "bundle": [
+      {
+        "bundle_order_count": 1,
+        "bundle_source_code": "ext_test0",
+        "bundle_source_desc": "External Test Backend 0",
+        "bundle_total_cost": 62.5,
+        "bundle_total_seatprice": 51,
+        "bundle_total_send_cost": 1.5,
+        "bundle_total_surcharge": 10,
+        "currency_code": "gbp",
+        "order": [
+          {
+            "backend_purchase_reference": "PURCHASE-17BB2-1",
+            "cancellation_comment" : "",
+            "cancellation_status" : "possible",
+            "event": {
+              "city_code": "london-uk",
+              "city_desc": "London",
+              "classes": {
+                "dance": "Ballet & Dance"
+              },
+              "country_code": "uk",
+              "country_desc": "United Kingdom",
+              "critic_review_percent": 100,
+              "custom_filter": [],
+              "event_desc": "Matthew Bourne's Nutcracker TEST",
+              "event_id": "6IF",
+              "event_path": "/6IF-matthew-bourne-s-nutcracker-test/",
+              "event_status": "live",
+              "event_type": "simple_ticket",
+              "event_upsell_list": {
+                "event_id": [
+                  "6IE",
+                  "MH0"
+                ]
+              },
+              "event_uri_desc": "Matthew-Bourne%27s-Nutcracker-TEST",
+              "geo_data": {
+                "latitude": 51.52961137,
+                "longitude": -0.10601562
+              },
+              "has_no_perfs": false,
+              "is_seated": true,
+              "max_running_time": 120,
+              "min_running_time": 120,
+              "need_departure_date": false,
+              "need_duration": false,
+              "need_performance": true,
+              "postcode": "EC1R 4TN",
+              "show_perf_time": true,
+              "source_code": "ext_test0",
+              "source_desc": "External Test Backend 0",
+              "user_review_percent": 100,
+              "venue_desc": "Sadler's Wells",
+              "venue_uri_desc": "Sadler%27s-Wells"
+            },
+            "got_requested_seats": false,
+            "gross_commission": {
+              "amount_excluding_vat": 7.13,
+              "amount_including_vat": 8.55,
+              "commission_currency_code": "gbp"
+            },
+            "item_number": 1,
+            "performance": {
+              "date_desc": "Tue, 13th June 2017",
+              "event_id": "6IF",
+              "has_pool_seats": true,
+              "is_ghost": false,
+              "is_limited": false,
+              "iso8601_date_and_time": "2017-06-13T19:30:00+01:00",
+              "perf_id": "6IF-B1S",
+              "perf_name": "Including back stage pass",
+              "running_time": 120,
+              "time_desc": "7.30 PM"
+            },
+            "price_band_code": "C/pool",
+            "send_method": {
+              "send_code": "COBO",
+              "send_cost": 1.5,
+              "send_desc": "Collect from the venue",
+              "send_final_type": "collect",
+              "send_type": "collect"
+            },
+            "ticket_orders": {
+              "ticket_order": [
+                {
+                  "discount_code": "ADULT",
+                  "discount_desc": "Adult",
+                  "no_of_seats": 1,
+                  "sale_seatprice": 25,
+                  "sale_surcharge": 4,
+                  "seats": [
+                    {
+                      "col_id": "419",
+                      "full_id": "OR419",
+                      "is_restricted_view": false,
+                      "row_id": "OR"
+                    }
+                  ],
+                  "total_sale_seatprice": 25,
+                  "total_sale_surcharge": 4
+                },
+                {
+                  "discount_code": "CHILD",
+                  "discount_desc": "Child rate",
+                  "no_of_seats": 2,
+                  "sale_seatprice": 13,
+                  "sale_surcharge": 3,
+                  "seats": [
+                    {
+                      "col_id": "416",
+                      "full_id": "OR416",
+                      "is_restricted_view": false,
+                      "row_id": "OR"
+                    },
+                    {
+                      "col_id": "413",
+                      "full_id": "OR413",
+                      "is_restricted_view": false,
+                      "row_id": "OR"
+                    }
+                  ],
+                  "total_sale_seatprice": 26,
+                  "total_sale_surcharge": 6
+                }
+              ]
+            },
+            "ticket_type_code": "CIRCLE",
+            "ticket_type_desc": "Upper circle",
+            "total_no_of_seats": 3,
+            "total_sale_seatprice": 51,
+            "total_sale_surcharge": 10,
+            "user_commission": {
+              "amount_excluding_vat": 0,
+              "amount_including_vat": 0,
+              "commission_currency_code": "gbp"
+            }
+          }
+        ],
+        "purchase_result": {
+          "is_semi_credit": false,
+          "success": true
+        }
+      }
+    ],
+    "purchase_result": {
+      "is_partial": false,
+      "success": true
+    },
+    "transaction_id": "T000-0000-8N66-K30B",
+    "transaction_uuid": "2dac0d00-002a-11e7-975c-002590326962",
+    "trolley_bundle_count": 1,
+    "trolley_order_count": 1
+  }
+}
+```
+
+```python
+from pyticketswitch.customer import Customer
+from pyticketswitch.trolley import Trolley
+from pyticketswitch.debitor import Debitor
+from pyticketswitch.status import Status
+from pyticketswitch.seat import Seat
+from pyticketswitch.performance import Performance
+from pyticketswitch.order import TicketOrder
+from pyticketswitch.purchase_result import PurchaseResult
+from pyticketswitch.event import Event
+from pyticketswitch.send_method import SendMethod
+from pyticketswitch.order import Order
+from pyticketswitch.bundle import Bundle
+
+# stripe purchases should always return a status object, and no callout.
+Status(
+    status='purchased',
+    reserved_at=datetime.datetime(2017, 5, 3, 16, 13, 28, tzinfo=tzutc()),
+    purchased_at=datetime.datetime(2017, 5, 3, 16, 14, 19, tzinfo=tzutc()),
+    trolley=Trolley(
+        transaction_uuid='7150d25f-301b-11e7-bede-0025903268a0',
+        transaction_id='T000-0000-8ZW5-68A8',
+        bundles=[
+            Bundle(
+                source_code='ext_test0',
+                orders=[
+                    Order(
+                        item=1,
+                        cancellation_comment='',
+                        cancellation_status='possible',
+                        event=Event(
+                            id='6IF',
+                            status='live',
+                            description="Matthew Bourne's Nutcracker TEST",
+                            source='External Test Backend 0',
+                            source_code='ext_test0',
+                            event_type='simple_ticket',
+                            venue="Sadler's Wells",
+                            classes={
+                                'dance': 'Ballet & Dance'
+                            },
+                            filters=[
+
+                            ],
+                            postcode='EC1R 4TN',
+                            city='London',
+                            city_code='london-uk',
+                            country='United Kingdom',
+                            country_code='uk',
+                            latitude=51.52961137,
+                            longitude=-0.10601562,
+                            max_running_time=120,
+                            min_running_time=120,
+                            show_performance_time=True,
+                            has_performances=True,
+                            is_seated=True,
+                            needs_departure_date=False,
+                            needs_duration=False,
+                            needs_performance=False,
+                            upsell_list=[
+                                '6IE',
+                                'MH0'
+                            ],
+                            critic_review_percent=100,
+                        ),
+                        performance=Performance(
+                            id='6IF-B0O',
+                            event_id='6IF',
+                            date_time=datetime.datetime(2017, 5, 4, 19, 30, tzinfo=tzoffset(None, 3600)),
+                            date_description='Thu, 4th May 2017',
+                            time_description='7.30 PM',
+                            has_pool_seats=True,
+                            is_limited=False,
+                            is_ghost=False,
+                            running_time=120,
+                        ),
+                        price_band_code='A/pool',
+                        ticket_type_code='STALLS',
+                        ticket_type_description='Stalls',
+                        ticket_orders=[
+                            TicketOrder(
+                                code='',
+                                seats=[
+                                    Seat(
+                                        id='JM189',
+                                        column='189',
+                                        row='JM',
+                                        separator='',
+                                        is_restricted=False,
+                                    ),
+                                    Seat(
+                                        id='JM190',
+                                        column='190',
+                                        row='JM',
+                                        separator='',
+                                        is_restricted=False,
+                                    )
+                                ],
+                                description='',
+                                number_of_seats=2,
+                                seatprice=21.0,
+                                surcharge=3.0,
+                                total_seatprice=42.0,
+                                total_surcharge=6.0,
+                            )
+                        ],
+                        number_of_seats=2,
+                        total_seatprice=42.0,
+                        total_surcharge=6.0,
+                        seat_request_status='not_requested',
+                        requested_seat_ids=[
+
+                        ],
+                        backend_purchase_reference='PURCHASE-11F22-1',
+                        send_method=SendMethod(
+                            code='COBO',
+                            cost=1.5,
+                            description='Collect from the venue',
+                            type='collect',
+                        ),
+                    )
+                ],
+                description='External Test Backend 0',
+                total_seatprice=42.0,
+                total_surcharge=6.0,
+                total_send_cost=1.5,
+                total=49.5,
+                currency_code='gbp',
+                debitor=Debitor(
+                    type='cider',
+                    name='cider',
+                    description='Cider',
+                    integration_data={
+                        'cider_api_token': 'key_XYZ789123',
+                        'cider_api_endpoint': 'https://payments.ingresso.co.uk/api',
+                        'cider_js': 'https://payments.ingresso.co.uk/static/js/cider/cider.js',
+                        'merchant_group_country_code': 'gb',
+                        'stripe': {
+                            'publishable_key': 'pk_test_b7N9DOwbo4B9t6EqCf9jFzfa',
+                            'payment_sources_enabled': true,
+                            'required': true,
+                        },
+                    },
+                ),
+            )
+        ],
+        discarded_orders=[
+
+        ],
+        purchase_result=PurchaseResult(
+            success=True,
+        ),
+    ),
+    languages=[
+        'en'
+    ],
+    customer=Customer(
+        first_name='Test',
+        first_name_latin='Test',
+        last_name='Tester',
+        last_name_latin='Tester',
+        address_lines=[
+            'Metro Building',
+            '1 Butterwick'
+        ],
+        address_lines_latin=[
+            'Metro Building',
+            '1 Butterwick'
+        ],
+        title='',
+        title_latin='',
+        initials='',
+        initials_latin='',
+        suffix='',
+        suffix_latin='',
+        country_code='uk',
+        post_code='W6 8DL',
+        post_code_latin='W6 8DL',
+        town='London',
+        town_latin='London',
+        county='London',
+        county_latin='London',
+        country='United Kingdom',
+        country_latin='United Kingdom',
+        email='testing@gmail.com',
+        home_phone='0203 137 7420',
+        work_phone='0203 137 7420',
+        agent_reference='',
+    ),
+)
+```
+
+The response is identical to the `purchase` response described in [purchasing on credit](#purchasing-on-credit).
+
+
+
+<aside class="warning">
+    Due to new European regulation for Strong Customer Authentication (SCA),
+    we recommend following the Stripe payment intent approach above. However the
+    following details have been retained for reference.
+</aside>
+
 ### Using the Ingresso white label
 
 To use the Ingresso white label solution only for the checkout functionality,
@@ -817,7 +1481,7 @@ After the purchase has completed, on the `demo-stripe` white label the customer
 is taken to the White Label's confirmation page at
 `https://demo-stripe.ticketswitch.com/confirmation/<transaction_uuid>/` - this
 behaviour is customisable and we can redirect the customer to any URL containing
-the `transaction_uuid` as a parameter. 
+the `transaction_uuid` as a parameter.
 
 ### Direct integration to the Ingresso payments API
 
@@ -846,27 +1510,6 @@ how to use a PaymentIntent with
 integration is compatible with PCI-DSS and customer payment card information is
 kept secure.
 
-### Saving the Stripe token in the Ingresso Payments system
-
-> **Example saving payment details**
-
-```shell
-curl https://payments.ingresso.co.uk/api/save-details \
-    -H "Content-Type: application/json" \
-    -H "Authorization: Bearer key_XYZ789123" \
-    -X POST \
-    -d @- << EOF
-{
-    "stripe_source": "src_ABCD1234",
-    "stripe_meta_email_address": "customer@example.com",
-    "stripe_meta_phone_number": "02045123456",
-    "stripe_meta_last_four": "4242",
-    "stripe_meta_event_ids": "6IF, 7AB",
-    "stripe_meta_send_methods": "collect",
-    "stripe_meta_days_to_performances": "37, 94",
-    "stripe_meta_user_id": "demo",
-    "stripe_meta_ip_address": "101.102.103.104"
-}
 EOF
 ```
 
@@ -918,7 +1561,7 @@ use a unique key per reservation, found at
 `debitor_integration_data.cider_api_token`.
 
 The API endpoint will look something like `https://payments.ingresso.co.uk/api`
-and you can save the stripe token or source generated above by making a HTTP
+and you can save the stripe payment intent generated above by making a HTTP
 `POST` request to this endpoint + `/save-details`, and authenticating with the
 key provided in the integration data.
 
@@ -927,7 +1570,7 @@ metadata about the purchase to this endpoint, which will be saved in Stripe
 against the purchase record. This is very important for anti-fraud rules when
 using the Ingresso Stripe account, and may be useful for your own account too.
 
-You must pass in the actual customer's `remote_ip` if you are taking payment via 
+You must pass in the actual customer's `remote_ip` if you are taking payment via
 Ingresso's Stripe account - we use this for fraud checks. It is also useful to
 pass in the `remote_site` so we know which website the customer purchased on.
 
@@ -940,15 +1583,15 @@ JSON, as per the examples.
 
 ### Making the purchase call
 Updating the Stripe PaymentIntent is the first half of the payment process - further
-server-side code is required to complete the second half. You don't need to 
-worry about this as Ingresso's payment processor takes care of it. Once you 
+server-side code is required to complete the second half. You don't need to
+worry about this as Ingresso's payment processor takes care of it. Once you
 have saved the Stripe token and retrieved the cider token, we will handle the
 following steps:
 
 * Authorise the payment with Stripe (validate that the PaymentIntent is
   chargeable and of sufficient value to account for the transaction)
 
-* Purchase your reserved tickets with the supplier ticketing system. *If this 
+* Purchase your reserved tickets with the supplier ticketing system. *If this
 step fails we automatically refund the Stripe payment.*
 
 * Capture the payment from Stripe.
@@ -1024,15 +1667,15 @@ To complete a test Stripe purchase:
 
 <aside class="notice">If you are using our Postman examples, the relevant calls are "reserve - best available - stripe user" and "purchase - stripe user".</aside>
 
-All of the parameters mentioned above in the 
-[purchasing on credit](#purchasing-on-credit) section are used. In addition the 
+All of the parameters mentioned above in the
+[purchasing on credit](#purchasing-on-credit) section are used. In addition the
 following parameter should be specified:
 
 Parameter | Description
 --------- | -----------
 `remote_ip` | The end customer's IP address.
 `remote_site` | The website the end customer is purchasing from, not including `https://` or `http://`.
-`X_callback/cider_token` | The single-use token retrieved from Cider after saving the stripe token or payment source being used. You should replace `X` with the `source_code` returned by `reserve`. So for `source_code=ext_test0` the parameter name used is `ext_test0_callback/stripeToken`. If you support basketing and your customer is attempting to purchase items across multiple bundles, you should provide the same Cider token for each bundle (each bundle has a unique `source_code`).
+`X_callback/cider_token` | The single-use token retrieved from Cider after saving the Stripe payment intent being used. You should replace `X` with the `source_code` returned by `reserve`. So for `source_code=ext_test0` the parameter name used is `ext_test0_callback/cider_token`. If you support basketing and your customer is attempting to purchase items across multiple bundles, you should provide the same Cider token for each bundle (each bundle has a unique `source_code`).
 
 
 ### Purchase response
@@ -1289,7 +1932,7 @@ Status(
                                 'dance': 'Ballet & Dance'
                             },
                             filters=[
-                                
+
                             ],
                             postcode='EC1R 4TN',
                             city='London',
@@ -1358,7 +2001,7 @@ Status(
                         total_surcharge=6.0,
                         seat_request_status='not_requested',
                         requested_seat_ids=[
-                            
+
                         ],
                         backend_purchase_reference='PURCHASE-11F22-1',
                         send_method=SendMethod(
@@ -1394,7 +2037,7 @@ Status(
             )
         ],
         discarded_orders=[
-            
+
         ],
         purchase_result=PurchaseResult(
             success=True,
@@ -1465,10 +2108,10 @@ To support generic redirects you should use the following sequence:
 
 1. Call the `purchase` endpoint
 2. The Ingresso platform will determine whether you need to redirect your customer. If so the response will include a `callout` section with the information you need to redirect your customer.
-3. Redirect your customer to `callout_destination_url`, including the `callout_parameters` in the query string (they must be URL encoded). 
+3. Redirect your customer to `callout_destination_url`, including the `callout_parameters` in the query string (they must be URL encoded).
 4. After the redirect your customer will arrive back at your `return_url`, and you may receive query string or post parameters.
 5. You should then call the `callback` endpoint, passing in verbatim all query string and post parameters you have received. These are needed by Ingresso to for example finalise the payment collection.
-6. If any further redirects are required, the `callback` response will include a `callout` section. You should continue to follow steps 3, 4 and 5 until the `callback` response no longer includes a `callout` section. At this point the purchase will be complete (it will have either succeeded or failed). 
+6. If any further redirects are required, the `callback` response will include a `callout` section. You should continue to follow steps 3, 4 and 5 until the `callback` response no longer includes a `callout` section. At this point the purchase will be complete (it will have either succeeded or failed).
 
 
 Please note as an alternative to the integration steps above, the Ingresso
@@ -1544,8 +2187,8 @@ status, callout, meta = client.make_purchase(
 
 
 
-All of the parameters mentioned above in the 
-[purchasing on credit](#purchasing-on-credit) section are used. In addition the 
+All of the parameters mentioned above in the
+[purchasing on credit](#purchasing-on-credit) section are used. In addition the
 following parameters must be specified:
 
 Parameter | Description
@@ -1671,7 +2314,7 @@ status, callout, meta = client.next_callout(
 If the `purchase` response received includes `callout` data then you need to
 redirect your customer and afterwards use the `callback` endpoint.
 
-Note that the URL structure is 
+Note that the URL structure is
 `callback.v1/this.[previous token used]/next.[new token]`.
 If `purchase` was the last endpoint hit, then the "previous token used" is
 the `return_token` that was passed in to `purchase`.  If the last endpoint hit
@@ -1689,9 +2332,9 @@ The `callback` response will either:
 
 - include further `callout` data, as in the `purchase` response example above,
   in which case you should redirect your customer and call `callback` again;
-  or 
-- include similar data to the `purchase` response described in 
+  or
+- include similar data to the `purchase` response described in
   [purchasing on credit](#purchasing-on-credit) - the purchase is complete and
-  has either succeeded or failed. 
+  has either succeeded or failed.
 
 You should continue to call `callback` until you no longer see `callout` data.
